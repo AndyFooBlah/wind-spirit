@@ -1,0 +1,171 @@
+import { useState } from 'react';
+import type { BreathAction, SeasonRoll } from '@wind-spirit/sim';
+import { P } from '@wind-spirit/sim';
+import { DIR_NAMES, ROLL_WORDS, SEASON_NAMES, SPEEDS, SPEED_LABEL, type Speed } from '../sim/protocol.ts';
+import { useGame, setSpeed, step, leaveWorld, setZoom, focusVillage, breathe, setTargeting, updateSettings, type Zoom } from '../store/game.ts';
+
+const KEY: Record<Speed, string> = { pause: 'space', step: '.', slow: '1', normal: '2', fast: '3', veryfast: '4' };
+
+export function TopBar() {
+  const world = useGame(s => s.world); const frame = useGame(s => s.frame); const speed = useGame(s => s.speed); const dream = useGame(s => s.dream);
+  const waiting = useGame(s => s.waiting);
+  return (
+    <header className="topbar">
+      <div className="brand">
+        <button className="ghost" onClick={() => void leaveWorld()} title="Back to the gallery">‹ Worlds</button>
+        <div><div className="world-name">{world?.name ?? 'Wind Spirit'}</div><div className="muted small">seed {world?.seed}</div></div>
+      </div>
+      {frame && <YearWheel season={frame.season} week={frame.week} year={frame.year} />}
+      {frame && <WeatherStrip rolls={frame.rolls} seasons={frame.rollSeasons} wind={frame.wind} />}
+      <div className="speeds" role="group" aria-label="Speed">
+        {SPEEDS.map(sp => (
+          <button key={sp} className={`speed ${speed === sp ? 'on' : ''}`} disabled={!!dream} title={`${SPEED_LABEL[sp]} (${KEY[sp]})`} onClick={() => (sp === 'step' ? step() : setSpeed(sp))}>{SPEED_LABEL[sp]}</button>
+        ))}
+        {waiting.length > 0 && speed !== 'pause' && <span className="waiting small" title="Time waits a moment for a chief who is still deliberating">waiting for {waiting.map(id => frame?.villages.find(v => v.id === id)?.name ?? id).join(', ')}…</span>}
+      </div>
+      {frame && <Breath breath={frame.breath} rolls={frame.rolls} seasons={frame.rollSeasons} />}
+      <ZoomControl />
+      <SettingsMenu />
+    </header>
+  );
+}
+
+function YearWheel({ season, week, year }: { season: number; week: number; year: number }) {
+  const angle = ((season * 13 + week - 1) / 52) * 360;
+  const colors = ['#7fb35a', '#e8b84a', '#c9803a', '#a9c4de'];
+  return (
+    <div className="yearwheel" title={`Year ${year}, ${SEASON_NAMES[season]}, week ${week} of 13`}>
+      <svg viewBox="0 0 40 40" width="40" height="40">
+        {colors.map((c, i) => { const a0 = (i / 4) * Math.PI * 2 - Math.PI / 2, a1 = ((i + 1) / 4) * Math.PI * 2 - Math.PI / 2; const x0 = 20 + 18 * Math.cos(a0), y0 = 20 + 18 * Math.sin(a0), x1 = 20 + 18 * Math.cos(a1), y1 = 20 + 18 * Math.sin(a1); return <path key={i} d={`M20 20 L${x0} ${y0} A18 18 0 0 1 ${x1} ${y1} Z`} fill={c} opacity={i === season ? 1 : 0.45} />; })}
+        <circle cx="20" cy="20" r="8" fill="#1f242b" />
+        <line x1="20" y1="20" x2={20 + 17 * Math.cos((angle - 90) * Math.PI / 180)} y2={20 + 17 * Math.sin((angle - 90) * Math.PI / 180)} stroke="#f7efe0" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+      <div><div className="strong">Year {year}</div><div className="small muted">{SEASON_NAMES[season]}, week {week}</div></div>
+    </div>
+  );
+}
+
+function RollIcon({ roll }: { roll: SeasonRoll }) {
+  const c = roll === 'drought' ? '#e0a040' : roll === 'wet' ? '#4f86b8' : roll === 'hard' ? '#a9c4de' : roll === 'storm' ? '#8d7fb5' : '#8fae5a';
+  return (
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden>
+      {roll === 'normal' && <circle cx="10" cy="10" r="6" fill={c} />}
+      {roll === 'drought' && <><circle cx="10" cy="10" r="5" fill={c} /><g stroke={c} strokeWidth="1.5">{[0, 45, 90, 135].map(a => <line key={a} x1={10 + 7 * Math.cos(a * Math.PI / 180)} y1={10 + 7 * Math.sin(a * Math.PI / 180)} x2={10 - 7 * Math.cos(a * Math.PI / 180)} y2={10 - 7 * Math.sin(a * Math.PI / 180)} />)}</g></>}
+      {roll === 'wet' && <path d="M10 3 C6 9 5 11 5 13 a5 5 0 0 0 10 0 c0-2-1-4-5-10z" fill={c} />}
+      {roll === 'hard' && <g stroke={c} strokeWidth="1.8" strokeLinecap="round"><line x1="10" y1="3" x2="10" y2="17" /><line x1="4" y1="6.5" x2="16" y2="13.5" /><line x1="4" y1="13.5" x2="16" y2="6.5" /></g>}
+      {roll === 'storm' && <><path d="M5 12 a4 4 0 0 1 1-8 a5 5 0 0 1 9 1 a3.5 3.5 0 0 1 0 7z" fill={c} /><path d="M9 12 l-2 5 h3 l-1 3 l4 -6 h-3 l1 -2z" fill="#ffd166" /></>}
+    </svg>
+  );
+}
+
+function WeatherStrip({ rolls, seasons, wind }: { rolls: SeasonRoll[]; seasons: number[]; wind: number[] }) {
+  return (
+    <div className="weather" title="The season now and the four ahead. The spirit sees what chiefs cannot.">
+      {rolls.map((r, i) => (
+        <div key={i} className={`roll ${i === 0 ? 'now' : ''}`}>
+          <RollIcon roll={r} />
+          <div className="small">{SEASON_NAMES[seasons[i] % 4]}</div>
+          <div className="small strong">{ROLL_WORDS[r]}</div>
+          <div className="small muted">wind {DIR_NAMES[wind[i] ?? 0]}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Breath({ breath, rolls, seasons }: { breath: number; rolls: SeasonRoll[]; seasons: number[] }) {
+  const [open, setOpen] = useState<'' | 'nudge' | 'override' | 'sail'>('');
+  const frame = useGame(s => s.frame); const targeting = useGame(s => s.targeting);
+  const cost = { nudge: P.breathNudge / 1000, override: P.breathOverride / 1000, storm: P.breathStorm / 1000, sail: P.breathSail / 1000 };
+  const boats = frame?.parties.filter(p => p.boat) ?? [];
+  const go = (a: BreathAction) => { if (breathe(a)) setOpen(''); };
+  return (
+    <div className="breath">
+      <div className="meter" title={`Breath ${breath.toFixed(1)} of 100; +0.25 a week`}>
+        <div className="fill" style={{ width: `${Math.max(0, Math.min(100, breath))}%` }} />
+        <span>Breath {Math.floor(breath)}</span>
+      </div>
+      <div className="actions">
+        <button className={open === 'nudge' ? 'on' : ''} disabled={breath < cost.nudge} onClick={() => setOpen(open === 'nudge' ? '' : 'nudge')} title={`Nudge a coming season one step (${cost.nudge})`}>Nudge {cost.nudge}</button>
+        <button className={open === 'override' ? 'on' : ''} disabled={breath < cost.override} onClick={() => setOpen(open === 'override' ? '' : 'override')} title={`Set a coming season outright (${cost.override})`}>Override {cost.override}</button>
+        <button className={targeting ? 'on' : ''} disabled={breath < cost.storm} onClick={() => { setOpen(''); setTargeting(!targeting); }} title={`A storm on one tile for one week (${cost.storm})`}>Storm {cost.storm}</button>
+        <button className={open === 'sail' ? 'on' : ''} disabled={breath < cost.sail || !boats.length} onClick={() => setOpen(open === 'sail' ? '' : 'sail')} title={boats.length ? `Fill or becalm a boat's sails (${cost.sail})` : 'No boats at sea'}>Sail {cost.sail}</button>
+      </div>
+      {open === 'nudge' && (
+        <div className="popover">
+          <div className="strong">Nudge a season</div>
+          {seasons.slice(1).map((s, i) => (
+            <div key={s} className="row">
+              <span className="w">{SEASON_NAMES[s % 4]} <span className="muted">({ROLL_WORDS[rolls[i + 1]]})</span></span>
+              <button onClick={() => go({ kind: 'nudge', season: s, direction: 'wetter' })}>wetter</button>
+              <button onClick={() => go({ kind: 'nudge', season: s, direction: 'drier' })}>drier</button>
+              {s % 4 === 3 && <><button onClick={() => go({ kind: 'nudge', season: s, direction: 'milder' })}>milder</button><button onClick={() => go({ kind: 'nudge', season: s, direction: 'harsher' })}>harsher</button></>}
+            </div>
+          ))}
+          <div className="small muted">Wetter: drought → fair → wet. Milder and harsher only touch winters.</div>
+        </div>
+      )}
+      {open === 'override' && (
+        <div className="popover">
+          <div className="strong">Set a season</div>
+          {seasons.slice(1).map((s, i) => (
+            <div key={s} className="row">
+              <span className="w">{SEASON_NAMES[s % 4]} <span className="muted">({ROLL_WORDS[rolls[i + 1]]})</span></span>
+              {(['drought', 'normal', 'wet', 'storm', ...(s % 4 === 3 ? ['hard'] : [])] as SeasonRoll[]).map(r => <button key={r} onClick={() => go({ kind: 'override', season: s, roll: r })}>{ROLL_WORDS[r]}</button>)}
+            </div>
+          ))}
+        </div>
+      )}
+      {open === 'sail' && (
+        <div className="popover">
+          <div className="strong">Boats at sea</div>
+          {boats.map(b => (
+            <div key={b.id} className="row">
+              <span className="w">{b.kind} party of {b.size} from {frame?.villages.find(v => v.id === b.home)?.name}{b.returning ? ', homeward' : ''}</span>
+              <button onClick={() => go({ kind: 'sail', party: b.id, mode: 'fill' })}>fill sails</button>
+              <button onClick={() => go({ kind: 'sail', party: b.id, mode: 'becalm' })}>becalm</button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ZoomControl() {
+  const zoom = useGame(s => s.zoom); const frame = useGame(s => s.frame); const selected = useGame(s => s.selected);
+  const zooms: Zoom[] = ['world', 'local', 'village'];
+  return (
+    <div className="zoomctl">
+      <div className="seg">{zooms.map(z => <button key={z} className={zoom === z ? 'on' : ''} disabled={z === 'village' && selected === undefined} onClick={() => setZoom(z)}>{z}</button>)}</div>
+      <select value="" onChange={e => { const id = Number(e.target.value); if (!Number.isNaN(id)) focusVillage(id); }} title="Find a village">
+        <option value="">Find village…</option>
+        {frame?.villages.filter(v => v.alive).map(v => <option key={v.id} value={v.id}>{v.name} ({v.pop.total})</option>)}
+      </select>
+    </div>
+  );
+}
+
+function SettingsMenu() {
+  const [open, setOpen] = useState(false); const settings = useGame(s => s.settings); const proxyOk = useGame(s => s.proxyOk);
+  return (
+    <div className="settings">
+      <button className="ghost" onClick={() => setOpen(!open)} title="Settings">Settings</button>
+      {open && (
+        <div className="popover right">
+          <div className="strong">Chiefs that think with the model</div>
+          <label><input type="radio" checked={settings.modelVillages === 'none'} onChange={() => updateSettings({ modelVillages: 'none' })} /> none (habit only)</label>
+          <label><input type="radio" checked={settings.modelVillages === 'focused'} onChange={() => updateSettings({ modelVillages: 'focused' })} /> focused: the village you have open plus the ones you have spoken to (up to 3)</label>
+          <label><input type="radio" checked={settings.modelVillages === 'all'} onChange={() => updateSettings({ modelVillages: 'all' })} /> all villages <span className="warn">(costly at speed)</span></label>
+          <div className="small muted">Model access: {proxyOk === undefined ? 'not yet used' : proxyOk ? 'signed in' : 'unavailable, chiefs act on habit'}</div>
+          <div className="strong" style={{ marginTop: 10 }}>Pause when</div>
+          {(Object.keys(settings.autoPause) as (keyof typeof settings.autoPause)[]).map(k => (
+            <label key={k}><input type="checkbox" checked={settings.autoPause[k]} onChange={e => updateSettings({ autoPause: { ...settings.autoPause, [k]: e.target.checked } })} /> {PAUSE_LABEL[k]}</label>
+          ))}
+          <div className="small muted" style={{ marginTop: 8 }}>Keys: space pause, . step, 1–4 speeds, arrows pan, double-click zooms in.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+const PAUSE_LABEL: Record<string, string> = { RaidResolved: 'raiders strike', Famine: 'famine (first each season)', ChiefSucceeded: 'a chief dies or falls', VillageFounded: 'a village is founded', VillageDied: 'a village dies', Prayer: 'a chief prays', StormStruck: 'a storm strikes', Discovered: 'a discovery' };
