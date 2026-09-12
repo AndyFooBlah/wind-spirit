@@ -1,4 +1,4 @@
-import { K } from '../fixed.js';
+import { K, mul } from '../fixed.js';
 import { AGE_ELDER, P, seasonOf, WEEKS_PER_YEAR } from '../params.js';
 import type { Stage, Village } from '../types.js';
 import { hasCap, newPerson, popCounts, shelter, stageOf, storeByCategory, type Ctx } from '../world.js';
@@ -63,5 +63,6 @@ export function succeed(ctx: Ctx, v: Village, reason: 'death' | 'coup'): void {
   v.chiefTraits = v.culture.map(c => Math.max(0, Math.min(K, c + rng.range(-150, 150))));
   v.culture = v.culture.map((c, i) => Math.max(0, Math.min(K, c + Math.trunc((v.chiefTraits[i] - c) / 10))));
   v.lowHappyWeeks = 0;
+  v.trust = mul(v.trust, P.trustInherit);
   ctx.events.push({ t: ctx.w.tick, type: 'ChiefSucceeded', village: v.id, chief: v.chief, reason });
 }

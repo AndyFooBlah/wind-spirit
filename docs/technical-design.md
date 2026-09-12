@@ -240,7 +240,7 @@ A small Cloud Run service.
 
 - **Auth.** Firebase anonymous auth for v1; the ID token is verified on every request. Accounts come with multiplayer.
 - **Quotas.** Per user per day, in tokens, with a hard ceiling. The scheduler's per-game-year budget is the soft limit; the proxy's is the backstop.
-- **Routing.** The client names a *class* (`routine` or `capable`), never a model id. The proxy maps classes to current Gemini models. Model ids are configuration, verified against the live model docs at deploy time per the global rule, never hard-coded in the client.
+- **Routing.** The client names a *class* (`routine` or `capable`), never a model id. The proxy maps classes to current Gemini models. Model ids are configuration, verified against the live model docs at deploy time per the global rule, never hard-coded in the client. As deployed 2026-09-12: routine `gemini-3.8-flash`, capable `gemini-3.1-pro-preview`, on Vertex AI via the service account and the `global` endpoint. Service: `https://llm-proxy-406179055859.us-central1.run.app`; health at `/health`.
 - **Structured output.** The proxy passes the JSON schema through and rejects malformed responses before they reach the client.
 - **Logging.** Request class, token counts, latency, and a hash of the prompt for cache diagnostics. Never prompt bodies in logs.
 
@@ -331,8 +331,8 @@ At fast speeds coalescing cuts routine calls by two thirds or more. The per-game
 | | Deliverable | Proves |
 |---|---|---|
 | M0 ✅ 2026-09-12 | Repo, `sim` core, `gen` world, harness with scripted chiefs, report | Determinism, balance targets. See m0-notes.md |
-| M1 | Tech generator, names, hints, research, recipes in the sim | Discovery feels like discovery under a scripted explorer |
-| M2 | `agents` scheduler, prompt contract, proxy on Cloud Run, fallback | A real chief runs a village for a century without breaking it |
+| M1 ✅ 2026-09-12 | Tech generator, names, hints, research, recipes in the sim | Discovery feels like discovery under a scripted explorer. See build-notes.md |
+| M2 ✅ 2026-09-12 | `agents` scheduler, prompt contract, proxy on Cloud Run, fallback, envoys and raids in the sim | A real chief runs a village (3-year and 30-year proofs; the century is an M7 playtest item) |
 | M3 | Web UI: map at three zooms, panels, speeds, auto-pause, saves | Watchable |
 | M4 | Spirit chat, breath, trust, chronicle | The core loop |
 | M5 | History scrubber, narrative | Replay |

@@ -126,7 +126,7 @@ export function takeFood(w: World, v: Village, qty: number): number {
 }
 
 export function emptyYear(): YearStats {
-  return { births: 0, deathsAge: 0, deathsHunger: 0, deathsTravel: 0, forage: 0, hunt: 0, fish: 0, farm: 0, wood: 0, stone: 0, gathered: 0, crafted: 0, spoiled: 0 };
+  return { births: 0, deathsAge: 0, deathsHunger: 0, deathsTravel: 0, deathsRaid: 0, forage: 0, hunt: 0, fish: 0, farm: 0, wood: 0, stone: 0, gathered: 0, crafted: 0, spoiled: 0 };
 }
 
 export function newPlots(): Plot[] {
@@ -162,7 +162,7 @@ export function foundVillage(ctx: Ctx, o: FoundOpts): Village {
   const v: Village = {
     id, name: nextName(w), tile: o.tile, founded: w.tick, alive: true, parent: o.parent,
     people: o.people, chief, culture: [...o.culture], chiefTraits,
-    stores: [], plots, recipes: [...o.recipes], capabilities: [...o.capabilities], known: [], tasted: {}, craft: {}, hints: {}, orders: [],
+    stores: [], plots, recipes: [...o.recipes], capabilities: [...o.capabilities], known: [], tasted: {}, craft: {}, hints: {}, relations: {}, memory: [], inbox: [], chronicle: [], orders: [],
     happiness: 700, lowHappyWeeks: 0, trust: 300,
     knowledge: { tiles: [], villages: [id] },
     recentDeaths: [], hungryWeek: 0, calmWeeks: 52, hardship: 0, year: emptyYear(),
@@ -192,5 +192,8 @@ export function nearWater(w: World, v: Village): boolean { return neighbors(w, v
 /** Commodities in stores by category, total units. */
 export function storeByCategory(w: World, v: Village, category: string): number { let t = 0; for (const s of v.stores) { const c = commodityById(w, s.c); if (c && c.category === category) t += s.qty; } return t; }
 export function craftLaborMult(v: Village): number { return hasCap(v, 'metaltools') ? 600 : hasCap(v, 'stonetools') ? 800 : K; }
+export function relation(v: Village, other: number): import('./types.js').Relation { return (v.relations[other] ??= { grudge: 0, lastContact: -1, trades: 0, raids: 0, sizeSeen: 0 }); }
+export function parseGoods(s: string): Record<string, number> { const out: Record<string, number> = {}; for (const part of s.split(',')) { const [c, q] = part.split(':').map(x => x.trim()); if (c && Number(q) > 0) out[c] = Math.trunc(Number(q)); } return out; }
+export function goodsTotal(g: Record<string, number>): number { let t = 0; for (const q of Object.values(g)) t += q; return t; }
 
 export { ceilDiv, div };

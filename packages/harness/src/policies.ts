@@ -1,11 +1,12 @@
 /** Scripted chief policies: deterministic stand-ins for LLM chiefs. Also the runtime fallback. */
 import {
   K, P, Rng, TERRAIN, div, mul, neighbors, popCounts, seasonOf, shelter, storeQty, storesWeeks, structures, tileDistance, yearOf, hasCap, nearWater, recipeById, commodityById, storeByCategory,
-  type Order, type Village, type World, type WildResource, type Recipe, type Capability,
+  type Order, type Village, type World, type WildResource, type Recipe, type Capability, type Mandate, type HostAnswer,
 } from '@wind-spirit/sim';
 
 export interface PolicyView { w: World; v: Village; reason: string; rng: Rng; mem: Record<string, number>; }
 export type Policy = (view: PolicyView) => Order[];
+export type HostPolicy = (view: PolicyView, mandate: Mandate, guest: Village) => HostAnswer;
 export type PolicyName = 'forager' | 'farmer' | 'sensible' | 'legacy-farmer-nocap' | 'legacy-farmer-hungerblock' | 'legacy-forager-nogranary';
 
 const order = (task: Order['task'], workers: number, params: Record<string, number | string> = {}): Order => ({ task, workers, params, since: 0 });
@@ -44,7 +45,77 @@ function plotCounts(v: Village) {
   return { cleared, planted, huts, granary, tents };
 }
 
-interface Features { farm: boolean; granary: boolean; explore: boolean; colonize: boolean; tech?: boolean; noPlotCap?: boolean; hungerBlocksFarming?: boolean; }
+interface Features { farm: boolean; granary: boolean; explore: boolean; colonize: boolean; tech?: boolean; trade?: boolean; raid?: boolean; noPlotCap?: boolean; hungerBlocksFarming?: boolean; }
+
+/** Send an envoy when we lack a regional input for our next capability and have a surplus to offer. */
+function tradeOrders(view: PolicyView, free: number): { orders: Order[]; used: number } {
+  const { w, v, rng, mem } = view; const out: Order[] = []; const year = yearOf(w.tick);
+  if (free < 3 || v.people.length < 15 || year - (mem.lastEnvoy ?? -10) < 2) return { orders: out, used: 0 };
+  const partners = v.knowledge.villages.filter(id => id !== v.id && w.villages[id]?.alive && (v.relations[id]?.grudge ?? 0) < 400);
+  if (!partners.length) return { orders: out, used: 0 };
+  // what do we lack? inputs of known-but-unbuilt capability recipes that we cannot gather here
+  const known = v.recipes.map(id => recipeById(w, id)).filter((r): r is Recipe => !!r);
+  const lacking = new Set<string>();
+  for (const r of known) if (r.output.capability && !hasCap(v, r.output.capability)) for (const i of r.inputs) if (storeQty(v, i.c) < i.qty && !gatherable(w, v, i.c)) lacking.add(i.c);
+  // regional commodities we have heard of but never held are worth asking for too
+  for (const c of v.known) { const cm = commodityById(w, c); if (cm?.regional && storeQty(v, c) === 0 && !gatherable(w, v, c)) lacking.add(c); }
+  if (!lacking.size) return { orders: out, used: 0 };
+  // prefer a partner known to have what we lack nearby; otherwise ask anyway
+  const nearPartner = (id: number, c: string) => { const o = w.villages[id]; return v.knowledge.tiles.some(t => w.tiles[t].extra[c] && tileDistance(w, o.tile, t) <= 2); };
+  const options = partners.flatMap(id => [...lacking].filter(c => nearPartner(id, c)).map(c => ({ id, c })));
+  const pickd = options.length ? rng.pick(options) : { id: rng.pick(partners), c: rng.pick([...lacking]) };
+  const want = pickd.c;
+  // surplus: durable food beyond 20 weeks, plus goods we make
+  const surplus: Record<string, number> = {};
+  const grain = storeQty(v, 'grain'); const need20 = v.people.length * 20 * 1000; if (grain > need20) surplus.grain = Math.min(30_000, grain - need20);
+  for (const s of v.stores) { const cm = commodityById(w, s.c); if (cm && (cm.regional || cm.category === 'cloth' || cm.category === 'curio') && s.qty > 4000) surplus[s.c] = Math.min(10_000, Math.trunc(s.qty / 2)); }
+  if (!Object.keys(surplus).length) return { orders: out, used: 0 };
+  const target = pickd.id;
+  mem.lastEnvoy = year;
+  // friends share knowledge: after a couple of good trades, carry a recipe along
+  const friendly = (v.relations[target]?.trades ?? 0) >= 1;
+  // share our most advanced knowledge: it is the least likely to be known already
+  const shareable = friendly ? v.recipes.map(id => recipeById(w, id)).filter((r): r is Recipe => !!r && !r.start && r.tier >= 2).sort((a, b) => b.tier - a.tier).slice(0, 3).map(r => r.id) : [];
+  const params: Record<string, number | string> = { target, offer: Object.entries(surplus).map(([c, q]) => `${c}:${q}`).join(','), want: `${want}:4000`, floor: 500 };
+  if (shareable.length) params.transfer = rng.pick(shareable);
+  out.push(order('envoy', 2, params));
+  return { orders: out, used: 2 };
+}
+
+/** Raid only under real pressure, against a smaller village we hold a grudge against or that is much weaker. */
+function raidOrders(view: PolicyView, free: number, hungry: boolean): { orders: Order[]; used: number } {
+  const { w, v, mem } = view; const year = yearOf(w.tick); const out: Order[] = [];
+  if (free < 8 || year - (mem.lastRaid ?? -10) < 6) return { orders: out, used: 0 };
+  const desperate = hungry && v.hardship > 250;
+  const targets = v.knowledge.villages.filter(id => id !== v.id && w.villages[id]?.alive).map(id => ({ id, r: v.relations[id] })).filter(x => x.r && x.r.sizeSeen > 0 && x.r.sizeSeen * 2 < v.people.length && (x.r.grudge >= 500 || desperate));
+  if (!targets.length) return { orders: out, used: 0 };
+  const t = targets.sort((a, b) => b.r.grudge - a.r.grudge)[0];
+  const n = Math.min(free - 4, Math.max(6, Math.trunc(free / 2)));
+  mem.lastRaid = year;
+  out.push(order('raid', n, { target: t.id }));
+  return { orders: out, used: n };
+}
+
+/** Host answer: accept when the ask is affordable and the offer is worth it, counter with what we can spare, else refuse. */
+export function hostAnswer(view: PolicyView, mandate: Mandate, guest: Village): HostAnswer {
+  const { w, v } = view;
+  const grudge = v.relations[guest.id]?.grudge ?? 0;
+  if (mandate.threat) { const weaker = v.people.length < (v.relations[guest.id]?.sizeSeen ?? guest.people.length) * 0.6; if (!weaker) return { kind: 'refuse', reason: 'we do not pay tribute' }; }
+  else if (grudge >= 600) return { kind: 'refuse', reason: 'old wounds' };
+  const give: Record<string, number> = {}; let canGive = 0;
+  for (const [c, q] of Object.entries(mandate.want)) {
+    const have = storeQty(v, c); const cm = commodityById(w, c);
+    const reserve = cm && cm.food > 0 ? v.people.length * 8 * 1000 : Math.trunc(have / 3);
+    const spare = Math.max(0, have - reserve); const g = Math.min(q, spare); if (g > 0) { give[c] = g; canGive += g; }
+  }
+  const offered = Object.values(mandate.offer).reduce((a, b) => a + b, 0);
+  const wanted = Object.values(mandate.want).reduce((a, b) => a + b, 0);
+  if (mandate.threat) return canGive > 0 ? { kind: 'counter', give, take: {} } : { kind: 'refuse', reason: 'nothing to give' };
+  if (wanted === 0) return { kind: 'accept' };
+  if (canGive === 0) return { kind: 'refuse', reason: 'we have none to spare' };
+  if (canGive >= wanted && offered >= wanted * 0.6) return { kind: 'accept' };
+  return { kind: 'counter', give, take: { ...mandate.offer } };
+}
 
 /** Preferred order for acquiring capabilities; tier and situation decide the rest. */
 const CAP_PRIORITY: Capability[] = ['fire', 'stonetools', 'net', 'spear', 'drying', 'pottery', 'paddle', 'bow', 'weaving', 'medicine', 'cart', 'husbandry', 'irrigation', 'hull', 'kiln', 'roadbuilding', 'sail', 'metaltools', 'plough', 'hook', 'wagon', 'bronzeweapons', 'seagoing'];
@@ -93,7 +164,6 @@ function techOrders(view: PolicyView, free: number, hungry: boolean): { orders: 
     let ingredients = '';
     if (unknownHinted.length) ingredients = unknownHinted[0].inputs.map(i => i.c).join(',');
     else {
-      const key = `research:${year}`; if (mem[key] === undefined) mem[key] = 1;
       const stock = v.known.filter(c => storeQty(v, c) > 0 || (commodityById(w, c)?.source));
       const caps = v.capabilities;
       const r = rng.int(3);
@@ -114,8 +184,16 @@ function decide(view: PolicyView, f: Features): Order[] {
   const pc = plotCounts(v); const sh = shelter(w, v);
   const weeks = storesWeeks(w, v);
   const hungry = v.hungryWeek > 0;
+  // feed first: reserve enough food workers to cover need (with a margin) at current expected yields, then spend the rest
+  const expected = Math.max(1, ['plants', 'game', 'fish'].map((r, i) => expectedPerWorker(w, v, r as WildResource, [P.yield.forage, P.yield.hunt, P.yield.fish][i], [P.seasonPlants, P.seasonGame, P.seasonFish][i][season])).sort((a, b) => b - a).slice(0, 2).reduce((a, b) => a + b, 0) / 2);
+  const grainPerWeek = Math.trunc(storeQty(v, 'grain') / 26);
+  const needPerWeek = Math.max(0, pop * P.foodPerPersonWeek * (hungry ? 1300 : 1100) / 1000 - grainPerWeek);
+  const reserve = Math.min(free, Math.ceil(needPerWeek / expected));
+  const spendable = Math.max(0, free - reserve);
+  const investBudget = { left: spendable };
 
-  // farming: never skipped, hunger is exactly when planting matters
+  const reserved = reserve; free = spendable; void investBudget;
+  // farming: never skipped, hunger is exactly when planting matters (farming counts as food work, so it may dip into the reserve)
   if (f.farm && !(f.hungerBlocksFarming && hungry)) {
     if (season === 0) { const plots = Math.ceil(pc.cleared / 2); const n = Math.min(Math.trunc(free * 0.4), Math.ceil(plots / P.plotsPerFarmer)); if (n > 0) { out.push(order('farm', n, f.noPlotCap ? {} : { plots })); free -= n; } }
     else if (season === 2) { const n = Math.min(Math.trunc(free * 0.6), Math.ceil(pc.planted / P.plotsPerFarmer)); if (n > 0) { out.push(order('farm', n)); free -= n; } }
@@ -138,10 +216,10 @@ function decide(view: PolicyView, f: Features): Order[] {
     if (pc.cleared < target && free > 1) { const n = Math.min(2, free - 1); out.push(order('clear', n)); free -= n; }
   }
   // exploration
-  if (f.explore && season === 0 && counts.adults >= 8 && free > 3 && year - (mem.lastExplore ?? -10) >= 3) {
+  if (f.explore && season === 0 && counts.adults >= 8 && free > 3 && year - (mem.lastExplore ?? -10) >= 2) {
     mem.lastExplore = year;
     const dirs = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]]; const d = dirs[rng.int(8)];
-    out.push(order('explore', 2, { dx: d[0], dy: d[1], dist: rng.range(4, 8) })); free -= 2;
+    out.push(order('explore', 2, { dx: d[0], dy: d[1], dist: rng.range(6, 14) })); free -= 2;
   }
   // colonize
   if (f.colonize && season === 0 && pop >= 30 && counts.adults >= 10 && year - (mem.lastColony ?? -10) >= 8) {
@@ -153,7 +231,15 @@ function decide(view: PolicyView, f: Features): Order[] {
       if (target >= 0) { mem.lastColony = year; out.push(order('colonize', 0, { tile: target, share: 400 })); }
     }
   }
+  // stockpile local specialties: they are what we have to trade
+  if (f.trade && !hungry && free >= 6) {
+    const local = v.known.filter(c => commodityById(w, c)?.regional && gatherable(w, v, c)).sort((a, b) => storeQty(v, a) - storeQty(v, b));
+    if (local.length && storeQty(v, local[0]) < 20_000) { const n = free >= 10 ? 2 : 1; out.push(order('gather', n, { c: local[0] })); free -= n; }
+  }
   if (f.tech) { const t = techOrders(view, free, hungry); out.push(...t.orders); free -= t.used; }
+  if (f.trade && !hungry) { const t = tradeOrders(view, free); out.push(...t.orders); free -= t.used; }
+  if (f.raid) { const t = raidOrders(view, free, hungry); out.push(...t.orders); free -= t.used; }
+  free += reserved;
   out.push(...foodOrders(w, v, free, season));
   return out;
 }
@@ -174,7 +260,7 @@ function pickColonySite(w: World, v: Village): number {
 export const POLICIES: Record<PolicyName, Policy> = {
   forager: view => decide(view, { farm: false, granary: true, explore: false, colonize: false }),
   farmer: view => decide(view, { farm: true, granary: true, explore: false, colonize: false }),
-  sensible: view => decide(view, { farm: true, granary: true, explore: true, colonize: true, tech: true }),
+  sensible: view => decide(view, { farm: true, granary: true, explore: true, colonize: true, tech: true, trade: true, raid: true }),
   'legacy-farmer-nocap': view => decide(view, { farm: true, granary: true, explore: false, colonize: false, noPlotCap: true }),
   'legacy-farmer-hungerblock': view => decide(view, { farm: true, granary: true, explore: false, colonize: false, hungerBlocksFarming: true }),
   'legacy-forager-nogranary': view => decide(view, { farm: false, granary: false, explore: false, colonize: false }),

@@ -24,7 +24,9 @@ export class Sim {
     const out = this.ctx.events; this.ctx.events = [];
     return out;
   }
-  snapshot(): string { this.ctx.w.rng = this.ctx.rng.save(); return JSON.stringify(this.ctx.w); }
+  /** Write the RNG stream states into the world so it can be handed off or serialized elsewhere. */
+  syncRng(): World { this.ctx.w.rng = this.ctx.rng.save(); return this.ctx.w; }
+  snapshot(): string { return JSON.stringify(this.syncRng()); }
   hash(): string { return cyrb53(this.snapshot()); }
   static fromSnapshot(json: string): Sim { return new Sim(JSON.parse(json) as World); }
 }

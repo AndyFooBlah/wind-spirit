@@ -5,6 +5,7 @@ A civilization sandbox where every village is run by an AI chief and the player 
 - [Concept](docs/concept.md)
 - [Technical design](docs/technical-design.md)
 - [M0 notes: balance findings](docs/m0-notes.md)
+- [Build notes: M1 and M2](docs/build-notes.md)
 
 ## Layout
 
@@ -13,6 +14,8 @@ A civilization sandbox where every village is run by an AI chief and the player 
 | `packages/sim` | Pure, deterministic weekly simulation. No dependencies. |
 | `packages/gen` | Seeded generators: world, names, tech. |
 | `packages/harness` | Balance harness: runs the sim with scripted chiefs, emits CSV and a report. |
+| `packages/agents` | The chief agent: village view, prompt, decision schema, parser, scheduler with fallback. |
+| `services/llm-proxy` | Cloud Run proxy to Vertex AI Gemini with Firebase auth and quotas. |
 
 ## Develop
 

@@ -1,0 +1,132 @@
+/**
+ * The chief scheduler: turns DeliberationRequested and VisitorArrived events into model calls, applies cadence,
+ * coalescing, a per-village token budget, and a scripted fallback. Never blocks the sim: decisions come back as inputs.
+ */
+import { WEEKS_PER_YEAR, cargoOf, commodityById, recipeById, type Event, type Input, type Order, type Village, type World, type Mandate, type HostAnswer } from '@wind-spirit/sim';
+import { buildView, type VillageView } from './view.js';
+import { statePrompt, systemPrompt, visitorPrompt } from './prompt.js';
+import { DECISION_SCHEMA, HOST_SCHEMA, type ChiefDecisionJson, type HostDecisionJson } from './schema.js';
+import { parseDecision, parseHostDecision } from './parse.js';
+import { renderChronicle } from './conversation.js';
+import type { LlmClient } from './client.js';
+
+export type Speed = 'pause' | 'step' | 'slow' | 'normal' | 'fast' | 'veryfast';
+export interface JournalEntry { tick: number; village: number; reason: string; text: string; source: 'model' | 'habit'; dropped?: string[]; }
+export interface Fallback { decide(w: World, v: Village, reason: string): Order[]; host(w: World, v: Village, mandate: Mandate, guest: Village): HostAnswer; }
+
+export interface SchedulerOptions {
+  client: LlmClient; fallback: Fallback; capNames: Record<string, string>;
+  /** tokens per village per game-year before falling back to habit for the rest of the year */
+  yearlyBudget?: number; maxInFlight?: number; onJournal?: (e: JournalEntry) => void; onError?: (err: unknown, village: number) => void;
+  /** which villages the model runs; others use the fallback (for cost control and tests) */
+  modelVillages?: (id: number) => boolean;
+  speed?: () => Speed;
+}
+
+const URGENT = new Set(['raided', 'famine', 'succession', 'spirit', 'founded', 'visitor']);
+
+export class ChiefScheduler {
+  private inFlight = new Set<number>();
+  private pendingReasons = new Map<number, Set<string>>();
+  private spent = new Map<string, number>();          // `${village}:${year}` -> tokens
+  private lastDecided = new Map<number, number>();
+  private eventsSince = new Map<number, Event[]>();
+  private queue: Input[] = [];
+  readonly journals: JournalEntry[] = [];
+  constructor(private o: SchedulerOptions) {}
+
+  /** Inputs ready to be queued into the sim; drain each tick. */
+  drain(): Input[] { const q = this.queue; this.queue = []; return q; }
+
+  /** Feed this tick's events. Returns promises for any model calls started (tests await them). */
+  onEvents(w: World, events: Event[]): Promise<void>[] {
+    const started: Promise<void>[] = [];
+    for (const v of w.villages) if (v.alive) (this.eventsSince.get(v.id) ?? this.eventsSince.set(v.id, []).get(v.id)!).push(...events.filter(e => touches(e, v.id)));
+    const speed = this.o.speed?.() ?? 'normal';
+    for (const e of events) {
+      if (e.type === 'VisitorArrived') { const host = w.villages[e.village]; if (host?.alive) started.push(this.visitor(w, host, e.party, e.from, e.mandate)); continue; }
+      if (e.type !== 'DeliberationRequested') continue;
+      const v = w.villages[e.village]; if (!v?.alive) continue;
+      const reasons = e.reason.split(',');
+      const urgent = reasons.some(r => URGENT.has(r));
+      const digestOnly = speed === 'fast' || speed === 'veryfast';
+      if (digestOnly && !urgent && !reasons.includes('season')) { const s = this.pendingReasons.get(v.id) ?? new Set(); reasons.forEach(r => s.add(r)); this.pendingReasons.set(v.id, s); continue; }
+      const all = new Set([...(this.pendingReasons.get(v.id) ?? []), ...reasons]); this.pendingReasons.delete(v.id);
+      started.push(this.deliberate(w, v, [...all].join(', ')));
+    }
+    return started;
+  }
+
+  private key(v: Village, w: World): string { return `${v.id}:${Math.floor(w.tick / WEEKS_PER_YEAR)}`; }
+  private overBudget(v: Village, w: World): boolean { return (this.spent.get(this.key(v, w)) ?? 0) >= (this.o.yearlyBudget ?? 200_000); }
+  private useModel(v: Village, w: World): boolean { return (this.o.modelVillages?.(v.id) ?? true) && !this.overBudget(v, w) && this.inFlight.size < (this.o.maxInFlight ?? 4); }
+
+  private habit(w: World, v: Village, reason: string, requestedAt: number, note: string): void {
+    const orders = this.o.fallback.decide(w, v, reason);
+    this.queue.push({ type: 'ChiefDecided', village: v.id, orders, requestedAt });
+    this.journal({ tick: w.tick, village: v.id, reason, text: note, source: 'habit' });
+    this.eventsSince.set(v.id, []);
+  }
+
+  private journal(e: JournalEntry): void { this.journals.push(e); this.o.onJournal?.(e); }
+
+  async deliberate(w: World, v: Village, reason: string): Promise<void> {
+    const requestedAt = w.tick;
+    if (this.inFlight.has(v.id)) { const s = this.pendingReasons.get(v.id) ?? new Set(); reason.split(', ').forEach(r => s.add(r)); this.pendingReasons.set(v.id, s); return; }
+    if (!this.useModel(v, w)) { this.habit(w, v, reason, requestedAt, this.overBudget(v, w) ? 'The chief acted on habit this season; the year had used up their attention.' : 'The chief acted on habit.'); return; }
+    this.inFlight.add(v.id);
+    try {
+      const view = buildView(w, v, { events: this.eventsSince.get(v.id) ?? [], capNames: this.o.capNames, pendingSpirit: [...v.inbox], chronicle: renderChronicle(w, v) });
+      const decision = await this.callDecision(view, reason, v, w);
+      if (!decision) { this.habit(w, v, reason, requestedAt, 'The chief could not make up their mind and fell back on habit.'); return; }
+      const parsed = parseDecision(view, decision);
+      this.queue.push({ type: 'ChiefDecided', village: v.id, orders: parsed.orders, requestedAt });
+      if (parsed.verdicts.length) this.queue.push({ type: 'ChiefJudged', village: v.id, verdicts: parsed.verdicts });
+      if (parsed.replyToSpirit) this.queue.push({ type: 'Prayer', village: v.id, text: parsed.replyToSpirit });
+      v.memory = parsed.memoryNotes;
+      v.inbox = [];
+      this.journal({ tick: w.tick, village: v.id, reason, text: parsed.journal, source: 'model', dropped: parsed.dropped });
+      if (parsed.replyToSpirit) this.onPrayer?.(v.id, parsed.replyToSpirit);
+      this.eventsSince.set(v.id, []);
+    } catch (err) { this.o.onError?.(err, v.id); this.habit(w, v, reason, requestedAt, 'The chief acted on habit; the spirit world was silent.'); }
+    finally { this.inFlight.delete(v.id); const pend = this.pendingReasons.get(v.id); if (pend && pend.size) { this.pendingReasons.delete(v.id); void this.deliberate(w, v, [...pend].join(', ')); } }
+  }
+
+  onPrayer?: (village: number, text: string) => void;
+
+  private async callDecision(view: VillageView, reason: string, v: Village, w: World): Promise<ChiefDecisionJson | undefined> {
+    const system = systemPrompt(view); const user = statePrompt(view, reason);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const res = await this.o.client.generate({ class: 'routine', system, messages: [{ role: 'user', text: user }], schema: DECISION_SCHEMA, maxOutputTokens: 6000, temperature: 0.7, thinkingLevel: 'low', cacheKey: `chief:${w.seed}:${v.id}` });
+      this.spent.set(this.key(v, w), (this.spent.get(this.key(v, w)) ?? 0) + res.usage.input + res.usage.output);
+      const json = (res.json ?? safeJson(res.text)) as ChiefDecisionJson | undefined;
+      if (json && Array.isArray(json.orders)) return json;
+    }
+    return undefined;
+  }
+
+  async visitor(w: World, host: Village, party: number, from: number, mandate: Mandate): Promise<void> {
+    const guest = w.villages[from]; const requestedAt = w.tick;
+    if (!this.useModel(host, w)) { this.queue.push({ type: 'HostDecided', village: host.id, party, answer: this.o.fallback.host(w, host, mandate, guest), requestedAt }); return; }
+    try {
+      const view = buildView(w, host, { events: this.eventsSince.get(host.id) ?? [], capNames: this.o.capNames, chronicle: renderChronicle(w, host) });
+      const p = w.parties.find(x => x.id === party); const m: Mandate = p ? { ...mandate, offer: cargoOf(p) } : mandate;
+      const user = visitorPrompt(view, guest?.name ?? 'strangers', m, id => commodityById(w, id)?.name ?? id, id => recipeById(w, id)?.name ?? id);
+      const res = await this.o.client.generate({ class: 'capable', system: systemPrompt(view), messages: [{ role: 'user', text: user }], schema: HOST_SCHEMA, maxOutputTokens: 4000, temperature: 0.7, thinkingLevel: 'low' });
+      this.spent.set(this.key(host, w), (this.spent.get(this.key(host, w)) ?? 0) + res.usage.input + res.usage.output);
+      const json = (res.json ?? safeJson(res.text)) as HostDecisionJson | undefined;
+      const parsed = json ? parseHostDecision(view, json) : { answer: this.o.fallback.host(w, host, mandate, guest), journal: 'The chief judged the visitors by habit.', dropped: [] as string[] };
+      this.queue.push({ type: 'HostDecided', village: host.id, party, answer: parsed.answer, requestedAt });
+      this.journal({ tick: w.tick, village: host.id, reason: 'visitors', text: parsed.journal, source: json ? 'model' : 'habit', dropped: parsed.dropped });
+    } catch (err) { this.o.onError?.(err, host.id); this.queue.push({ type: 'HostDecided', village: host.id, party, answer: this.o.fallback.host(w, host, mandate, guest), requestedAt }); }
+  }
+
+  /** Tokens spent per village-year, for cost reporting. */
+  spending(): Record<string, number> { return Object.fromEntries(this.spent); }
+}
+
+function touches(e: Event, village: number): boolean {
+  const any = e as unknown as Record<string, unknown>;
+  return any.village === village || any.parent === village || any.attacker === village || any.defender === village || any.guest === village || any.to === village || any.from === village || e.type === 'WeatherRolled';
+}
+function safeJson(s: string): unknown { try { return JSON.parse(s); } catch { const m = s.match(/\{[\s\S]*\}/); if (m) { try { return JSON.parse(m[0]); } catch { return undefined; } } return undefined; } }

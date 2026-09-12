@@ -33,7 +33,7 @@ export function runSuite(nSeeds: number, log: (s: string) => void = () => {}): S
   results['farmer'] = fa;
   const peak = median(fa.map(r => r.peakPop));
   checks.push({ name: 'Farming lifts a village past 50 but plateaus below 250 (median peak)', pass: peak > 50 && peak < 250, detail: `median peak village pop ${peak}` });
-  const hungerShare = fa.map(r => { const h = r.rows.reduce((s, x) => s + x.deathsHunger, 0), t = r.rows.reduce((s, x) => s + x.deathsAge + x.deathsHunger + x.deathsTravel, 0); return t ? h / t : 0; });
+  const hungerShare = fa.map(r => { const h = r.rows.reduce((s, x) => s + x.deathsHunger, 0), t = r.rows.reduce((s, x) => s + x.deathsAge + x.deathsHunger + x.deathsTravel + x.deathsRaid, 0); return t ? h / t : 0; });
   checks.push({ name: 'Under farming without expansion, hunger is a minority cause of death (median share < 50%)', pass: median(hungerShare) < 0.5, detail: `median hunger share ${(median(hungerShare) * 100).toFixed(0)}%` });
 
   log('sensible');
@@ -45,10 +45,12 @@ export function runSuite(nSeeds: number, log: (s: string) => void = () => {}): S
   checks.push({ name: 'Median first colony within 150 years', pass: first.length > 0 && median(first) <= 150, detail: `median first colony year ${first.length ? median(first) : 'never'}` });
   const alive = se.filter(r => r.finalVillages > 0).length / se.length;
   checks.push({ name: 'Civilization persists 300 years in ≥ 90% of worlds', pass: alive >= 0.9, detail: `${(alive * 100).toFixed(0)}% of seeds have a living village; median final pop ${median(se.map(r => r.finalPop))}` });
-  const seHunger = se.map(r => { const h = r.rows.reduce((s, x) => s + x.deathsHunger, 0), t = r.rows.reduce((s, x) => s + x.deathsAge + x.deathsHunger + x.deathsTravel, 0); return t ? h / t : 0; });
+  const seHunger = se.map(r => { const h = r.rows.reduce((s, x) => s + x.deathsHunger, 0), t = r.rows.reduce((s, x) => s + x.deathsAge + x.deathsHunger + x.deathsTravel + x.deathsRaid, 0); return t ? h / t : 0; });
   checks.push({ name: 'With expansion, hunger falls below 45% of deaths', pass: median(seHunger) < 0.45, detail: `median hunger share ${(median(seHunger) * 100).toFixed(0)}%` });
   const paths = median(se.map(r => r.pathTiles));
   checks.push({ name: 'Paths form (median ≥ 5 path tiles after 300 years)', pass: paths >= 5, detail: `median path tiles ${paths}` });
+  const trades = median(se.map(r => r.trades)), raids = median(se.map(r => r.raids));
+  checks.push({ name: 'Trade happens and outnumbers raids over 300 years', pass: trades >= 10 && trades > raids, detail: `median trades ${trades}, raids ${raids}, tech transfers ${median(se.map(r => r.transfers))}` });
   // discovery ladder
   const lastRows = (r: RunResult) => r.rows.filter(x => x.year === r.years - 1 && x.alive);
   const capsMed = median(se.map(r => median(lastRows(r).map(x => x.capabilities))));

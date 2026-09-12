@@ -95,7 +95,7 @@ export function generateWorld(o: GenOptions): World {
 
   const world: World & { names: string[]; nameCursor: number } = {
     seed: o.seed, width, height, tick: 0, tiles, villages: [], parties: [], rolls: [], wind: [],
-    commodities: tech.commodities, recipes: tech.recipes, breath: 100_000, nextId: 1, rng: {},
+    commodities: tech.commodities, recipes: tech.recipes, breath: 100_000, storms: [], nextId: 1, rng: {},
     names: villageNames(Rng.fromSeed(o.seed, 'names'), 200), nameCursor: 0,
   };
 

@@ -1,0 +1,17 @@
+{
+  "_comment": "Self-contained copy of ../../tsconfig.base.json for the Docker build, whose context is this directory only. Keep in sync with the base.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noImplicitOverride": true,
+    "declaration": false,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "lib": ["ES2022"],
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}

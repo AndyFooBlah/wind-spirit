@@ -37,7 +37,7 @@ export interface Plot {
 
 export interface Stack { c: string; qty: number; age: number; }
 
-export type Task = 'forage' | 'hunt' | 'fish' | 'gather' | 'clear' | 'farm' | 'build' | 'craft' | 'research' | 'road' | 'explore' | 'colonize' | 'rest';
+export type Task = 'forage' | 'hunt' | 'fish' | 'gather' | 'clear' | 'farm' | 'build' | 'craft' | 'research' | 'road' | 'explore' | 'colonize' | 'envoy' | 'raid' | 'rest';
 
 export interface Order {
   task: Task;
@@ -52,7 +52,18 @@ export interface Knowledge {
   villages: number[];   // village ids known
 }
 
-export interface Relation { grudge: number; lastContact: number; }
+/** A claim the spirit made. Weather claims are checked by the sim; others the chief judges when due. */
+export interface Claim {
+  id: number; tick: number; text: string; due: number;
+  check: { kind: 'weather'; season: number; roll: SeasonRoll } | { kind: 'judged' } | { kind: 'none' };
+  outcome: 'pending' | 'fulfilled' | 'failed' | 'unverifiable';
+}
+export type BreathAction =
+  | { kind: 'nudge'; season: number; direction: 'wetter' | 'drier' | 'milder' | 'harsher' }
+  | { kind: 'override'; season: number; roll: SeasonRoll }
+  | { kind: 'storm'; tile: number }
+  | { kind: 'sail'; party: number; mode: 'fill' | 'becalm' };
+export interface Relation { grudge: number; lastContact: number; trades: number; raids: number; sizeSeen: number; }
 
 export interface Village {
   id: number; name: string; tile: number; founded: number; alive: boolean; parent: number;
@@ -64,6 +75,10 @@ export interface Village {
   tasted: Record<string, number>;   // commodity id -> last tick consumed or enjoyed
   craft: Record<string, number>;    // recipe id -> accumulated worker-weeks (thousandths)
   hints: Record<string, number>;    // recipe id -> hints revealed so far
+  relations: Record<number, Relation>;   // other village id -> memory of them
+  memory: string[];                 // the chief's own notes, bounded
+  inbox: string[];                  // spirit messages not yet considered
+  chronicle: Claim[];               // what the spirit said, and what came of it
   orders: Order[];
   happiness: number; lowHappyWeeks: number; trust: number;
   knowledge: Knowledge;
@@ -76,12 +91,17 @@ export interface Village {
 }
 
 export interface YearStats {
-  births: number; deathsAge: number; deathsHunger: number; deathsTravel: number;
+  births: number; deathsAge: number; deathsHunger: number; deathsTravel: number; deathsRaid: number;
   forage: number; hunt: number; fish: number; farm: number; wood: number; stone: number; gathered: number; crafted: number;
   spoiled: number;
 }
 
-export type PartyKind = 'explore' | 'colonize' | 'refugee';
+export type PartyKind = 'explore' | 'colonize' | 'refugee' | 'envoy' | 'raid';
+
+/** What an envoy carries besides goods: what to offer, what to ask for, the floor it will accept, an optional recipe to share, an optional threat. */
+export interface Mandate { offer: Record<string, number>; want: Record<string, number>; floor: number; transfer?: string; threat?: boolean; message?: string; }
+/** The host chief's answer to a visiting envoy. */
+export type HostAnswer = { kind: 'accept' } | { kind: 'refuse'; reason?: string } | { kind: 'counter'; give: Record<string, number>; take: Record<string, number> };
 export interface Party {
   id: number; home: number; kind: PartyKind;
   members: Person[]; rations: number; cargo: Stack[];
@@ -90,6 +110,8 @@ export interface Party {
   route: number[]; at: number; dayCarry: number; target: number; returning: boolean;
   seen: number[];
   lostWeeks: number;
+  mandate?: Mandate; waiting: number; result?: string; targetVillage?: number;
+  sailBoost?: 'fill' | 'becalm';
 }
 
 export type Category = 'grain' | 'fruit' | 'root' | 'meat' | 'fish' | 'hide' | 'wood' | 'stone' | 'fiber' | 'herb' | 'clay' | 'salt' | 'ore' | 'food' | 'drink' | 'cloth' | 'instrument' | 'metal' | 'fuel' | 'curio';
@@ -128,7 +150,8 @@ export interface World {
   wind: Direction[];
   commodities: Commodity[];
   recipes: Recipe[];
-  breath: number;
+  breath: number;               // the spirit's pool, thousandths
+  storms: { tile: number; tick: number }[];
   nextId: number;
   rng: Record<string, [number, number, number, number]>;
 }
@@ -139,7 +162,7 @@ export type Event =
   | { t: number; type: 'WeatherRolled'; season: number; roll: SeasonRoll; wind: Direction }
   | { t: number; type: 'Harvested'; village: number; qty: number; plots: number }
   | { t: number; type: 'Born'; village: number; person: number }
-  | { t: number; type: 'Died'; village: number; person: number; cause: 'age' | 'hunger' | 'travel'; stage: Stage }
+  | { t: number; type: 'Died'; village: number; person: number; cause: 'age' | 'hunger' | 'travel' | 'raid'; stage: Stage }
   | { t: number; type: 'ChiefSucceeded'; village: number; chief: number; reason: 'death' | 'coup' }
   | { t: number; type: 'Built'; village: number; recipe: string }
   | { t: number; type: 'Discovered'; village: number; recipe: string; how: 'research' | 'accident' | 'transfer' }
@@ -147,6 +170,19 @@ export type Event =
   | { t: number; type: 'Crafted'; village: number; recipe: string; qty: number }
   | { t: number; type: 'CapabilityGained'; village: number; capability: Capability }
   | { t: number; type: 'RoadBuilt'; village: number; tile: number }
+  | { t: number; type: 'VisitorArrived'; village: number; party: number; from: number; mandate: Mandate }
+  | { t: number; type: 'TradeCompleted'; village: number; guest: number; gave: Record<string, number>; got: Record<string, number> }
+  | { t: number; type: 'TradeRefused'; village: number; guest: number; reason: string }
+  | { t: number; type: 'TechTransferred'; village: number; from: number; recipe: string }
+  | { t: number; type: 'TributePaid'; village: number; to: number; goods: Record<string, number> }
+  | { t: number; type: 'RaidResolved'; attacker: number; defender: number; success: boolean; attackersLost: number; defendersLost: number; taken: Record<string, number>; destroyed: boolean }
+  | { t: number; type: 'HostDecided'; village: number; party: number; answer: HostAnswer; requestedAt: number }
+  | { t: number; type: 'SpiritSpoke'; village: number; text: string }
+  | { t: number; type: 'SpiritBreathed'; action: BreathAction; cost: number; natural?: SeasonRoll; adjusted?: SeasonRoll }
+  | { t: number; type: 'StormStruck'; tile: number; parties: number; drowned: number }
+  | { t: number; type: 'ClaimRecorded'; village: number; claim: Claim }
+  | { t: number; type: 'ClaimResolved'; village: number; claim: number; outcome: 'fulfilled' | 'failed' | 'unverifiable'; trustBefore: number; trustAfter: number }
+  | { t: number; type: 'Prayer'; village: number; text: string }
   | { t: number; type: 'Cleared'; village: number; plots: number }
   | { t: number; type: 'PartyLeft'; village: number; party: number; kind: PartyKind; size: number }
   | { t: number; type: 'PartyReturned'; village: number; party: number; tilesSeen: number }
@@ -159,4 +195,11 @@ export type Event =
   | { t: number; type: 'ChiefDecided'; village: number; orders: Order[]; requestedAt: number }
   | { t: number; type: 'WeekSummary'; births: number; deaths: number; pop: number; villages: number };
 
-export type Input = { type: 'ChiefDecided'; village: number; orders: Order[]; requestedAt: number };
+export type Input =
+  | { type: 'ChiefDecided'; village: number; orders: Order[]; requestedAt: number }
+  | { type: 'HostDecided'; village: number; party: number; answer: HostAnswer; requestedAt: number }
+  | { type: 'SpiritSpoke'; village: number; text: string }
+  | { type: 'SpiritBreathed'; action: BreathAction }
+  | { type: 'ClaimsMade'; village: number; claims: { text: string; due: number; check: Claim['check'] }[] }
+  | { type: 'ChiefJudged'; village: number; verdicts: { claim: number; verdict: 'fulfilled' | 'failed' | 'unverifiable' }[] }
+  | { type: 'Prayer'; village: number; text: string };

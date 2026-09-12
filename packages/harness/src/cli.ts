@@ -14,7 +14,7 @@ if (cmd === 'run') {
   const n = Number(arg('seeds', '10')), years = Number(arg('years', '200')), policy = arg('policy', 'sensible') as PolicyName;
   const startPop = Number(arg('pop', '20')); const prefix = arg('prefix', 'run');
   const results = [];
-  for (let i = 0; i < n; i++) { const r = runOne({ seed: `${prefix}-${i}`, years, policy, startPop, replayCheck: i === 0 }); results.push(r); console.log(`${r.seed}: villages ${r.finalVillages} pop ${r.finalPop} peak ${r.peakPop} founded ${r.villagesFounded} paths ${r.pathTiles} (${r.ms} ms)`); }
+  for (let i = 0; i < n; i++) { const r = runOne({ seed: `${prefix}-${i}`, years, policy, startPop, replayCheck: i === 0 }); results.push(r); console.log(`${r.seed}: villages ${r.finalVillages} pop ${r.finalPop} peak ${r.peakPop} founded ${r.villagesFounded} paths ${r.pathTiles} trades ${r.trades} raids ${r.raids} transfers ${r.transfers} (${r.ms} ms)`); }
   writeFileSync(join(out, 'rows.csv'), toCsv(results.flatMap(r => r.rows)));
   writeFileSync(join(out, 'report.html'), buildReport(results, [], `Wind Spirit harness: ${policy}, ${n} seeds × ${years} years`));
   console.log(`wrote ${out}/report.html`);

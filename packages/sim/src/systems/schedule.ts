@@ -13,6 +13,11 @@ export function schedule(ctx: Ctx, since: number): void {
     else if (e.type === 'PartyReturned') add(e.village, 'party-returned');
     else if (e.type === 'VillageFounded') add(e.village, 'founded');
     else if (e.type === 'Built') add(e.village, 'built');
+    else if (e.type === 'Discovered') add(e.village, 'discovery');
+    else if (e.type === 'SpiritSpoke') add(e.village, 'spirit');
+    else if (e.type === 'ClaimResolved') add(e.village, 'omen');
+    else if (e.type === 'RaidResolved') { add(e.defender, 'raided'); }
+    else if (e.type === 'TradeCompleted' || e.type === 'TradeRefused') add(e.village, 'visitor-left');
   }
   for (const v of w.villages) {
     if (!v.alive) continue;

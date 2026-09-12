@@ -35,7 +35,7 @@ export function buildReport(results: RunResult[], checks: Check[], title: string
   const villages = series(results, rows => rows.filter(r => r.alive).length);
   const src = (k: keyof YearRow, scale = 1) => series(results, rows => rows.reduce((a, r) => a + Number(r[k]), 0) / scale);
   const forage = src('forage', 1000), hunt = src('hunt', 1000), fish = src('fish', 1000), farm = src('farm', 1000), spoiled = src('spoiled', 1000);
-  const dAge = src('deathsAge'), dHunger = src('deathsHunger'), dTravel = src('deathsTravel'), births = src('births');
+  const dAge = src('deathsAge'), dHunger = src('deathsHunger'), dTravel = src('deathsTravel'), dRaid = src('deathsRaid'), births = src('births');
   const happy = series(results, rows => { const a = rows.filter(r => r.alive); return a.length ? a.reduce((s, r) => s + r.happiness, 0) / a.length : 0; });
   const stores = series(results, rows => { const a = rows.filter(r => r.alive); return a.length ? a.reduce((s, r) => s + r.storesWeeks, 0) / a.length : 0; });
   const perSeed = results.map(r => `<tr><td>${r.seed}</td><td>${r.finalVillages}</td><td>${r.finalPop}</td><td>${r.peakPop}</td><td>${r.villagesFounded}</td><td>${r.firstColonyYear < 0 ? '—' : r.firstColonyYear}</td><td>${r.pathTiles}</td><td>${r.hash.slice(0, 10)}</td><td>${r.replayHash ? (r.replayHash === r.hash ? 'ok' : 'MISMATCH') : ''}</td><td>${r.ms}</td></tr>`).join('');
@@ -52,7 +52,7 @@ ${checks.length ? `<h2>Checks</h2><table><tr><th></th><th>Check</th><th>Detail</
 ${svgLines('Total population (all villages)', [{ name: 'population', color: '#2f6f7a', ys: pop.median, band: pop }])}
 ${svgLines('Villages alive', [{ name: 'villages', color: '#8c5f2a', ys: villages.median, band: villages }])}
 ${svgLines('Food produced per year by source', [{ name: 'forage', color: '#4c9a2a', ys: forage.median }, { name: 'hunt', color: '#a0522d', ys: hunt.median }, { name: 'fish', color: '#2f6f7a', ys: fish.median }, { name: 'farm', color: '#c9a227', ys: farm.median }, { name: 'spoiled', color: '#999', ys: spoiled.median }])}
-${svgLines('Births and deaths per year', [{ name: 'births', color: '#2f6f7a', ys: births.median }, { name: 'age', color: '#777', ys: dAge.median }, { name: 'hunger', color: '#b3261e', ys: dHunger.median }, { name: 'travel', color: '#e08a1e', ys: dTravel.median }])}
+${svgLines('Births and deaths per year', [{ name: 'births', color: '#2f6f7a', ys: births.median }, { name: 'age', color: '#777', ys: dAge.median }, { name: 'hunger', color: '#b3261e', ys: dHunger.median }, { name: 'travel', color: '#e08a1e', ys: dTravel.median }, { name: 'raid', color: '#5b3a8c', ys: dRaid.median }])}
 ${svgLines('Mean happiness (thousandths) and stores (weeks)', [{ name: 'happiness', color: '#2f6f7a', ys: happy.median }, { name: 'stores weeks ×10', color: '#c9a227', ys: stores.median.map(v => v * 10) }])}
 <h2>Per seed</h2><table><tr><th>seed</th><th>villages</th><th>final pop</th><th>peak village</th><th>founded</th><th>first colony yr</th><th>path tiles</th><th>hash</th><th>replay</th><th>ms</th></tr>${perSeed}</table>
 </body></html>`;

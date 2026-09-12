@@ -2,7 +2,8 @@ import { K, mul, div } from '../fixed.js';
 import { harvestWeatherFactor, P, seasonOf, TERRAIN, WEEKS_PER_SEASON } from '../params.js';
 import type { Capability, Order, Person, Recipe, Village, WildResource } from '../types.js';
 import { CAPABILITIES } from '../types.js';
-import { addStore, commodityById, craftLaborMult, hasCap, idx, inBounds, learnCommodities, nearWater, neighbors, popCounts, recipeById, stageOf, storeQty, takeStore, xy, type Ctx } from '../world.js';
+import { addStore, commodityById, craftLaborMult, hasCap, idx, inBounds, learnCommodities, nearWater, neighbors, parseGoods, popCounts, recipeById, stageOf, storeQty, takeStore, xy, type Ctx } from '../world.js';
+import { addCargo } from './diplomacy.js';
 import { tread } from './paths.js';
 import { spawnParty } from './travel.js';
 import { currentRoll } from './weather.js';
@@ -35,6 +36,8 @@ export function work(ctx: Ctx): void {
         case 'road': { const done = road(ctx, v, Number(o.params.tile ?? -1), n); free -= n; if (!done) keep.push(o); break; }
         case 'explore': { const used = explore(ctx, v, o, free); free -= used; break; }
         case 'colonize': { const used = colonize(ctx, v, o, free); free -= used; break; }
+        case 'envoy': { const used = envoy(ctx, v, o, free); free -= used; break; }
+        case 'raid': { const used = raid(ctx, v, o, free); free -= used; break; }
         case 'rest': free -= n; keep.push(o); break;
       }
     }
@@ -277,6 +280,35 @@ function explore(ctx: Ctx, v: Village, o: Order, free: number): number {
   const rations = takeStore(v, 'grain', members.length * 4 * P.foodPerPersonWeek);
   const party = spawnParty(ctx, v, 'explore', members, rations, target, { boat, cart: hasCap(v, 'cart'), sail: hasCap(v, 'sail') });
   if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
+  return n;
+}
+
+function envoy(ctx: Ctx, v: Village, o: Order, free: number): number {
+  const { w } = ctx; const target = w.villages[Number(o.params.target ?? -1)];
+  if (!target || !target.alive || target.id === v.id || !v.knowledge.villages.includes(target.id)) return 0;
+  const n = Math.max(1, Math.min(o.workers || 2, free)); if (free < n) return 0;
+  const offer = parseGoods(String(o.params.offer ?? '')); const want = parseGoods(String(o.params.want ?? ''));
+  for (const c of Object.keys(offer)) offer[c] = Math.min(offer[c], storeQty(v, c));
+  const members = takeAdults(v, w.tick, n);
+  const rations = takeStore(v, 'grain', members.length * 6 * P.foodPerPersonWeek);
+  const party = spawnParty(ctx, v, 'envoy', members, rations, target.tile, { boat: hasCap(v, 'paddle'), cart: hasCap(v, 'cart'), sail: hasCap(v, 'sail') });
+  if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
+  party.targetVillage = target.id;
+  const capacity = members.length * P.carryPerPerson * (party.cart ? 3 : 1) * (party.boat ? 4 : 1); let room = capacity;
+  for (const [c, q] of Object.entries(offer)) { const take = Math.min(q, room); if (take <= 0) continue; takeStore(v, c, take); addCargo(party, c, take); room -= take; }
+  party.mandate = { offer: Object.fromEntries(party.cargo.map(s => [s.c, s.qty])), want, floor: Math.max(0, Math.min(K, Number(o.params.floor ?? 700))), transfer: o.params.transfer ? String(o.params.transfer) : undefined, threat: !!o.params.threat, message: o.params.message ? String(o.params.message) : undefined };
+  return n;
+}
+
+function raid(ctx: Ctx, v: Village, o: Order, free: number): number {
+  const { w } = ctx; const target = w.villages[Number(o.params.target ?? -1)];
+  if (!target || !target.alive || target.id === v.id || !v.knowledge.villages.includes(target.id)) return 0;
+  const n = Math.min(o.workers, free); if (n < 2) return 0;
+  const members = takeAdults(v, w.tick, n);
+  const rations = takeStore(v, 'grain', members.length * 6 * P.foodPerPersonWeek);
+  const party = spawnParty(ctx, v, 'raid', members, rations, target.tile, { boat: hasCap(v, 'paddle'), cart: hasCap(v, 'cart'), sail: hasCap(v, 'sail') });
+  if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
+  party.targetVillage = target.id;
   return n;
 }
 

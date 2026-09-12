@@ -24,6 +24,12 @@ export const P = {
   researchFocused: 120, researchExplore: 25, researchKnown: 400, hintFocused: 120, hintExplore: 150,
   serendipity: 300,             // per week per village, in hundred-thousandths
   roadStone: 5000, roadLabor: 4,
+  /** Breath: the spirit's pool (thousandths of 100). */
+  breathCap: 100_000, breathRegen: 250, breathNudge: 15_000, breathOverride: 50_000, breathStorm: 80_000, breathSail: 10_000,
+  /** Trust changes (thousandths). */
+  trustFulfilled: 100, trustFailed: -200, trustInherit: 700,
+  envoyPatience: 8,             // weeks an envoy waits for the host's answer
+  carryPerPerson: 6000,         // units a person carries on foot
   /** Farming. */
   clearLabor: 4000,             // worker-weeks (thousandths) to clear one plot
   plotsPerFarmer: 3,            // plots a farmer can plant or harvest per week

@@ -1,8 +1,9 @@
 import { K, mul } from '../fixed.js';
 import { P, seasonOf, TERRAIN, TILE_MILES, WEEKS_PER_YEAR } from '../params.js';
 import type { Party, PartyKind, Person, Village, World } from '../types.js';
-import { addStore, foundVillage, knowledgeUnion, neighbors, xy, type Ctx } from '../world.js';
+import { addStore, foundVillage, knowledgeUnion, neighbors, relation, xy, type Ctx } from '../world.js';
 import { isPath, tread } from './paths.js';
+import { envoyArrives, raidArrives } from './diplomacy.js';
 
 /** Days (thousandths) to enter `to` from adjacent `from`. Infinity if impassable. Boats may use water at paddle or sail speed. */
 export function stepCost(w: World, from: number, to: number, boat = false, sail = false): number {
@@ -51,7 +52,7 @@ export function spawnParty(ctx: Ctx, v: Village, kind: PartyKind, members: Perso
   const r = route(w, v.tile, target, gear.boat, gear.sail);
   if (!r.length && target !== v.tile) return null;
   for (const m of members) m.hungry = 0;
-  const p: Party = { id: w.nextId++, home: v.id, kind, members, rations, cargo: [], mode: 'provisioned', boat: gear.boat, cart: gear.cart, sail: gear.sail, route: r, at: v.tile, dayCarry: 0, target, returning: false, seen: [], lostWeeks: 0 };
+  const p: Party = { id: w.nextId++, home: v.id, kind, members, rations, cargo: [], mode: 'provisioned', boat: gear.boat, cart: gear.cart, sail: gear.sail, route: r, at: v.tile, dayCarry: 0, target, returning: false, seen: [], lostWeeks: 0, waiting: 0 };
   addSeen(p, neighbors(w, v.tile, 1, true));
   w.parties.push(p);
   ctx.events.push({ t: w.tick, type: 'PartyLeft', village: v.id, party: p.id, kind, size: members.length });
@@ -63,6 +64,8 @@ export function moveParties(ctx: Ctx): void {
   const winter = seasonOf(w.tick) === 3;
   for (const p of [...w.parties]) {
     const home = w.villages[p.home];
+    if (p.waiting > 0) continue;                       // envoys waiting for an answer eat as guests
+    if (p.returning && !p.route.length && p.at !== home.tile) { const dest = p.kind === 'refugee' ? w.villages[p.target]?.tile ?? home.tile : home.tile; p.route = route(w, p.at, dest, p.boat, p.sail); if (!p.route.length) { remove(w, p); continue; } }
     if (p.lostWeeks > 0) { p.lostWeeks--; eat(ctx, p); continue; }
     if (p.route.length && !home.knowledge.tiles.includes(p.at) && rng.chance(P.lostChanceK)) { p.lostWeeks = 1; eat(ctx, p); continue; }
     let mult = K;
@@ -70,7 +73,8 @@ export function moveParties(ctx: Ctx): void {
     if (!p.cart && p.rations > p.members.length * 2 * P.foodPerPersonWeek) mult = mul(mult, P.loadSpeed);
     let budget = mul(7000, mult) + p.dayCarry;
     while (p.route.length) {
-      const next = p.route[0]; const cost = stepCost(w, p.at, next, p.boat, p.sail);
+      const next = p.route[0]; let cost = stepCost(w, p.at, next, p.boat, p.sail);
+      if (p.boat && TERRAIN[w.tiles[next].terrain].water && p.sailBoost) cost = p.sailBoost === 'fill' ? Math.trunc(cost * 600 / K) : stepCost(w, p.at, next, true, false);
       if (cost === Infinity) { p.route = route(w, p.at, p.route[p.route.length - 1], p.boat, p.sail); if (!p.route.length) break; continue; }
       if (cost > budget) break;
       budget -= cost; p.at = next; p.route.shift();
@@ -119,8 +123,14 @@ function arrive(ctx: Ctx, p: Party): void {
   const { w } = ctx; const home = w.villages[p.home];
   if (p.kind === 'refugee') {
     const target = w.villages[p.target];
-    if (target && target.alive) { for (const m of p.members) { m.hungry = 0; target.people.push(m); } }
+    if (target && target.alive) { for (const m of p.members) { m.hungry = 0; target.people.push(m); } for (const s of p.cargo) addStore(target, s.c, s.qty, s.age); }
     remove(w, p); return;
+  }
+  if ((p.kind === 'envoy' || p.kind === 'raid') && !p.returning) {
+    const host = w.villages[p.targetVillage ?? -1];
+    if (!host || !host.alive || host.tile !== p.at) { p.returning = true; p.result = 'gone'; return; }
+    if (p.kind === 'envoy') envoyArrives(ctx, p, host); else raidArrives(ctx, p, host);
+    return;
   }
   if (p.kind === 'colonize' && !p.returning) {
     let site = habitable(w, p.at) ? p.at : -1;
@@ -145,6 +155,7 @@ function arrive(ctx: Ctx, p: Party): void {
   if (!home.alive) return goRefugee(ctx, p);
   for (const m of p.members) { m.hungry = 0; home.people.push(m); }
   knowledgeUnion(home.knowledge, p.seen);
+  for (const tile of p.seen) { const id = w.tiles[tile].village; if (id >= 0 && id !== home.id && !home.knowledge.villages.includes(id)) { home.knowledge.villages.push(id); const r = relation(home, id); r.lastContact = w.tick; r.sizeSeen = w.villages[id].people.length; } }
   if (p.rations > 0) addStore(home, 'plants', p.rations);
   for (const s of p.cargo) addStore(home, s.c, s.qty, s.age);
   ctx.events.push({ t: w.tick, type: 'PartyReturned', village: p.home, party: p.id, tilesSeen: p.seen.length });

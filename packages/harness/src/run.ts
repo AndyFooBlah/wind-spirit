@@ -1,19 +1,19 @@
 import { Rng, Sim, WEEKS_PER_YEAR, isPath, popCounts, shelter, storesWeeks, type Event, type Input, type World } from '@wind-spirit/sim';
 import { generateWorld } from '@wind-spirit/gen';
-import { POLICIES, type PolicyName } from './policies.js';
+import { POLICIES, hostAnswer, type PolicyName } from './policies.js';
 
 export interface RunOptions { seed: string; years: number; policy: PolicyName; villages?: number; startPop?: number; replayCheck?: boolean; }
 
 export interface YearRow {
   seed: string; year: number; village: number; name: string; alive: number; pop: number; children: number; adults: number; elders: number;
-  storesWeeks: number; happiness: number; shelter: number; births: number; deathsAge: number; deathsHunger: number; deathsTravel: number;
+  storesWeeks: number; happiness: number; shelter: number; births: number; deathsAge: number; deathsHunger: number; deathsTravel: number; deathsRaid: number;
   forage: number; hunt: number; fish: number; farm: number; gathered: number; crafted: number; spoiled: number; cleared: number; huts: number; granary: number;
   recipes: number; capabilities: number; maxTier: number;
 }
 export interface RunResult {
   seed: string; policy: PolicyName; years: number; rows: YearRow[]; hash: string; replayHash?: string;
   villagesFounded: number; firstColonyYear: number; pathTiles: number; peakPop: number; finalPop: number; finalVillages: number;
-  events: Record<string, number>; ms: number;
+  events: Record<string, number>; ms: number; trades: number; raids: number; transfers: number;
 }
 
 export function runOne(o: RunOptions): RunResult {
@@ -37,6 +37,10 @@ export function runOne(o: RunOptions): RunResult {
         queued.push({ type: 'ChiefDecided', village: v.id, orders, requestedAt: e.t });
       }
       if (e.type === 'VillageFounded' && firstColonyYear < 0) firstColonyYear = Math.floor(e.t / WEEKS_PER_YEAR);
+      if (e.type === 'VisitorArrived') {
+        const host = world.villages[e.village]; const guest = world.villages[e.from]; if (!host.alive) continue;
+        queued.push({ type: 'HostDecided', village: host.id, party: e.party, answer: hostAnswer({ w: world, v: host, reason: 'visitor', rng, mem: (mem[host.id] ??= {}) }, e.mandate, guest), requestedAt: e.t });
+      }
     }
     inputs.push(queued); for (const i of queued) sim.queue(i);
     if (world.tick % WEEKS_PER_YEAR === 0) {
@@ -59,7 +63,7 @@ export function runOne(o: RunOptions): RunResult {
   }
   let pathTiles = 0; for (const t of world.tiles) if (isPath(t.trodden, t.road)) pathTiles++;
   let finalPop = 0, finalVillages = 0; for (const v of world.villages) if (v.alive) { finalVillages++; finalPop += v.people.length; }
-  return { seed: o.seed, policy: o.policy, years: o.years, rows, hash, replayHash, villagesFounded: world.villages.length - initial, firstColonyYear, pathTiles, peakPop, finalPop, finalVillages, events: counts, ms: Date.now() - t0 };
+  return { seed: o.seed, policy: o.policy, years: o.years, rows, hash, replayHash, villagesFounded: world.villages.length - initial, firstColonyYear, pathTiles, peakPop, finalPop, finalVillages, events: counts, ms: Date.now() - t0, trades: (counts.TradeCompleted ?? 0) + (counts.TributePaid ?? 0), raids: counts.RaidResolved ?? 0, transfers: counts.TechTransferred ?? 0 };
 }
 
 export function toCsv(rows: YearRow[]): string {
