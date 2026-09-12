@@ -1,6 +1,6 @@
 # Wind Spirit — Concept Document
 
-*Status: concept settled. See technical-design.md. No code yet.*
+*Status: concept settled; M0–M2 built, M3–M7 in progress. See technical-design.md and build-notes.md.*
 *Last updated: 2026-09-11*
 
 ## 1. One-liner
@@ -281,3 +281,9 @@ Language evolution, per-individual tech knowledge, genders, continuous real time
 - 2026-09-11: Audio design: wind is the player; five buses; speed-dependent playback; generated music.
 - 2026-09-11: Step zero of the build is a headless balance harness with scripted chiefs.
 - 2026-09-11: World pauses when closed; chiefs speak plain stylized English; opening is a first prayer; no ending; two-tier chief models. Concept settled.
+- 2026-09-12 (build): Starvation is rationing with quadratic, capped mortality; births scale with a hardship average; adulthood 14–60. (m0-notes.md)
+- 2026-09-12 (build): Tech skeleton of ~45 slots in four tiers, seeded leaves; regional raw commodities in blobs; research has explore / focused / hint-driven speeds. (build-notes.md)
+- 2026-09-12 (build): Envoys teach any recipe they carry on arrival; hosts answer within eight weeks or the envoy leaves; raids take stores, not people, unless overwhelming. (build-notes.md)
+- 2026-09-12 (build): Expeditions collect far commodities; settlers leave one party at a time and never fewer than 16 behind.
+- 2026-09-12 (build): Model ids live in the proxy: routine gemini-3.8-flash, capable gemini-3.1-pro-preview; thinking low for routine decisions.
+- 2026-09-12 (build): The hunger balance check measures the expansion phase; once a 64×64 map fills (~year 150) hunger regulates and that is expected. Larger worlds are supported by the generator and harness (--size).

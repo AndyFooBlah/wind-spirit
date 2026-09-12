@@ -2,7 +2,7 @@ import { Rng, Sim, WEEKS_PER_YEAR, isPath, popCounts, shelter, storesWeeks, type
 import { generateWorld } from '@wind-spirit/gen';
 import { POLICIES, hostAnswer, type PolicyName } from './policies.js';
 
-export interface RunOptions { seed: string; years: number; policy: PolicyName; villages?: number; startPop?: number; replayCheck?: boolean; }
+export interface RunOptions { seed: string; years: number; policy: PolicyName; villages?: number; startPop?: number; size?: number; replayCheck?: boolean; }
 
 export interface YearRow {
   seed: string; year: number; village: number; name: string; alive: number; pop: number; children: number; adults: number; elders: number;
@@ -18,7 +18,7 @@ export interface RunResult {
 
 export function runOne(o: RunOptions): RunResult {
   const t0 = Date.now();
-  const world = generateWorld({ seed: o.seed, villages: o.villages ?? 4, startPop: o.startPop ?? 20 });
+  const world = generateWorld({ seed: o.seed, villages: o.villages ?? 4, startPop: o.startPop ?? 20, width: o.size ?? 64, height: o.size ?? 64 });
   const initial = world.villages.length;
   const sim = new Sim(world);
   const policy = POLICIES[o.policy]; const rng = Rng.fromSeed(o.seed, 'work'); const mem: Record<number, Record<string, number>> = {};
@@ -57,7 +57,7 @@ export function runOne(o: RunOptions): RunResult {
   const hash = sim.hash();
   let replayHash: string | undefined;
   if (o.replayCheck) {
-    const w2 = generateWorld({ seed: o.seed, villages: o.villages ?? 4, startPop: o.startPop ?? 20 }); const s2 = new Sim(w2);
+    const w2 = generateWorld({ seed: o.seed, villages: o.villages ?? 4, startPop: o.startPop ?? 20, width: o.size ?? 64, height: o.size ?? 64 }); const s2 = new Sim(w2);
     for (let t = 0; t < total; t++) { s2.tick(); for (const i of inputs[t]) s2.queue(i); }
     replayHash = s2.hash();
   }
