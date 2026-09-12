@@ -49,3 +49,19 @@ First smoke run, Gemini 3.8 Flash on 14 cases: 0.99. The rule checks are a floor
 ## The intelligence knob
 
 Four tiers in `packages/agents/src/tiers.ts`, chosen per game: habit ($0, scripted chiefs; the model only for dreams), thrifty ($1 a century: cheap model for routine, standard for impactful, seasonal digests only), standard ($5: the current behaviour), lavish ($100: capable model for impactful decisions and the premium model for conversations). A decision is *impactful* when the reason is a visitor, a raid, a famine, a succession, a spirit message, or a seasonal decision where a settlement site is known and the village is 40 or more. Everything else is routine. The evals decide which model fills each slot.
+
+## Correction: Vertex prices are not Gemini API prices (2026-09-12)
+
+The proxy bills through Vertex AI, and the Cloud Billing Catalog says Gemini 3.8 Flash on Vertex is **$1.50 in / $7.50 out** per million, double the Gemini API list I used above (which was the 2026 promotional price on the API side). So the baseline chief is about $34 per century at normal cadence and $10 at fast, not $17 and $5. Flash-Lite and 2.5 Flash are the same on both ($0.30 / $2.50), and 2.5 Flash-Lite is $0.10 / $0.40. Every price in the model table now comes from the catalog SKUs or, where a model is billed through Marketplace, the pricing page, and is served by the proxy on `/v1/models` so the eval runner computes cost from the same numbers it is billed at.
+
+## What is actually available without a click-through
+
+Working through the service account today: the Gemini line (3.8, 3.6, 3.5 Flash; 3.5 and 3.1 Flash-Lite; 2.5 Flash and Flash-Lite; 3.1 Pro), and the open models offered as managed APIs that need no enablement: gpt-oss-120b ($0.09 / $0.36) and gpt-oss-20b, DeepSeek V3.2 ($0.56 / $1.68) and R1, Qwen3-235B ($0.22 / $0.88) and Qwen3-Next-80B, and Gemma 4 26B ($0.15 / $0.60). Three of those (DeepSeek V3.2, both Qwens) are already deprecated and retire on 2026-10-21, so they can inform the study but not the product.
+
+Blocked behind a Model Garden "Enable" click that accepts partner terms, which no API call can do: every Claude model (Haiku 4.5 at $1.00 / $5.00, Sonnet 5), Llama 4 Maverick, Llama 3.3, and Mistral. The Anthropic adapter is written and untested until someone clicks.
+
+Observation: on list price alone, nothing in the Claude line is cheaper than 3.8 Flash on Vertex except Haiku's input side, and the cheap tier is really a contest between Flash-Lite, 2.5 Flash, gpt-oss-120b and Gemma 4.
+
+## Caching, as observed
+
+Gemini caches implicitly: repeating a 7.5k-token prompt reported 4k cached tokens on the second 3.8 Flash call and most of the prompt cached on Flash-Lite from the first. Explicit caches need 4,096 tokens on the Gemini 3 family; our fixed prefix (persona plus world rules) is about 1,200 tokens, and the whole prompt is 3k to 8k, so explicit caching only pays for the biggest villages, and the proxy falls back below the minimum. Qwen reported the whole prompt cached on both calls; gpt-oss and DeepSeek never report cached tokens and have no cache-hit price, so caching does nothing for them. Anthropic caching needs 4,096 tokens on Haiku, which our prompts rarely reach. Conclusion: caching is a Gemini-side saving, mostly automatic, worth a few tens of percent on input, and input is the smaller part of the bill.
