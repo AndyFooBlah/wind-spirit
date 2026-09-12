@@ -214,7 +214,7 @@ export function setCenter(x: number, y: number): void { set({ center: { x, y } }
 
 export function updateSettings(patch: Partial<Settings>): void {
   const s = { ...get().settings, ...patch }; set({ settings: s });
-  try { localStorage.setItem('ws.settings', JSON.stringify({ modelVillages: s.modelVillages, autoPause: s.autoPause })); } catch { /* ignore */ }
+  try { localStorage.setItem('ws.settings', JSON.stringify({ modelVillages: s.modelVillages, autoPause: s.autoPause, tier: s.tier })); } catch { /* ignore */ }
   pushSettings();
 }
 /** Focused villages: the one open plus the ones spoken to, newest first, at most three. */

@@ -77,6 +77,7 @@ export class SimHost {
       client: this.io.client, capNames: CAP_NAMES, maxInFlight: 3, yearlyBudget: 400_000,
       modelVillages: id => this.usesModel(id),
       speed: () => this.speed,
+      tier: () => this.settings.tier ?? 'standard',
       fallback: {
         decide: (w, v, reason) => POLICIES.sensible({ w, v, reason, rng, mem: (this.mem[v.id] ??= {}) }),
         host: (w, v, m, g) => hostAnswer({ w, v, reason: 'visitor', rng, mem: (this.mem[v.id] ??= {}) }, m, g),

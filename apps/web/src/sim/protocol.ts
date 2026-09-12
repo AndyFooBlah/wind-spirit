@@ -18,8 +18,9 @@ export type AutoPause = Record<AttentionEvent, boolean>;
 export const DEFAULT_AUTOPAUSE: AutoPause = { RaidResolved: true, Famine: true, ChiefSucceeded: true, VillageFounded: true, VillageDied: true, Prayer: true, StormStruck: true, Discovered: false };
 
 export type ModelVillages = 'none' | 'focused' | 'all';
-export interface Settings { modelVillages: ModelVillages; focused: number[]; autoPause: AutoPause; }
-export const DEFAULT_SETTINGS: Settings = { modelVillages: 'focused', focused: [], autoPause: DEFAULT_AUTOPAUSE };
+export type TierName = 'habit' | 'thrifty' | 'standard' | 'lavish';
+export interface Settings { modelVillages: ModelVillages; focused: number[]; autoPause: AutoPause; tier: TierName; }
+export const DEFAULT_SETTINGS: Settings = { modelVillages: 'focused', focused: [], autoPause: DEFAULT_AUTOPAUSE, tier: 'standard' };
 
 /**
  * What gets persisted per tick. Sim inputs replay verbatim. `ChiefMemory` is a side effect the scheduler and the
