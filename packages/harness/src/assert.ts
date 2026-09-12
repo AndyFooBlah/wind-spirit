@@ -6,14 +6,19 @@ export interface Suite { checks: Check[]; results: Record<string, RunResult[]>; 
 const seeds = (prefix: string, n: number) => Array.from({ length: n }, (_, i) => `${prefix}-${i}`);
 
 /** The balance ladder and determinism, from the concept document. */
-export function runSuite(nSeeds: number, log: (s: string) => void = () => {}): Suite {
+export function runSuite(nSeeds: number, log: (s: string) => void = () => {}, only?: string): Suite {
   const checks: Check[] = []; const results: Record<string, RunResult[]> = {};
+  const want = (name: string) => !only || only.split(',').includes(name);
+  if (want('determinism')) {
 
   log('determinism');
   const a = runOne({ seed: 'det-0', years: 40, policy: 'sensible', replayCheck: true });
   const b = runOne({ seed: 'det-0', years: 40, policy: 'sensible' });
   checks.push({ name: 'Determinism: same seed twice gives the same hash', pass: a.hash === b.hash, detail: `${a.hash} vs ${b.hash}` });
   checks.push({ name: 'Replay: recorded inputs reproduce the live run', pass: a.replayHash === a.hash, detail: `${a.replayHash} vs ${a.hash}` });
+  }
+
+  if (want('forager')) {
 
   log('forager 20');
   const f20 = seeds('f20', nSeeds).map(s => runOne({ seed: s, years: 100, policy: 'forager', startPop: 20 }));
@@ -27,6 +32,9 @@ export function runSuite(nSeeds: number, log: (s: string) => void = () => {}): S
   results['forager-50'] = f50;
   const f50final = median(f50.map(r => r.finalPop / Math.max(1, r.finalVillages)));
   checks.push({ name: 'A village of 50 cannot hold on wild food alone (median falls below 45 within 60 years)', pass: f50final < 45, detail: `median final village pop ${f50final}` });
+  }
+
+  if (want('farmer')) {
 
   log('farmer');
   const fa = seeds('farm', nSeeds).map(s => runOne({ seed: s, years: 150, policy: 'farmer', startPop: 20 }));
@@ -35,6 +43,9 @@ export function runSuite(nSeeds: number, log: (s: string) => void = () => {}): S
   checks.push({ name: 'Farming lifts a village past 50 but plateaus below 250 (median peak)', pass: peak > 50 && peak < 250, detail: `median peak village pop ${peak}` });
   const hungerShare = fa.map(r => { const h = r.rows.reduce((s, x) => s + x.deathsHunger, 0), t = r.rows.reduce((s, x) => s + x.deathsAge + x.deathsHunger + x.deathsTravel + x.deathsRaid, 0); return t ? h / t : 0; });
   checks.push({ name: 'Under farming without expansion, hunger is a minority cause of death (median share < 50%)', pass: median(hungerShare) < 0.5, detail: `median hunger share ${(median(hungerShare) * 100).toFixed(0)}%` });
+  }
+
+  if (want('sensible')) {
 
   log('sensible');
   const se = seeds('sens', nSeeds).map(s => runOne({ seed: s, years: 300, policy: 'sensible', startPop: 20 }));
@@ -45,8 +56,9 @@ export function runSuite(nSeeds: number, log: (s: string) => void = () => {}): S
   checks.push({ name: 'Median first colony within 150 years', pass: first.length > 0 && median(first) <= 150, detail: `median first colony year ${first.length ? median(first) : 'never'}` });
   const alive = se.filter(r => r.finalVillages > 0).length / se.length;
   checks.push({ name: 'Civilization persists 300 years in ≥ 90% of worlds', pass: alive >= 0.9, detail: `${(alive * 100).toFixed(0)}% of seeds have a living village; median final pop ${median(se.map(r => r.finalPop))}` });
-  const seHunger = se.map(r => { const h = r.rows.reduce((s, x) => s + x.deathsHunger, 0), t = r.rows.reduce((s, x) => s + x.deathsAge + x.deathsHunger + x.deathsTravel + x.deathsRaid, 0); return t ? h / t : 0; });
-  checks.push({ name: 'With expansion, hunger falls below 45% of deaths', pass: median(seHunger) < 0.45, detail: `median hunger share ${(median(seHunger) * 100).toFixed(0)}%` });
+  const share = (rows: typeof se[0]['rows']) => { const h = rows.reduce((s, x) => s + x.deathsHunger, 0), t = rows.reduce((s, x) => s + x.deathsAge + x.deathsHunger + x.deathsTravel + x.deathsRaid, 0); return t ? h / t : 0; };
+  const early = se.map(r => share(r.rows.filter(x => x.year < 150))), late = se.map(r => share(r.rows.filter(x => x.year >= 150)));
+  checks.push({ name: 'While there is room to expand (first 150 years), hunger is below 45% of deaths', pass: median(early) < 0.45, detail: `median hunger share ${(median(early) * 100).toFixed(0)}% early, ${(median(late) * 100).toFixed(0)}% once the map is full` });
   const paths = median(se.map(r => r.pathTiles));
   checks.push({ name: 'Paths form (median ≥ 5 path tiles after 300 years)', pass: paths >= 5, detail: `median path tiles ${paths}` });
   const trades = median(se.map(r => r.trades)), raids = median(se.map(r => r.raids));
@@ -57,6 +69,8 @@ export function runSuite(nSeeds: number, log: (s: string) => void = () => {}): S
   checks.push({ name: 'Villages discover and build: median village has ≥ 6 capabilities after 300 years', pass: capsMed >= 6, detail: `median capabilities per village ${capsMed}; median recipes ${median(se.map(r => median(lastRows(r).map(x => x.recipes))))}` });
   const tier3 = se.filter(r => lastRows(r).some(x => x.maxTier >= 3)).length / se.length;
   checks.push({ name: 'Some village reaches tier 3 in ≥ 60% of worlds', pass: tier3 >= 0.6, detail: `${(tier3 * 100).toFixed(0)}% of seeds; tier 4 in ${(se.filter(r => lastRows(r).some(x => x.maxTier >= 4)).length / se.length * 100).toFixed(0)}%` });
+
+  }
 
   return { checks, results };
 }

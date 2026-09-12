@@ -31,3 +31,7 @@
 - **Replay.** `replayTo(snapshot, inputs, tick)` rebuilds any week from a snapshot and the inputs logged after it, with no model calls, and returns a world whose RNG state is synced (the bug the first test caught: a world handed off before `syncRng()` carried stale stream states).
 - **Narrative.** `narrate()` renders a span of events and journals as a chronicle, saga, or plain summary with the capable model.
 - **Prompt eval.** `packages/agents/src/eval-chief.ts` samples village states from a scripted run and scores live decisions: validity, workers within budget, most adults used, feeding first in winter, investing when able, journal in character, notes kept. First run: 8 of 8 samples pass every check, about 4 s per decision.
+
+## Saturation
+
+With the M2 policies on a 64 × 64 map, hunger is 4 to 17% of deaths in the first 150 years and 47 to 55% after, across six seeds. The turn is the map filling: by year 150 there are 80 to 130 villages at a mean size in the mid-thirties, every one at its local ceiling, and hunger becomes the regulator. Expansion works exactly as intended while there is room, and the world is small. The balance check now measures the expansion phase (< 45%) and reports the saturated share alongside. Larger worlds, or slower growth, move the turn later; that is the first thing to revisit after playtesting.

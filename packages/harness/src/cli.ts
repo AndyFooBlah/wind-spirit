@@ -19,8 +19,8 @@ if (cmd === 'run') {
   writeFileSync(join(out, 'report.html'), buildReport(results, [], `Wind Spirit harness: ${policy}, ${n} seeds × ${years} years`));
   console.log(`wrote ${out}/report.html`);
 } else if (cmd === 'assert') {
-  const n = Number(arg('seeds', '10'));
-  const suite = runSuite(n, s => console.log(`… ${s}`));
+  const n = Number(arg('seeds', '10')); const only = arg('only', '');
+  const suite = runSuite(n, s => console.log(`… ${s}`), only || undefined);
   for (const c of suite.checks) console.log(`${c.pass ? 'PASS' : 'FAIL'}  ${c.name}  (${c.detail})`);
   for (const [k, rs] of Object.entries(suite.results)) {
     writeFileSync(join(out, `${k}.csv`), toCsv(rs.flatMap(r => r.rows)));
