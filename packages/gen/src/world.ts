@@ -1,6 +1,6 @@
 /** Seeded world generation: elevation, moisture, rivers, biomes, resources, village sites, wind. */
 import {
-  K, Rng, Sim, Streams, TERRAIN, WILD, foundVillage, idx, neighbors, newPerson, tileDistance, xy,
+  K, Rng, Sim, Streams, TERRAIN, WILD, ensureRolls, foundVillage, idx, neighbors, newPerson, tileDistance, xy,
   type Terrain, type Tile, type World, type Person, type Direction,
 } from '@wind-spirit/sim';
 import { Simplex } from './noise.js';
@@ -102,6 +102,7 @@ export function generateWorld(o: GenOptions): World {
   // village sites
   const sites = chooseSites(world, o.villages ?? 4, rng);
   const sim = new Sim(world);
+  ensureRolls(sim.ctx); sim.ctx.events.length = 0;   // the first season and four ahead exist before anyone looks
   const cultureRng = Rng.fromSeed(o.seed, 'names');
   for (const site of sites) {
     const people = startingPeople(world, o.startPop ?? 20, rng);

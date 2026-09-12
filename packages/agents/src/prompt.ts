@@ -8,7 +8,8 @@ function traitWords(t: number[]): string {
   return [w(t[0], 'skeptical of spirits', 'open to the spirit world', 'deeply pious'), w(t[1], 'cautious', 'steady', 'ambitious'), w(t[2], 'suspicious of strangers', 'fair with strangers', 'warm to strangers'), w(t[3], 'bound to tradition', 'practical', 'restlessly curious')].join(', ');
 }
 
-export function systemPrompt(v: VillageView): string {
+export function systemPrompt(v: VillageView, mode: 'decide' | 'dream' = 'decide'): string {
+  const closing = mode === 'dream' ? 'Tonight a spirit comes to you in a dream. Answer it as yourself, in a few plain sentences, in your own voice. You may ask it questions. You are not obliged to believe it. Speak; never answer with JSON or lists of orders.' : 'Decide standing orders for your adults. Orders persist until you change them. Answer only with the JSON asked for.';
   return `You are ${v.village.name}'s chief, a person of the stone age. You are ${traitWords(v.village.chiefTraits)}. Your village's ways are ${traitWords(v.village.culture)}.
 You speak plainly, in clear English with a light old-world cadence. No modern words or ideas. You know only what your people have seen and done.
 
@@ -23,12 +24,12 @@ How the world works, as your people understand it:
 - The chief does not labour. Children and elders do not labour. Every adult you do not assign forages on their own, poorly.
 - Villages that stop trying things fall behind. In good times keep one or two adults researching, crafting a new skill, or exploring; a rumour you have heard is a good place to start.
 
-Decide standing orders for your adults. Orders persist until you change them. Answer only with the JSON asked for.`;
+${closing}`;
 }
 
 const list = (xs: string[], empty = 'none') => (xs.length ? xs.map(x => `- ${x}`).join('\n') : `- ${empty}`);
 
-export function statePrompt(v: VillageView, reason: string): string {
+export function statePrompt(v: VillageView, reason: string, withMenu = true): string {
   const p = v.people;
   const sections: string[] = [];
   sections.push(`# Now: year ${v.year}, ${v.season}, week ${v.week} of the season. Reason for deciding: ${reason}.`);
@@ -47,7 +48,7 @@ export function statePrompt(v: VillageView, reason: string): string {
   sections.push(`# Since you last decided:\n${list(v.events, 'quiet')}`);
   sections.push(`# The spirit: ${v.spirit.attitude}.${v.spirit.chronicle.length ? '\nWhat the spirit has said and what came of it:\n' + list(v.spirit.chronicle) : ''}${v.spirit.pending.length ? '\nThe spirit speaks now:\n' + list(v.spirit.pending.map(m => `"${m}"`)) : ''}`);
   sections.push(`# Your notes to yourself:\n${list(v.memory, 'none')}`);
-  sections.push(`# Orders you may give (workers are adults; keep the sum within ${p.workersFree}):
+  if (withMenu) sections.push(`# Orders you may give (workers are adults; keep the sum within ${p.workersFree}):
 - forage / hunt / fish: workers. Winter favours hunting and fishing.
 - gather: workers, commodity (wood, stone, or anything listed as within a day). expedition: workers, commodity, weeks (go to where something far is known to be, collect, and come back).
 - clear: workers (about 4 worker-weeks per plot).

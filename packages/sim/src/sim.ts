@@ -1,6 +1,5 @@
 import { cyrb53 } from './hash.js';
 import { Streams } from './rng.js';
-import { ensureRolls } from './systems/weather.js';
 import { tick } from './tick.js';
 import type { Event, Input, World } from './types.js';
 import type { Ctx } from './world.js';
@@ -11,9 +10,7 @@ export class Sim {
   private pending: Input[] = [];
   constructor(world: World) {
     const rng = new Streams(world.seed, Object.keys(world.rng).length ? world.rng : undefined);
-    this.ctx = { w: world, rng, events: [] };
-    ensureRolls(this.ctx);
-    this.ctx.events.length = 0;
+    this.ctx = { w: world, rng, events: [] };   // rolls are ensured at the start of each tick, never here, so a restored world hashes as stored
   }
   get world(): World { return this.ctx.w; }
   queue(input: Input): void { this.pending.push(input); }

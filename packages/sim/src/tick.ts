@@ -26,7 +26,9 @@ export function tick(ctx: Ctx, inputs: Input[]): void {
     if (i.type === 'Prayer') { prayer(ctx, i.village, i.text); continue; }
     if (i.type === 'ChiefDecided') {
       v.orders = i.orders.map(o => ({ ...o, params: { ...o.params }, since: w.tick }));   // clone: the sim mutates params, inputs must stay immutable
-      ctx.events.push({ t: w.tick, type: 'ChiefDecided', village: i.village, orders: i.orders, requestedAt: i.requestedAt });
+      if (i.memoryNotes) v.memory = i.memoryNotes.slice(0, 12);
+      if (i.clearInbox) v.inbox = [];
+      ctx.events.push({ t: w.tick, type: 'ChiefDecided', village: i.village, orders: i.orders, requestedAt: i.requestedAt, memoryNotes: i.memoryNotes });
     } else if (i.type === 'HostDecided') {
       const p = w.parties.find(x => x.id === i.party); if (!p || p.waiting === 0 || p.targetVillage !== v.id) continue;
       ctx.events.push({ t: w.tick, type: 'HostDecided', village: i.village, party: i.party, answer: i.answer, requestedAt: i.requestedAt });

@@ -11,7 +11,7 @@ import { renderChronicle } from './conversation.js';
 import type { LlmClient } from './client.js';
 
 export type Speed = 'pause' | 'step' | 'slow' | 'normal' | 'fast' | 'veryfast';
-export interface JournalEntry { tick: number; village: number; reason: string; text: string; source: 'model' | 'habit'; dropped?: string[]; }
+export interface JournalEntry { tick: number; requestedAt: number; village: number; reason: string; text: string; source: 'model' | 'habit'; dropped?: string[]; }
 export interface Fallback { decide(w: World, v: Village, reason: string): Order[]; host(w: World, v: Village, mandate: Mandate, guest: Village): HostAnswer; }
 
 export interface SchedulerOptions {
@@ -64,7 +64,7 @@ export class ChiefScheduler {
   private habit(w: World, v: Village, reason: string, requestedAt: number, note: string): void {
     const orders = this.o.fallback.decide(w, v, reason);
     this.queue.push({ type: 'ChiefDecided', village: v.id, orders, requestedAt });
-    this.journal({ tick: w.tick, village: v.id, reason, text: note, source: 'habit' });
+    this.journal({ tick: w.tick, requestedAt, village: v.id, reason, text: note, source: 'habit' });
     this.eventsSince.set(v.id, []);
   }
 
@@ -75,17 +75,17 @@ export class ChiefScheduler {
     if (this.inFlight.has(v.id)) { const s = this.pendingReasons.get(v.id) ?? new Set(); reason.split(', ').forEach(r => s.add(r)); this.pendingReasons.set(v.id, s); return; }
     if (!this.useModel(v, w)) { this.habit(w, v, reason, requestedAt, this.overBudget(v, w) ? 'The chief acted on habit this season; the year had used up their attention.' : 'The chief acted on habit.'); return; }
     this.inFlight.add(v.id);
+    // provisional orders: the village keeps working by habit while the chief thinks; the model's decision replaces them
+    if (!v.orders.length || reason.includes('season')) this.queue.push({ type: 'ChiefDecided', village: v.id, orders: this.o.fallback.decide(w, v, reason), requestedAt });
     try {
       const view = buildView(w, v, { events: this.eventsSince.get(v.id) ?? [], capNames: this.o.capNames, pendingSpirit: [...v.inbox], chronicle: renderChronicle(w, v) });
       const decision = await this.callDecision(view, reason, v, w);
       if (!decision) { this.habit(w, v, reason, requestedAt, 'The chief could not make up their mind and fell back on habit.'); return; }
       const parsed = parseDecision(view, decision);
-      this.queue.push({ type: 'ChiefDecided', village: v.id, orders: parsed.orders, requestedAt });
+      this.queue.push({ type: 'ChiefDecided', village: v.id, orders: parsed.orders, requestedAt, memoryNotes: parsed.memoryNotes, clearInbox: true });
       if (parsed.verdicts.length) this.queue.push({ type: 'ChiefJudged', village: v.id, verdicts: parsed.verdicts });
       if (parsed.replyToSpirit) this.queue.push({ type: 'Prayer', village: v.id, text: parsed.replyToSpirit });
-      v.memory = parsed.memoryNotes;
-      v.inbox = [];
-      this.journal({ tick: w.tick, village: v.id, reason, text: parsed.journal, source: 'model', dropped: parsed.dropped });
+      this.journal({ tick: w.tick, requestedAt, village: v.id, reason, text: parsed.journal, source: 'model', dropped: parsed.dropped });
       if (parsed.replyToSpirit) this.onPrayer?.(v.id, parsed.replyToSpirit);
       this.eventsSince.set(v.id, []);
     } catch (err) { this.o.onError?.(err, v.id); this.habit(w, v, reason, requestedAt, 'The chief acted on habit; the spirit world was silent.'); }
@@ -117,7 +117,7 @@ export class ChiefScheduler {
       const json = (res.json ?? safeJson(res.text)) as HostDecisionJson | undefined;
       const parsed = json ? parseHostDecision(view, json) : { answer: this.o.fallback.host(w, host, mandate, guest), journal: 'The chief judged the visitors by habit.', dropped: [] as string[] };
       this.queue.push({ type: 'HostDecided', village: host.id, party, answer: parsed.answer, requestedAt });
-      this.journal({ tick: w.tick, village: host.id, reason: 'visitors', text: parsed.journal, source: json ? 'model' : 'habit', dropped: parsed.dropped });
+      this.journal({ tick: w.tick, requestedAt, village: host.id, reason: 'visitors', text: parsed.journal, source: json ? 'model' : 'habit', dropped: parsed.dropped });
     } catch (err) { this.o.onError?.(err, host.id); this.queue.push({ type: 'HostDecided', village: host.id, party, answer: this.o.fallback.host(w, host, mandate, guest), requestedAt }); }
   }
 

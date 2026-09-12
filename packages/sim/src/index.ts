@@ -10,5 +10,5 @@ export { discover } from './systems/work.js';
 export { cargoOf } from './systems/diplomacy.js';
 export { breathe } from './systems/spirit.js';
 export { isPath } from './systems/paths.js';
-export { currentRoll } from './systems/weather.js';
+export { currentRoll, ensureRolls } from './systems/weather.js';
 export * from './replay.js';

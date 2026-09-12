@@ -9,7 +9,7 @@ export interface LlmClient {
 
 /** HTTP client for services/llm-proxy. `token` returns a Firebase ID token (or undefined when auth is off). */
 export class HttpLlmClient implements LlmClient {
-  constructor(private baseUrl: string, private token: () => Promise<string | undefined> = async () => undefined, private fetchImpl: typeof fetch = fetch) {}
+  constructor(private baseUrl: string, private token: () => Promise<string | undefined> = async () => undefined, private fetchImpl: typeof fetch = (i, o) => fetch(i, o)) {}
   private async headers(): Promise<Record<string, string>> { const h: Record<string, string> = { 'content-type': 'application/json' }; const t = await this.token(); if (t) h.authorization = `Bearer ${t}`; return h; }
   async generate(req: GenerateRequest): Promise<GenerateResponse> {
     const res = await this.fetchImpl(`${this.baseUrl}/v1/generate`, { method: 'POST', headers: await this.headers(), body: JSON.stringify(req) });

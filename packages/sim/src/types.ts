@@ -193,11 +193,11 @@ export type Event =
   | { t: number; type: 'Famine'; village: number; hungry: number }
   | { t: number; type: 'PathFormed'; tile: number }
   | { t: number; type: 'DeliberationRequested'; village: number; reason: string }
-  | { t: number; type: 'ChiefDecided'; village: number; orders: Order[]; requestedAt: number }
+  | { t: number; type: 'ChiefDecided'; village: number; orders: Order[]; requestedAt: number; memoryNotes?: string[] }
   | { t: number; type: 'WeekSummary'; births: number; deaths: number; pop: number; villages: number };
 
 export type Input =
-  | { type: 'ChiefDecided'; village: number; orders: Order[]; requestedAt: number }
+  | { type: 'ChiefDecided'; village: number; orders: Order[]; requestedAt: number; memoryNotes?: string[]; clearInbox?: boolean }
   | { type: 'HostDecided'; village: number; party: number; answer: HostAnswer; requestedAt: number }
   | { type: 'SpiritSpoke'; village: number; text: string }
   | { type: 'SpiritBreathed'; action: BreathAction }

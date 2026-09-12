@@ -29,8 +29,8 @@ export class Conversation {
   private system: string; private state: string;
   constructor(private w: World, private v: Village, private o: ConversationOptions) {
     const view = buildView(w, v, { events: [], capNames: o.capNames, pendingSpirit: [], chronicle: renderChronicle(w, v) });
-    this.system = systemPrompt(view) + `\n\nTonight the spirit comes to you in a dream. Answer it as yourself, in a few sentences, in your own voice. You may ask it questions. You are not obliged to believe it. Do not answer with JSON; speak.`;
-    this.state = statePrompt(view, 'a dream');
+    this.system = systemPrompt(view, 'dream');
+    this.state = statePrompt(view, 'a dream', false);
   }
   /** Send the spirit's words; streams the chief's reply through onText and returns the full reply. */
   async send(text: string, onText?: (t: string) => void): Promise<string> {
