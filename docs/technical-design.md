@@ -1,6 +1,6 @@
 # Wind Spirit — Technical Design
 
-*Status: draft 1 complete, all M0 decisions settled. Companion to concept.md. No code yet.*
+*Status: M0 built. Companion to concept.md and m0-notes.md.*
 *Last updated: 2026-09-12*
 
 ## 1. Goals and constraints
@@ -330,7 +330,7 @@ At fast speeds coalescing cuts routine calls by two thirds or more. The per-game
 
 | | Deliverable | Proves |
 |---|---|---|
-| M0 | Repo, `sim` core, `gen` world, harness with scripted chiefs, report | Determinism, balance targets |
+| M0 ✅ 2026-09-12 | Repo, `sim` core, `gen` world, harness with scripted chiefs, report | Determinism, balance targets. See m0-notes.md |
 | M1 | Tech generator, names, hints, research, recipes in the sim | Discovery feels like discovery under a scripted explorer |
 | M2 | `agents` scheduler, prompt contract, proxy on Cloud Run, fallback | A real chief runs a village for a century without breaking it |
 | M3 | Web UI: map at three zooms, panels, speeds, auto-pause, saves | Watchable |
