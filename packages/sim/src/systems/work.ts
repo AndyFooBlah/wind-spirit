@@ -334,8 +334,10 @@ function colonize(ctx: Ctx, v: Village, o: Order, free: number): number {
   const { w } = ctx; const target = Number(o.params.tile ?? -1); if (target < 0 || !inBounds(w, ...xy(w, target))) return 0;
   const share = Math.max(100, Math.min(600, Number(o.params.share ?? 400)));
   const counts = popCounts(v, w.tick);
+  if (w.parties.some(p => p.home === v.id && p.kind === 'colonize')) return 0;          // one settler party at a time
   const nAdults = Math.min(free, Math.max(2, Math.trunc((counts.adults * share) / K)));
-  if (nAdults < 2 || counts.adults - nAdults < 2) return 0;
+  const leaving = nAdults + Math.trunc(((counts.children + counts.elders) * share) / K);
+  if (nAdults < 2 || counts.adults - nAdults < 4 || counts.total - leaving < P.colonizeMinRemaining) return 0;
   const members = takeAdults(v, w.tick, nAdults);
   const nOther = Math.trunc(((counts.children + counts.elders) * share) / K);
   const others = v.people.filter(p => stageOf(p.born, w.tick) !== 'adult').slice(-nOther);

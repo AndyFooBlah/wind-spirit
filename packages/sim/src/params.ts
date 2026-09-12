@@ -24,6 +24,7 @@ export const P = {
   researchFocused: 120, researchExplore: 25, researchKnown: 400, hintFocused: 120, hintExplore: 150,
   serendipity: 300,             // per week per village, in hundred-thousandths
   roadStone: 5000, roadLabor: 4,
+  colonizeMinRemaining: 16,     // settlers never leave fewer than this many behind
   /** Breath: the spirit's pool (thousandths of 100). */
   breathCap: 100_000, breathRegen: 250, breathNudge: 15_000, breathOverride: 50_000, breathStorm: 80_000, breathSail: 10_000,
   /** Trust changes (thousandths). */
@@ -38,7 +39,7 @@ export const P = {
   fertilityRecoverPerFallowSeason: 50,
   /** Mortality, annual in millionths per year → converted weekly in code. */
   annualDeath: { child: 30_000, adult: 12_000, elder: 60_000, elderPerYear: 15_000 },
-  hungerCubic: true,
+  hungerMult: 3,                // mortality multiplier = 1 + hungerMult * (weeks-equivalent of hunger)^2; at 6 weeks ~ 109x
   /** Births: annual per adult in millionths. */
   annualBirthPerAdult: 100_000,
   hardshipRate: 40,             // per-week weight of the current shortfall in the hardship average (~25-week memory)

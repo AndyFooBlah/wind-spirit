@@ -25,7 +25,7 @@ export function healthAndBirths(ctx: Ctx): void {
       const age = w.tick - p.born; const stage = stageOf(p.born, w.tick);
       let pM = weeklyBaseM(stage, age);
       pM = Math.trunc((pM * exposure) / K); pM = Math.trunc((pM * medicine) / K);
-      if (p.hungry > 0) { const h = p.hungry / 1000; pM = Math.trunc(pM * (1 + h * h * h)); }
+      if (p.hungry > 0) { const h = Math.min(8, p.hungry / 1000); pM = Math.trunc(pM * (1 + P.hungerMult * h * h)); }
       if (pM > 0 && rng.chanceM(Math.min(pM, 999_999))) {
         deaths++;
         const cause = p.hungry >= 1000 ? 'hunger' : 'age';

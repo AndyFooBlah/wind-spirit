@@ -88,7 +88,7 @@ export function moveParties(ctx: Ctx): void {
     const survivors: Person[] = [];
     for (const m of p.members) {
       if (m.hungry > 0) {
-        const h = m.hungry / 1000; const pM = Math.min(999_999, Math.trunc((P.annualDeath.adult / WEEKS_PER_YEAR) * (1 + h * h * h)));
+        const h = Math.min(8, m.hungry / 1000); const pM = Math.min(999_999, Math.trunc((P.annualDeath.adult / WEEKS_PER_YEAR) * (1 + P.hungerMult * h * h)));
         if (mort.chanceM(pM)) { home.year.deathsTravel++; ctx.events.push({ t: w.tick, type: 'Died', village: p.home, person: m.id, cause: 'travel', stage: 'adult' }); continue; }
       }
       survivors.push(m);

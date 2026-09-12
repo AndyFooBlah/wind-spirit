@@ -55,7 +55,7 @@ export function statePrompt(v: VillageView, reason: string): string {
 - build: workers, recipe (a building recipe). craft: workers, recipe, quantity (0 to keep going). Skills are crafted once.
 - research: workers, ingredients (1 or 2 names, may include a skill).
 - explore: workers, direction, days. envoy: workers, village, offer, want, floor, transfer, threat, message.
-- colonize: site, share (0.2 to 0.6 of the village). raid: workers, village. road: workers, roadSite. rest: workers.
+- colonize: site, share (0.2 to 0.6 of the village); a grave step taken once in a generation, never while a settler party is already out. raid: workers, village. road: workers, roadSite. rest: workers.
 Answer with JSON: { "orders": [...], "journal": "...", "memoryNotes": [...], "replyToSpirit": "..." }.`);
   return sections.join('\n\n');
 }
