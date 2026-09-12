@@ -1,0 +1,10 @@
+{
+  "name": "@wind-spirit/harness",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "build": "tsc -b", "cli": "tsx src/cli.ts" },
+  "dependencies": { "@wind-spirit/sim": "workspace:*", "@wind-spirit/gen": "workspace:*" }
+}

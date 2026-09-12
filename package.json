@@ -1,0 +1,19 @@
+{
+  "name": "wind-spirit",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "vitest run",
+    "typecheck": "tsc -b packages/sim packages/gen packages/harness",
+    "harness": "pnpm --filter @wind-spirit/harness run cli"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  },
+  "packageManager": "pnpm@11.17.0"
+}
