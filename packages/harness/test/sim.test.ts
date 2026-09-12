@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim, WEEKS_PER_YEAR } from '../src/index.js';
+import { Sim, WEEKS_PER_YEAR } from '@wind-spirit/sim';
 import { generateWorld } from '@wind-spirit/gen';
-import { runOne } from '@wind-spirit/harness';
+import { runOne } from '../src/index.js';
 
 describe('sim', () => {
   it('ticks a year without hunger deaths when nobody works but durable stores suffice', () => {
