@@ -6,3 +6,4 @@ export * from './client.js';
 export * from './scheduler.js';
 export * from './conversation.js';
 export * from './narrative.js';
+export * from './tiers.js';

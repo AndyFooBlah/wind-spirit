@@ -1,7 +1,7 @@
 /** Model client contract. The proxy implements it over HTTP; tests use a mock. */
-export type ModelClass = 'routine' | 'capable';
-export interface GenerateRequest { class: ModelClass; system?: string; messages: { role: 'user' | 'model'; text: string }[]; schema?: object; maxOutputTokens?: number; temperature?: number; cacheKey?: string; thinkingLevel?: 'low' | 'medium' | 'high'; }
-export interface GenerateResponse { text: string; json?: unknown; usage: { input: number; output: number }; model: string; ms: number; }
+export type ModelClass = 'cheap' | 'routine' | 'capable' | 'premium';
+export interface GenerateRequest { class: ModelClass; system?: string; messages: { role: 'user' | 'model'; text: string }[]; schema?: object; maxOutputTokens?: number; temperature?: number; cacheKey?: string; thinkingLevel?: 'low' | 'medium' | 'high'; model?: string; }
+export interface GenerateResponse { text: string; json?: unknown; usage: { input: number; output: number; thoughts?: number; cached?: number; cacheWrite?: number }; model: string; ms: number; cost?: number; }
 export interface LlmClient {
   generate(req: GenerateRequest): Promise<GenerateResponse>;
   stream?(req: GenerateRequest, onText: (t: string) => void): Promise<GenerateResponse>;
