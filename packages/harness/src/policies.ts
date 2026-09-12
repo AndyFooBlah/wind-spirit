@@ -61,7 +61,8 @@ function tradeOrders(view: PolicyView, free: number): { orders: Order[]; used: n
   for (const c of v.known) { const cm = commodityById(w, c); if (cm?.regional && storeQty(v, c) === 0 && !gatherable(w, v, c)) lacking.add(c); }
   if (!lacking.size) return { orders: out, used: 0 };
   // prefer a partner known to have what we lack nearby; otherwise ask anyway
-  const nearPartner = (id: number, c: string) => { const o = w.villages[id]; return v.knowledge.tiles.some(t => w.tiles[t].extra[c] && tileDistance(w, o.tile, t) <= 2); };
+  const knownSet = new Set(v.knowledge.tiles);
+  const nearPartner = (id: number, c: string) => { const o = w.villages[id]; return neighbors(w, o.tile, 2, true).some(t => knownSet.has(t) && !!w.tiles[t].extra[c]); };
   const options = partners.flatMap(id => [...lacking].filter(c => nearPartner(id, c)).map(c => ({ id, c })));
   const pickd = options.length ? rng.pick(options) : { id: rng.pick(partners), c: rng.pick([...lacking]) };
   const want = pickd.c;

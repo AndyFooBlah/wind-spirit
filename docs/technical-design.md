@@ -316,13 +316,13 @@ A node CLI over `sim` and `gen`.
 
 Per village-year at normal speed: about four seasonal deliberations plus roughly eight event-driven ones. Prompt size dominates; output is small.
 
-| Quantity | Estimate |
-|---|---|
-| Deliberations per village-year | ~12 |
-| Prompt tokens per deliberation | ~5,000 (fixed sections cache well) |
-| Output tokens per deliberation | ~500 |
-| Conversations per hour of play | a handful, capable model, ~20 turns |
-| A 300-year world of ~10 average villages | ~36,000 routine calls |
+| Quantity | Estimate (design) | Measured 2026-09-12 |
+|---|---|---|
+| Deliberations per village-year | ~12 | ~17 at normal speed; ~5 at fast (seasonal digests) |
+| Tokens per deliberation (in + out, incl. thinking) | ~5,500 | ~3,000 with `thinkingLevel: low` |
+| Latency per decision | — | 4 to 5 s on gemini-3.8-flash |
+| Conversations per hour of play | a handful, capable model, ~20 turns | not yet measured |
+| A 300-year world of ~10 average villages | ~36,000 routine calls | ~50,000 at normal speed, ~15,000 at fast; only focused villages use the model by default |
 
 At fast speeds coalescing cuts routine calls by two thirds or more. The per-game-year budget and the scripted fallback bound the worst case. Model pricing is checked at build time, not written here.
 

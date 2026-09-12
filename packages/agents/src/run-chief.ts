@@ -9,7 +9,7 @@ import { generateWorld, CAP_NAMES } from '@wind-spirit/gen';
 import { POLICIES, hostAnswer } from '@wind-spirit/harness';
 import { ChiefScheduler, HttpLlmClient } from './index.js';
 
-const [seed = 'chief-0', years = '20', vidArg = '0'] = process.argv.slice(2).filter(a => a !== '--');
+const [seed = 'chief-0', years = '20', vidArg = '0', speedArg = 'normal'] = process.argv.slice(2).filter(a => a !== '--');
 const proxy = process.env.PROXY_URL ?? 'https://llm-proxy-406179055859.us-central1.run.app';
 const vid = Number(vidArg);
 
@@ -27,7 +27,7 @@ async function main() {
   const out = `out/chief-${seed}`; mkdirSync(out, { recursive: true });
   const log: string[] = []; let calls = 0, errors = 0;
   const sched = new ChiefScheduler({
-    client, capNames: CAP_NAMES, modelVillages: id => id === vid, maxInFlight: 2, yearlyBudget: 400_000,
+    client, capNames: CAP_NAMES, modelVillages: id => id === vid, maxInFlight: 2, yearlyBudget: 400_000, speed: () => speedArg as 'normal' | 'fast',
     fallback: { decide: (w2, v, reason) => POLICIES.sensible({ w: w2, v, reason, rng, mem: (mem[v.id] ??= {}) }), host: (w2, v, m, g) => hostAnswer({ w: w2, v, reason: 'visitor', rng, mem: (mem[v.id] ??= {}) }, m, g) },
     onJournal: e => { if (e.village === vid) { const line = `[y${Math.floor(e.tick / WEEKS_PER_YEAR)} w${e.tick % WEEKS_PER_YEAR}] (${e.reason}; ${e.source}${e.dropped?.length ? `; dropped: ${e.dropped.join(' | ')}` : ''}) ${e.text}`; log.push(line); console.log(line); } },
     onError: (err, village) => { errors++; console.error(`village ${village}:`, (err as Error).message); },

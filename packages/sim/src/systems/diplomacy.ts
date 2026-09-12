@@ -21,7 +21,7 @@ function meet(ctx: Ctx, a: Village, b: Village, p?: Party): void {
     const r = relation(x, y.id); r.lastContact = w.tick; r.sizeSeen = y.people.length;
     if (!x.knowledge.villages.includes(y.id)) x.knowledge.villages.push(y.id);
   }
-  if (p) { knowledgeUnion(b.knowledge, p.seen); for (const t of b.knowledge.tiles) if (!p.seen.includes(t)) p.seen.push(t); }
+  if (p) { knowledgeUnion(b.knowledge, p.seen); const seen = new Set(p.seen); for (const t of b.knowledge.tiles) seen.add(t); p.seen = [...seen]; }
 }
 
 /** Apply the host chief's answer to a waiting envoy. Executes the exchange and sends the envoy home. */
