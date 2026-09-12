@@ -13,7 +13,12 @@ import type { JournalEntry, LoggedInput, GenOpts } from '../sim/protocol.ts';
 import { touches } from '../sim/views.ts';
 
 export interface WorldMeta { id: string; name: string; seed: string; createdAt: number; lastTick: number; options: GenOpts; updatedAt: number; }
-export interface SnapshotRow { world: string; tick: number; json: string; savedAt: number; reason: string; }
+export interface SnapshotRow { world: string; tick: number; json?: string; gz?: ArrayBuffer; savedAt: number; reason: string; }
+
+/** Snapshots are gzip-compressed at rest: a 128 × 128 world is ~4 MB as JSON and ~300 KB compressed. Old rows may still carry plain json. */
+async function gzip(text: string): Promise<ArrayBuffer> { return new Response(new Blob([text]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer(); }
+async function gunzip(buf: ArrayBuffer): Promise<string> { return new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).text(); }
+async function snapshotText(row: SnapshotRow): Promise<string> { return row.gz ? gunzip(row.gz) : (row.json ?? ''); }
 export interface InputRow { world: string; tick: number; inputs: LoggedInput[]; }
 export interface JournalRow { seq?: number; world: string; village: number; entry: JournalEntry; }
 export interface EventRow { world: string; tick: number; events: Event[]; }
@@ -73,7 +78,8 @@ export async function deleteWorld(db: Db, id: string): Promise<void> {
 }
 
 export async function saveSnapshot(db: Db, world: string, tick: number, json: string, reason: string): Promise<void> {
-  await db.put('snapshots', { world, tick, json, savedAt: Date.now(), reason });
+  const gz = await gzip(json);
+  await db.put('snapshots', { world, tick, gz, savedAt: Date.now(), reason });
 }
 
 /** Record a tick: its inputs and history-worthy events (if any) and the world's new current tick, in one transaction. */
@@ -108,7 +114,7 @@ export async function loadHistoryWindow(db: Db, world: string, tick: number): Pr
   const snap = snaps.filter(s => s.tick <= tick).sort((a, b) => b.tick - a.tick)[0]; if (!snap) return undefined;
   const rows = snap.tick < tick ? await db.getAll('inputs', IDBKeyRange.bound([world, snap.tick], [world, tick - 1])) : [];
   const inputs: Record<number, LoggedInput[]> = {}; for (const r of rows) inputs[r.tick] = r.inputs;
-  return { snapshot: snap.json, snapshotTick: snap.tick, inputs };
+  return { snapshot: await snapshotText(snap), snapshotTick: snap.tick, inputs };
 }
 export async function snapshotTicks(db: Db, world: string): Promise<number[]> { return (await db.getAllFromIndex('snapshots', 'byWorld', world)).map(s => s.tick).sort((a, b) => a - b); }
 
@@ -124,7 +130,7 @@ export async function loadResume(db: Db, world: string): Promise<ResumeData | un
   const inputsAfter: LoggedInput[][] = [];
   for (let t = snap.tick; t < meta.lastTick; t++) inputsAfter.push([]);
   for (const r of rows) if (r.tick >= snap.tick && r.tick < meta.lastTick) inputsAfter[r.tick - snap.tick] = r.inputs;
-  return { snapshot: snap.json, snapshotTick: snap.tick, inputsAfter, lastTick: meta.lastTick };
+  return { snapshot: await snapshotText(snap), snapshotTick: snap.tick, inputsAfter, lastTick: meta.lastTick };
 }
 
 /** Serialises writes so a snapshot and the ticks around it land in order. */

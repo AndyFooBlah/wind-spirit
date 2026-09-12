@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { WEEKS_PER_YEAR } from '@wind-spirit/sim';
-import { useGame, refreshWorlds, newWorld, continueWorld, removeWorld } from '../store/game.ts';
+import { useGame, refreshWorlds, newWorld, continueWorld, removeWorld, WORLD_SIZES, type WorldSize } from '../store/game.ts';
 
 /** Start screen: new world from a seed, continue a saved one, or delete it. */
 export function Gallery() {
   const worlds = useGame(s => s.worlds); const loading = useGame(s => s.loading);
-  const [seed, setSeed] = useState(''); const [name, setName] = useState(''); const [busy, setBusy] = useState(false);
+  const [seed, setSeed] = useState(''); const [name, setName] = useState(''); const [busy, setBusy] = useState(false); const [size, setSize] = useState<WorldSize>('large');
   useEffect(() => { void refreshWorlds(); }, []);
-  const create = async () => { setBusy(true); try { await newWorld(seed, name); } finally { setBusy(false); } };
+  const create = async () => { setBusy(true); try { await newWorld(seed, name, size); } finally { setBusy(false); } };
   return (
     <div className="gallery">
       <div className="hero">
@@ -19,7 +19,8 @@ export function Gallery() {
           <h2>A new world</h2>
           <label>Seed <input value={seed} onChange={e => setSeed(e.target.value)} placeholder="any words; the same seed makes the same world" /></label>
           <label>Name <input value={name} onChange={e => setName(e.target.value)} placeholder="optional" /></label>
-          <div className="small muted">64 × 64 tiles, four villages of twenty. Leave the seed empty for a random one.</div>
+          <label>Size <select value={size} onChange={e => setSize(e.target.value as WorldSize)}>{(Object.keys(WORLD_SIZES) as WorldSize[]).map(k => <option key={k} value={k}>{k}</option>)}</select></label>
+          <div className="small muted">{WORLD_SIZES[size].label}, twenty people each. Leave the seed empty for a random one.</div>
           <button type="submit" className="primary" disabled={busy}>{busy ? 'Shaping…' : 'Wake'}</button>
         </form>
         <section className="card">

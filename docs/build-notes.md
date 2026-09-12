@@ -60,3 +60,7 @@ Two things for M7: very fast ran about three game years in thirty seconds rather
 ## What comes next (not in scope of M0–M7)
 
 Larger worlds by default (the 64 × 64 map fills by year 150), an eval corpus for dreams as well as decisions, prompt caching through the proxy, festivals and shrines, multiplayer spirits, generated art.
+
+## Larger worlds (2026-09-12, after M7)
+
+The new-world form offers small (64 × 64, four villages), medium (96 × 96, six) and large (128 × 128, eight); large is the default, since a 64 × 64 map fills by year 150. Snapshots are gzip-compressed at rest: a large world's yearly snapshot is about 4 MB of JSON and about 300 KB stored, so a 300-year save is under 100 MB. In the harness a large world runs 300 years in about 85 s against 20 s for small; in the browser expect very fast to be proportionally slower.

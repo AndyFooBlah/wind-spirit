@@ -137,9 +137,16 @@ export function dismissToast(id: number): void { set(s => ({ toasts: s.toasts.fi
 
 export async function refreshWorlds(): Promise<void> { const d = await ensureDb(); set({ worlds: await listWorlds(d) }); }
 
-export async function newWorld(seed: string, name?: string): Promise<void> {
-  const d = await ensureDb(); const s = seed.trim() || Math.random().toString(36).slice(2, 10);
-  const meta = await createWorld(d, { id: newWorldId(), name: name?.trim() || s, seed: s, options: { width: 64, height: 64, villages: 4, startPop: 20 } });
+export type WorldSize = 'small' | 'medium' | 'large';
+export const WORLD_SIZES: Record<WorldSize, { width: number; height: number; villages: number; label: string }> = {
+  small: { width: 64, height: 64, villages: 4, label: '64 × 64 tiles, four villages; fills in about 150 years' },
+  medium: { width: 96, height: 96, villages: 6, label: '96 × 96 tiles, six villages' },
+  large: { width: 128, height: 128, villages: 8, label: '128 × 128 tiles, eight villages; room for centuries' },
+};
+
+export async function newWorld(seed: string, name?: string, size: WorldSize = 'large'): Promise<void> {
+  const d = await ensureDb(); const s = seed.trim() || Math.random().toString(36).slice(2, 10); const dims = WORLD_SIZES[size];
+  const meta = await createWorld(d, { id: newWorldId(), name: name?.trim() || s, seed: s, options: { width: dims.width, height: dims.height, villages: dims.villages, startPop: 20 } });
   set({ loading: 'Shaping the world…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: [], talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {} });
   await startWorker(); persister = new Persister(d, meta.id); audio.setWorld(s);
   pushSettings();
