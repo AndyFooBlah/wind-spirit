@@ -2,6 +2,8 @@
 
 A civilization sandbox where every village is run by an AI chief and the player is a spirit who sees everything and can touch almost nothing.
 
+Play it at https://wind-spirit-prod.web.app.
+
 - [Concept](docs/concept.md)
 - [Technical design](docs/technical-design.md)
 - [M0 notes: balance findings](docs/m0-notes.md)
@@ -16,6 +18,8 @@ A civilization sandbox where every village is run by an AI chief and the player 
 | `packages/harness` | Balance harness: runs the sim with scripted chiefs, emits CSV and a report. |
 | `packages/agents` | The chief agent: village view, prompt, decision schema, parser, scheduler with fallback. |
 | `services/llm-proxy` | Cloud Run proxy to Vertex AI Gemini with Firebase auth and quotas. |
+| `packages/audio` | Synthesized, seeded Web Audio engine: ambient beds, events, the wind, generated music. |
+| `apps/web` | The game: React + Canvas, sim and chiefs in a worker, saves, history scrubber, sound. |
 
 ## Develop
 

@@ -1,6 +1,6 @@
 # Wind Spirit — Technical Design
 
-*Status: M0–M2 built; M3–M7 in progress. Companion to concept.md, m0-notes.md, build-notes.md.*
+*Status: M0–M7 built and deployed. Companion to concept.md, m0-notes.md, build-notes.md.*
 *Last updated: 2026-09-12*
 
 ## 1. Goals and constraints
@@ -333,11 +333,11 @@ At fast speeds coalescing cuts routine calls by two thirds or more. The per-game
 | M0 ✅ 2026-09-12 | Repo, `sim` core, `gen` world, harness with scripted chiefs, report | Determinism, balance targets. See m0-notes.md |
 | M1 ✅ 2026-09-12 | Tech generator, names, hints, research, recipes in the sim | Discovery feels like discovery under a scripted explorer. See build-notes.md |
 | M2 ✅ 2026-09-12 | `agents` scheduler, prompt contract, proxy on Cloud Run, fallback, envoys and raids in the sim | A real chief ran a village for a century (427 decisions, 0 fallbacks) and for 30 years at normal cadence (367 decisions) |
-| M3 | Web UI: map at three zooms, panels, speeds, auto-pause, saves | Watchable |
-| M4 | Spirit chat, breath, trust, chronicle | The core loop |
-| M5 | History scrubber, narrative | Replay |
-| M6 | Audio v1 | Hearable |
-| M7 | Playtest and tune | Fun |
+| M3 ✅ 2026-09-12 | Web UI: map at three zooms, panels, speeds, auto-pause, saves | Watchable, at https://wind-spirit-prod.web.app |
+| M4 ✅ 2026-09-12 | Spirit chat, breath, trust, chronicle | The core loop, verified in production |
+| M5 ✅ 2026-09-12 | History scrubber, narrative | Replay in a second worker |
+| M6 ✅ 2026-09-12 | Audio v1 | Synthesized, seeded, mixed per bus |
+| M7 ✅ 2026-09-12 | Playtest and tune | Fourteen balance checks green; fixes in build-notes.md |
 
 ## 20. Technical decisions and open items
 

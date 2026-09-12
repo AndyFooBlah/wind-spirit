@@ -47,3 +47,16 @@ Famine mortality is now quadratic and capped: a model-run village of 102 had los
 Deployed at https://wind-spirit-prod.web.app. A new world, very fast for thirty seconds, a village opened, a whisper sent ("the winter after next will be bitter, store grain and cut wood"). The chief deliberated within the week, wrote a journal that weighed the warning without obeying it ("a wise hearth prepares regardless of spirits"), and prayed back; the prayer auto-paused the game with a toast. Chief deaths auto-pause too. Villages the player has not opened run on the scripted policy ("acted on habit"), which is the cost control working as designed.
 
 Two things for M7: very fast ran about three game years in thirty seconds rather than the ten the speed table implies, and the map pane wants a wide window; at narrow widths the village panel pushes the map aside.
+
+## M3 to M7: the app, the spirit, history, sound, and the playtest
+
+- **The app** (`apps/web`, https://wind-spirit-prod.web.app) runs the sim and the chief scheduler inside a Web Worker; the UI mirrors a compact frame each tick. Only villages the player has opened (up to three) use the model; the rest act by habit, which is the cost control from the design. Saves are yearly snapshots plus every input, in IndexedDB; resume replays from the latest snapshot with no model calls.
+- **History** is a second worker replaying from the nearest snapshot (at most 51 ticks), so the live world is untouched. The scrubber labels everything "history" and "Back to now" returns. **Narrative** runs `narrate()` in the worker over stored events and journals, cached per span.
+- **Sound** is `@wind-spirit/audio` with a mixer popover per bus; the engine starts on the first gesture.
+- **Fixes the integration forced in the packages**: a worker-safe `fetch` default; a prose-only dream prompt (the decision prompt made the capable model answer dreams in JSON); chief memory carried on `ChiefDecided` so replay is exact; provisional habit orders queued while a chief is thinking (at very fast a slow first call had left a village orderless for hundreds of weeks); journals stamped with the tick they were requested at; and no weather roll in the Sim constructor, so a restored world hashes as stored.
+- **Playtest results.** The whisper → deliberation → prayer → auto-pause loop works in production. A stale served bundle once opened the database at an old version and hid every saved world; the fix was simply redeploying, and the store now closes old connections when a newer version opens. Very fast runs about a third of its nominal speed on this machine, gated by the worker's timer; acceptable for now.
+- **Milestone gate.** All fourteen balance checks pass on six seeds, and with expeditions and deeper input chasing bronze is reached in 83% of worlds within 300 years.
+
+## What comes next (not in scope of M0–M7)
+
+Larger worlds by default (the 64 × 64 map fills by year 150), an eval corpus for dreams as well as decisions, prompt caching through the proxy, festivals and shrines, multiplayer spirits, generated art.

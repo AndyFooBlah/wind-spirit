@@ -1,6 +1,6 @@
 # Wind Spirit — Concept Document
 
-*Status: concept settled; M0–M2 built, M3–M7 in progress. See technical-design.md and build-notes.md.*
+*Status: concept settled; M0–M7 built and deployed at https://wind-spirit-prod.web.app. See technical-design.md and build-notes.md.*
 *Last updated: 2026-09-11*
 
 ## 1. One-liner
