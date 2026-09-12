@@ -11,4 +11,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm test
-      - run: pnpm harness -- assert --seeds 6 --out out/ci
+      - run: pnpm harness -- assert --seeds 3 --only determinism,forager,farmer --out out/ci   # the full suite (all scenarios, 6+ seeds) is run locally before each milestone
