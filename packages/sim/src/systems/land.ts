@@ -20,7 +20,7 @@ export function regrow(ctx: Ctx): void {
   }
   if (w.tick % WEEKS_PER_SEASON === 0) {
     for (const v of w.villages) if (v.alive) for (const p of v.plots) {
-      if ((p.kind === 'clear' || p.kind === 'field') && !p.planted && p.fertility < K) p.fertility = Math.min(K, p.fertility + P.fertilityRecoverPerFallowSeason);
+      if ((p.kind === 'clear' || p.kind === 'field') && !p.planted && p.fertility < K) p.fertility = Math.min(K, p.fertility + P.fertilityRecoverPerFallowSeason * (v.capabilities.includes('husbandry') ? 2 : 1));
     }
   }
 }

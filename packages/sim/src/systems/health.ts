@@ -1,7 +1,7 @@
 import { K } from '../fixed.js';
 import { AGE_ELDER, P, seasonOf, WEEKS_PER_YEAR } from '../params.js';
 import type { Stage, Village } from '../types.js';
-import { newPerson, popCounts, shelter, stageOf, type Ctx } from '../world.js';
+import { hasCap, newPerson, popCounts, shelter, stageOf, storeByCategory, type Ctx } from '../world.js';
 import { currentRoll } from './weather.js';
 
 function weeklyBaseM(stage: Stage, age: number): number {
@@ -17,13 +17,14 @@ export function healthAndBirths(ctx: Ctx): void {
     if (!v.alive) continue;
     const sh = shelter(w, v);
     let exposure = K;
-    if (winter) { exposure = K + Math.trunc(((K - sh.score) * P.winterExposureMult) / K); if (hard) exposure = Math.trunc(exposure * 1.5); }
+    if (winter) { exposure = K + Math.trunc(((K - sh.score) * P.winterExposureMult) / K); if (hard) exposure = Math.trunc(exposure * 1.5); if (storeByCategory(w, v, 'cloth') >= Math.trunc((v.people.length * K) / 2)) exposure = Math.trunc((exposure * 700) / K); }
+    const medicine = hasCap(v, 'medicine') ? 800 : K;
     let deaths = 0;
     const survivors = [];
     for (const p of v.people) {
       const age = w.tick - p.born; const stage = stageOf(p.born, w.tick);
       let pM = weeklyBaseM(stage, age);
-      pM = Math.trunc((pM * exposure) / K);
+      pM = Math.trunc((pM * exposure) / K); pM = Math.trunc((pM * medicine) / K);
       if (p.hungry > 0) { const h = p.hungry / 1000; pM = Math.trunc(pM * (1 + h * h * h)); }
       if (pM > 0 && rng.chanceM(Math.min(pM, 999_999))) {
         deaths++;

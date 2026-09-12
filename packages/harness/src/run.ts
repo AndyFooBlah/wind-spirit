@@ -7,7 +7,8 @@ export interface RunOptions { seed: string; years: number; policy: PolicyName; v
 export interface YearRow {
   seed: string; year: number; village: number; name: string; alive: number; pop: number; children: number; adults: number; elders: number;
   storesWeeks: number; happiness: number; shelter: number; births: number; deathsAge: number; deathsHunger: number; deathsTravel: number;
-  forage: number; hunt: number; fish: number; farm: number; spoiled: number; cleared: number; huts: number; granary: number;
+  forage: number; hunt: number; fish: number; farm: number; gathered: number; crafted: number; spoiled: number; cleared: number; huts: number; granary: number;
+  recipes: number; capabilities: number; maxTier: number;
 }
 export interface RunResult {
   seed: string; policy: PolicyName; years: number; rows: YearRow[]; hash: string; replayHash?: string;
@@ -44,7 +45,8 @@ export function runOne(o: RunOptions): RunResult {
         const c = popCounts(v, world.tick); if (c.total > peakPop) peakPop = c.total;
         let cleared = 0, huts = 0, granary = 0; for (const p of v.plots) { if (p.kind === 'clear' || p.kind === 'field') cleared++; if (p.kind === 'structure') { if (p.recipe === 'hut') huts++; if (p.recipe === 'granary') granary++; } }
         rows.push({ seed: o.seed, year, village: v.id, name: v.name, alive: v.alive ? 1 : 0, pop: c.total, children: c.children, adults: c.adults, elders: c.elders,
-          storesWeeks: storesWeeks(world, v), happiness: v.happiness, shelter: shelter(world, v).score, ...v.year, cleared, huts, granary });
+          storesWeeks: storesWeeks(world, v), happiness: v.happiness, shelter: shelter(world, v).score, ...v.year, cleared, huts, granary,
+          recipes: v.recipes.length, capabilities: v.capabilities.length, maxTier: v.capabilities.reduce((m, c) => Math.max(m, world.recipes.find(r => r.output.capability === c)?.tier ?? 0), 0) });
       }
     }
   }

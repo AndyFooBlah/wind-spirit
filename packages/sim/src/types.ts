@@ -18,6 +18,7 @@ export interface Tile {
   road: boolean;
   ford: boolean;
   village: number; // village id or -1
+  extra: Record<string, { stock: number; cap: number }>;   // regional raw commodities on this tile
 }
 
 export type Stage = 'child' | 'adult' | 'elder';
@@ -31,16 +32,17 @@ export interface Plot {
   planted: boolean;
   progress: number;   // thousandths of worker-weeks toward clearing or building
   recipe: string;     // structure recipe id when kind === 'structure' or while building
+  crop: string;       // commodity planted, '' if none
 }
 
 export interface Stack { c: string; qty: number; age: number; }
 
-export type Task = 'forage' | 'hunt' | 'fish' | 'gather' | 'clear' | 'farm' | 'build' | 'explore' | 'colonize' | 'rest';
+export type Task = 'forage' | 'hunt' | 'fish' | 'gather' | 'clear' | 'farm' | 'build' | 'craft' | 'research' | 'road' | 'explore' | 'colonize' | 'rest';
 
 export interface Order {
   task: Task;
   workers: number;
-  /** gather: commodity ('wood'|'stone'); build: recipe id; explore: {dx,dy,dist}; colonize: {tile, share}. */
+  /** gather: {c}; build: {recipe}; craft: {recipe, qty}; research: {ingredients: 'a,b' commodity ids and/or capability names}; farm: {plots, crop}; road: {tile}; explore: {dx,dy,dist}; colonize: {tile, share}. */
   params: Record<string, number | string>;
   since: number;
 }
@@ -57,6 +59,11 @@ export interface Village {
   people: Person[]; chief: number;
   culture: number[]; chiefTraits: number[]; // 4 axes, thousandths
   stores: Stack[]; plots: Plot[]; recipes: string[];
+  capabilities: Capability[];
+  known: string[];                  // commodity ids this village has seen
+  tasted: Record<string, number>;   // commodity id -> last tick consumed or enjoyed
+  craft: Record<string, number>;    // recipe id -> accumulated worker-weeks (thousandths)
+  hints: Record<string, number>;    // recipe id -> hints revealed so far
   orders: Order[];
   happiness: number; lowHappyWeeks: number; trust: number;
   knowledge: Knowledge;
@@ -70,7 +77,7 @@ export interface Village {
 
 export interface YearStats {
   births: number; deathsAge: number; deathsHunger: number; deathsTravel: number;
-  forage: number; hunt: number; fish: number; farm: number; wood: number; stone: number;
+  forage: number; hunt: number; fish: number; farm: number; wood: number; stone: number; gathered: number; crafted: number;
   spoiled: number;
 }
 
@@ -79,17 +86,37 @@ export interface Party {
   id: number; home: number; kind: PartyKind;
   members: Person[]; rations: number; cargo: Stack[];
   mode: 'provisioned' | 'foraging';
+  boat: boolean; cart: boolean; sail: boolean;
   route: number[]; at: number; dayCarry: number; target: number; returning: boolean;
   seen: number[];
   lostWeeks: number;
 }
 
-export interface Commodity { id: string; name: string; category: string; food: number; perish: number; weight: number; }
+export type Category = 'grain' | 'fruit' | 'root' | 'meat' | 'fish' | 'hide' | 'wood' | 'stone' | 'fiber' | 'herb' | 'clay' | 'salt' | 'ore' | 'food' | 'drink' | 'cloth' | 'instrument' | 'metal' | 'fuel' | 'curio';
+export type Capability = 'fire' | 'stonetools' | 'spear' | 'net' | 'paddle' | 'drying' | 'pottery' | 'weaving' | 'cart' | 'hull' | 'bow' | 'medicine' | 'irrigation' | 'husbandry' | 'sail' | 'roadbuilding' | 'kiln' | 'metaltools' | 'hook' | 'wagon' | 'seagoing' | 'bronzeweapons' | 'plough';
+export const CAPABILITIES: readonly Capability[] = ['fire', 'stonetools', 'spear', 'net', 'paddle', 'drying', 'pottery', 'weaving', 'cart', 'hull', 'bow', 'medicine', 'irrigation', 'husbandry', 'sail', 'roadbuilding', 'kiln', 'metaltools', 'hook', 'wagon', 'seagoing', 'bronzeweapons', 'plough'];
+
+export interface Commodity {
+  id: string; name: string; category: Category;
+  food: number;        // food value per unit, thousandths of a person-week
+  novelty: number;     // 0..10, how much variety it adds
+  perish: number;      // weeks before it spoils, 0 = never
+  weight: number;
+  source?: WildResource;                              // ubiquitous raw, drawn from tile stocks
+  regional?: { terrains: Terrain[]; cap: number };    // regional raw, placed in blobs
+  crop?: { yield: number };                           // plantable; harvest per plot at full fertility
+}
+
+export interface RecipeOutput { commodity?: { c: string; qty: number }; structure?: { shelter: number; quality: number; storage: number; defense?: number; watch?: boolean }; capability?: Capability; crop?: string; }
 export interface Recipe {
   id: string; name: string; tier: number;
   inputs: { c: string; qty: number }[];
+  requires?: Capability;
   labor: number;              // worker-weeks
-  structure?: { shelter: number; quality: number; storage: number; }; // shelter capacity (people), quality thousandths, storage multiplier thousandths
+  output: RecipeOutput;
+  hints: string[];
+  curiosity: boolean;
+  start?: boolean;            // known by every village at the start
 }
 
 export interface World {
@@ -115,6 +142,11 @@ export type Event =
   | { t: number; type: 'Died'; village: number; person: number; cause: 'age' | 'hunger' | 'travel'; stage: Stage }
   | { t: number; type: 'ChiefSucceeded'; village: number; chief: number; reason: 'death' | 'coup' }
   | { t: number; type: 'Built'; village: number; recipe: string }
+  | { t: number; type: 'Discovered'; village: number; recipe: string; how: 'research' | 'accident' | 'transfer' }
+  | { t: number; type: 'HintRevealed'; village: number; recipe: string; hint: string }
+  | { t: number; type: 'Crafted'; village: number; recipe: string; qty: number }
+  | { t: number; type: 'CapabilityGained'; village: number; capability: Capability }
+  | { t: number; type: 'RoadBuilt'; village: number; tile: number }
   | { t: number; type: 'Cleared'; village: number; plots: number }
   | { t: number; type: 'PartyLeft'; village: number; party: number; kind: PartyKind; size: number }
   | { t: number; type: 'PartyReturned'; village: number; party: number; tilesSeen: number }

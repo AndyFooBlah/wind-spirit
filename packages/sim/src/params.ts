@@ -13,13 +13,17 @@ export const P = {
   legacy: { starvation: 'rationing' as 'rationing' | 'selective', births: 'hardship' as 'hardship' | 'calmgate', hardWinter: 'partial' as 'partial' | 'all' },
   foodPerPersonWeek: 1000,
   /** Base yields per worker-week at full stock, in food units (thousandths). */
-  yield: { forage: 3500, hunt: 3000, fish: 4000, wood: 5000, stone: 3000 },
+  yield: { forage: 3500, hunt: 3000, fish: 4000, wood: 5000, stone: 3000, regional: 2500 },
   /** Seasonal factors (thousandths) for plants / game / fish yields. */
   seasonPlants: [800, 1200, 1300, 150] as const,
   seasonGame: [1000, 1000, 1100, 800] as const,
   seasonFish: [1000, 1100, 1000, 600] as const,
   /** Regrowth per week (thousandths of logistic rate). Plants only in spring/summer. */
   regrow: { plants: 50, game: 20, fish: 30, timber: 5, stone: 0 } as Record<WildResource, number>,
+  /** Research: weekly success chance per worker (thousandths). */
+  researchFocused: 120, researchExplore: 25, researchKnown: 400, hintFocused: 120, hintExplore: 150,
+  serendipity: 300,             // per week per village, in hundred-thousandths
+  roadStone: 5000, roadLabor: 4,
   /** Farming. */
   clearLabor: 4000,             // worker-weeks (thousandths) to clear one plot
   plotsPerFarmer: 3,            // plots a farmer can plant or harvest per week
@@ -37,7 +41,8 @@ export const P = {
   winterExposureMult: 1500,     // extra mortality multiplier at zero shelter, thousandths
   tentShelter: 5, tentQuality: 600,
   /** Happiness. */
-  happyCalmWeeks: 13,           // weeks without hunger for full food-security happiness
+  happyCalmWeeks: 13,
+  noveltyFull: 20,              // summed novelty of goods enjoyed in the last 26 weeks for a full novelty score           // weeks without hunger for full food-security happiness
   coupBelow: 300, coupWeeks: 26,
   /** Paths. */
   treadParty: 1000, treadCart: 2000, treadForage: 150, pathDecay: 20 /* per mille per week */,

@@ -6,5 +6,6 @@ export * from './hash.js';
 export * from './world.js';
 export * from './sim.js';
 export { route, stepCost } from './systems/travel.js';
+export { discover } from './systems/work.js';
 export { isPath } from './systems/paths.js';
 export { currentRoll } from './systems/weather.js';

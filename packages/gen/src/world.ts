@@ -5,7 +5,7 @@ import {
 } from '@wind-spirit/sim';
 import { Simplex } from './noise.js';
 import { villageNames } from './names.js';
-import { COMMODITIES, RECIPES, START_RECIPES } from './tech.js';
+import { generateTech } from './tech.js';
 
 export interface GenOptions {
   seed: string; width?: number; height?: number;
@@ -67,18 +67,35 @@ export function generateWorld(o: GenOptions): World {
     }
   }
 
+  const tech = generateTech(o.seed);
   const tiles: Tile[] = [];
   for (let i = 0; i < n; i++) {
     const t = terrain[i]; const info = TERRAIN[t]; const [x, y] = xy(dummy, i);
     const variation = 0.7 + 0.6 * nVar.fbm(x * 0.15 + 50, y * 0.15 + 50, 2);
     const cap = {} as Record<typeof WILD[number], number>, stock = {} as Record<typeof WILD[number], number>;
     for (const r of WILD) { cap[r] = Math.trunc(info.cap[r] * variation); stock[r] = cap[r]; }
-    tiles.push({ terrain: t, elev: Math.trunc(elev[i] * K), moist: Math.trunc(moist[i] * K), stock, cap, trodden: 0, road: false, ford: ford[i] === 1, village: -1 });
+    tiles.push({ terrain: t, elev: Math.trunc(elev[i] * K), moist: Math.trunc(moist[i] * K), stock, cap, trodden: 0, road: false, ford: ford[i] === 1, village: -1, extra: {} });
+  }
+  // regional raw commodities in blobs: every regional commodity exists somewhere, nowhere has everything
+  for (const c of tech.commodities) {
+    if (!c.regional) continue;
+    const fits = [...Array(n).keys()].filter(i => c.regional!.terrains.includes(tiles[i].terrain));
+    if (!fits.length) continue;
+    const blobs = 2 + rng.int(3);
+    for (let b = 0; b < blobs; b++) {
+      const center = fits[rng.int(fits.length)]; const radius = 2 + rng.int(3);
+      for (const t of neighbors(dummy, center, radius, true)) {
+        if (!c.regional.terrains.includes(tiles[t].terrain)) continue;
+        if (tileDistance(dummy, center, t) > radius || rng.chance(250)) continue;
+        const cap = Math.trunc(c.regional.cap * (700 + rng.int(600)) / 1000);
+        tiles[t].extra[c.id] = { stock: cap, cap };
+      }
+    }
   }
 
   const world: World & { names: string[]; nameCursor: number } = {
     seed: o.seed, width, height, tick: 0, tiles, villages: [], parties: [], rolls: [], wind: [],
-    commodities: COMMODITIES, recipes: RECIPES, breath: 100_000, nextId: 1, rng: {},
+    commodities: tech.commodities, recipes: tech.recipes, breath: 100_000, nextId: 1, rng: {},
     names: villageNames(Rng.fromSeed(o.seed, 'names'), 200), nameCursor: 0,
   };
 
@@ -89,7 +106,7 @@ export function generateWorld(o: GenOptions): World {
   for (const site of sites) {
     const people = startingPeople(world, o.startPop ?? 20, rng);
     const culture = [0, 1, 2, 3].map(() => cultureRng.range(250, 750));
-    foundVillage(sim.ctx, { tile: site, people, parent: -1, culture, recipes: START_RECIPES, knownTiles: [], food: (o.startPop ?? 20) * (o.startFoodWeeks ?? 8) * 1000, tents: Math.ceil((o.startPop ?? 20) / 5) });
+    foundVillage(sim.ctx, { tile: site, people, parent: -1, culture, recipes: tech.startRecipes, capabilities: [], knownTiles: [], food: (o.startPop ?? 20) * (o.startFoodWeeks ?? 8) * 1000, tents: Math.ceil((o.startPop ?? 20) / 5) });
   }
   world.rng = sim.ctx.rng.save();
   return world;

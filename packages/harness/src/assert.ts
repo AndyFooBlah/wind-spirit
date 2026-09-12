@@ -49,6 +49,12 @@ export function runSuite(nSeeds: number, log: (s: string) => void = () => {}): S
   checks.push({ name: 'With expansion, hunger falls below 45% of deaths', pass: median(seHunger) < 0.45, detail: `median hunger share ${(median(seHunger) * 100).toFixed(0)}%` });
   const paths = median(se.map(r => r.pathTiles));
   checks.push({ name: 'Paths form (median ≥ 5 path tiles after 300 years)', pass: paths >= 5, detail: `median path tiles ${paths}` });
+  // discovery ladder
+  const lastRows = (r: RunResult) => r.rows.filter(x => x.year === r.years - 1 && x.alive);
+  const capsMed = median(se.map(r => median(lastRows(r).map(x => x.capabilities))));
+  checks.push({ name: 'Villages discover and build: median village has ≥ 6 capabilities after 300 years', pass: capsMed >= 6, detail: `median capabilities per village ${capsMed}; median recipes ${median(se.map(r => median(lastRows(r).map(x => x.recipes))))}` });
+  const tier3 = se.filter(r => lastRows(r).some(x => x.maxTier >= 3)).length / se.length;
+  checks.push({ name: 'Some village reaches tier 3 in ≥ 60% of worlds', pass: tier3 >= 0.6, detail: `${(tier3 * 100).toFixed(0)}% of seeds; tier 4 in ${(se.filter(r => lastRows(r).some(x => x.maxTier >= 4)).length / se.length * 100).toFixed(0)}%` });
 
   return { checks, results };
 }

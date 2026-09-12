@@ -1,7 +1,7 @@
 /** Scripted chief policies: deterministic stand-ins for LLM chiefs. Also the runtime fallback. */
 import {
-  K, P, Rng, TERRAIN, div, mul, neighbors, popCounts, seasonOf, shelter, storeQty, storesWeeks, structures, tileDistance, yearOf,
-  type Order, type Village, type World, type WildResource,
+  K, P, Rng, TERRAIN, div, mul, neighbors, popCounts, seasonOf, shelter, storeQty, storesWeeks, structures, tileDistance, yearOf, hasCap, nearWater, recipeById, commodityById, storeByCategory,
+  type Order, type Village, type World, type WildResource, type Recipe, type Capability,
 } from '@wind-spirit/sim';
 
 export interface PolicyView { w: World; v: Village; reason: string; rng: Rng; mem: Record<string, number>; }
@@ -44,7 +44,67 @@ function plotCounts(v: Village) {
   return { cleared, planted, huts, granary, tents };
 }
 
-interface Features { farm: boolean; granary: boolean; explore: boolean; colonize: boolean; noPlotCap?: boolean; hungerBlocksFarming?: boolean; }
+interface Features { farm: boolean; granary: boolean; explore: boolean; colonize: boolean; tech?: boolean; noPlotCap?: boolean; hungerBlocksFarming?: boolean; }
+
+/** Preferred order for acquiring capabilities; tier and situation decide the rest. */
+const CAP_PRIORITY: Capability[] = ['fire', 'stonetools', 'net', 'spear', 'drying', 'pottery', 'paddle', 'bow', 'weaving', 'medicine', 'cart', 'husbandry', 'irrigation', 'hull', 'kiln', 'roadbuilding', 'sail', 'metaltools', 'plough', 'hook', 'wagon', 'bronzeweapons', 'seagoing'];
+
+function gatherable(w: World, v: Village, c: string): boolean {
+  const cm = commodityById(w, c); if (!cm) return false;
+  if (cm.source) return neighbors(w, v.tile, 1, true).some(t => w.tiles[t].cap[cm.source!] > 0);
+  if (cm.regional) return neighbors(w, v.tile, 2, true).some(t => w.tiles[t].extra[c]);
+  return false;
+}
+
+/** Orders that move a village toward crafting recipe r: gather or craft each missing input, then craft r. Returns workers used. */
+function pursue(w: World, v: Village, r: Recipe, out: Order[], free: number, depth = 0): number {
+  let used = 0;
+  const missing = r.inputs.filter(i => storeQty(v, i.c) < i.qty);
+  if (!missing.length) { const n = Math.min(free, 2); if (n > 0) { out.push(order('craft', n, { recipe: r.id, qty: r.output.commodity ? r.output.commodity.qty : 0 })); used += n; } return used; }
+  for (const m of missing) {
+    if (free - used <= 0) break;
+    if (gatherable(w, v, m.c)) { out.push(order('gather', 1, { c: m.c })); used += 1; continue; }
+    if (depth < 1) { const maker = v.recipes.map(id => recipeById(w, id)).find(x => x?.output.commodity?.c === m.c && (!x.requires || hasCap(v, x.requires))); if (maker) used += pursue(w, v, maker, out, free - used, depth + 1); }
+  }
+  return used;
+}
+
+function techOrders(view: PolicyView, free: number, hungry: boolean): { orders: Order[]; used: number } {
+  const { w, v, rng, mem } = view; const out: Order[] = []; let used = 0; const year = yearOf(w.tick);
+  if (hungry || free < 3) return { orders: out, used };
+  // 1. acquire the next capability we know a recipe for
+  const known = v.recipes.map(id => recipeById(w, id)).filter((r): r is Recipe => !!r);
+  const capTargets = known.filter(r => r.output.capability && !hasCap(v, r.output.capability) && (!r.requires || hasCap(v, r.requires)) && !(r.output.capability === 'irrigation' && !nearWater(w, v)) && !(r.output.capability === 'paddle' && !nearWater(w, v)))
+    .sort((a, b) => CAP_PRIORITY.indexOf(a.output.capability!) - CAP_PRIORITY.indexOf(b.output.capability!));
+  if (capTargets.length) used += pursue(w, v, capTargets[0], out, free - used);
+  // 2. goods: cloth for warmth, one instrument, occasional novelty food
+  if (free - used > 1) {
+    const wantCloth = storeByCategory(w, v, 'cloth') < Math.trunc((v.people.length * K) / 2);
+    const clothR = known.find(r => r.output.commodity && commodityById(w, r.output.commodity.c)?.category === 'cloth' && (!r.requires || hasCap(v, r.requires)));
+    if (wantCloth && clothR) used += pursue(w, v, clothR, out, free - used);
+    const instR = known.find(r => r.output.commodity && commodityById(w, r.output.commodity.c)?.category === 'instrument' && (!r.requires || hasCap(v, r.requires)));
+    if (instR && storeByCategory(w, v, 'instrument') === 0 && free - used > 0) used += pursue(w, v, instR, out, free - used);
+    const foodR = known.filter(r => r.output.commodity && (commodityById(w, r.output.commodity.c)?.food ?? 0) > 0 && (!r.requires || hasCap(v, r.requires)) && r.inputs.every(i => storeQty(v, i.c) >= i.qty * 3));
+    if (foodR.length && free - used > 0 && w.tick % 4 === 0) { const r = foodR[rng.int(foodR.length)]; out.push(order('craft', 1, { recipe: r.id, qty: r.output.commodity!.qty * 3 })); used += 1; }
+  }
+  // 3. research: one worker, chasing hints first, otherwise plausible pairs
+  if (free - used > 0 && v.people.length >= 12) {
+    const unknownHinted = w.recipes.filter(r => !v.recipes.includes(r.id) && (v.hints[r.id] ?? 0) >= r.hints.length && r.hints.length > 0 && r.inputs.every(i => v.known.includes(i.c)));
+    let ingredients = '';
+    if (unknownHinted.length) ingredients = unknownHinted[0].inputs.map(i => i.c).join(',');
+    else {
+      const key = `research:${year}`; if (mem[key] === undefined) mem[key] = 1;
+      const stock = v.known.filter(c => storeQty(v, c) > 0 || (commodityById(w, c)?.source));
+      const caps = v.capabilities;
+      const r = rng.int(3);
+      if (r === 0 || stock.length < 2) ingredients = rng.pick(stock);
+      else if (r === 1 && caps.length) ingredients = `${rng.pick(stock)},${rng.pick(caps)}`;
+      else { const a = rng.pick(stock); let b = rng.pick(stock); if (b === a) b = rng.pick(stock); ingredients = a === b ? a : `${a},${b}`; }
+    }
+    if (ingredients) { out.push(order('research', 1, { ingredients })); used += 1; }
+  }
+  return { orders: out, used };
+}
 
 function decide(view: PolicyView, f: Features): Order[] {
   const { w, v, rng, mem } = view; const tick = w.tick; const season = seasonOf(tick); const year = yearOf(tick);
@@ -93,6 +153,7 @@ function decide(view: PolicyView, f: Features): Order[] {
       if (target >= 0) { mem.lastColony = year; out.push(order('colonize', 0, { tile: target, share: 400 })); }
     }
   }
+  if (f.tech) { const t = techOrders(view, free, hungry); out.push(...t.orders); free -= t.used; }
   out.push(...foodOrders(w, v, free, season));
   return out;
 }
@@ -113,7 +174,7 @@ function pickColonySite(w: World, v: Village): number {
 export const POLICIES: Record<PolicyName, Policy> = {
   forager: view => decide(view, { farm: false, granary: true, explore: false, colonize: false }),
   farmer: view => decide(view, { farm: true, granary: true, explore: false, colonize: false }),
-  sensible: view => decide(view, { farm: true, granary: true, explore: true, colonize: true }),
+  sensible: view => decide(view, { farm: true, granary: true, explore: true, colonize: true, tech: true }),
   'legacy-farmer-nocap': view => decide(view, { farm: true, granary: true, explore: false, colonize: false, noPlotCap: true }),
   'legacy-farmer-hungerblock': view => decide(view, { farm: true, granary: true, explore: false, colonize: false, hungerBlocksFarming: true }),
   'legacy-forager-nogranary': view => decide(view, { farm: false, granary: false, explore: false, colonize: false }),

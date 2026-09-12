@@ -1,6 +1,6 @@
 import { K, mul, ceilDiv } from '../fixed.js';
 import { P } from '../params.js';
-import { commodityById, foodNeed, storageMult, takeFood, type Ctx } from '../world.js';
+import { commodityById, compactStores, foodNeed, storageMult, takeFood, type Ctx } from '../world.js';
 
 export function consumeAndSpoil(ctx: Ctx): void {
   const { w } = ctx;
@@ -33,5 +33,6 @@ export function consumeAndSpoil(ctx: Ctx): void {
       keep.push(s);
     }
     v.stores = keep;
+    if (w.tick % 13 === 5) compactStores(w, v);
   }
 }

@@ -17,7 +17,7 @@ export function tick(ctx: Ctx, inputs: Input[]): void {
   if (w.tick % WEEKS_PER_YEAR === 0) for (const v of w.villages) v.year = emptyYear();
   for (const i of inputs) {
     const v = w.villages[i.village]; if (!v || !v.alive) continue;
-    v.orders = i.orders.map(o => ({ ...o, since: w.tick }));
+    v.orders = i.orders.map(o => ({ ...o, params: { ...o.params }, since: w.tick }));   // clone: the sim mutates params, inputs must stay immutable
     ctx.events.push({ t: w.tick, type: 'ChiefDecided', village: i.village, orders: i.orders, requestedAt: i.requestedAt });
   }
   ensureRolls(ctx);
