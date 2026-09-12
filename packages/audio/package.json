@@ -1,0 +1,24 @@
+{
+  "name": "@wind-spirit/audio",
+  "version": "0.0.1",
+  "description": "Wind Spirit audio engine: synthesized ambient beds, event sounds, spirit wind and seed-generated music on the Web Audio API.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "test": "cd ../.. && vitest run packages/audio",
+    "demo": "vite --config vite.config.ts"
+  },
+  "dependencies": {
+    "@wind-spirit/sim": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^7.3.0"
+  }
+}

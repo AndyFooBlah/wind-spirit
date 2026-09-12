@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wind Spirit audio demo</title>
+  <style>
+    :root { color-scheme: light dark; --bg: #f5f1e8; --fg: #2b2620; --muted: #7a7064; --line: #d9d0c1; --card: #fffdf8; --accent: #3a6ea5; --accent2: #b8672a; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #1d1a16; --fg: #ece5d8; --muted: #a39887; --line: #3a342c; --card: #26221c; --accent: #7fb0e6; --accent2: #e0955a; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--fg); }
+    header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--line); }
+    header h1 { font-size: 18px; margin: 0; }
+    header .spec { color: var(--muted); font-size: 12px; }
+    main { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; padding: 16px 20px; }
+    section { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+    section h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
+    .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
+    .row label { display: inline-flex; gap: 4px; align-items: center; }
+    button { font: inherit; padding: 5px 10px; border-radius: 7px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; }
+    button:hover { border-color: var(--accent); }
+    button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+    button.big { background: var(--accent2); color: #fff; border-color: var(--accent2); font-weight: 600; }
+    input[type=range] { width: 120px; }
+    input[type=text] { font: inherit; padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); }
+    select { font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); }
+    .bus { display: grid; grid-template-columns: 70px 1fr auto auto; gap: 8px; align-items: center; margin-bottom: 4px; }
+    .bus .val { width: 34px; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+    #log { font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; max-height: 220px; overflow: auto; color: var(--muted); margin: 0; }
+    #status { font-size: 12px; color: var(--muted); }
+    .wide { grid-column: 1 / -1; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Wind Spirit audio</h1>
+    <label>seed <input id="seed" type="text" value="wind" size="12" /></label>
+    <button id="start" class="big">Start audio</button>
+    <button id="suspend">Suspend</button>
+    <span id="status">not started</span>
+    <span class="spec" id="spec"></span>
+  </header>
+  <main>
+    <section>
+      <h2>Buses</h2>
+      <div id="buses"></div>
+    </section>
+    <section>
+      <h2>Scene (ambient bed)</h2>
+      <div class="row">season <span id="season"></span></div>
+      <div class="row">roll <span id="roll"></span></div>
+      <div class="row">biome <span id="biome"></span></div>
+      <div class="row">zoom <span id="zoom"></span></div>
+      <div class="row">speed <span id="speed"></span></div>
+    </section>
+    <section>
+      <h2>Village</h2>
+      <div class="row"><label><input id="v-none" type="checkbox" /> no village focused</label></div>
+      <div class="row"><label>population <input id="v-pop" type="range" min="0" max="400" value="40" /> <span id="v-pop-val">40</span></label></div>
+      <div class="row">
+        <label><input id="v-building" type="checkbox" /> building</label>
+        <label><input id="v-famine" type="checkbox" /> famine</label>
+        <label><input id="v-instruments" type="checkbox" /> instruments</label>
+        <label><input id="v-festival" type="checkbox" /> festival</label>
+      </div>
+    </section>
+    <section>
+      <h2>Music</h2>
+      <div class="row"><label><input id="m-enabled" type="checkbox" checked /> enabled</label></div>
+      <div class="row">intensity <span id="m-intensity"></span></div>
+    </section>
+    <section>
+      <h2>Events (one-shots)</h2>
+      <div class="row" id="events"></div>
+      <div class="row">
+        <button id="six-births">6 births via onEvents</button>
+        <button id="mixed-week">a busy week via onEvents</button>
+      </div>
+    </section>
+    <section>
+      <h2>Time markers</h2>
+      <div class="row">tick <b id="tick">0</b>
+        <button id="tick-1">+1 week</button>
+        <button id="tick-season">to next season</button>
+        <button id="tick-year">to new year</button>
+      </div>
+    </section>
+    <section>
+      <h2>Spirit</h2>
+      <div class="row"><label>pool <input id="pool" type="range" min="0" max="100" value="100" /> <span id="pool-val">1.00</span></label></div>
+      <div class="row" id="spirit"></div>
+    </section>
+    <section class="wide">
+      <h2>Log</h2>
+      <pre id="log"></pre>
+    </section>
+  </main>
+  <script type="module" src="./demo.ts"></script>
+</body>
+</html>
