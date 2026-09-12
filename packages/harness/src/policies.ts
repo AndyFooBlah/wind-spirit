@@ -142,7 +142,9 @@ function pursue(w: World, v: Village, r: Recipe, out: Order[], free: number, dep
   for (const m of missing) {
     if (free - used <= 0) break;
     if (gatherable(w, v, m.c)) { out.push(order('gather', 1, { c: m.c })); used += 1; continue; }
-    if (depth < 1) { const maker = v.recipes.map(id => recipeById(w, id)).find(x => x?.output.commodity?.c === m.c && (!x.requires || hasCap(v, x.requires))); if (maker) used += pursue(w, v, maker, out, free - used, depth + 1); }
+    const cm = commodityById(w, m.c);
+    if (cm?.regional && !w.parties.some(p => p.home === v.id && p.kind === 'expedition') && v.knowledge.tiles.some(t => w.tiles[t].extra[m.c] && tileDistance(w, v.tile, t) <= 12) && free - used >= 3) { out.push(order('expedition', 2, { c: m.c, weeks: 3 })); used += 2; continue; }
+    if (depth < 3) { const maker = v.recipes.map(id => recipeById(w, id)).find(x => x?.output.commodity?.c === m.c && (!x.requires || hasCap(v, x.requires))); if (maker) used += pursue(w, v, maker, out, free - used, depth + 1); }
   }
   return used;
 }
@@ -171,7 +173,8 @@ function techOrders(view: PolicyView, free: number, hungry: boolean): { orders: 
     let ingredients = '';
     if (unknownHinted.length) ingredients = unknownHinted[0].inputs.map(i => i.c).join(',');
     else {
-      const stock = v.known.filter(c => storeQty(v, c) > 0 || (commodityById(w, c)?.source));
+      const held = v.known.filter(c => storeQty(v, c) > 0 || (commodityById(w, c)?.source));
+      const stock = held.length && rng.chance(700) ? held : v.known;   // mostly what we hold, sometimes anything we have seen
       const caps = v.capabilities;
       const r = rng.int(3);
       if (r === 0 || stock.length < 2) ingredients = rng.pick(stock);

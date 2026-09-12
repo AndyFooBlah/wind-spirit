@@ -35,3 +35,9 @@
 ## Saturation
 
 With the M2 policies on a 64 × 64 map, hunger is 4 to 17% of deaths in the first 150 years and 47 to 55% after, across six seeds. The turn is the map filling: by year 150 there are 80 to 130 villages at a mean size in the mid-thirties, every one at its local ceiling, and hunger becomes the regulator. Expansion works exactly as intended while there is room, and the world is small. The balance check now measures the expansion phase (< 45%) and reports the saturated share alongside. Larger worlds, or slower growth, move the turn later; that is the first thing to revisit after playtesting.
+
+## Expeditions and the bronze chain
+
+Chiefs kept "sending walkers to the clay banks" with no way to bring clay home, because gathering only reached two tiles. An `expedition` order now sends a party to a known far tile to collect a commodity for a few weeks and carry it back (boats and carts raise the load). With expeditions, deeper input chasing in the scripted policy, and research that sometimes tries things the village has seen but never held, bronze appears: 12 of 408 villages reached tier 4 within 300 years across three seeds, all near hills. Tier 4 remains rare by design.
+
+Famine mortality is now quadratic and capped: a model-run village of 102 had lost 95% of its people in one season under the cubic curve. Settlers leave one party at a time and never fewer than 16 people behind, because a model chief once colonized its village down to seven.
