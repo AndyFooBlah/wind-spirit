@@ -5,7 +5,7 @@ import type { ChiefDecisionJson, HostDecisionJson } from './schema.js';
 
 export interface Parsed { orders: Order[]; dropped: string[]; journal: string; memoryNotes: string[]; replyToSpirit?: string; verdicts: { claim: number; verdict: 'fulfilled' | 'failed' | 'unverifiable' }[]; }
 
-const TASKS: Task[] = ['forage', 'hunt', 'fish', 'gather', 'clear', 'farm', 'build', 'craft', 'research', 'road', 'explore', 'colonize', 'envoy', 'raid', 'rest'];
+const TASKS: Task[] = ['forage', 'hunt', 'fish', 'gather', 'clear', 'farm', 'build', 'craft', 'research', 'road', 'explore', 'colonize', 'envoy', 'raid', 'expedition', 'rest'];
 
 function lookup(map: Record<string, string>, name: string | undefined): string | undefined {
   if (!name) return undefined; const k = name.trim().toLowerCase(); if (map[k]) return map[k];
@@ -30,7 +30,7 @@ export function parseDecision(view: VillageView, json: ChiefDecisionJson): Parse
     if (workers > budget) { workers = budget; if (workers === 0) { dropped.push(`${task}: no adults left to assign`); continue; } }
     const params: Record<string, number | string> = {};
     switch (task) {
-      case 'gather': { const id = lookup(names.commodities, o.commodity); if (!id) { dropped.push(`gather: unknown commodity "${o.commodity}"`); continue; } params.c = id; break; }
+      case 'gather': case 'expedition': { const id = lookup(names.commodities, o.commodity); if (!id) { dropped.push(`${task}: unknown commodity "${o.commodity}"`); continue; } params.c = id; if (task === 'expedition') params.weeks = Math.max(1, Math.min(8, Math.trunc(Number(o.weeks) || 3))); break; }
       case 'build': case 'craft': { const id = lookup(names.recipes, o.recipe); if (!id || !view.recipes.some(r => r.id === id)) { dropped.push(`${task}: unknown recipe "${o.recipe}"`); continue; } params.recipe = id; if (task === 'craft') params.qty = Math.max(0, Math.trunc((Number(o.quantity) || 0) * K)); break; }
       case 'research': { const ings = (o.ingredients ?? []).map(n => lookup(names.commodities, n) ?? lookup(names.capabilities, n)).filter((x): x is string => !!x); if (!ings.length) { dropped.push(`research: no known ingredients in ${JSON.stringify(o.ingredients)}`); continue; } params.ingredients = ings.slice(0, 3).join(','); break; }
       case 'farm': { params.plots = Math.max(0, Math.trunc(Number(o.plots) || 0)); const crop = lookup(names.commodities, o.crop) ?? 'grain'; params.crop = crop; break; }

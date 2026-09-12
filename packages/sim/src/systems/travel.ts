@@ -65,6 +65,7 @@ export function moveParties(ctx: Ctx): void {
   for (const p of [...w.parties]) {
     const home = w.villages[p.home];
     if (p.waiting > 0) continue;                       // envoys waiting for an answer eat as guests
+    if (p.kind === 'expedition' && !p.returning && p.gather && p.at === p.target && p.route.length === 0) { eat(ctx, p); arrive(ctx, p); continue; }
     if (p.returning && !p.route.length && p.at !== home.tile) { const dest = p.kind === 'refugee' ? w.villages[p.target]?.tile ?? home.tile : home.tile; p.route = route(w, p.at, dest, p.boat, p.sail); if (!p.route.length) { remove(w, p); continue; } }
     if (p.lostWeeks > 0) { p.lostWeeks--; eat(ctx, p); continue; }
     if (p.route.length && !home.knowledge.tiles.includes(p.at) && rng.chance(P.lostChanceK)) { p.lostWeeks = 1; eat(ctx, p); continue; }
@@ -95,6 +96,7 @@ export function moveParties(ctx: Ctx): void {
     p.members = survivors;
     if (!p.members.length) { ctx.events.push({ t: w.tick, type: 'PartyLost', village: p.home, party: p.id, cause: 'starved' }); remove(w, p); continue; }
     if (!p.route.length) arrive(ctx, p);
+    else if (p.kind === 'expedition' && !p.returning && p.gather && p.at === p.target) arrive(ctx, p);
   }
 }
 
@@ -125,6 +127,20 @@ function arrive(ctx: Ctx, p: Party): void {
     const target = w.villages[p.target];
     if (target && target.alive) { for (const m of p.members) { m.hungry = 0; target.people.push(m); } for (const s of p.cargo) addStore(target, s.c, s.qty, s.age); }
     remove(w, p); return;
+  }
+  if (p.kind === 'expedition' && !p.returning) {
+    // collect for the planned weeks, then turn home
+    const g = p.gather; if (!g) { p.returning = true; return; }
+    const cm = w.commodities.find(c => c.id === g.c); const tile = w.tiles[p.at];
+    if (cm) {
+      const cap = p.members.length * P.carryPerPerson * (p.cart ? 3 : 1) * (p.boat ? 4 : 1); const held = p.cargo.reduce((a, s) => a + s.qty, 0);
+      let got = 0;
+      if (cm.regional && tile.extra[g.c]) { const e = tile.extra[g.c]; got = Math.min(e.stock, p.members.length * P.yield.regional, cap - held); e.stock -= got; }
+      else if (cm.source && tile.cap[cm.source] > 0) { const base = cm.source === 'stone' ? P.yield.stone : cm.source === 'timber' ? P.yield.wood : P.yield.forage; got = Math.min(tile.stock[cm.source], p.members.length * base, cap - held); tile.stock[cm.source] -= got; }
+      if (got > 0) { const s = p.cargo.find(x => x.c === g.c); if (s) s.qty += got; else p.cargo.push({ c: g.c, qty: got, age: 0 }); }
+    }
+    g.weeks--; if (g.weeks <= 0) { p.returning = true; }
+    return;
   }
   if ((p.kind === 'envoy' || p.kind === 'raid') && !p.returning) {
     const host = w.villages[p.targetVillage ?? -1];

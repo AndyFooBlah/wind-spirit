@@ -2,9 +2,10 @@
 export const ORDER_SCHEMA = {
   type: 'object',
   properties: {
-    task: { type: 'string', enum: ['forage', 'hunt', 'fish', 'gather', 'clear', 'farm', 'build', 'craft', 'research', 'road', 'explore', 'colonize', 'envoy', 'raid', 'rest'] },
+    task: { type: 'string', enum: ['forage', 'hunt', 'fish', 'gather', 'clear', 'farm', 'build', 'craft', 'research', 'road', 'explore', 'colonize', 'envoy', 'raid', 'expedition', 'rest'] },
     workers: { type: 'integer', description: 'adults assigned (0 for colonize)' },
-    commodity: { type: 'string', description: 'gather: what to gather, by name' },
+    commodity: { type: 'string', description: 'gather or expedition: what to collect, by name' },
+    weeks: { type: 'integer', description: 'expedition: weeks to spend collecting, 1 to 8' },
     recipe: { type: 'string', description: 'build or craft: recipe by name' },
     quantity: { type: 'integer', description: 'craft: units to make before stopping (0 = keep making)' },
     ingredients: { type: 'array', items: { type: 'string' }, description: 'research: one or two ingredient names, optionally one skill name' },
@@ -51,7 +52,7 @@ export const HOST_SCHEMA = {
 } as const;
 
 export interface ChiefDecisionJson {
-  orders: Array<{ task: string; workers: number; commodity?: string; recipe?: string; quantity?: number; ingredients?: string[]; plots?: number; crop?: string; direction?: string; days?: number; site?: number; share?: number; village?: string; offer?: Record<string, number>; want?: Record<string, number>; floor?: number; transfer?: string; threat?: boolean; message?: string; roadSite?: number }>;
+  orders: Array<{ task: string; workers: number; commodity?: string; weeks?: number; recipe?: string; quantity?: number; ingredients?: string[]; plots?: number; crop?: string; direction?: string; days?: number; site?: number; share?: number; village?: string; offer?: Record<string, number>; want?: Record<string, number>; floor?: number; transfer?: string; threat?: boolean; message?: string; roadSite?: number }>;
   journal: string; memoryNotes: string[]; replyToSpirit?: string; verdicts?: { claim: number; verdict: 'fulfilled' | 'failed' | 'unverifiable' }[];
 }
 export interface HostDecisionJson { answer: 'accept' | 'counter' | 'refuse'; give?: Record<string, number>; take?: Record<string, number>; reason?: string; journal: string; }

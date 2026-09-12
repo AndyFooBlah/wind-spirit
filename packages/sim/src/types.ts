@@ -37,7 +37,7 @@ export interface Plot {
 
 export interface Stack { c: string; qty: number; age: number; }
 
-export type Task = 'forage' | 'hunt' | 'fish' | 'gather' | 'clear' | 'farm' | 'build' | 'craft' | 'research' | 'road' | 'explore' | 'colonize' | 'envoy' | 'raid' | 'rest';
+export type Task = 'forage' | 'hunt' | 'fish' | 'gather' | 'clear' | 'farm' | 'build' | 'craft' | 'research' | 'road' | 'explore' | 'colonize' | 'envoy' | 'raid' | 'expedition' | 'rest';
 
 export interface Order {
   task: Task;
@@ -96,7 +96,7 @@ export interface YearStats {
   spoiled: number;
 }
 
-export type PartyKind = 'explore' | 'colonize' | 'refugee' | 'envoy' | 'raid';
+export type PartyKind = 'explore' | 'colonize' | 'refugee' | 'envoy' | 'raid' | 'expedition';
 
 /** What an envoy carries besides goods: what to offer, what to ask for, the floor it will accept, an optional recipe to share, an optional threat. */
 export interface Mandate { offer: Record<string, number>; want: Record<string, number>; floor: number; transfer?: string; threat?: boolean; message?: string; }
@@ -112,6 +112,7 @@ export interface Party {
   lostWeeks: number;
   mandate?: Mandate; waiting: number; result?: string; targetVillage?: number;
   sailBoost?: 'fill' | 'becalm';
+  gather?: { c: string; weeks: number };   // expedition: what to collect and for how long
 }
 
 export type Category = 'grain' | 'fruit' | 'root' | 'meat' | 'fish' | 'hide' | 'wood' | 'stone' | 'fiber' | 'herb' | 'clay' | 'salt' | 'ore' | 'food' | 'drink' | 'cloth' | 'instrument' | 'metal' | 'fuel' | 'curio';

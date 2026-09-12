@@ -49,7 +49,7 @@ export function statePrompt(v: VillageView, reason: string): string {
   sections.push(`# Your notes to yourself:\n${list(v.memory, 'none')}`);
   sections.push(`# Orders you may give (workers are adults; keep the sum within ${p.workersFree}):
 - forage / hunt / fish: workers. Winter favours hunting and fishing.
-- gather: workers, commodity (wood, stone, or anything listed as near).
+- gather: workers, commodity (wood, stone, or anything listed as within a day). expedition: workers, commodity, weeks (go to where something far is known to be, collect, and come back).
 - clear: workers (about 4 worker-weeks per plot).
 - farm: workers, plots, crop. Spring plants, autumn harvests. A farmer handles 3 plots a week.
 - build: workers, recipe (a building recipe). craft: workers, recipe, quantity (0 to keep going). Skills are crafted once.

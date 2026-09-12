@@ -63,6 +63,9 @@ function tradeOrders(view: PolicyView, free: number): { orders: Order[]; used: n
   // regional commodities we have heard of but never held are worth asking for too
   for (const c of v.known) { const cm = commodityById(w, c); if (cm?.regional && storeQty(v, c) === 0 && !gatherable(w, v, c)) lacking.add(c); }
   if (!lacking.size) return { orders: out, used: 0 };
+  // if we know where it grows, go and get it ourselves
+  const knownFar = [...lacking].filter(c => v.knowledge.tiles.some(t => w.tiles[t].extra[c] && tileDistance(w, v.tile, t) > 2 && tileDistance(w, v.tile, t) <= 12));
+  if (knownFar.length && free >= 4) { mem.lastEnvoy = year; out.push(order('expedition', 2, { c: rng.pick(knownFar), weeks: 3 })); return { orders: out, used: 2 }; }
   // prefer a partner known to have what we lack nearby; otherwise ask anyway
   const knownSet = new Set(v.knowledge.tiles);
   const nearPartner = (id: number, c: string) => { const o = w.villages[id]; return neighbors(w, o.tile, 2, true).some(t => knownSet.has(t) && !!w.tiles[t].extra[c]); };

@@ -38,6 +38,7 @@ export function work(ctx: Ctx): void {
         case 'colonize': { const used = colonize(ctx, v, o, free); free -= used; break; }
         case 'envoy': { const used = envoy(ctx, v, o, free); free -= used; break; }
         case 'raid': { const used = raid(ctx, v, o, free); free -= used; break; }
+        case 'expedition': { const used = expedition(ctx, v, o, free); free -= used; break; }
         case 'rest': free -= n; keep.push(o); break;
       }
     }
@@ -309,6 +310,23 @@ function raid(ctx: Ctx, v: Village, o: Order, free: number): number {
   const party = spawnParty(ctx, v, 'raid', members, rations, target.tile, { boat: hasCap(v, 'paddle'), cart: hasCap(v, 'cart'), sail: hasCap(v, 'sail') });
   if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
   party.targetVillage = target.id;
+  return n;
+}
+
+/** Send a party to a known far tile to collect a commodity for some weeks and bring it back. */
+function expedition(ctx: Ctx, v: Village, o: Order, free: number): number {
+  const { w } = ctx; const c = String(o.params.c ?? ''); const cm = commodityById(w, c); if (!cm) return 0;
+  const n = Math.min(o.workers, free); if (n < 1) return 0;
+  const has = (t: number) => cm.regional ? !!w.tiles[t].extra[c] : cm.source ? w.tiles[t].cap[cm.source] > 0 && w.tiles[t].village === -1 : false;
+  let target = Number(o.params.tile ?? -1);
+  if (target < 0 || !has(target)) { let best = -1, bestD = 99; for (const t of v.knowledge.tiles) if (has(t)) { const d = Math.max(Math.abs(xy(w, t)[0] - xy(w, v.tile)[0]), Math.abs(xy(w, t)[1] - xy(w, v.tile)[1])); if (d > 1 && d < bestD) { bestD = d; best = t; } } target = best; }
+  if (target < 0) return 0;
+  const weeks = Math.max(1, Math.min(8, Number(o.params.weeks ?? 3)));
+  const members = takeAdults(v, w.tick, n);
+  const rations = takeStore(v, 'grain', members.length * (weeks + 4) * P.foodPerPersonWeek);
+  const party = spawnParty(ctx, v, 'expedition', members, rations, target, { boat: hasCap(v, 'paddle'), cart: hasCap(v, 'cart'), sail: hasCap(v, 'sail') });
+  if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
+  party.gather = { c, weeks };
   return n;
 }
 
