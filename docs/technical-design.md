@@ -332,7 +332,7 @@ At fast speeds coalescing cuts routine calls by two thirds or more. The per-game
 |---|---|---|
 | M0 ✅ 2026-09-12 | Repo, `sim` core, `gen` world, harness with scripted chiefs, report | Determinism, balance targets. See m0-notes.md |
 | M1 ✅ 2026-09-12 | Tech generator, names, hints, research, recipes in the sim | Discovery feels like discovery under a scripted explorer. See build-notes.md |
-| M2 ✅ 2026-09-12 | `agents` scheduler, prompt contract, proxy on Cloud Run, fallback, envoys and raids in the sim | A real chief runs a village (3-year and 30-year proofs; the century is an M7 playtest item) |
+| M2 ✅ 2026-09-12 | `agents` scheduler, prompt contract, proxy on Cloud Run, fallback, envoys and raids in the sim | A real chief ran a village for a century (427 decisions, 0 fallbacks) and for 30 years at normal cadence (367 decisions) |
 | M3 | Web UI: map at three zooms, panels, speeds, auto-pause, saves | Watchable |
 | M4 | Spirit chat, breath, trust, chronicle | The core loop |
 | M5 | History scrubber, narrative | Replay |
