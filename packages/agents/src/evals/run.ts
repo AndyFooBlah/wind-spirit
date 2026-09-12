@@ -25,6 +25,13 @@ async function anonToken(): Promise<string> {
 }
 
 export async function runCase(client: HttpLlmClient, model: string, c: EvalCase, judge?: HttpLlmClient): Promise<CaseResult> {
+  // one retry on upstream rate limits or transient proxy errors
+  const r = await runCaseOnce(client, model, c, judge);
+  if (r.error && /429|Resource exhausted|502|503/.test(r.error)) { await new Promise(res => setTimeout(res, 8000)); return runCaseOnce(client, model, c, judge); }
+  return r;
+}
+
+async function runCaseOnce(client: HttpLlmClient, model: string, c: EvalCase, judge?: HttpLlmClient): Promise<CaseResult> {
   const t0 = Date.now();
   const base: Partial<GenerateRequest> = { model, temperature: 0.7, thinkingLevel: 'low' };
   try {
@@ -34,7 +41,7 @@ export async function runCase(client: HttpLlmClient, model: string, c: EvalCase,
       if (!json || !Array.isArray(json.orders)) return fail(c, model, res, 'no decision json', t0);
       const parsed = parseDecision(c.view, json); const checks = scoreDecision(c, parsed);
       const r: CaseResult = { id: c.id, category: c.category, model, checks, score: checksScore(checks), usage: res.usage, cost: res.cost ?? 0, ms: Date.now() - t0, output: JSON.stringify(json).slice(0, 4000) };
-      if (judge) r.judge = await judgeText(judge, 'journal', c, parsed.journal);
+      if (judge) { try { r.judge = await judgeText(judge, 'journal', c, parsed.journal); } catch { /* judge failures never fail the case */ } }
       return r;
     }
     if (c.kind === 'host') {
@@ -54,7 +61,7 @@ export async function runCase(client: HttpLlmClient, model: string, c: EvalCase,
     const res = await client.generate({ ...base, class: 'capable', system: systemPrompt(c.view, 'dream'), messages, maxOutputTokens: 3000, temperature: 0.9 } as GenerateRequest);
     const reply = res.text.trim(); const checks = scoreDream(c, reply);
     const r: CaseResult = { id: c.id, category: c.category, model, checks, score: checksScore(checks), usage: res.usage, cost: res.cost ?? 0, ms: Date.now() - t0, output: reply.slice(0, 2000) };
-    if (judge) r.judge = await judgeText(judge, 'dream', c, reply);
+    if (judge) { try { r.judge = await judgeText(judge, 'dream', c, reply); } catch { /* ignore */ } }
     return r;
   } catch (e) {
     return { id: c.id, category: c.category, model, checks: { valid: false }, score: 0, usage: { input: 0, output: 0 }, cost: 0, ms: Date.now() - t0, output: '', error: (e as Error).message.slice(0, 300) };
@@ -69,7 +76,7 @@ function safeJson(s: string): unknown { try { return JSON.parse(s); } catch { co
 /** LLM judge: 1 to 5 for being in character, grounded in the facts given, and coherent. */
 async function judgeText(judge: HttpLlmClient, kind: 'journal' | 'dream', c: EvalCase, text: string): Promise<number> {
   const facts = statePrompt(c.view, c.reason, false).slice(0, 6000);
-  const res = await judge.generate({ class: 'capable', thinkingLevel: 'low', maxOutputTokens: 500, temperature: 0,
+  const res = await judge.generate({ class: 'capable', thinkingLevel: 'low', maxOutputTokens: 4000, temperature: 0,
     system: 'You grade text written in the voice of a stone-age village chief. Answer only with JSON {"score": n, "why": "..."} where n is an integer 1 to 5.',
     messages: [{ role: 'user', text: `Facts the chief knows:\n${facts}\n\n${kind === 'journal' ? "The chief's journal entry" : "The chief's reply to a spirit in a dream"}:\n"${text}"\n\nScore 5 if it is in character (no modern ideas or words), grounded only in the facts above, coherent and specific; 3 if plausible but generic or slightly off; 1 if out of character, contradicts the facts, or is not prose.` }],
     schema: { type: 'object', properties: { score: { type: 'integer' }, why: { type: 'string' } }, required: ['score', 'why'] } });

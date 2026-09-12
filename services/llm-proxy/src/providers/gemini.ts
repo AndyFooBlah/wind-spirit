@@ -61,7 +61,8 @@ async function prepare(req: ProviderRequest, signal: AbortSignal): Promise<Prepa
     cfg.responseMimeType = 'application/json';
     cfg.responseJsonSchema = req.schema;
   }
-  if (req.thinkingLevel) cfg.thinkingConfig = { thinkingLevel: req.thinkingLevel as ThinkingLevel };
+  // Gemini 2.5 takes a token budget, not a level: 'low' means no thinking there; 3.x takes the level as given.
+  if (req.thinkingLevel) cfg.thinkingConfig = /^gemini-2\./.test(req.model) ? { thinkingBudget: req.thinkingLevel === 'low' ? 0 : req.thinkingLevel === 'medium' ? 2048 : 8192 } : { thinkingLevel: req.thinkingLevel as ThinkingLevel };
 
   const plain = (): Prepared => {
     if (req.system) cfg.systemInstruction = req.system;

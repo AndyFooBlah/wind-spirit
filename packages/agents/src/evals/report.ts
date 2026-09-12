@@ -16,4 +16,11 @@ for (const r of runs.sort((a, b) => mean(b.results.map(x => x.score)) - mean(a.r
   if (refRun && refRun.model !== r.model) { const pairs = r.results.filter(x => ['visitor', 'expansion'].includes(x.category)).map(x => [decisionClass(x), decisionClass(refRun.results.find(y => y.id === x.id) ?? x)]).filter(p => p[0] && p[1]); if (pairs.length) agree = `${(100 * pairs.filter(p => p[0] === p[1]).length / pairs.length).toFixed(0)}%`; }
   md += `| ${r.model} | ${mean(r.results.map(x => x.score)).toFixed(3)} | ${by.join(' | ')} | ${judged.length ? mean(judged).toFixed(2) : '–'} | ${agree} | ${mean(r.results.map(x => x.cost)).toFixed(4)} | ${Math.round(mean(r.results.map(x => x.ms)))} | ${r.results.filter(x => x.error).length} |\n`;
 }
+
+// Cost per chief-century: 13 routine and 4 impactful decisions a year at normal cadence (5 and 2 at fast), measured per-case costs.
+const costOf = (r: { results: CaseResult[] }, cats: string[]) => mean(r.results.filter(x => cats.includes(x.category) && !x.error).map(x => x.cost));
+md += `\n\n### Projected cost per chief per century (normal cadence: 13 routine + 4 impactful decisions a year; fast: 5 + 2)\n\n| model for everything | normal | fast |\n|---|---|---|\n`;
+for (const r of runs) { const ro = costOf(r, ['routine']), im = costOf(r, ['crisis', 'visitor', 'expansion', 'spirit']); md += `| ${r.model} | $${(100 * (13 * ro + 4 * im)).toFixed(2)} | $${(100 * (5 * ro + 2 * im)).toFixed(2)} |\n`; }
+const base = runs.find(r => r.model === 'gemini-3.8-flash');
+if (base) { md += `\n### Mixed: candidate for routine, Gemini 3.8 Flash for impactful\n\n| routine model | routine score | normal | fast |\n|---|---|---|---|\n`; for (const r of runs) { const ro = costOf(r, ['routine']), im = costOf(base, ['crisis', 'visitor', 'expansion', 'spirit']); md += `| ${r.model} | ${mean(r.results.filter(x => x.category === 'routine').map(x => x.score)).toFixed(3)} | $${(100 * (13 * ro + 4 * im)).toFixed(2)} | $${(100 * (5 * ro + 2 * im)).toFixed(2)} |\n`; } }
 writeFileSync(`${dir}/report.md`, md); console.log(md);
