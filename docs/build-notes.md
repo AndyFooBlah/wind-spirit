@@ -41,3 +41,9 @@ With the M2 policies on a 64 × 64 map, hunger is 4 to 17% of deaths in the firs
 Chiefs kept "sending walkers to the clay banks" with no way to bring clay home, because gathering only reached two tiles. An `expedition` order now sends a party to a known far tile to collect a commodity for a few weeks and carry it back (boats and carts raise the load). With expeditions, deeper input chasing in the scripted policy, and research that sometimes tries things the village has seen but never held, bronze appears: 12 of 408 villages reached tier 4 within 300 years across three seeds, all near hills. Tier 4 remains rare by design.
 
 Famine mortality is now quadratic and capped: a model-run village of 102 had lost 95% of its people in one season under the cubic curve. Settlers leave one party at a time and never fewer than 16 people behind, because a model chief once colonized its village down to seven.
+
+## First playtest of the deployed app (M3/M4, 2026-09-12)
+
+Deployed at https://wind-spirit-prod.web.app. A new world, very fast for thirty seconds, a village opened, a whisper sent ("the winter after next will be bitter, store grain and cut wood"). The chief deliberated within the week, wrote a journal that weighed the warning without obeying it ("a wise hearth prepares regardless of spirits"), and prayed back; the prayer auto-paused the game with a toast. Chief deaths auto-pause too. Villages the player has not opened run on the scripted policy ("acted on habit"), which is the cost control working as designed.
+
+Two things for M7: very fast ran about three game years in thirty seconds rather than the ten the speed table implies, and the map pane wants a wide window; at narrow widths the village panel pushes the map aside.
