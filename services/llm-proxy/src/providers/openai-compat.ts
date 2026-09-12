@@ -74,7 +74,7 @@ export function toBody(req: ProviderRequest, stream: boolean): Record<string, un
   if (req.maxOutputTokens !== undefined) body.max_tokens = req.maxOutputTokens;
   if (req.temperature !== undefined) body.temperature = req.temperature;
   if (req.schema && native) {
-    body.response_format = { type: 'json_schema', json_schema: { name: 'response', schema: req.schema, strict: true } };
+    body.response_format = { type: 'json_schema', json_schema: { name: 'response', schema: req.schema, strict: false } };
   }
   if (stream) {
     body.stream = true;

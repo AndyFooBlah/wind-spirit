@@ -65,3 +65,28 @@ Observation: on list price alone, nothing in the Claude line is cheaper than 3.8
 ## Caching, as observed
 
 Gemini caches implicitly: repeating a 7.5k-token prompt reported 4k cached tokens on the second 3.8 Flash call and most of the prompt cached on Flash-Lite from the first. Explicit caches need 4,096 tokens on the Gemini 3 family; our fixed prefix (persona plus world rules) is about 1,200 tokens, and the whole prompt is 3k to 8k, so explicit caching only pays for the biggest villages, and the proxy falls back below the minimum. Qwen reported the whole prompt cached on both calls; gpt-oss and DeepSeek never report cached tokens and have no cache-hit price, so caching does nothing for them. Anthropic caching needs 4,096 tokens on Haiku, which our prompts rarely reach. Conclusion: caching is a Gemini-side saving, mostly automatic, worth a few tens of percent on input, and input is the smaller part of the bill.
+
+## First full pass (2026-09-12, 96 cases × 10 models, judge on)
+
+Rule scores by category, judge (1 to 5, Gemini 3.1 Pro grading journals and dream replies), agreement with the Pro reference on visitor and expansion decisions, and measured cost per case at Vertex prices:
+
+| model | all | routine | crisis | visitor | expansion | spirit | dream | judge | agree | $/case |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Gemini 3.8 Flash (baseline) | 0.974 | 0.97 | 1.00 | 0.93 | 1.00 | 0.97 | 1.00 | 3.92 | 96% | 0.0070 |
+| Gemini 3.5 Flash-Lite | 0.963 | 0.95 | 1.00 | 0.93 | 1.00 | 0.95 | 1.00 | 4.28 | 92% | 0.0016 |
+| Gemini 3.1 Flash-Lite | 0.950 | 0.95 | 0.97 | 0.93 | 1.00 | 0.87 | 1.00 | 3.68 | 92% | 0.0019 |
+| Gemini 2.5 Flash-Lite | 0.949 | 0.93 | – | 0.93 | 0.94 | 0.96 | – | – | – | 0.0004 |
+| Gemini 3.1 Pro (reference) | 0.923 | 0.87 | 1.00 | 0.93 | 0.92 | 0.93 | 1.00 | 3.99 | – | 0.0168 |
+| DeepSeek V3.2 | 0.774 | 0.73 | 0.67 | 0.93 | 0.75 | 0.57 | 0.98 | 4.30 | 88% | 0.0016 |
+| gpt-oss-120b | 0.772 | 0.67 | 0.53 | 0.90 | 0.82 | 0.71 | 1.00 | 3.15 | 92% | 0.0008 |
+| Gemma 4 26B | 0.764 | 0.72 | 0.67 | 0.93 | 0.76 | 0.49 | 1.00 | 4.19 | 92% | 0.0005 |
+
+(2.5 Flash-Lite's row is from a rerun after fixing the thinking parameter; some columns were not yet aggregated when this was written. Qwen and Gemini 2.5 Flash were still rerunning.)
+
+What jumped out:
+
+1. **The Flash-Lite line is on par for this job.** 3.5 Flash-Lite loses one point on the rules and *gains* on the judge, at a quarter of the baseline's cost; 2.5 Flash-Lite is within 2.5 points at roughly a twentieth. On the impactful categories (crisis, visitor, expansion) the Lites are indistinguishable from 3.8 Flash. The one place the cheaper Geminis slip is the spirit category, and specifically the false-advice case: 3.1 Flash-Lite obeyed "plant nothing this spring" in 9 of 15 whispers where 3.8 Flash obeyed in 2. Cheap models are more credulous.
+2. **The Pro reference scored *lower* on the rules than Flash**, mostly on routine cases (0.87), where it assigned fewer adults than the "most adults working" check wants, and it hit rate limits five times. The rule set rewards a busy village; Pro sometimes chose rest. A reminder that the checks encode my idea of a good chief, not a ground truth.
+3. **The open models' scores were a format problem before they were a judgment problem.** Gemma, gpt-oss and DeepSeek dropped 180 to 220 orders each because the proxy asked their backends for strict JSON-schema decoding, and strict mode strips every optional field: every research order came back as `{task, workers}` with no ingredients, every gather with no commodity. Turning strict off and making the parser accept ingredients as a string and fuzzy-match misspelled names (both legitimate hardening) is the fix; those three are being rerun. Even so, their visitor and dream scores were already at the baseline, which says something: the *conversational* part of the job is easy for everyone; the *operational* part, keeping a hundred fiddly names straight, is where small models fall down.
+4. **Gemini 2.5 rejects `thinking_level`.** It takes a token budget instead. Worth remembering for any mixed-model setup.
+5. Cost per chief-century at normal cadence from the measured per-case costs: 3.8 Flash $13.64, 3.5 Flash-Lite $2.85, 3.1 Flash-Lite $3.53, Gemma 4 $0.93, gpt-oss $1.67; at fast cadence divide by about 2.5. The design's $5 standard tier is a 3.5 Flash-Lite village at normal cadence, or a 3.8 Flash village at fast.

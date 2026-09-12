@@ -8,9 +8,20 @@ export interface Parsed { orders: Order[]; dropped: string[]; journal: string; m
 const TASKS: Task[] = ['forage', 'hunt', 'fish', 'gather', 'clear', 'farm', 'build', 'craft', 'research', 'road', 'explore', 'colonize', 'envoy', 'raid', 'expedition', 'rest'];
 
 function lookup(map: Record<string, string>, name: string | undefined): string | undefined {
-  if (!name) return undefined; const k = name.trim().toLowerCase(); if (map[k]) return map[k];
+  if (!name) return undefined; const k = String(name).trim().toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); if (!k) return undefined;
+  if (map[k]) return map[k];
   // tolerate partial matches like "wheat" for "vaikan wheat"
-  const hit = Object.keys(map).filter(n => n.includes(k) || k.includes(n)); return hit.length === 1 ? map[hit[0]] : undefined;
+  const hit = Object.keys(map).filter(n => n.includes(k) || k.includes(n)); if (hit.length === 1) return map[hit[0]];
+  // then the best token overlap (models misspell generated names or add words)
+  const toks = new Set(k.split(' ')); let best: string | undefined; let bestScore = 0;
+  for (const n of Object.keys(map)) { const nt = new Set(n.split(' ')); let inter = 0; for (const x of toks) if (nt.has(x)) inter++; const score = inter / Math.max(toks.size, nt.size); if (score > bestScore) { bestScore = score; best = n; } }
+  return bestScore >= 0.5 && best ? map[best] : undefined;
+}
+/** Ingredients may arrive as an array or as "a, b" / "a + b" / "a and b". */
+function ingredientList(x: unknown): string[] {
+  if (Array.isArray(x)) return x.map(String);
+  if (typeof x === 'string') return x.split(/,|\+|\band\b|\bwith\b/).map(s => s.trim()).filter(Boolean);
+  return [];
 }
 function goodsToIds(map: Record<string, string>, g: Record<string, number> | undefined, dropped: string[]): string {
   if (!g) return ''; const parts: string[] = [];
@@ -32,7 +43,7 @@ export function parseDecision(view: VillageView, json: ChiefDecisionJson): Parse
     switch (task) {
       case 'gather': case 'expedition': { const id = lookup(names.commodities, o.commodity); if (!id) { dropped.push(`${task}: unknown commodity "${o.commodity}"`); continue; } params.c = id; if (task === 'expedition') params.weeks = Math.max(1, Math.min(8, Math.trunc(Number(o.weeks) || 3))); break; }
       case 'build': case 'craft': { const id = lookup(names.recipes, o.recipe); if (!id || !view.recipes.some(r => r.id === id)) { dropped.push(`${task}: unknown recipe "${o.recipe}"`); continue; } params.recipe = id; if (task === 'craft') params.qty = Math.max(0, Math.trunc((Number(o.quantity) || 0) * K)); break; }
-      case 'research': { const ings = (o.ingredients ?? []).map(n => lookup(names.commodities, n) ?? lookup(names.capabilities, n)).filter((x): x is string => !!x); if (!ings.length) { dropped.push(`research: no known ingredients in ${JSON.stringify(o.ingredients)}`); continue; } params.ingredients = ings.slice(0, 3).join(','); break; }
+      case 'research': { const raw = ingredientList(o.ingredients ?? (o as unknown as { ingredient?: unknown }).ingredient ?? (o as unknown as { commodity?: unknown }).commodity); const ings = raw.map(n => lookup(names.commodities, n) ?? lookup(names.capabilities, n)).filter((x): x is string => !!x); if (!ings.length) { dropped.push(`research: no known ingredients in ${JSON.stringify(raw)}`); continue; } params.ingredients = [...new Set(ings)].slice(0, 3).join(','); break; }
       case 'farm': { params.plots = Math.max(0, Math.trunc(Number(o.plots) || 0)); const crop = lookup(names.commodities, o.crop) ?? 'grain'; params.crop = crop; break; }
       case 'explore': { const d = DIRS.find(x => x[0] === String(o.direction ?? '').toLowerCase()); if (!d) { dropped.push(`explore: unknown direction "${o.direction}"`); continue; } params.dx = d[1]; params.dy = d[2]; params.dist = Math.max(1, Math.min(20, Math.trunc((Number(o.days) || 4) * 3))); break; }
       case 'colonize': { const site = view.sites.find(s => s.index === Number(o.site)); if (!site) { dropped.push(`colonize: no site ${o.site}`); continue; } params.tile = site.tile; params.share = Math.trunc(Math.max(0.2, Math.min(0.6, Number(o.share) || 0.4)) * K); break; }

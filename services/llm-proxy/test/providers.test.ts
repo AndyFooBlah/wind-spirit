@@ -95,7 +95,7 @@ describe('openai-compat request shaping', () => {
   const schema = { type: 'object', properties: { decision: { type: 'string' } }, required: ['decision'] };
   it('uses response_format json_schema for models with native support', () => {
     const b = toBody({ model: 'openai/gpt-oss-120b-maas', system: 's', schema, messages: [{ role: 'user', text: 'u' }], maxOutputTokens: 50, temperature: 0.2 }, false);
-    expect(b.response_format).toEqual({ type: 'json_schema', json_schema: { name: 'response', schema, strict: true } });
+    expect(b.response_format).toEqual({ type: 'json_schema', json_schema: { name: 'response', schema, strict: false } });
     expect(b.messages).toEqual([{ role: 'system', content: 's' }, { role: 'user', content: 'u' }]);
     expect(b.max_tokens).toBe(50);
     expect(b.temperature).toBe(0.2);
