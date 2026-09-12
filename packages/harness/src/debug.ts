@@ -8,6 +8,7 @@ const world = generateWorld({ seed, villages: 4, startPop: Number(pop) });
 const sim = new Sim(world); const policy = POLICIES[policyName as PolicyName]; const rng = Rng.fromSeed(seed, 'work'); const mem: Record<number, Record<string, number>> = {};
 const v: Village = world.villages[Number(vid)];
 const prev = { food: 0 };
+const every = Number(process.env.WS_DEBUG_EVERY ?? '4'); // print cadence in weeks (1 = every week)
 console.log('tick yr s | pop ch ad el | orders | prod need stores | hungerAvg calm | plants game fish (stock frac of best tile) | deaths');
 for (let t = 0; t < Number(years) * 52; t++) {
   const events = sim.tick(); const queued: Input[] = [];
@@ -24,6 +25,6 @@ for (let t = 0; t < Number(years) * 52; t++) {
   const hungerAvg = v.people.length ? Math.trunc(v.people.reduce((s, p) => s + p.hungry, 0) / v.people.length) : 0;
   const orders = v.orders.map(o => `${o.task}${o.workers}`).join(' ');
   const fields = v.plots.filter(p => p.kind === 'clear' || p.kind === 'field'); const planted = fields.filter(p => p.planted).length; const fert = fields.length ? Math.trunc(fields.reduce((s, p) => s + p.fertility, 0) / fields.length) : 0;
-  if (t % 4 === 0 || deaths > 0) console.log(`${String(world.tick).padStart(4)} ${String(Math.floor(world.tick / 52)).padStart(2)} ${seasonOf(world.tick)} | ${String(c.total).padStart(3)} ${c.children} ${c.adults} ${c.elders} | ${orders.padEnd(28)} | ${String(Math.round(prod / 1000)).padStart(3)} ${String(v.people.length).padStart(3)} ${String(Math.round(totalFood(world, v) / 1000)).padStart(4)} | ${String(hungerAvg).padStart(5)} ${String(v.calmWeeks).padStart(3)} | ${frac('plants')} ${frac('game')} ${frac('fish')} | ${planted}/${fields.length} f${fert} grain${Math.round((v.stores.filter(s => s.c === 'grain').reduce((a, s) => a + s.qty, 0)) / 1000)} | ${deaths || ''}`);
+  if (t % every === 0 || deaths > 0) console.log(`${String(world.tick).padStart(4)} ${String(Math.floor(world.tick / 52)).padStart(2)} ${seasonOf(world.tick)} | ${String(c.total).padStart(3)} ${c.children} ${c.adults} ${c.elders} | ${orders.padEnd(28)} | ${String(Math.round(prod / 1000)).padStart(3)} ${String(v.people.length).padStart(3)} ${String(Math.round(totalFood(world, v) / 1000)).padStart(4)} | ${String(hungerAvg).padStart(5)} ${String(v.calmWeeks).padStart(3)} | ${frac('plants')} ${frac('game')} ${frac('fish')} | ${planted}/${fields.length} f${fert} grain${Math.round((v.stores.filter(s => s.c === 'grain').reduce((a, s) => a + s.qty, 0)) / 1000)} | ${deaths || ''}`);
   if (!v.alive) { console.log('village died'); break; }
 }
