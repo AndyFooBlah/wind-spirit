@@ -26,11 +26,14 @@ function foodOrders(w: World, v: Village, n: number, season: number): Order[] {
     { task: 'fish' as const, y: expectedPerWorker(w, v, 'fish', P.yield.fish, P.seasonFish[season]) },
   ].filter(e => e.y > 0).sort((a, b) => b.y - a.y);
   if (!ex.length) return [order('forage', n)];
-  const total = ex.reduce((a, e) => a + e.y, 0);
+  // drop sources that yield less than a third of the best; with few workers, put them all on the best
+  const good = ex.filter(e => e.y * 3 >= ex[0].y);
+  if (n <= 3 || good.length === 1) return [order(good[0].task, n)];
+  const total = good.reduce((a, e) => a + e.y, 0);
   const out: Order[] = []; let left = n;
-  for (let i = 0; i < ex.length; i++) {
-    const share = i === ex.length - 1 ? left : Math.min(left, Math.round((n * ex[i].y) / total));
-    if (share > 0) out.push(order(ex[i].task, share)); left -= share;
+  for (let i = 0; i < good.length; i++) {
+    const share = i === good.length - 1 ? left : Math.min(left, Math.round((n * good[i].y) / total));
+    if (share > 0) out.push(order(good[i].task, share)); left -= share;
   }
   return out;
 }
@@ -223,7 +226,7 @@ function decide(view: PolicyView, f: Features): Order[] {
     out.push(order('explore', 2, { dx: d[0], dy: d[1], dist: rng.range(6, 14) })); free -= 2;
   }
   // colonize
-  if (f.colonize && season === 0 && pop >= 30 && counts.adults >= 10 && year - (mem.lastColony ?? -10) >= 8) {
+  if (f.colonize && season === 0 && pop >= 40 && counts.adults >= 14 && weeks >= 6 && year - (mem.lastColony ?? -10) >= 8) {
     const perWorker = expectedPerWorker(w, v, 'plants', P.yield.forage, K);
     if (mem.baseYield === undefined) mem.baseYield = perWorker;
     const pressure = v.calmWeeks < 26 || perWorker < mul(mem.baseYield, 600) || pc.cleared >= 90;
@@ -253,6 +256,7 @@ function pickColonySite(w: World, v: Village): number {
     const d = tileDistance(w, v.tile, t); if (d < 6 || d > 15) continue;
     if (w.villages.some(o => o.alive && tileDistance(w, o.tile, t) < 5)) continue;
     let score = 0; for (const nb of neighbors(w, t, 1, true)) { const c = w.tiles[nb].cap; score += c.plants + c.game + c.fish; }
+    if (score < 2_500_000) continue;   // a poor site starves its colonists
     if (score > bestScore) { bestScore = score; best = t; }
   }
   return best;

@@ -83,10 +83,10 @@ export function totalFood(w: World, v: Village): number {
 export const foodNeed = (v: Village): number => v.people.length * P.foodPerPersonWeek;
 export const storesWeeks = (w: World, v: Village): number => (v.people.length === 0 ? 0 : Math.trunc(totalFood(w, v) / foodNeed(v)));
 
-/** Add to stores. Stacks within a few weeks of age merge (adopting the older age), which bounds the stack count. */
+/** Add to stores. Stacks within a week of age merge (adopting the older age), which bounds the stack count without aging fresh food much. */
 export function addStore(v: Village, c: string, qty: number, age = 0): void {
   if (qty <= 0) return;
-  for (const s of v.stores) if (s.c === c && s.age >= age && s.age <= age + 3) { s.qty += qty; return; }
+  for (const s of v.stores) if (s.c === c && s.age >= age && s.age <= age + 1) { s.qty += qty; return; }
   v.stores.push({ c, qty, age });
 }
 /** Merge stacks of the same commodity into age buckets (width grows with shelf life). Called quarterly. */
@@ -94,7 +94,7 @@ export function compactStores(w: World, v: Village): void {
   const mult = storageMult(w, v); const out: Stack[] = []; const byKey = new Map<string, Stack>();
   for (const s of v.stores) {
     const cm = commodityById(w, s.c); const limit = cm && cm.perish > 0 ? Math.trunc(mul(cm.perish * K, mult) / K) : 0;
-    const width = limit === 0 ? 1_000_000 : Math.max(4, Math.trunc(limit / 8));
+    const width = limit === 0 ? 1_000_000 : Math.max(1, Math.trunc(limit / 8));   // short-lived food must not be aged by merging
     const key = `${s.c}:${Math.trunc(s.age / width)}`;
     const cur = byKey.get(key);
     if (cur) { cur.qty += s.qty; cur.age = Math.max(cur.age, s.age); } else { const n = { ...s }; byKey.set(key, n); out.push(n); }
