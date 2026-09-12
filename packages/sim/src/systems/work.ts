@@ -48,7 +48,7 @@ function gatherFood(ctx: Ctx, v: Village, task: 'forage' | 'hunt' | 'fish', work
   const { w } = ctx; const src = SOURCE[task];
   const tiles = sourceTiles(ctx, v, src.res); if (!tiles.length) return;
   let factor = src.season[season];
-  if (roll === 'hard' && season === 3) factor = Math.trunc(factor * (task === 'forage' ? 500 : 750) / 1000);
+  if (roll === 'hard' && season === 3) factor = Math.trunc(factor * (P.legacy.hardWinter === 'all' || task === 'forage' ? 500 : 750) / 1000);
   let total = 0;
   for (let i = 0; i < workers; i++) {
     let best = -1, bestFrac = 0;

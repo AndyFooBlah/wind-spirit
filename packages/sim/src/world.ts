@@ -28,7 +28,7 @@ export const milesBetween = (w: World, a: number, b: number): number => tileDist
 
 export function stageOf(born: number, tick: number): Stage {
   const age = tick - born;
-  return age < AGE_ADULT ? 'child' : age < AGE_ELDER ? 'adult' : 'elder';
+  return age < AGE_ADULT() ? 'child' : age < AGE_ELDER() ? 'adult' : 'elder';
 }
 
 export function popCounts(v: Village, tick: number): { children: number; adults: number; elders: number; total: number } {

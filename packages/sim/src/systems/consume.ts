@@ -15,7 +15,11 @@ export function consumeAndSpoil(ctx: Ctx): void {
     v.hungryWeek = hungry;
     v.calmWeeks = shortK > 100 ? 0 : Math.min(999, v.calmWeeks + 1);
     v.hardship = Math.trunc((v.hardship * (K - P.hardshipRate) + shortK * P.hardshipRate) / K);
-    for (const p of v.people) p.hungry = shortK > 0 ? Math.min(12_000, p.hungry + shortK) : Math.max(0, p.hungry - 500);
+    if (P.legacy.starvation === 'selective') {
+      // original model: a few people starve outright while everyone else eats
+      const start = w.tick % Math.max(1, v.people.length);
+      for (let i = 0; i < v.people.length; i++) { const p = v.people[(start + i) % v.people.length]; p.hungry = i < hungry ? Math.min(12_000, p.hungry + 1000) : 0; }
+    } else for (const p of v.people) p.hungry = shortK > 0 ? Math.min(12_000, p.hungry + shortK) : Math.max(0, p.hungry - 500);
     if (hungry > 0 && w.tick % 4 === 0) ctx.events.push({ t: w.tick, type: 'Famine', village: v.id, hungry });
 
     // spoilage

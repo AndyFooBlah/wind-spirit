@@ -6,10 +6,11 @@ export const WEEKS_PER_SEASON = 13;
 export const TILE_MILES = 5;
 export const PLOT_GRID = 12;
 
-export const AGE_ADULT = 14 * 52;
-export const AGE_ELDER = 60 * 52;
 
 export const P = {
+  ageAdultYears: 14, ageElderYears: 60,
+  /** Legacy model switches, kept so earlier failure modes can be reproduced (see docs/m0-notes.md). */
+  legacy: { starvation: 'rationing' as 'rationing' | 'selective', births: 'hardship' as 'hardship' | 'calmgate', hardWinter: 'partial' as 'partial' | 'all' },
   foodPerPersonWeek: 1000,
   /** Base yields per worker-week at full stock, in food units (thousandths). */
   yield: { forage: 3500, hunt: 3000, fish: 4000, wood: 5000, stone: 3000 },
@@ -72,6 +73,15 @@ export const TERRAIN: Record<Terrain, TerrainInfo> = {
   lake:     { mpdWild: 0,  mpdPath: 0,  passable: false, water: true,  forage: false, cap: cap(0, 0, 500, 0, 0) },
   ocean:    { mpdWild: 0,  mpdPath: 0,  passable: false, water: true,  forage: false, cap: cap(0, 0, 800, 0, 0) },
 };
+
+/** Optional overrides from the WS_PARAMS environment variable (JSON, shallow-merged into P; nested objects merged one level). */
+declare const process: { env?: Record<string, string | undefined> } | undefined;
+try {
+  const raw = typeof process !== 'undefined' && process?.env ? process.env.WS_PARAMS : undefined;
+  if (raw) { const o = JSON.parse(raw) as Record<string, unknown>; for (const [k, v] of Object.entries(o)) { const cur = (P as Record<string, unknown>)[k]; if (cur && typeof cur === 'object' && v && typeof v === 'object' && !Array.isArray(v)) Object.assign(cur as object, v); else (P as Record<string, unknown>)[k] = v; } }
+} catch { /* ignore bad overrides */ }
+export const AGE_ADULT = () => P.ageAdultYears * 52;
+export const AGE_ELDER = () => P.ageElderYears * 52;
 
 export function seasonOf(tick: number): Season { return Math.floor((tick % WEEKS_PER_YEAR) / WEEKS_PER_SEASON) as Season; }
 export function seasonIndex(tick: number): number { return Math.floor(tick / WEEKS_PER_SEASON); }

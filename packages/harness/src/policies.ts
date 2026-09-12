@@ -6,7 +6,7 @@ import {
 
 export interface PolicyView { w: World; v: Village; reason: string; rng: Rng; mem: Record<string, number>; }
 export type Policy = (view: PolicyView) => Order[];
-export type PolicyName = 'forager' | 'farmer' | 'sensible';
+export type PolicyName = 'forager' | 'farmer' | 'sensible' | 'legacy-farmer-nocap' | 'legacy-farmer-hungerblock' | 'legacy-forager-nogranary';
 
 const order = (task: Order['task'], workers: number, params: Record<string, number | string> = {}): Order => ({ task, workers, params, since: 0 });
 
@@ -44,7 +44,7 @@ function plotCounts(v: Village) {
   return { cleared, planted, huts, granary, tents };
 }
 
-interface Features { farm: boolean; granary: boolean; explore: boolean; colonize: boolean; }
+interface Features { farm: boolean; granary: boolean; explore: boolean; colonize: boolean; noPlotCap?: boolean; hungerBlocksFarming?: boolean; }
 
 function decide(view: PolicyView, f: Features): Order[] {
   const { w, v, rng, mem } = view; const tick = w.tick; const season = seasonOf(tick); const year = yearOf(tick);
@@ -56,8 +56,8 @@ function decide(view: PolicyView, f: Features): Order[] {
   const hungry = v.hungryWeek > 0;
 
   // farming: never skipped, hunger is exactly when planting matters
-  if (f.farm) {
-    if (season === 0) { const plots = Math.ceil(pc.cleared / 2); const n = Math.min(Math.trunc(free * 0.4), Math.ceil(plots / P.plotsPerFarmer)); if (n > 0) { out.push(order('farm', n, { plots })); free -= n; } }
+  if (f.farm && !(f.hungerBlocksFarming && hungry)) {
+    if (season === 0) { const plots = Math.ceil(pc.cleared / 2); const n = Math.min(Math.trunc(free * 0.4), Math.ceil(plots / P.plotsPerFarmer)); if (n > 0) { out.push(order('farm', n, f.noPlotCap ? {} : { plots })); free -= n; } }
     else if (season === 2) { const n = Math.min(Math.trunc(free * 0.6), Math.ceil(pc.planted / P.plotsPerFarmer)); if (n > 0) { out.push(order('farm', n)); free -= n; } }
   }
   // shelter
@@ -114,6 +114,9 @@ export const POLICIES: Record<PolicyName, Policy> = {
   forager: view => decide(view, { farm: false, granary: true, explore: false, colonize: false }),
   farmer: view => decide(view, { farm: true, granary: true, explore: false, colonize: false }),
   sensible: view => decide(view, { farm: true, granary: true, explore: true, colonize: true }),
+  'legacy-farmer-nocap': view => decide(view, { farm: true, granary: true, explore: false, colonize: false, noPlotCap: true }),
+  'legacy-farmer-hungerblock': view => decide(view, { farm: true, granary: true, explore: false, colonize: false, hungerBlocksFarming: true }),
+  'legacy-forager-nogranary': view => decide(view, { farm: false, granary: false, explore: false, colonize: false }),
 };
 
 export { structures };

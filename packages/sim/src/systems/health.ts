@@ -6,7 +6,7 @@ import { currentRoll } from './weather.js';
 
 function weeklyBaseM(stage: Stage, age: number): number {
   const a = P.annualDeath;
-  const annual = stage === 'child' ? a.child : stage === 'adult' ? a.adult : a.elder + a.elderPerYear * Math.floor((age - AGE_ELDER) / WEEKS_PER_YEAR);
+  const annual = stage === 'child' ? a.child : stage === 'adult' ? a.adult : a.elder + a.elderPerYear * Math.floor((age - AGE_ELDER()) / WEEKS_PER_YEAR);
   return Math.trunc(annual / WEEKS_PER_YEAR);
 }
 
@@ -41,7 +41,8 @@ export function healthAndBirths(ctx: Ctx): void {
 
     // births
     const counts = popCounts(v, w.tick);
-    const fertility = Math.max(0, K - Math.trunc((v.hardship * K) / P.birthHardshipZero));
+    let fertility = Math.max(0, K - Math.trunc((v.hardship * K) / P.birthHardshipZero));
+    if (P.legacy.births === 'calmgate') fertility = v.calmWeeks >= 8 ? K : 0;   // the original cliff-shaped gate
     if (counts.adults >= 2 && fertility > 0) {
       const pM = Math.trunc(((P.annualBirthPerAdult / WEEKS_PER_YEAR) * fertility) / K);
       for (let i = 0; i < counts.adults; i++) if (births.chanceM(pM)) {
