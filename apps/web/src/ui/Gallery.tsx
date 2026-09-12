@@ -4,7 +4,7 @@ import { useGame, refreshWorlds, newWorld, continueWorld, removeWorld } from '..
 
 /** Start screen: new world from a seed, continue a saved one, or delete it. */
 export function Gallery() {
-  const worlds = useGame(s => s.worlds);
+  const worlds = useGame(s => s.worlds); const loading = useGame(s => s.loading);
   const [seed, setSeed] = useState(''); const [name, setName] = useState(''); const [busy, setBusy] = useState(false);
   useEffect(() => { void refreshWorlds(); }, []);
   const create = async () => { setBusy(true); try { await newWorld(seed, name); } finally { setBusy(false); } };
@@ -24,7 +24,8 @@ export function Gallery() {
         </form>
         <section className="card">
           <h2>Saved worlds</h2>
-          {!worlds.length && <div className="muted">None yet. Worlds pause when you leave and resume where they were.</div>}
+          {loading && <div className="warn">{loading}</div>}
+          {!worlds.length && !loading && <div className="muted">None yet. Worlds pause when you leave and resume where they were.</div>}
           <ul className="worlds">
             {worlds.map(w => (
               <li key={w.id}>

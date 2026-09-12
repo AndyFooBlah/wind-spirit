@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useGame, dismissToast, focusVillage, installGlobalHandlers } from '../store/game.ts';
 import { MapCanvas } from '../map/MapCanvas.tsx';
 import { Gallery } from './Gallery.tsx';
-import { TopBar } from './TopBar.tsx';
+import { TopBar, HistoryBar } from './TopBar.tsx';
 import { VillagePanel } from './VillagePanel.tsx';
 import { SpiritDialog } from './SpiritDialog.tsx';
 
@@ -13,6 +13,7 @@ export function App() {
   return (
     <div className="game">
       <TopBar />
+      <HistoryBar />
       <div className="main">
         <MapCanvas />
         <VillagePanel />

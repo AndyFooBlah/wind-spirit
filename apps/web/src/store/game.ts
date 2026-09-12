@@ -5,14 +5,22 @@
 import { create } from 'zustand';
 import type { BreathAction, Event, Input } from '@wind-spirit/sim';
 import { P } from '@wind-spirit/sim';
+import { WEEKS_PER_YEAR, seasonOf } from '@wind-spirit/sim';
 import { idToken } from '../auth.ts';
-import { DEFAULT_SETTINGS, type Frame, type FromWorker, type JournalEntry, type Settings, type Speed, type StaticMap, type ToWorker, type VillageDetail } from '../sim/protocol.ts';
-import { createWorld, deleteWorld, listWorlds, loadJournals, loadResume, newWorldId, openStore, Persister, type Db, type WorldMeta } from './db.ts';
+import { audio, dominantTerrain, type AudioSettings } from '../audio/audio.ts';
+import { historyWorthy } from '../sim/views.ts';
+import { DEFAULT_SETTINGS, type Frame, type FromHistory, type FromWorker, type JournalEntry, type Settings, type Speed, type StaticMap, type ToHistory, type ToWorker, type VillageDetail } from '../sim/protocol.ts';
+import { createWorld, deleteWorld, listWorlds, loadEvents, loadHistoryWindow, loadJournals, loadResume, newWorldId, openStore, Persister, setStoreBlockedHandler, type Db, type WorldMeta } from './db.ts';
 
 export type Zoom = 'world' | 'local' | 'village';
 export interface Toast { id: number; text: string; kind: 'attention' | 'info' | 'error'; village?: number; }
 export interface DreamTurn { role: 'spirit' | 'chief'; text: string; }
 export interface DreamState { village: number; turns: DreamTurn[]; streaming: string; busy: boolean; closing: boolean; }
+/** History mode: a replayed past state rendered read-only while the live sim stays paused. */
+export interface HistoryState { target: number; tick: number; frame: Frame; detail?: VillageDetail; loading: boolean; }
+export type NarrativeSpan = 'y10' | 'y50' | 'all';
+export type NarrativeStyle = 'chronicle' | 'saga' | 'plain';
+export interface NarrativeState { loading: boolean; text?: string; error?: string; fromTick: number; toTick: number; }
 
 export interface GameState {
   screen: 'gallery' | 'game';
@@ -38,11 +46,14 @@ export interface GameState {
   lastEvents: Event[];
   whisperFor?: number;
   waiting: number[];
+  history?: HistoryState;
+  narratives: Record<string, NarrativeState>;
+  audioSettings: AudioSettings;
 }
 
 export const useGame = create<GameState>(() => ({
   screen: 'gallery', worlds: [], speed: 'pause', resumeSpeed: 'normal', journals: [], toasts: [], settings: loadSettings(), talkedTo: [],
-  pendingClaims: [], zoom: 'local', center: { x: 32, y: 32 }, targeting: false, loading: '', lastEvents: [], waiting: [],
+  pendingClaims: [], zoom: 'local', center: { x: 32, y: 32 }, targeting: false, loading: '', lastEvents: [], waiting: [], narratives: {}, audioSettings: audio.settings,
 }));
 
 const set = useGame.setState; const get = useGame.getState;
@@ -51,8 +62,16 @@ const set = useGame.setState; const get = useGame.getState;
 
 let db: Db | undefined; let worker: Worker | undefined; let persister: Persister | undefined; let toastSeq = 0;
 let villageTimer: number | undefined; let lastVillageRequest = 0;
+let historyWorker: Worker | undefined; let seekSeq = 0; let seekTimer: number | undefined;
+let narrativeSeq = 0; const narrativeWaiters = new Map<number, string>();
+let knownParties = new Set<number>();
 
-async function ensureDb(): Promise<Db> { return (db ??= await openStore()); }
+async function ensureDb(): Promise<Db> {
+  if (db) return db;
+  setStoreBlockedHandler(() => { toast('Another Wind Spirit tab holds an older save format open. Close it (or reload it) and this one will continue.', 'error'); set({ loading: 'Waiting for another tab to close…' }); });
+  db = await openStore(); set(s => (s.loading.startsWith('Waiting') ? { loading: '' } : {}));
+  return db;
+}
 
 function send(m: ToWorker): void { worker?.postMessage(m); }
 
@@ -73,10 +92,11 @@ function startWorker(): Promise<void> {
 function onWorker(m: FromWorker): void {
   switch (m.type) {
     case 'map': set({ map: m.map }); break;
-    case 'loaded': { set({ frame: m.frame, loading: '' }); const v = m.frame.villages.find(x => x.alive); if (v && get().selected === undefined) { const [x, y] = tileXY(v.tile); set({ center: { x: x + 0.5, y: y + 0.5 } }); } break; }
+    case 'loaded': { set({ frame: m.frame, loading: '' }); const v = m.frame.villages.find(x => x.alive); if (v && get().selected === undefined) { const [x, y] = tileXY(v.tile); set({ center: { x: x + 0.5, y: y + 0.5 } }); } knownParties = new Set(m.frame.parties.map(p => p.id)); refreshScene(); break; }
     case 'tick': {
       set({ frame: m.frame, lastEvents: m.events });
-      void persister?.tick(m.tick, m.inputs);
+      void persister?.tick(m.tick, m.inputs, m.events.filter(historyWorthy));
+      soundTick(m.frame, m.events);
       const w = get().world; if (w) set({ world: { ...w, lastTick: m.tick + 1 } });
       for (const e of m.events) if (e.type === 'SpiritBreathed') toast(breathText(e.action, e.cost), 'info');
       const landed = new Set(m.events.filter(e => e.type === 'ClaimRecorded').map(e => (e as { village: number }).village));
@@ -88,12 +108,14 @@ function onWorker(m: FromWorker): void {
     case 'attention': { const text = eventText(m.event); const village = villageOf(m.event); toast(text, 'attention', village); if (village !== undefined) focusVillage(village); break; }
     case 'journal': set(s => ({ journals: [...s.journals, m.entry] })); void persister?.journal(m.entry); break;
     case 'village': if (m.detail.id === get().selected) set({ detail: m.detail }); break;
-    case 'speed': set(s => ({ speed: m.speed, toasts: m.speed === 'pause' ? s.toasts : s.toasts.filter(t => t.kind !== 'attention') })); break;
+    case 'speed': set(s => ({ speed: m.speed, toasts: m.speed === 'pause' ? s.toasts : s.toasts.filter(t => t.kind !== 'attention') })); refreshScene(); break;
     case 'waiting': set({ waiting: m.villages }); break;
     case 'needToken': void idToken().then(token => { send({ type: 'token', id: m.id, token }); set({ proxyOk: !!token }); }); break;
     case 'dreamChunk': set(s => s.dream ? { dream: { ...s.dream, streaming: s.dream.streaming + m.text } } : {}); break;
     case 'dreamReply': set(s => s.dream ? { dream: { ...s.dream, streaming: '', busy: false, turns: m.text ? [...s.dream.turns, { role: 'chief', text: m.text }] : s.dream.turns } } : {}); break;
+    case 'narrative': { const key = narrativeWaiters.get(m.id); narrativeWaiters.delete(m.id); if (key) set(s => ({ narratives: { ...s.narratives, [key]: { ...s.narratives[key], loading: false, text: m.text, error: m.error } } })); break; }
     case 'dreamClosed': {
+      audio.spirit('dream-close', 1);
       const d = get().dream; set({ dream: undefined });
       if (d) { if (m.claims.length) { set(s => ({ pendingClaims: [...s.pendingClaims, { village: d.village, texts: m.claims.map(c => c.text) }] })); toast(`${m.claims.length} claim${m.claims.length === 1 ? '' : 's'} will enter the chronicle when the week turns.`, 'info', d.village); } else toast('The dream ended; the chief noted nothing to hold you to.', 'info', d.village); }
       break;
@@ -118,8 +140,8 @@ export async function refreshWorlds(): Promise<void> { const d = await ensureDb(
 export async function newWorld(seed: string, name?: string): Promise<void> {
   const d = await ensureDb(); const s = seed.trim() || Math.random().toString(36).slice(2, 10);
   const meta = await createWorld(d, { id: newWorldId(), name: name?.trim() || s, seed: s, options: { width: 64, height: 64, villages: 4, startPop: 20 } });
-  set({ loading: 'Shaping the world…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: [], talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local' });
-  await startWorker(); persister = new Persister(d, meta.id);
+  set({ loading: 'Shaping the world…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: [], talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {} });
+  await startWorker(); persister = new Persister(d, meta.id); audio.setWorld(s);
   pushSettings();
   send({ type: 'init', seed: s, opts: meta.options });
   send({ type: 'snapshot', reason: 'start' });
@@ -129,8 +151,8 @@ export async function newWorld(seed: string, name?: string): Promise<void> {
 export async function continueWorld(id: string): Promise<void> {
   const d = await ensureDb(); const meta = (await listWorlds(d)).find(w => w.id === id); if (!meta) return;
   const resume = await loadResume(d, id);
-  set({ loading: 'Remembering…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: await loadJournals(d, id), talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local' });
-  await startWorker(); persister = new Persister(d, meta.id);
+  set({ loading: 'Remembering…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: await loadJournals(d, id), talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {} });
+  await startWorker(); persister = new Persister(d, meta.id); audio.setWorld(meta.seed);
   pushSettings();
   if (resume) send({ type: 'load', snapshot: resume.snapshot, inputsAfter: resume.inputsAfter });
   else { send({ type: 'init', seed: meta.seed, opts: meta.options }); send({ type: 'snapshot', reason: 'start' }); }
@@ -142,7 +164,8 @@ export async function leaveWorld(): Promise<void> {
   send({ type: 'speed', speed: 'pause' });
   await new Promise(r => setTimeout(r, 150)); await persister?.flush();
   worker?.terminate(); worker = undefined; persister = undefined;
-  set({ screen: 'gallery', world: undefined, frame: undefined, map: undefined, selected: undefined, detail: undefined, dream: undefined, speed: 'pause' });
+  historyWorker?.terminate(); historyWorker = undefined; audio.village(null);
+  set({ screen: 'gallery', world: undefined, frame: undefined, map: undefined, selected: undefined, detail: undefined, dream: undefined, speed: 'pause', history: undefined });
   await refreshWorlds();
 }
 
@@ -150,17 +173,20 @@ export async function leaveWorld(): Promise<void> {
 
 export function setSpeed(speed: Speed): void {
   if (get().dream) return;
+  if (speed !== 'pause' && get().history) exitHistory();         // time moves again: leave the past
   if (speed !== 'pause' && speed !== 'step') set({ resumeSpeed: speed });
   send({ type: 'speed', speed });
 }
 export function togglePause(): void { const s = get(); setSpeed(s.speed === 'pause' || s.speed === 'step' ? s.resumeSpeed : 'pause'); }
-export function step(): void { if (get().dream) return; send({ type: 'step' }); }
+export function step(): void { if (get().dream) return; if (get().history) exitHistory(); send({ type: 'step' }); }
 
 // ---------- villages ----------
 
 export function selectVillage(id: number | undefined): void {
   set({ selected: id, detail: id === get().selected ? get().detail : undefined });
   if (id !== undefined) { requestVillage(id, true); pushSettings(); }
+  const h = get().history; if (h) void seek(h.target);
+  refreshScene();
 }
 export function focusVillage(id: number): void {
   const f = get().frame; const v = f?.villages.find(x => x.id === id); if (!v) return;
@@ -174,8 +200,8 @@ function requestVillage(id: number, now: boolean): void {
   if (villageTimer === undefined) villageTimer = window.setTimeout(() => { villageTimer = undefined; lastVillageRequest = Date.now(); send({ type: 'requestVillage', id }); }, gap - dt);
 }
 
-export function setZoom(zoom: Zoom): void { set({ zoom }); }
-export function setCenter(x: number, y: number): void { set({ center: { x, y } }); }
+export function setZoom(zoom: Zoom): void { set({ zoom }); refreshScene(); }
+export function setCenter(x: number, y: number): void { set({ center: { x, y } }); refreshScene(); }
 
 // ---------- settings ----------
 
@@ -201,6 +227,7 @@ export function queueInput(input: Input): void { send({ type: 'queue', input });
 export function whisper(village: number, text: string): void {
   const t = text.trim(); if (!t) return;
   queueInput({ type: 'SpiritSpoke', village, text: t }); markTalked(village);
+  audio.spirit('message', (get().frame?.breath ?? 100) / 100);
   toast('Your words ride the wind; the chief will hear them this week.', 'info', village);
 }
 
@@ -209,6 +236,7 @@ export function breathe(action: BreathAction): boolean {
   const cost = action.kind === 'nudge' ? P.breathNudge : action.kind === 'override' ? P.breathOverride : action.kind === 'storm' ? P.breathStorm : P.breathSail;
   if (f.breath * 1000 < cost) { toast('Not enough breath.', 'error'); return false; }
   queueInput({ type: 'SpiritBreathed', action });
+  audio.spirit(action.kind, Math.max(0, f.breath - cost / 1000) / 100);
   if (get().speed === 'pause') toast('The breath is drawn; it takes hold when the week turns.', 'info');
   return true;
 }
@@ -218,6 +246,7 @@ export function stormAt(tile: number): void { set({ targeting: false }); breathe
 export function dreamStart(village: number): void {
   if (get().dream) return;
   send({ type: 'dreamStart', village }); markTalked(village);
+  audio.spirit('dream-open', 1);
   set({ dream: { village, turns: [], streaming: '', busy: false, closing: false } });
 }
 export function dreamSend(text: string): void {
@@ -231,6 +260,92 @@ export function dreamClose(): void {
   set({ dream: { ...d, closing: true } }); send({ type: 'dreamClose' });
 }
 export function openWhisper(village: number | undefined): void { set({ whisperFor: village }); }
+
+// ---------- history (the scrubber) ----------
+
+function ensureHistoryWorker(): Worker {
+  if (historyWorker) return historyWorker;
+  historyWorker = new Worker(new URL('../sim/history.worker.ts', import.meta.url), { type: 'module' });
+  historyWorker.onmessage = (ev: MessageEvent<FromHistory>) => {
+    const m = ev.data; if (m.seq !== seekSeq) return;                 // a newer seek superseded this one
+    const h = get().history; if (!h) return;
+    if (m.type === 'error') { toast(`History: ${m.message}`, 'error'); set({ history: { ...h, loading: false } }); return; }
+    set({ history: { ...h, tick: m.tick, frame: m.frame, detail: m.detail, loading: false } });
+  };
+  historyWorker.onerror = e => toast(`History worker error: ${e.message}`, 'error');
+  return historyWorker;
+}
+
+/** Enter history mode at the present moment. The live sim pauses and stays paused; the scrubber replays the past. */
+export function enterHistory(): void {
+  const s = get(); if (!s.frame || !s.world || s.dream) return;
+  if (s.speed !== 'pause') setSpeed('pause');
+  set({ history: { target: s.frame.tick, tick: s.frame.tick, frame: s.frame, detail: s.detail, loading: false } });
+}
+export function exitHistory(): void { set({ history: undefined }); refreshScene(); }
+/** Move the scrubber; the seek itself is debounced so dragging stays smooth. */
+export function scrubTo(tick: number): void {
+  const h = get().history; if (!h) return;
+  const t = Math.max(0, Math.min(get().frame?.tick ?? tick, Math.round(tick)));
+  set({ history: { ...h, target: t, loading: true } });
+  if (seekTimer !== undefined) window.clearTimeout(seekTimer);
+  seekTimer = window.setTimeout(() => { seekTimer = undefined; void seek(t); }, 120);
+}
+async function seek(tick: number): Promise<void> {
+  const s = get(); const w = s.world; if (!w || !s.history) return;
+  const d = await ensureDb(); await persister?.flush();
+  const seq = ++seekSeq;
+  const win = await loadHistoryWindow(d, w.id, tick);
+  if (!win) { toast('No snapshot covers that week yet.', 'error'); set(st => st.history ? { history: { ...st.history, loading: false } } : {}); return; }
+  const villageEvents = s.selected !== undefined ? (await loadEvents(d, w.id, 0, tick, s.selected)).slice(-200) : [];
+  if (seq !== seekSeq) return;
+  const msg: ToHistory = { type: 'seek', seq, snapshot: win.snapshot, snapshotTick: win.snapshotTick, inputs: win.inputs, targetTick: tick, village: s.selected, villageEvents };
+  ensureHistoryWorker().postMessage(msg);
+}
+/** The frame and detail to render: the replayed past in history mode, the live world otherwise. */
+export function viewFrame(s: GameState): Frame | undefined { return s.history?.frame ?? s.frame; }
+export function viewDetail(s: GameState): VillageDetail | undefined { return s.history ? s.history.detail : s.detail; }
+export function tickLabel(tick: number): string { return `Year ${Math.floor(tick / WEEKS_PER_YEAR)}, ${['spring', 'summer', 'autumn', 'winter'][seasonOf(tick)]} week ${(tick % 13) + 1}`; }
+
+// ---------- narrative ----------
+
+export function narrativeKey(village: number, span: NarrativeSpan, style: NarrativeStyle, toTick: number): string { return `${village}:${span}:${style}:${toTick}`; }
+/** Ask the capable model for the story of a village over a span, cached per span. Runs in the sim worker, where the World lives. */
+export async function tellStory(village: number, span: NarrativeSpan, style: NarrativeStyle): Promise<void> {
+  const s = get(); const w = s.world; const toTick = s.history?.tick ?? s.frame?.tick; if (!w || toTick === undefined) return;
+  const det = viewDetail(s); const founded = det && det.id === village ? det.view.village.founded * WEEKS_PER_YEAR : 0;
+  const fromTick = span === 'all' ? founded : Math.max(founded, toTick - (span === 'y10' ? 10 : 50) * WEEKS_PER_YEAR);
+  const key = narrativeKey(village, span, style, toTick);
+  if (s.narratives[key]?.text) return;
+  set(st => ({ narratives: { ...st.narratives, [key]: { loading: true, fromTick, toTick } } }));
+  try {
+    const d = await ensureDb(); await persister?.flush();
+    const events = await loadEvents(d, w.id, fromTick, toTick, village);
+    const journals = get().journals.filter(j => j.village === village && j.tick >= fromTick && j.tick < toTick);
+    const id = ++narrativeSeq; narrativeWaiters.set(id, key);
+    send({ type: 'narrate', request: { id, village, fromTick, toTick, style, events, journals } });
+  } catch (e) { set(st => ({ narratives: { ...st.narratives, [key]: { loading: false, fromTick, toTick, error: (e as Error)?.message ?? String(e) } } })); }
+}
+
+// ---------- audio ----------
+
+export function updateAudio(patch: Partial<AudioSettings>): void { audio.update(patch); set({ audioSettings: audio.settings }); }
+/** What is on screen, for the ambient bed: season, roll, dominant terrain, zoom and speed. */
+export function refreshScene(): void {
+  const s = get(); const m = s.map; const f = viewFrame(s); if (!m || !f) return;
+  const v = s.selected !== undefined ? f.villages.find(x => x.id === s.selected) : undefined;
+  audio.scene({ season: f.season as 0 | 1 | 2 | 3, roll: f.rolls[0] ?? 'normal', biome: dominantTerrain(m.terrain, m.width, m.height, s.zoom, s.center, v?.tile), zoom: s.zoom, speed: s.history ? 'pause' : s.speed });
+}
+function soundTick(frame: Frame, events: Event[]): void {
+  const s = get(); if (s.history) return;
+  const focused = s.selected ?? null;
+  audio.tick(frame.tick, events, focused);
+  for (const p of frame.parties) if (!knownParties.has(p.id) && p.boat) audio.boat();
+  knownParties = new Set(frame.parties.map(p => p.id));
+  const v = focused !== null ? frame.villages.find(x => x.id === focused) : undefined; const d = s.detail && s.detail.id === focused ? s.detail : undefined;
+  audio.village(v && v.alive ? { population: v.pop.total, building: d?.view.orders.some(o => o.includes(' build ')) ?? false, famine: v.hungryWeek > 0, hasInstruments: d?.view.stores.some(st => st.category === 'instrument') ?? false, festival: false } : null);
+  if (frame.tick % 13 === 0) refreshScene();
+}
 
 // ---------- text helpers ----------
 
@@ -268,7 +383,7 @@ export function installGlobalHandlers(): void {
     if (e.key === ' ') { e.preventDefault(); togglePause(); }
     else if (e.key === '.') { e.preventDefault(); step(); }
     else if (e.key === '1') setSpeed('slow'); else if (e.key === '2') setSpeed('normal'); else if (e.key === '3') setSpeed('fast'); else if (e.key === '4') setSpeed('veryfast');
-    else if (e.key === 'Escape') { set({ targeting: false, whisperFor: undefined }); }
+    else if (e.key === 'Escape') { if (get().history) exitHistory(); set({ targeting: false, whisperFor: undefined }); }
   });
   const save = () => { if (get().screen === 'game') send({ type: 'snapshot', reason: 'unload' }); };
   window.addEventListener('pagehide', save);

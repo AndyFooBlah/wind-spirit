@@ -1,26 +1,26 @@
 import { useState } from 'react';
 import { WEEKS_PER_YEAR } from '@wind-spirit/sim';
 import { SEASON_NAMES } from '../sim/protocol.ts';
-import { useGame, selectVillage, openWhisper, dreamStart, setZoom } from '../store/game.ts';
+import { useGame, selectVillage, openWhisper, dreamStart, setZoom, viewDetail, tellStory, narrativeKey, tickLabel, type NarrativeSpan, type NarrativeStyle } from '../store/game.ts';
 
 type Tab = 'overview' | 'stores' | 'history' | 'journal' | 'chronicle';
 
 /** Everything the spirit sees of one village, plus the door to speak with its chief. */
 export function VillagePanel() {
-  const selected = useGame(s => s.selected); const detail = useGame(s => s.detail); const frame = useGame(s => s.frame);
+  const selected = useGame(s => s.selected); const detail = useGame(viewDetail); const frame = useGame(s => s.frame); const history = useGame(s => s.history);
   const journals = useGame(s => s.journals); const pending = useGame(s => s.pendingClaims); const dream = useGame(s => s.dream);
   const [tab, setTab] = useState<Tab>('overview');
   if (selected === undefined) return null;
   const summary = frame?.villages.find(v => v.id === selected);
-  if (!detail || detail.id !== selected) return <aside className="panel"><div className="panel-head"><h2>{summary?.name ?? '…'}</h2><button className="ghost" onClick={() => selectVillage(undefined)}>×</button></div><div className="muted">Looking closer…</div></aside>;
+  if (!detail || detail.id !== selected) return <aside className="panel"><div className="panel-head"><h2>{summary?.name ?? '…'}</h2><button className="ghost" onClick={() => selectVillage(undefined)}>×</button></div><div className="muted">{history ? 'Remembering…' : 'Looking closer…'}</div></aside>;
   const v = detail.view; const p = v.people;
-  const mine = journals.filter(j => j.village === selected).slice().reverse();
+  const mine = journals.filter(j => j.village === selected && (!history || j.tick < history.tick)).slice().reverse();
   const myPending = pending.filter(c => c.village === selected).flatMap(c => c.texts);
   const tabs: [Tab, string][] = [['overview', 'Village'], ['stores', 'Stores & craft'], ['history', 'History'], ['journal', `Journal${mine.length ? ` (${mine.length})` : ''}`], ['chronicle', `Chronicle${detail.chronicle.length + myPending.length ? ` (${detail.chronicle.length + myPending.length})` : ''}`]];
   return (
     <aside className="panel">
       <div className="panel-head">
-        <div><h2>{v.village.name}</h2><div className="small muted">{detail.alive ? `founded year ${v.village.founded} · ${v.season}, year ${v.year}` : 'this village is gone'}</div></div>
+        <div><h2>{v.village.name}</h2><div className="small muted">{history ? <span className="hist">{tickLabel(detail.tick)} — history</span> : detail.alive ? `founded year ${v.village.founded} · ${v.season}, year ${v.year}` : 'this village is gone'}</div></div>
         <div className="row"><button className="ghost" onClick={() => setZoom('village')} title="Zoom to the village plots">Plots</button><button className="ghost" onClick={() => selectVillage(undefined)} title="Close">×</button></div>
       </div>
       <div className="stat-row">
@@ -33,7 +33,7 @@ export function VillagePanel() {
         <div className="small"><span className="strong">The chief:</span> {v.spirit.attitude}.</div>
         <div className="bar"><div style={{ width: `${v.spirit.trust / 10}%` }} /></div>
       </div>
-      {detail.alive && (
+      {detail.alive && !history && (
         <div className="speak">
           <button className="primary" onClick={() => openWhisper(selected)} disabled={!!dream}>Whisper</button>
           <button className="primary" onClick={() => dreamStart(selected)} disabled={!!dream}>Dream (pauses)</button>
@@ -66,7 +66,12 @@ export function VillagePanel() {
             <Section title="Rumours (hints not yet worked out)">{v.rumors.length ? <ul>{v.rumors.map((r, i) => <li key={i}>{r}</li>)}</ul> : <span className="muted">none</span>}</Section>
           </>
         )}
-        {tab === 'history' && (detail.feed.length ? detail.feed.map(g => <Section key={g.tick} title={g.when}><ul>{g.lines.map((l, i) => <li key={i}>{l}</li>)}</ul></Section>) : <div className="muted">Nothing yet; let the weeks turn.</div>)}
+        {tab === 'history' && (
+          <>
+            <Story village={selected} />
+            {detail.feed.length ? detail.feed.map(g => <Section key={g.tick} title={g.when}><ul>{g.lines.map((l, i) => <li key={i}>{l}</li>)}</ul></Section>) : <div className="muted">Nothing yet; let the weeks turn.</div>}
+          </>
+        )}
         {tab === 'journal' && (mine.length ? mine.map((j, i) => (
           <div key={i} className={`journal ${j.source}`}>
             <div className="small muted">Year {Math.floor(j.tick / WEEKS_PER_YEAR)}, {SEASON_NAMES[Math.floor((j.tick % WEEKS_PER_YEAR) / 13)]} · {j.reason} · <span className={`tag ${j.source}`}>{j.source === 'model' ? 'deliberated' : 'habit'}</span></div>
@@ -88,6 +93,26 @@ export function VillagePanel() {
         )}
       </div>
     </aside>
+  );
+}
+
+/** Narrative synthesis over a span, by the capable model; cached per span. */
+function Story({ village }: { village: number }) {
+  const [span, setSpan] = useState<NarrativeSpan>('y10'); const [style, setStyle] = useState<NarrativeStyle>('chronicle');
+  const toTick = useGame(s => s.history?.tick ?? s.frame?.tick); const narratives = useGame(s => s.narratives);
+  if (toTick === undefined) return null;
+  const key = narrativeKey(village, span, style, toTick); const n = narratives[key];
+  return (
+    <section className="sec story">
+      <div className="row">
+        <select value={span} onChange={e => setSpan(e.target.value as NarrativeSpan)} aria-label="Span"><option value="y10">last 10 years</option><option value="y50">last 50 years</option><option value="all">since founding</option></select>
+        <select value={style} onChange={e => setStyle(e.target.value as NarrativeStyle)} aria-label="Style"><option value="chronicle">chronicle</option><option value="saga">saga</option><option value="plain">plain</option></select>
+        <button className="primary" disabled={n?.loading} onClick={() => void tellStory(village, span, style)}>{n?.loading ? 'Writing…' : n?.text ? 'Told' : 'Tell the story'}</button>
+      </div>
+      {n?.loading && <div className="small muted spinner">The scribe is writing…</div>}
+      {n?.error && <div className="small warn">Could not tell the story: {n.error}</div>}
+      {n?.text && <div className="narrative">{n.text}</div>}
+    </section>
   );
 }
 

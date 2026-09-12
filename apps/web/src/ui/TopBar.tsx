@@ -1,22 +1,23 @@
 import { useState } from 'react';
 import type { BreathAction, SeasonRoll } from '@wind-spirit/sim';
 import { P } from '@wind-spirit/sim';
+import { BUSES, type Bus } from '@wind-spirit/audio';
 import { DIR_NAMES, ROLL_WORDS, SEASON_NAMES, SPEEDS, SPEED_LABEL, type Speed } from '../sim/protocol.ts';
-import { useGame, setSpeed, step, leaveWorld, setZoom, focusVillage, breathe, setTargeting, updateSettings, type Zoom } from '../store/game.ts';
+import { useGame, setSpeed, step, leaveWorld, setZoom, focusVillage, breathe, setTargeting, updateSettings, updateAudio, enterHistory, exitHistory, scrubTo, tickLabel, viewFrame, type Zoom } from '../store/game.ts';
 
 const KEY: Record<Speed, string> = { pause: 'space', step: '.', slow: '1', normal: '2', fast: '3', veryfast: '4' };
 
 export function TopBar() {
   const world = useGame(s => s.world); const frame = useGame(s => s.frame); const speed = useGame(s => s.speed); const dream = useGame(s => s.dream);
-  const waiting = useGame(s => s.waiting);
+  const waiting = useGame(s => s.waiting); const shown = useGame(viewFrame);   // the year-wheel and weather follow the viewed moment (history or live)
   return (
     <header className="topbar">
       <div className="brand">
         <button className="ghost" onClick={() => void leaveWorld()} title="Back to the gallery">‹ Worlds</button>
         <div><div className="world-name">{world?.name ?? 'Wind Spirit'}</div><div className="muted small">seed {world?.seed}</div></div>
       </div>
-      {frame && <YearWheel season={frame.season} week={frame.week} year={frame.year} />}
-      {frame && <WeatherStrip rolls={frame.rolls} seasons={frame.rollSeasons} wind={frame.wind} />}
+      {shown && <YearWheel season={shown.season} week={shown.week} year={shown.year} />}
+      {shown && <WeatherStrip rolls={shown.rolls} seasons={shown.rollSeasons} wind={shown.wind} />}
       <div className="speeds" role="group" aria-label="Speed">
         {SPEEDS.map(sp => (
           <button key={sp} className={`speed ${speed === sp ? 'on' : ''}`} disabled={!!dream} title={`${SPEED_LABEL[sp]} (${KEY[sp]})`} onClick={() => (sp === 'step' ? step() : setSpeed(sp))}>{SPEED_LABEL[sp]}</button>
@@ -25,8 +26,59 @@ export function TopBar() {
       </div>
       {frame && <Breath breath={frame.breath} rolls={frame.rolls} seasons={frame.rollSeasons} />}
       <ZoomControl />
+      <HistoryButton />
+      <SoundMenu />
       <SettingsMenu />
     </header>
+  );
+}
+
+function HistoryButton() {
+  const history = useGame(s => s.history); const frame = useGame(s => s.frame); const dream = useGame(s => s.dream);
+  return <button className={history ? 'on' : 'ghost'} disabled={!frame || !!dream} onClick={() => (history ? exitHistory() : enterHistory())} title="Scrub back through this world's past (the live world pauses)">History</button>;
+}
+
+/** The scrubber: a timeline over every week so far. Seeking replays from the nearest yearly snapshot in a second worker. */
+export function HistoryBar() {
+  const history = useGame(s => s.history); const frame = useGame(s => s.frame);
+  if (!history || !frame) return null;
+  const max = frame.tick; const years = Math.floor(max / 52);
+  return (
+    <div className="historybar">
+      <span className="strong">History</span>
+      <input type="range" className="scrub" min={0} max={max} step={1} value={history.target} onChange={e => scrubTo(Number(e.target.value))} aria-label="Week in history" />
+      <span className="label">{history.loading && history.tick !== history.target ? `${tickLabel(history.target)} · remembering…` : `${tickLabel(history.tick)} — history`}</span>
+      <div className="row small">
+        {[10, 20, 50].filter(y => y <= years).map(y => <button key={y} onClick={() => scrubTo(max - y * 52)}>−{y} years</button>)}
+        <button onClick={() => scrubTo(0)}>The beginning</button>
+        <button className="primary" onClick={exitHistory}>Back to now</button>
+      </div>
+    </div>
+  );
+}
+
+const BUS_LABEL: Record<Bus, string> = { master: 'Master', ambient: 'Ambient', village: 'Village', markers: 'Time', events: 'Events', spirit: 'Spirit', music: 'Music' };
+function SoundMenu() {
+  const [open, setOpen] = useState(false); const a = useGame(s => s.audioSettings);
+  return (
+    <div className="settings">
+      <button className={a.muteAll ? 'ghost' : 'on'} onClick={() => updateAudio({ muteAll: !a.muteAll })} title={a.muteAll ? 'Sound is off; click to turn it on' : 'Sound is on; click to mute everything'}>{a.muteAll ? 'Sound off' : 'Sound on'}</button>
+      <button className="ghost" onClick={() => setOpen(!open)} title="Sound settings">Mix</button>
+      {open && (
+        <div className="popover right mix">
+          <div className="strong">Sound</div>
+          {BUSES.map(b => (
+            <div key={b} className="row bus">
+              <span className="w">{BUS_LABEL[b]}</span>
+              <input type="range" min={0} max={1} step={0.05} value={a.gains[b]} onChange={e => updateAudio({ gains: { ...a.gains, [b]: Number(e.target.value) } })} aria-label={`${BUS_LABEL[b]} level`} />
+              <label className="small"><input type="checkbox" checked={a.mutes[b]} onChange={e => updateAudio({ mutes: { ...a.mutes, [b]: e.target.checked } })} /> mute</label>
+            </div>
+          ))}
+          <label><input type="checkbox" checked={a.music} onChange={e => updateAudio({ music: e.target.checked })} /> generated music</label>
+          <div className="small muted">The wind is you: whispers and breath sound through the spirit bus. Everything is synthesized from the seed; nothing is recorded.</div>
+        </div>
+      )}
+    </div>
   );
 }
 

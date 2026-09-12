@@ -60,8 +60,11 @@ export interface VillageDetail {
   chiefId: number;
 }
 
+export interface NarrativeRequest { id: number; village: number; fromTick: number; toTick: number; style: 'chronicle' | 'saga' | 'plain'; events: Event[]; journals: JournalEntry[]; }
+
 export type ToWorker =
   | { type: 'init'; seed: string; opts?: GenOpts }
+  | { type: 'narrate'; request: NarrativeRequest }
   | { type: 'load'; snapshot: string; inputsAfter: LoggedInput[][] }
   | { type: 'queue'; input: Input }
   | { type: 'speed'; speed: Speed }
@@ -89,7 +92,12 @@ export type FromWorker =
   | { type: 'dreamChunk'; text: string }
   | { type: 'dreamReply'; text: string }
   | { type: 'dreamClosed'; claims: { text: string; due: number }[]; memoryNotes: string[] }
+  | { type: 'narrative'; id: number; text?: string; error?: string }
   | { type: 'error'; message: string; village?: number };
+
+/** History worker: replay to a tick from the nearest earlier snapshot and render views from the replayed world. */
+export type ToHistory = { type: 'seek'; seq: number; snapshot: string; snapshotTick: number; inputs: Record<number, LoggedInput[]>; targetTick: number; village?: number; villageEvents: Event[] };
+export type FromHistory = { type: 'frame'; seq: number; tick: number; frame: Frame; detail?: VillageDetail } | { type: 'error'; seq: number; message: string };
 
 export const SEASON_NAMES = ['Spring', 'Summer', 'Autumn', 'Winter'];
 export const DIR_NAMES = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];

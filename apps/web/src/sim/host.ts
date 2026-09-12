@@ -2,16 +2,15 @@
  * SimHost: the sim loop, chief scheduler, journals, auto-pause, dreams and the replay log, as a plain class.
  * The worker wraps it with postMessage; tests drive it directly with a fake timer.
  */
-import {
-  P, Rng, Sim, WEEKS_PER_SEASON, WEEKS_PER_YEAR, commodityById, popCounts, recipeById, seasonIndex, seasonOf, storesWeeks, yearOf,
-  type Event, type Input, type Village, type World,
-} from '@wind-spirit/sim';
+import { Rng, Sim, WEEKS_PER_YEAR, seasonIndex, type Event, type Input, type World } from '@wind-spirit/sim';
 import { generateWorld, CAP_NAMES } from '@wind-spirit/gen';
 import { POLICIES, hostAnswer } from '@wind-spirit/harness';
-import { ChiefScheduler, Conversation, buildView, renderChronicle, renderEvents, SEASONS, type LlmClient, type Speed } from '@wind-spirit/agents';
+import { ChiefScheduler, Conversation, narrate, type JournalEntry, type LlmClient, type Speed } from '@wind-spirit/agents';
 import {
-  DEFAULT_SETTINGS, SPEED_MS, type AttentionEvent, type Frame, type FromWorker, type GenOpts, type LoggedInput, type Settings, type StaticMap, type VillageDetail,
+  DEFAULT_SETTINGS, SPEED_MS, type AttentionEvent, type Frame, type FromWorker, type GenOpts, type LoggedInput, type NarrativeRequest, type Settings, type StaticMap, type VillageDetail,
 } from './protocol.ts';
+import { buildFrame, buildStaticMap, buildVillageDetail, feedVillages, historyWorthy, touches } from './views.ts';
+export { touches };
 
 export interface HostIO {
   post(msg: FromWorker): void;
@@ -24,12 +23,6 @@ const HISTORY_MAX = 200;
 /** Weeks the sim may run on while a model decision is outstanding before it waits ("throttled by chief throughput"). */
 export const THINK_GRACE = 2;
 const URGENT = new Set(['raided', 'famine', 'succession', 'spirit', 'founded', 'visitor']);
-
-/** Does an event touch this village? (same rule the scheduler uses, minus the weather broadcast) */
-export function touches(e: Event, village: number): boolean {
-  const any = e as unknown as Record<string, unknown>;
-  return any.village === village || any.parent === village || any.attacker === village || any.defender === village || any.guest === village || any.to === village || any.from === village;
-}
 
 export class SimHost {
   sim?: Sim;
@@ -183,11 +176,7 @@ export class SimHost {
   }
 
   private record(events: Event[]): void {
-    for (const e of events) {
-      if (e.type === 'WeekSummary' || e.type === 'DeliberationRequested' || e.type === 'PathFormed') continue;
-      if (e.type === 'WeatherRolled') { if (e.season === seasonIndex(e.t)) for (const v of this.sim!.world.villages) if (v.alive) this.push(v.id, e); continue; }
-      for (const v of this.sim!.world.villages) if (touches(e, v.id)) this.push(v.id, e);
-    }
+    for (const e of events) { if (!historyWorthy(e)) continue; for (const id of feedVillages(this.sim!.world, e)) this.push(id, e); }
   }
   private push(village: number, e: Event): void {
     let h = this.history.get(village); if (!h) { h = []; this.history.set(village, h); }
@@ -215,52 +204,14 @@ export class SimHost {
   }
   hash(): string { return this.sim!.hash(); }
 
-  frame(): Frame {
-    const w = this.world; const cur = seasonIndex(w.tick);
-    const paths: number[] = [], roads: number[] = [];
-    for (let i = 0; i < w.tiles.length; i++) { const t = w.tiles[i]; if (t.road) roads.push(i); else if (t.trodden >= P.pathAt) paths.push(i); }
-    return {
-      tick: w.tick, year: yearOf(w.tick), season: seasonOf(w.tick), week: (w.tick % WEEKS_PER_SEASON) + 1,
-      villages: w.villages.map(v => ({ id: v.id, name: v.name, tile: v.tile, alive: v.alive, pop: popCounts(v, w.tick), happiness: v.happiness, trust: v.trust, foodWeeks: storesWeeks(w, v), hungryWeek: v.hungryWeek, capabilities: v.capabilities.length })),
-      parties: w.parties.map(p => ({ id: p.id, kind: p.kind, home: p.home, at: p.at, boat: p.boat, target: p.target, targetVillage: p.targetVillage, returning: p.returning, size: p.members.length, waiting: p.waiting })),
-      paths, roads,
-      breath: w.breath / 1000,
-      rolls: w.rolls.slice(cur, cur + 5), rollSeasons: [0, 1, 2, 3, 4].map(i => cur + i), wind: w.wind.slice(cur, cur + 5),
-      storms: [...w.storms],
-    };
-  }
+  frame(): Frame { return buildFrame(this.world); }
+  staticMap(): StaticMap { return buildStaticMap(this.world); }
+  villageDetail(id: number): VillageDetail | undefined { return buildVillageDetail(this.world, id, this.history.get(id) ?? []); }
 
-  staticMap(): StaticMap {
-    const w = this.world;
-    return {
-      seed: w.seed, width: w.width, height: w.height,
-      terrain: w.tiles.map(t => t.terrain), ford: w.tiles.map(t => t.ford), extra: w.tiles.map(t => Object.keys(t.extra)),
-      names: { commodities: Object.fromEntries(w.commodities.map(c => [c.id, c.name])), recipes: Object.fromEntries(w.recipes.map(r => [r.id, r.name])), capabilities: { ...CAP_NAMES } },
-    };
-  }
-
-  villageDetail(id: number): VillageDetail | undefined {
-    const w = this.world; const v = w.villages[id]; if (!v) return undefined;
-    const cname = (c: string) => commodityById(w, c)?.name ?? c;
-    const rname = (r: string) => recipeById(w, r)?.name ?? r;
-    const capName = (c: string) => (CAP_NAMES as Record<string, string>)[c] ?? c;
-    const view = buildView(w, v, { events: [], capNames: CAP_NAMES, pendingSpirit: [...v.inbox], chronicle: renderChronicle(w, v) });
-    const { names: _names, ...rest } = view; void _names;
-    const feed = this.feed(w, v, cname, rname, capName);
-    const plots = v.plots.map(p => ({ kind: p.kind, planted: p.planted, recipe: p.recipe ? rname(p.recipe) : '', crop: p.crop ? cname(p.crop) : '', building: p.kind !== 'structure' && p.recipe !== '' }));
-    return { id, tick: w.tick, alive: v.alive, view: rest, plots, chronicle: [...v.chronicle], feed, inbox: [...v.inbox], chiefId: v.chief };
-  }
-
-  /** The history feed: this village's last events grouped by season and rendered as sentences. */
-  private feed(w: World, v: Village, cname: (c: string) => string, rname: (r: string) => string, capName: (c: string) => string) {
-    const h = this.history.get(v.id) ?? [];
-    const groups: { when: string; tick: number; events: Event[] }[] = [];
-    for (const e of h) {
-      const s = seasonIndex(e.t); const last = groups[groups.length - 1];
-      if (last && seasonIndex(last.tick) === s) last.events.push(e);
-      else groups.push({ when: `Year ${yearOf(e.t)}, ${SEASONS[seasonOf(e.t)]}`, tick: e.t, events: [e] });
-    }
-    return groups.map(g => ({ when: g.when, tick: g.tick, lines: renderEvents(w, v, g.events, cname, rname, capName) })).filter(g => g.lines.length).reverse();
+  /** Narrative synthesis over a span of a village's history (events and journals come from the store). */
+  async narrate(r: NarrativeRequest): Promise<string> {
+    const w = this.world; const v = w.villages[r.village]; if (!v) throw new Error('no such village');
+    return narrate(w, v, r.events, r.journals as JournalEntry[], { client: this.io.client, capNames: CAP_NAMES, fromTick: r.fromTick, toTick: r.toTick, style: r.style });
   }
 
   // ---------- dreams ----------

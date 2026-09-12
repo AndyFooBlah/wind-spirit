@@ -35,6 +35,7 @@ self.onmessage = (ev: MessageEvent<ToWorker>) => {
       case 'dreamStart': host.dreamStart(m.village); break;
       case 'dreamSend': void host.dreamSend(m.text); break;
       case 'dreamClose': void host.dreamClose(); break;
+      case 'narrate': host.narrate(m.request).then(text => post({ type: 'narrative', id: m.request.id, text }), e => post({ type: 'narrative', id: m.request.id, error: (e as Error)?.message ?? String(e) })); break;
     }
   } catch (e) { post({ type: 'error', message: (e as Error)?.message ?? String(e) }); }
 };

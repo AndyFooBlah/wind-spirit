@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { useGame, selectVillage, setCenter, setZoom, stormAt, type Zoom } from '../store/game.ts';
+import { useGame, selectVillage, setCenter, setZoom, stormAt, tickLabel, viewDetail, viewFrame, type Zoom } from '../store/game.ts';
 import { SPEED_MS } from '../sim/protocol.ts';
 import { MapRenderer, LOCAL_TILE, type RenderState } from './render.ts';
+
+function HistoryBanner() {
+  const h = useGame(s => s.history); if (!h) return null;
+  return <div className="banner history">{h.loading ? 'Remembering…' : `${tickLabel(h.tick)} — history`}</div>;
+}
 
 /** One canvas, three zoom levels. Drag or arrow keys pan the local view; click selects; double-click zooms in. */
 export function MapCanvas() {
@@ -13,7 +18,7 @@ export function MapCanvas() {
   const zoom = useGame(s => s.zoom); const targeting = useGame(s => s.targeting);
 
   useEffect(() => {
-    const sync = () => { const s = useGame.getState(); Object.assign(state.current, { map: s.map, frame: s.frame, detail: s.detail, zoom: s.zoom, center: s.center, selected: s.selected, targeting: s.targeting, speedMs: SPEED_MS[s.speed] }); };
+    const sync = () => { const s = useGame.getState(); Object.assign(state.current, { map: s.map, frame: viewFrame(s), detail: viewDetail(s), zoom: s.zoom, center: s.center, selected: s.selected, targeting: s.targeting, speedMs: SPEED_MS[s.speed] }); };
     sync(); const unsub = useGame.subscribe(sync);
     const canvas = canvasRef.current!; const ctx = canvas.getContext('2d')!;
     let raf = 0; let W = 0, H = 0;
@@ -45,15 +50,16 @@ export function MapCanvas() {
     }
     if (s.zoom === 'village') {
       const p = renderer.current.plotAt(W, H, px, py); state.current.hoverPlot = p;
-      const d = s.detail; const plot = p !== undefined && d ? d.plots[p] : undefined;
+      const d = viewDetail(s); const plot = p !== undefined && d ? d.plots[p] : undefined;
       if (plot && plot.kind !== 'wild') setTip({ x: px + 14, y: py + 14, text: plot.kind === 'structure' ? plot.recipe : plot.building ? `building ${plot.recipe}` : plot.kind === 'field' ? (plot.planted ? `field: ${plot.crop || 'planted'}` : 'field, fallow') : 'cleared ground' }); else setTip(undefined);
       return;
     }
     const t = renderer.current.tileAt(state.current, W, H, px, py); state.current.hoverTile = t;
-    if (t !== undefined && s.map && s.frame) {
-      const v = s.frame.villages.find(x => x.tile === t && x.alive); const extra = s.map.extra[t].map(id => s.map!.names.commodities[id] ?? id);
-      const parts = [s.map.terrain[t], ...(v ? [`${v.name}, ${v.pop.total} people`] : []), ...(extra.length ? [`here: ${extra.join(', ')}`] : []), ...(s.frame.roads.includes(t) ? ['road'] : s.frame.paths.includes(t) ? ['path'] : [])];
-      const parties = s.frame.parties.filter(p => p.at === t); if (parties.length) parts.push(`${parties.length} part${parties.length === 1 ? 'y' : 'ies'} here`);
+    const fr = viewFrame(s);
+    if (t !== undefined && s.map && fr) {
+      const v = fr.villages.find(x => x.tile === t && x.alive); const extra = s.map.extra[t].map(id => s.map!.names.commodities[id] ?? id);
+      const parts = [s.map.terrain[t], ...(v ? [`${v.name}, ${v.pop.total} people`] : []), ...(extra.length ? [`here: ${extra.join(', ')}`] : []), ...(fr.roads.includes(t) ? ['road'] : fr.paths.includes(t) ? ['path'] : [])];
+      const parties = fr.parties.filter(p => p.at === t); if (parties.length) parts.push(`${parties.length} part${parties.length === 1 ? 'y' : 'ies'} here`);
       setTip({ x: px + 14, y: py + 14, text: parts.join(' · ') });
     } else setTip(undefined);
   };
@@ -62,13 +68,13 @@ export function MapCanvas() {
     const [W, H, L, T] = size(); const s = useGame.getState();
     if (s.zoom === 'village') return;
     const t = renderer.current.tileAt(state.current, W, H, e.clientX - L, e.clientY - T); if (t === undefined) return;
-    if (s.targeting) { stormAt(t); return; }
-    const v = s.frame?.villages.find(x => x.tile === t); if (v) selectVillage(v.id);
+    if (s.targeting && !s.history) { stormAt(t); return; }
+    const v = viewFrame(s)?.villages.find(x => x.tile === t); if (v) selectVillage(v.id);
   };
   const onDouble = (e: React.MouseEvent) => {
     const [W, H, L, T] = size(); const s = useGame.getState(); if (s.targeting) return;
     if (s.zoom === 'world') { const t = renderer.current.tileAt(state.current, W, H, e.clientX - L, e.clientY - T); if (t !== undefined && s.map) { setCenter(t % s.map.width + 0.5, Math.floor(t / s.map.width) + 0.5); setZoom('local'); } }
-    else if (s.zoom === 'local') { const t = renderer.current.tileAt(state.current, W, H, e.clientX - L, e.clientY - T); const v = s.frame?.villages.find(x => x.tile === t && x.alive); if (v) { selectVillage(v.id); setZoom('village'); } }
+    else if (s.zoom === 'local') { const t = renderer.current.tileAt(state.current, W, H, e.clientX - L, e.clientY - T); const v = viewFrame(s)?.villages.find(x => x.tile === t && x.alive); if (v) { selectVillage(v.id); setZoom('village'); } }
   };
   const onWheel = (e: React.WheelEvent) => {
     const s = useGame.getState(); const order: Zoom[] = ['world', 'local', 'village']; const i = order.indexOf(s.zoom);
@@ -82,6 +88,7 @@ export function MapCanvas() {
       <canvas ref={canvasRef} onMouseDown={onDown} onMouseMove={onMove} onMouseUp={onUp} onMouseLeave={onLeave} onDoubleClick={onDouble} onWheel={onWheel} />
       {tip && <div className="tip" style={{ left: tip.x, top: tip.y }}>{tip.text}</div>}
       {targeting && <div className="banner">Choose a tile for the storm (Esc to cancel)</div>}
+      <HistoryBanner />
     </div>
   );
 }
