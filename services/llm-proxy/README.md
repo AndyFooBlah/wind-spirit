@@ -2,12 +2,27 @@
 
 The model proxy from `docs/technical-design.md` §9. A small Node 24 HTTP service on Cloud Run that
 verifies Firebase ID tokens, enforces a per-user daily token quota (Firestore), maps a model *class*
-to a Gemini model id, calls Vertex AI with Application Default Credentials, and logs one JSON line
-per request. There are no API keys anywhere: Vertex is reached with the runtime service account.
+(or, for evals, an allowlisted explicit model id) to a provider adapter, calls Vertex AI with
+Application Default Credentials, and logs one JSON line per request with tokens, cached tokens and an
+estimated cost. There are no API keys anywhere: Gemini, Claude-on-Vertex and the open MaaS models are
+all reached with the runtime service account's access token.
 
 - Service URL (prod): `https://llm-proxy-406179055859.us-central1.run.app`
 - GCP project: `wind-spirit-prod`, region `us-central1`, runtime SA `llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com`
 - Firebase web app config for the browser client: `firebase-web-config.json` (public client config, not a secret)
+- Candidate-model study (verified ids, prices, sources, caching observations): `MODELS.md`
+
+## Providers
+
+| Provider (`src/providers/`) | Models | Transport | JSON schema | Caching |
+|---|---|---|---|---|
+| `gemini.ts` | `gemini-*` | `@google/genai` (Vertex, ADC, `VERTEX_LOCATION`, default `global`) | native (`responseJsonSchema`) + validated | implicit (reported) and explicit `cachedContents` on `cache: {key, ttlSeconds}` |
+| `anthropic.ts` | `claude-*` | `@anthropic-ai/vertex-sdk` (`rawPredict` under the hood; ADC; `ANTHROPIC_LOCATION`, default `global`) | instruct + validate (Vertex gates native structured outputs behind an org policy) | `cache_control: {type: 'ephemeral'}` on the system block and the last `stable` message |
+| `openai-compat.ts` | `<publisher>/<model>-maas` | Vertex OpenAI-compatible chat completions (`.../endpoints/openapi/chat/completions`, bearer = ADC token; `MAAS_LOCATION` default `global`, per-model override in the catalog) | `response_format: json_schema` where the model supports it, else instruct + validate | none to request; `prompt_tokens_details.cached_tokens` reported when present |
+
+All three implement one `Provider` interface (`src/providers/types.ts`): `generate(req, signal) → {text, usage, model, finishReason, cacheNote}` and `stream(req, signal)` yielding `{text}` chunks then one `{done, usage}`. The server validates JSON output against the schema with Ajv for every provider, retries once on a miss, then answers `502 bad_model_output`.
+
+The catalog in `src/models.ts` maps each model id to its provider, endpoint location, list prices and cache minimum. Ids that are not in the catalog are assumed to be Gemini and cost `0` (with a warning in the log), so a class can be pointed at a brand-new Gemini model before the catalog catches up.
 
 ## API
 
@@ -21,32 +36,46 @@ Request body:
 
 ```jsonc
 {
-  "class": "routine" | "capable",       // model class; the client never names a model id
+  "class": "cheap" | "routine" | "capable" | "premium",   // model class (the game never names a model id)
+  "model": "google/gemma-4-26b-a4b-it-maas",              // OR an explicit id; honored only if it is in EVAL_MODELS
   "system": "optional system prompt",
-  "messages": [{ "role": "user" | "model", "text": "..." }],   // last message must be role user
-  "schema": { /* JSON schema */ },      // optional: structured output (responseMimeType application/json)
+  "messages": [{ "role": "user" | "model", "text": "...", "stable": true }],   // last message must be role user
+  "schema": { /* JSON schema */ },      // optional: structured output, validated with Ajv
   "maxOutputTokens": 1024,              // optional, 1..65536
   "temperature": 0.7,                   // optional, 0..2
-  "cacheKey": "village:abc",            // optional label; logged for cache diagnostics only
-  "thinkingLevel": "low"                // optional passthrough to Gemini thinkingConfig.thinkingLevel
+  "cache": { "key": "village:abc", "ttlSeconds": 3600 },   // optional explicit context cache (see Caching)
+  "cacheKey": "village:abc",            // optional label; logged for diagnostics only
+  "thinkingLevel": "low"                // optional; Gemini thinkingConfig.thinkingLevel (Claude: anything but low/minimal turns thinking on)
 }
 ```
+
+`class` or `model` is required. `messages[].stable` marks a leading run of messages that belongs to the
+cacheable prefix (system prompt + stable messages); the first non-stable message ends the prefix.
 
 Response `200`:
 
 ```jsonc
 {
   "text": "...",
-  "json": { },                          // present when schema was given; parsed model output
-  "usage": { "input": 123, "output": 45, "thoughts": 30 },   // output includes hidden thinking tokens
-  "model": "gemini-3.8-flash",
+  "json": { },                          // present when schema was given; parsed + validated model output
+  "usage": { "input": 7549, "output": 45, "thoughts": 30, "cached": 7543, "cacheWrite": 0 },
+  "cost": 0.00023059,                   // USD, from the pricing table (cached tokens at the cache-read price)
+  "model": "gemini-3.5-flash-lite",
+  "provider": "gemini",
   "ms": 812,
-  "finishReason": "STOP"
+  "finishReason": "STOP",
+  "cacheNote": "explicit cache reused"  // only when a cache was requested
 }
 ```
 
-When `schema` is given the model output is parsed as JSON; on parse failure the call is retried once,
-then the proxy answers `502 {"error":"bad_model_output"}`.
+Usage semantics are the same for every provider: `input` is the whole prompt including cached and
+cache-write tokens, `output` includes hidden thinking (`thoughts` is the part of `output` that was
+thinking, when the provider reports it), `cached` was served from a cache, `cacheWrite` was written to
+one this call (Anthropic only; 0 elsewhere). `cost = (input − cached − cacheWrite)·in + cached·cacheRead + cacheWrite·cacheWrite + output·out`.
+Gemini explicit-cache **storage** ($1/1M tokens/hour on Flash models) is not included.
+
+When `schema` is given the model output is extracted as JSON (fences and prose tolerated), validated
+against the schema, retried once on failure, then `502 {"error":"bad_model_output"}`.
 
 ### `POST /v1/stream`
 
@@ -55,60 +84,92 @@ Same body. Responds with Server-Sent Events:
 ```
 data: {"text":"chunk"}
 data: {"text":"chunk"}
-data: {"done":true,"usage":{"input":..,"output":..,"thoughts":..},"model":"gemini-3.1-pro-preview","ms":1234}
+data: {"done":true,"usage":{...},"cost":0.0000426,"model":"openai/gpt-oss-120b-maas","provider":"openai-compat","ms":889,"finishReason":"stop"}
 ```
 
-A mid-stream failure ends the stream with `data: {"error":"...","message":"..."}`.
+A mid-stream failure ends the stream with `data: {"error":"...","message":"..."}`. Reasoning models
+on the OpenAI-compatible endpoint (gpt-oss, DeepSeek-R1) stream their reasoning as a separate field
+that is not forwarded, so a small `maxOutputTokens` can end with `finishReason: "length"` and no text.
+
+### `GET /v1/models`
+
+Returns the class mapping, the eval allowlist and the pricing table so the eval runner can recompute
+costs: `{ classes: {cheap, routine, capable, premium}, evalModels: [...], pricingUnit: "USD per 1M tokens",
+pricing: { "<id>": { provider, location, input, output, cacheRead, cacheWrite, nativeJsonSchema, minCacheTokens, note? } } }`.
 
 ### `GET /health`
 
-`{ ok: true, models: { routine, capable }, requireAuth, location }`. Add `?deep=1` to run a tiny
-generation on each class and get `{ deep: { routine: {ok, ms, model, ...}, capable: {...} } }`
-(503 if either fails). No auth required. `/healthz` is accepted as an alias, but on Cloud Run the Google
+`{ ok: true, models: {cheap, routine, capable, premium}, requireAuth, location }`. Add `?deep=1` to run a tiny
+generation on each class and get `{ deep: { cheap: {ok, ms, model, usage, cost, ...}, routine: ..., capable: ..., premium: ... } }`
+(503 if any fails). No auth required. `/healthz` is accepted as an alias, but on Cloud Run the Google
 Frontend intercepts exactly `/healthz` on `*.run.app` and returns its own HTML 404, so use `/health` there.
 
 ### Errors
 
 | Status | `error` | Meaning |
 |---|---|---|
-| 400 | `bad_request` | body failed validation (`message` says why) |
+| 400 | `bad_request` | body failed validation (`message` says why), including a `model` outside `EVAL_MODELS` |
 | 401 | `unauthorized` | missing/invalid Firebase ID token (only when `REQUIRE_AUTH=true`) |
 | 413 | `too_large` | body over `MAX_BODY_BYTES` |
 | 429 | `quota` | daily token quota used; `resetAt` is the next UTC midnight |
-| 502 | `upstream` / `bad_model_output` | Vertex rejected the call, or JSON output never parsed |
+| 502 | `upstream` / `bad_model_output` | the provider rejected the call, or JSON output never validated |
 | 503 | `quota_unavailable` | Firestore unreachable (fails closed: the quota is the cost backstop) |
 | 504 | `timeout` | model call exceeded `REQUEST_TIMEOUT_MS` |
+
+## Caching
+
+- **Gemini implicit**: always on; the proxy just reports `cachedContentTokenCount` as `usage.cached`.
+  Repeated prefixes of ≥ 4,096 tokens (Gemini 3.x; 2,048 on 2.5) start hitting from the second call.
+- **Gemini explicit**: send `cache: {key, ttlSeconds}`. The proxy counts the prefix (system prompt +
+  leading `stable` messages) with the free `countTokens`; if it is under the model minimum it silently
+  runs uncached (`cacheNote` says so, remembered for an hour per key+content). Otherwise it creates a
+  `cachedContents` resource once per key, records `{name, model, contentHash, expiresAt, tokens}` in
+  memory and in Firestore `caches/{key}`, and reuses it while it is fresh. A different system prompt or
+  model under the same key transparently creates a new cache; a cache Vertex no longer has is dropped
+  and the call retried uncached. Only the non-stable messages are sent with the cache reference.
+- **Anthropic**: `cache` puts `cache_control: {type:'ephemeral'}` on the system block and on the last
+  stable message. Below the model minimum (Haiku 4.5: 4,096 tokens, Sonnet 5: 1,024) nothing is cached
+  and `cacheWrite`/`cached` stay 0. `key` and `ttlSeconds` are not used (Anthropic caches by content, 5 min TTL).
+- **OpenAI-compatible MaaS**: nothing to request; `cached_tokens` is reported when the backend
+  provides it (Qwen and Gemma do; gpt-oss-120b and DeepSeek-V3.2 do not).
 
 ## Environment
 
 | Var | Default | Notes |
 |---|---|---|
+| `MODEL_CHEAP` | `gemini-3.5-flash-lite` | model id for `class: cheap` |
 | `MODEL_ROUTINE` | `gemini-3.8-flash` | model id for `class: routine`; verify against the live Vertex model list before changing |
-| `MODEL_CAPABLE` | `gemini-3.1-pro-preview` | model id for `class: capable`; note `gemini-3.1-pro` (no suffix) does not exist on Vertex as of 2026-09-12 |
+| `MODEL_CAPABLE` | `gemini-3.1-pro-preview` | model id for `class: capable`; `gemini-3.1-pro` (no suffix) does not exist on Vertex as of 2026-09-12 |
+| `MODEL_PREMIUM` | `gemini-3.1-pro-preview` | model id for `class: premium` |
+| `EVAL_MODELS` | every catalog model that verified live (see `src/config.ts`; Claude excluded until enabled) | comma-separated ids a request may name explicitly |
 | `GOOGLE_CLOUD_PROJECT` | `wind-spirit-prod` | Vertex + Firebase project |
 | `VERTEX_LOCATION` | `global` | Gemini 3.x on Vertex requires the global endpoint; regional 404s |
+| `ANTHROPIC_LOCATION` | `global` | Claude on Vertex; Haiku 4.5 and Sonnet 5 both support `global` |
+| `MAAS_LOCATION` | `global` | OpenAI-compatible MaaS endpoint; per-model overrides (e.g. `us-central1`-only models) live in the catalog |
 | `REQUIRE_AUTH` | `true` | `false` keys quotas by client IP instead of requiring a token |
 | `DAILY_TOKEN_QUOTA` | `2000000` | input+output tokens per principal per UTC day |
 | `REQUEST_TIMEOUT_MS` | `120000` | per-request model timeout |
 | `QUOTA_COLLECTION` | `quotas` | Firestore collection; doc id `YYYY-MM-DD_<kind>_<id>` |
+| `CACHE_COLLECTION` | `caches` | Firestore collection for explicit Gemini cache records, doc id = `cache.key` |
 | `MAX_BODY_BYTES` | `2000000` | request body cap |
 | `PORT` | `8080` | set by Cloud Run |
 
-Model ids live only here. Clients send a class. When Google ships new models, change the env var
-on the service (`gcloud run services update llm-proxy --update-env-vars MODEL_ROUTINE=...`) and
-check `/health?deep=1`.
+Model ids live only in the env vars and `src/models.ts`. Clients send a class (or an allowlisted id).
+When Google ships new models, change the env var on the service (`gcloud run services update llm-proxy
+--update-env-vars MODEL_ROUTINE=...`), add the price to `src/models.ts`, and check `/health?deep=1`.
 
 ## Logging
 
-One JSON line per request: `route, class, model, principal (uid, or hashed ip), cacheKey,
-promptSha256, inputTokens, outputTokens, thoughtTokens, status, ms`. Prompt bodies are never logged.
-Cloud Logging picks up `severity`.
+One JSON line per request: `route, class, model, provider, principal (uid, or hashed ip), cacheKey,
+promptSha256, inputTokens, outputTokens, thoughtTokens, cachedTokens, cacheWriteTokens, costUsd,
+cacheNote, status, ms`. Prompt bodies are never logged. Cloud Logging picks up `severity`.
 
 ## Deploy
 
 Prerequisites (done once, 2026-09-12): Firebase added to the project, Anonymous sign-in enabled,
 Firestore native database in `nam5`, service account `llm-proxy-sa` with `roles/aiplatform.user` and
-`roles/datastore.user`.
+`roles/datastore.user` (this is enough for Gemini and the open MaaS models; Claude additionally needs
+the Model Garden **Enable** click-through per model in the console, see `MODELS.md` §2).
 
 ```sh
 cd /path/to/wind-spirit
@@ -117,7 +178,7 @@ gcloud run deploy llm-proxy \
   --project wind-spirit-prod --region us-central1 \
   --service-account llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com \
   --allow-unauthenticated \
-  --set-env-vars GOOGLE_CLOUD_PROJECT=wind-spirit-prod,VERTEX_LOCATION=global,MODEL_ROUTINE=gemini-3.8-flash,MODEL_CAPABLE=gemini-3.1-pro-preview,REQUIRE_AUTH=true,DAILY_TOKEN_QUOTA=2000000 \
+  --set-env-vars GOOGLE_CLOUD_PROJECT=wind-spirit-prod,VERTEX_LOCATION=global,ANTHROPIC_LOCATION=global,MAAS_LOCATION=global,MODEL_CHEAP=gemini-3.5-flash-lite,MODEL_ROUTINE=gemini-3.8-flash,MODEL_CAPABLE=gemini-3.1-pro-preview,MODEL_PREMIUM=gemini-3.1-pro-preview,REQUIRE_AUTH=true,DAILY_TOKEN_QUOTA=2000000 \
   --timeout 300 --concurrency 40 --memory 512Mi --cpu 1 \
   --min-instances 0 --max-instances 5
 ```
@@ -147,10 +208,16 @@ REQUIRE_AUTH=false pnpm --filter @wind-spirit/llm-proxy dev
 curl -s "localhost:8080/health?deep=1" | jq
 ```
 
-Unit tests: `pnpm --filter @wind-spirit/llm-proxy test` (validation and quota keys; the model calls are
-exercised by `/health?deep=1` and the post-deploy curls).
+Unit tests: `pnpm --filter @wind-spirit/llm-proxy test` (request validation, quota keys, pricing/cost,
+provider selection, usage normalisation, Anthropic/OpenAI request shaping, SSE parsing, JSON
+extraction/validation). The live model calls are exercised by `/health?deep=1` and the post-deploy curls.
 
 Getting an ID token for manual testing: with the web config in `firebase-web-config.json`, call
-`signInAnonymously` from the Firebase JS SDK and use `getIdToken()`. From a shell you can also use
-the Identity Toolkit REST endpoint `accounts:signUp` with the web API key and an empty body, which
-returns an anonymous user's `idToken` (see the Firebase Auth REST docs).
+`signInAnonymously` from the Firebase JS SDK and use `getIdToken()`. From a shell:
+
+```sh
+KEY=$(jq -r .apiKey services/llm-proxy/firebase-web-config.json)
+TOKEN=$(curl -s -X POST "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$KEY" \
+  -H 'Content-Type: application/json' -d '{"returnSecureToken":true}' | jq -r .idToken)
+curl -s "$URL/v1/models" -H "Authorization: Bearer $TOKEN" | jq .classes
+```

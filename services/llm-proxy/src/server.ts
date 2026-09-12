@@ -1,11 +1,14 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
-import { config, type ModelClass } from './config.js';
+import { config, MODEL_CLASSES, type ModelClass } from './config.js';
 import { HttpError } from './errors.js';
 import { errorFields, log } from './log.js';
 import { authenticate, initFirebase, principalLabel, type Principal } from './auth.js';
 import { checkQuota, recordUsage } from './quota.js';
-import { generate, generateStream, modelFor, usageOf, type Usage } from './gemini.js';
-import { parseGenerateRequest, promptHash, type GenerateRequest } from './request.js';
+import { addUsage, estimateCost, MODELS, modelInfo, ZERO_USAGE, type Usage } from './models.js';
+import { providerFor, type ProviderRequest } from './providers/index.js';
+import { extractJson } from './providers/types.js';
+import { validateAgainst } from './schema.js';
+import { parseGenerateRequest, promptHash, resolveModel, type GenerateRequest } from './request.js';
 
 // ---------- helpers ----------
 
@@ -58,12 +61,17 @@ interface RequestLog {
   route: string;
   class?: ModelClass;
   model?: string;
+  provider?: string;
   principal?: string;
   cacheKey?: string;
   promptSha256?: string;
   inputTokens?: number;
   outputTokens?: number;
   thoughtTokens?: number;
+  cachedTokens?: number;
+  cacheWriteTokens?: number;
+  costUsd?: number;
+  cacheNote?: string;
   retried?: boolean;
 }
 
@@ -83,7 +91,7 @@ function upstreamError(err: unknown, timedOut: boolean): HttpError {
   return new HttpError(502, 'upstream', upstreamMessage(err).slice(0, 2000), { upstreamStatus: upstreamStatus(err) });
 }
 
-/** The Vertex ApiError wraps a JSON body inside its message; dig out the human-readable `error.message`. */
+/** Vertex/Anthropic errors wrap a JSON body inside the message; dig out the human-readable `error.message`. */
 function upstreamMessage(err: unknown): string {
   let msg = err instanceof Error ? err.message : String(err);
   for (let i = 0; i < 3; i++) {
@@ -104,9 +112,47 @@ function upstreamStatus(err: unknown): number | undefined {
   return typeof s === 'number' ? s : undefined;
 }
 
+function toProviderRequest(gen: GenerateRequest, model: string): ProviderRequest {
+  const req: ProviderRequest = { model, messages: gen.messages };
+  if (gen.system !== undefined) req.system = gen.system;
+  if (gen.schema !== undefined) req.schema = gen.schema;
+  if (gen.maxOutputTokens !== undefined) req.maxOutputTokens = gen.maxOutputTokens;
+  if (gen.temperature !== undefined) req.temperature = gen.temperature;
+  if (gen.thinkingLevel !== undefined) req.thinkingLevel = gen.thinkingLevel;
+  if (gen.cache !== undefined) req.cache = gen.cache;
+  return req;
+}
+
+function usageBody(u: Usage): Record<string, number> {
+  return { input: u.input, output: u.output, thoughts: u.thoughts, cached: u.cached, cacheWrite: u.cacheWrite };
+}
+
 // ---------- routes ----------
 
-async function healthz(url: URL, res: ServerResponse): Promise<void> {
+function modelsBody(): Record<string, unknown> {
+  const pricing: Record<string, unknown> = {};
+  for (const m of Object.values(MODELS)) {
+    pricing[m.id] = {
+      provider: m.provider,
+      location: m.location ?? (m.provider === 'gemini' ? config.location : m.provider === 'anthropic' ? config.anthropicLocation : config.maasLocation),
+      input: m.pricing.input,
+      output: m.pricing.output,
+      cacheRead: m.pricing.cacheRead,
+      cacheWrite: m.pricing.cacheWrite,
+      nativeJsonSchema: m.nativeJsonSchema,
+      minCacheTokens: m.minCacheTokens,
+      ...(m.note ? { note: m.note } : {}),
+    };
+  }
+  return {
+    classes: { ...config.models },
+    evalModels: [...config.evalModels],
+    pricingUnit: 'USD per 1M tokens',
+    pricing,
+  };
+}
+
+async function health(url: URL, res: ServerResponse): Promise<void> {
   const models = { ...config.models };
   if (url.searchParams.get('deep') !== '1') {
     sendJson(res, 200, { ok: true, models, requireAuth: config.requireAuth, location: config.location });
@@ -116,21 +162,23 @@ async function healthz(url: URL, res: ServerResponse): Promise<void> {
   const timer = setTimeout(() => ac.abort(), 60_000);
   const probe = async (cls: ModelClass) => {
     const t0 = Date.now();
+    const model = config.models[cls];
     try {
-      const r = await generate(
-        { class: cls, messages: [{ role: 'user', text: 'Reply with the single word OK.' }], maxOutputTokens: 256, thinkingLevel: 'low' },
+      const r = await providerFor(model).generate(
+        { model, messages: [{ role: 'user', text: 'Reply with the single word OK.' }], maxOutputTokens: 256, thinkingLevel: 'low' },
         ac.signal,
       );
-      return { ok: true, model: modelFor(cls), ms: Date.now() - t0, text: (r.text ?? '').slice(0, 40), usage: usageOf(r) };
+      return { ok: true, model, ms: Date.now() - t0, text: r.text.slice(0, 40), usage: usageBody(r.usage), cost: estimateCost(model, r.usage) };
     } catch (err) {
-      return { ok: false, model: modelFor(cls), ms: Date.now() - t0, ...errorFields(err) };
+      return { ok: false, model, ms: Date.now() - t0, ...errorFields(err) };
     }
   };
   try {
-    const [routine, capable] = await Promise.all([probe('routine'), probe('capable')]);
-    const ok = routine.ok && capable.ok;
-    if (!ok) log('ERROR', 'deep health check failed', { routine, capable });
-    sendJson(res, ok ? 200 : 503, { ok, models, requireAuth: config.requireAuth, location: config.location, deep: { routine, capable } });
+    const results = await Promise.all(MODEL_CLASSES.map(probe));
+    const deep = Object.fromEntries(MODEL_CLASSES.map((c, i) => [c, results[i]]));
+    const ok = results.every((r) => r.ok);
+    if (!ok) log('ERROR', 'deep health check failed', deep);
+    sendJson(res, ok ? 200 : 503, { ok, models, requireAuth: config.requireAuth, location: config.location, deep });
   } finally {
     clearTimeout(timer);
   }
@@ -143,62 +191,74 @@ interface Ctx {
   startedAt: number;
 }
 
-/** Shared prelude for /v1/*: auth, parse, quota. */
-async function prelude(ctx: Ctx): Promise<{ principal: Principal; gen: GenerateRequest }> {
+/** Shared prelude for /v1/generate and /v1/stream: auth, parse, resolve model, quota. */
+async function prelude(ctx: Ctx): Promise<{ principal: Principal; gen: GenerateRequest; preq: ProviderRequest }> {
   const principal = await authenticate(ctx.req);
   ctx.entry.principal = principalLabel(principal);
   const gen = parseGenerateRequest(await readJson(ctx.req));
-  ctx.entry.class = gen.class;
-  ctx.entry.model = modelFor(gen.class);
+  const model = resolveModel(gen);
+  if (gen.class) ctx.entry.class = gen.class;
+  ctx.entry.model = model;
+  ctx.entry.provider = providerFor(model).name;
   ctx.entry.promptSha256 = promptHash(gen);
   if (gen.cacheKey) ctx.entry.cacheKey = gen.cacheKey;
+  else if (gen.cache) ctx.entry.cacheKey = gen.cache.key;
+  if (!modelInfo(model)) log('WARNING', 'model not in pricing catalog; cost will be 0', { model });
   await checkQuota(principal);
-  return { principal, gen };
+  return { principal, gen, preq: toProviderRequest(gen, model) };
 }
 
-function noteUsage(entry: RequestLog, usage: Usage): void {
+function noteUsage(entry: RequestLog, usage: Usage, model: string, cacheNote?: string): number {
   entry.inputTokens = usage.input;
   entry.outputTokens = usage.output;
   entry.thoughtTokens = usage.thoughts;
+  entry.cachedTokens = usage.cached;
+  entry.cacheWriteTokens = usage.cacheWrite;
+  const cost = estimateCost(model, usage);
+  entry.costUsd = cost;
+  if (cacheNote) entry.cacheNote = cacheNote;
+  return cost;
 }
 
 async function v1Generate(ctx: Ctx): Promise<void> {
-  const { principal, gen } = await prelude(ctx);
+  const { principal, gen, preq } = await prelude(ctx);
+  const provider = providerFor(preq.model);
   const { signal, done, timedOut } = requestSignal(ctx.res);
   try {
-    let total: Usage = { input: 0, output: 0, thoughts: 0 };
+    let total: Usage = ZERO_USAGE;
     for (let attempt = 0; attempt < 2; attempt++) {
       let r;
       try {
-        r = await generate(gen, signal);
+        r = await provider.generate(preq, signal);
       } catch (err) {
         throw upstreamError(err, timedOut());
       }
-      const usage = usageOf(r);
-      total = { input: total.input + usage.input, output: total.output + usage.output, thoughts: total.thoughts + usage.thoughts };
-      const text = r.text ?? '';
+      total = addUsage(total, r.usage);
       let json: unknown;
       if (gen.schema) {
-        try {
-          json = JSON.parse(text);
-        } catch {
+        json = extractJson(r.text);
+        const problem = json === undefined ? 'not JSON' : validateAgainst(gen.schema, json);
+        if (problem) {
           if (attempt === 0) {
             ctx.entry.retried = true;
-            log('WARNING', 'structured output did not parse; retrying once', { model: ctx.entry.model, promptSha256: ctx.entry.promptSha256 });
+            log('WARNING', 'structured output invalid; retrying once', { model: preq.model, problem, promptSha256: ctx.entry.promptSha256 });
             continue;
           }
-          noteUsage(ctx.entry, total);
-          throw new HttpError(502, 'bad_model_output', 'model returned non-JSON output twice', { finishReason: r.candidates?.[0]?.finishReason });
+          noteUsage(ctx.entry, total, preq.model, r.cacheNote);
+          throw new HttpError(502, 'bad_model_output', `model output did not match schema twice (${problem})`, { finishReason: r.finishReason });
         }
       }
-      noteUsage(ctx.entry, total);
+      const cost = noteUsage(ctx.entry, total, preq.model, r.cacheNote);
       sendJson(ctx.res, 200, {
-        text,
+        text: r.text,
         ...(gen.schema ? { json } : {}),
-        usage: { input: total.input, output: total.output, thoughts: total.thoughts },
-        model: ctx.entry.model,
+        usage: usageBody(total),
+        cost,
+        model: preq.model,
+        provider: provider.name,
         ms: Date.now() - ctx.startedAt,
-        finishReason: r.candidates?.[0]?.finishReason,
+        finishReason: r.finishReason,
+        ...(r.cacheNote ? { cacheNote: r.cacheNote } : {}),
       });
       return;
     }
@@ -210,17 +270,20 @@ async function v1Generate(ctx: Ctx): Promise<void> {
 }
 
 async function v1Stream(ctx: Ctx): Promise<void> {
-  const { principal, gen } = await prelude(ctx);
+  const { principal, preq } = await prelude(ctx);
+  const provider = providerFor(preq.model);
   const { signal, done, timedOut } = requestSignal(ctx.res);
   const res = ctx.res;
   const send = (obj: unknown) => {
     if (!res.writableEnded) res.write(`data: ${JSON.stringify(obj)}\n\n`);
   };
-  let usage: Usage = { input: 0, output: 0, thoughts: 0 };
+  let usage: Usage = ZERO_USAGE;
   try {
-    let stream;
+    const stream = provider.stream(preq, signal);
+    // Pull the first event before committing to a 200 so upstream rejections still map to proper status codes.
+    let first;
     try {
-      stream = await generateStream(gen, signal);
+      first = await stream.next();
     } catch (err) {
       throw upstreamError(err, timedOut());
     }
@@ -231,11 +294,20 @@ async function v1Stream(ctx: Ctx): Promise<void> {
       'X-Accel-Buffering': 'no',
     });
     res.flushHeaders();
+    let cacheNote: string | undefined;
+    let finishReason: string | undefined;
     try {
-      for await (const chunk of stream) {
-        if (chunk.usageMetadata) usage = usageOf(chunk);
-        const text = chunk.text;
-        if (text) send({ text });
+      let cur = first;
+      while (!cur.done) {
+        const ev = cur.value;
+        if ('done' in ev) {
+          usage = ev.usage;
+          cacheNote = ev.cacheNote;
+          finishReason = ev.finishReason;
+        } else if (ev.text) {
+          send({ text: ev.text });
+        }
+        cur = await stream.next();
       }
     } catch (err) {
       const e = upstreamError(err, timedOut());
@@ -244,8 +316,8 @@ async function v1Stream(ctx: Ctx): Promise<void> {
       res.end();
       return;
     }
-    noteUsage(ctx.entry, usage);
-    send({ done: true, usage: { input: usage.input, output: usage.output, thoughts: usage.thoughts }, model: ctx.entry.model, ms: Date.now() - ctx.startedAt });
+    const cost = noteUsage(ctx.entry, usage, preq.model, cacheNote);
+    send({ done: true, usage: usageBody(usage), cost, model: preq.model, provider: provider.name, ms: Date.now() - ctx.startedAt, finishReason });
     res.end();
   } finally {
     done();
@@ -270,7 +342,12 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
     // Cloud Run's Google Frontend reserves exactly `/healthz` and answers its own 404 before the container
     // sees it, so the canonical route is `/health`; `/healthz` stays as an alias for local development.
     if (req.method === 'GET' && (url.pathname === '/health' || url.pathname === '/healthz')) {
-      await healthz(url, res);
+      await health(url, res);
+      return;
+    }
+    if (req.method === 'GET' && url.pathname === '/v1/models') {
+      await authenticate(req);
+      sendJson(res, 200, modelsBody());
       return;
     }
     if (req.method === 'POST' && url.pathname === '/v1/generate') {
@@ -311,7 +388,10 @@ server.listen(config.port, () => {
     port: config.port,
     project: config.project,
     location: config.location,
+    anthropicLocation: config.anthropicLocation,
+    maasLocation: config.maasLocation,
     models: config.models,
+    evalModels: config.evalModels,
     requireAuth: config.requireAuth,
     dailyTokenQuota: config.dailyTokenQuota,
     requestTimeoutMs: config.requestTimeoutMs,

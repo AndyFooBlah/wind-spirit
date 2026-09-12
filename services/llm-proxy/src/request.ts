@@ -1,14 +1,15 @@
 import { createHash } from 'node:crypto';
 import { HttpError } from './errors.js';
-import type { ModelClass } from './config.js';
+import { config, isModelClass, type ModelClass } from './config.js';
+import type { Message } from './providers/types.js';
 
-export interface Message {
-  role: 'user' | 'model';
-  text: string;
-}
+export type { Message };
 
 export interface GenerateRequest {
-  class: ModelClass;
+  /** Model class; required unless `model` names an allowlisted id. */
+  class?: ModelClass;
+  /** Explicit model id (evals only); must be in EVAL_MODELS. */
+  model?: string;
   system?: string;
   messages: Message[];
   schema?: Record<string, unknown>;
@@ -16,6 +17,8 @@ export interface GenerateRequest {
   temperature?: number;
   /** Opaque client label for cache diagnostics; logged, never sent to the model. */
   cacheKey?: string;
+  /** Explicit context cache: create/reuse a cache of the system prompt (+ stable messages) under this key. */
+  cache?: { key: string; ttlSeconds: number };
   /** Optional passthrough to Gemini's thinkingLevel (e.g. 'low' for routine calls). */
   thinkingLevel?: string;
 }
@@ -28,8 +31,21 @@ function isObject(v: unknown): v is Record<string, unknown> {
 export function parseGenerateRequest(body: unknown): GenerateRequest {
   if (!isObject(body)) throw new HttpError(400, 'bad_request', 'body must be a JSON object');
   const cls = body.class;
-  if (cls !== 'routine' && cls !== 'capable') {
-    throw new HttpError(400, 'bad_request', "class must be 'routine' or 'capable'");
+  if (cls !== undefined && !isModelClass(cls)) {
+    throw new HttpError(400, 'bad_request', "class must be one of 'cheap', 'routine', 'capable', 'premium'");
+  }
+  let model: string | undefined;
+  if (body.model !== undefined) {
+    if (typeof body.model !== 'string' || body.model.length > 120) {
+      throw new HttpError(400, 'bad_request', 'model must be a string');
+    }
+    if (!config.evalModels.includes(body.model)) {
+      throw new HttpError(400, 'bad_request', `model ${JSON.stringify(body.model)} is not in the EVAL_MODELS allowlist (see GET /v1/models)`);
+    }
+    model = body.model;
+  }
+  if (cls === undefined && model === undefined) {
+    throw new HttpError(400, 'bad_request', 'class or model is required');
   }
   if (!Array.isArray(body.messages) || body.messages.length === 0) {
     throw new HttpError(400, 'bad_request', 'messages must be a non-empty array');
@@ -38,12 +54,17 @@ export function parseGenerateRequest(body: unknown): GenerateRequest {
     if (!isObject(m) || (m.role !== 'user' && m.role !== 'model') || typeof m.text !== 'string') {
       throw new HttpError(400, 'bad_request', `messages[${i}] must be {role:'user'|'model', text:string}`);
     }
-    return { role: m.role, text: m.text };
+    if (m.stable !== undefined && typeof m.stable !== 'boolean') {
+      throw new HttpError(400, 'bad_request', `messages[${i}].stable must be a boolean`);
+    }
+    return m.stable ? { role: m.role, text: m.text, stable: true } : { role: m.role, text: m.text };
   });
   if (messages[messages.length - 1]!.role !== 'user') {
     throw new HttpError(400, 'bad_request', 'last message must have role user');
   }
-  const req: GenerateRequest = { class: cls, messages };
+  const req: GenerateRequest = { messages };
+  if (cls !== undefined) req.class = cls;
+  if (model !== undefined) req.model = model;
   if (body.system !== undefined) {
     if (typeof body.system !== 'string') throw new HttpError(400, 'bad_request', 'system must be a string');
     req.system = body.system;
@@ -72,6 +93,17 @@ export function parseGenerateRequest(body: unknown): GenerateRequest {
     }
     req.cacheKey = body.cacheKey;
   }
+  if (body.cache !== undefined) {
+    const c = body.cache;
+    if (!isObject(c) || typeof c.key !== 'string' || !/^[A-Za-z0-9._:-]{1,120}$/.test(c.key)) {
+      throw new HttpError(400, 'bad_request', 'cache.key must be a string of 1..120 chars [A-Za-z0-9._:-]');
+    }
+    const ttl = c.ttlSeconds ?? 3600;
+    if (typeof ttl !== 'number' || !Number.isInteger(ttl) || ttl < 60 || ttl > 86_400) {
+      throw new HttpError(400, 'bad_request', 'cache.ttlSeconds must be an integer in 60..86400');
+    }
+    req.cache = { key: c.key, ttlSeconds: ttl };
+  }
   if (body.thinkingLevel !== undefined) {
     if (typeof body.thinkingLevel !== 'string' || !/^[a-z]{1,16}$/.test(body.thinkingLevel)) {
       throw new HttpError(400, 'bad_request', 'thinkingLevel must be a short lowercase string');
@@ -81,9 +113,15 @@ export function parseGenerateRequest(body: unknown): GenerateRequest {
   return req;
 }
 
+/** The model id a request resolves to: the explicit allowlisted id, else the class mapping. */
+export function resolveModel(req: GenerateRequest): string {
+  // A class may be pointed at an id outside the catalog (a brand-new model); providerFor() defaults that to Gemini.
+  return req.model ?? config.models[req.class!];
+}
+
 /** sha256 of the prompt (system + messages) for cache diagnostics. The hash is logged; the prompt is not. */
 export function promptHash(req: GenerateRequest): string {
   return createHash('sha256')
-    .update(JSON.stringify({ system: req.system ?? null, messages: req.messages }))
+    .update(JSON.stringify({ system: req.system ?? null, messages: req.messages.map((m) => ({ role: m.role, text: m.text })) }))
     .digest('hex');
 }
