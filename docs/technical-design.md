@@ -1,6 +1,6 @@
 # Wind Spirit — Technical Design
 
-*Status: M0 built. Companion to concept.md and m0-notes.md.*
+*Status: M0–M2 built; M3–M7 in progress. Companion to concept.md, m0-notes.md, build-notes.md.*
 *Last updated: 2026-09-12*
 
 ## 1. Goals and constraints
