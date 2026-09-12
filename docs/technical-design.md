@@ -1,7 +1,7 @@
 # Wind Spirit — Technical Design
 
-*Status: draft for review. Companion to concept.md. No code yet.*
-*Last updated: 2026-09-11*
+*Status: draft 1 complete, all M0 decisions settled. Companion to concept.md. No code yet.*
+*Last updated: 2026-09-12*
 
 ## 1. Goals and constraints
 
@@ -343,9 +343,9 @@ At fast speeds coalescing cuts routine calls by two thirds or more. The per-game
 
 Decided in this document: TypeScript monorepo; pure sim in a worker; event sourcing with yearly snapshots; named PRNG streams; scheduler on the main thread; Cloud Run proxy with anonymous auth and class-based routing; Canvas 2D plus React; IndexedDB saves; scripted policies double as fallback and harness.
 
-Open, to settle at M0:
+Decided 2026-09-12:
 
-- Cloud Run vs. Firebase Functions for the proxy (leaning Cloud Run for streaming and cold-start control).
-- Fixed-point representation for stocks and fertility (leaning integers in thousandths).
-- Local plot grid size (leaning 12 × 12).
-- Whether the history worker shares the tile atlas with the live map (leaning yes, via a shared bitmap).
+- **Proxy host: Cloud Run.** Streaming replies for conversations, control over minimum instances so a first prayer doesn't wait on a cold start, and a deploy pattern already used by weatherbot and Familiaris.
+- **Numbers: integers in thousandths** for stocks, fertility, trust, happiness, and trodden values. Floats can differ across engines over thousands of ticks; integers hash identically everywhere, which replay and the harness depend on.
+- **Local plot grid: 12 × 12.** 144 plots fits a village of 150 with room to spare and stays readable at a glance; a full grid is a natural nudge to colonize.
+- **Tile atlas shared** between the live map and the history worker via a shared bitmap.
