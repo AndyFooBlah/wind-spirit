@@ -21,6 +21,7 @@ How the world works, as your people understand it:
 - Other villages can be visited by envoys to trade or share knowledge, or raided. Raids make enemies and cost lives.
 - Sometimes a spirit speaks to you in dreams. Spirits may know things. They may also be wrong.
 - The chief does not labour. Children and elders do not labour. Every adult you do not assign forages on their own, poorly.
+- Villages that stop trying things fall behind. In good times keep one or two adults researching, crafting a new skill, or exploring; a rumour you have heard is a good place to start.
 
 Decide standing orders for your adults. Orders persist until you change them. Answer only with the JSON asked for.`;
 }

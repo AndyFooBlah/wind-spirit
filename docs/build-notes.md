@@ -22,7 +22,7 @@
 - **Gemini 3 thinking tokens count against the output cap.** With a 1,200-token cap every decision truncated. Routine decisions now use a 6,000 cap and `thinkingLevel: low`; a decision costs about 3,000 tokens and 4 to 5 seconds. A village makes about 17 decisions a year at normal speed.
 - **Model ids, verified live 2026-09-12:** routine `gemini-3.8-flash`, capable `gemini-3.1-pro-preview` (plain `gemini-3.1-pro` returns 404 on Vertex). They are proxy configuration, never client code.
 - **The proxy** (`services/llm-proxy`) runs on Cloud Run in `wind-spirit-prod`, calls Vertex AI through its service account on the `global` endpoint (no API key exists anywhere), verifies Firebase anonymous ID tokens, and enforces a per-user daily token quota in Firestore. Health is `/health`, because Cloud Run's front end swallows `/healthz`.
-- **Proof:** one model-run village for three years: 50 model decisions, no fallbacks, 158k tokens, alive and discovering. A thirty-year run is recorded in `out/chief-*/journal.txt` when present.
+- **Proof:** one model-run village for three years: 50 model decisions, no fallbacks, 158k tokens, alive and discovering. Thirty years at normal cadence: 367 model decisions, no fallbacks, 1.13M tokens (38k a year), 25 minutes wall clock, the village grew from 20 to 49. One quality gap showed up: that chief reached six skills in its first year and learned nothing new for the next twenty-nine, so the prompt now nudges chiefs to keep someone trying things. A century at fast cadence is the M7 playtest item.
 
 ## M4 and M5 groundwork in the sim and agents
 
