@@ -116,7 +116,8 @@ function onWorker(m: FromWorker): void {
       break;
     }
     case 'snapshot': void persister?.snapshot(m.tick, m.json, m.reason); break;
-    case 'attention': { const text = eventText(m.event); const village = villageOf(m.event); toast(text, 'attention', village, m.event.type); if (village !== undefined) focusVillage(village); break; }
+    // Pause and say what happened; do not move the camera (clicking the toast goes there). Jumping on every founding and prayer was distracting.
+    case 'attention': { const text = eventText(m.event); const village = villageOf(m.event); toast(text, 'attention', village, m.event.type); break; }
     case 'journal': set(s => ({ journals: [...s.journals, m.entry] })); void persister?.journal(m.entry); break;
     case 'village': if (m.detail.id === get().selected) set({ detail: m.detail }); break;
     case 'speed': set(s => ({ speed: m.speed, toasts: m.speed === 'pause' ? s.toasts : s.toasts.filter(t => t.kind !== 'attention') })); refreshScene(); break;
