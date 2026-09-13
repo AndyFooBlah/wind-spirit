@@ -25,11 +25,21 @@ export function TechTree({ onClose }: { onClose: () => void }) {
         </div>
         <div className="tree-scroll">
           <svg width={layout.width} height={layout.height} role="img" aria-label="tech tree">
+            <defs>
+              {([['arrow', '#8a7a60'], ['arrow-req', '#6a4c93'], ['arrow-lit', '#b3261e']] as [string, string][]).map(([id, c]) => (
+                <marker key={id} id={id} viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill={c} /></marker>
+              ))}
+            </defs>
             {layout.tiers.map(t => <text key={t.tier} x={t.x + NODE_W / 2} y={14} fontSize={12} fontWeight={600} textAnchor="middle" fill="#5a4a30">tier {t.tier}</text>)}
             {layout.edges.map((e, i) => {
               const a = layout.at.get(e.from)!, b = layout.at.get(e.to)!; const lit = hot && (e.from === hot.node.id || e.to === hot.node.id);
-              const x1 = a.x + NODE_W, y1 = a.y + NODE_H / 2, x2 = b.x, y2 = b.y + NODE_H / 2; const mx = (x1 + x2) / 2;
-              return <path key={i} d={`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`} fill="none" stroke={lit ? '#b3261e' : e.kind === 'requires' ? '#6a4c93' : '#8a7a60'} strokeWidth={lit ? 2 : 1} opacity={hot && !lit ? 0.15 : 0.7} strokeDasharray={e.kind === 'requires' ? '4 3' : undefined} />;
+              const colour = lit ? '#b3261e' : e.kind === 'requires' ? '#6a4c93' : '#8a7a60';
+              // Out of the right side of the input, into the left side of the output. Same column or backwards: bulge out to the right and come back.
+              const x1 = a.x + NODE_W, y1 = a.y + NODE_H / 2;
+              const forward = b.x > a.x;
+              const x2 = forward ? b.x : b.x + NODE_W, y2 = b.y + NODE_H / 2;
+              const d = forward ? `M${x1},${y1} C${(x1 + x2) / 2},${y1} ${(x1 + x2) / 2},${y2} ${x2},${y2}` : `M${x1},${y1} C${x1 + 46},${y1} ${x2 + 46},${y2} ${x2},${y2}`;
+              return <path key={i} d={d} fill="none" stroke={colour} strokeWidth={lit ? 2 : 1} opacity={hot && !lit ? 0.15 : 0.7} strokeDasharray={e.kind === 'requires' ? '4 3' : undefined} markerEnd={lit ? 'url(#arrow-lit)' : e.kind === 'requires' ? 'url(#arrow-req)' : 'url(#arrow)'} />;
             })}
             {layout.nodes.map(({ node: n, x, y }) => {
               const st = state(n); const dim = hot && hot.node.id !== n.id && !related.has(n.id);
@@ -77,5 +87,5 @@ function place(tech: TechNode[]) {
     inCol.forEach((t, ri) => { const y = TOP + ri * (NODE_H + ROW_GAP); at.set(t.id, { x, y }); nodes.push({ node: t, x, y }); });
     maxRows = Math.max(maxRows, inCol.length);
   });
-  return { nodes, edges, at, tiers: cols, width: 24 + tiers.length * (NODE_W + COL_GAP) - COL_GAP, height: TOP + maxRows * (NODE_H + ROW_GAP) + 8 };
+  return { nodes, edges, at, tiers: cols, width: 24 + tiers.length * (NODE_W + COL_GAP), height: TOP + maxRows * (NODE_H + ROW_GAP) + 8 };
 }
