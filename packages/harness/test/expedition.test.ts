@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { Sim, storeQty, knowledgeUnion, tileDistance } from '@wind-spirit/sim';
+import { Sim, storeQty, knowledgeUnion, tileDistance, route } from '@wind-spirit/sim';
 import { generateWorld } from '@wind-spirit/gen';
 
 describe('expedition', () => {
   it('collects a far regional commodity and brings it home', () => {
     const w = generateWorld({ seed: 'exp', startFoodWeeks: 100 }); const sim = new Sim(w); const v = w.villages[0];
-    const far = w.tiles.map((t, i) => i).find(i => Object.keys(w.tiles[i].extra).length && tileDistance(w, v.tile, i) > 3 && tileDistance(w, v.tile, i) < 10);
+    // a regional commodity a few tiles off that can be walked to: with an ocean rim, the nearest one may be across water
+    const far = w.tiles.map((t, i) => i).find(i => Object.keys(w.tiles[i].extra).length && tileDistance(w, v.tile, i) > 3 && tileDistance(w, v.tile, i) < 10 && route(w, v.tile, i).length > 0);
     if (far === undefined) return;
     const c = Object.keys(w.tiles[far].extra)[0]; knowledgeUnion(v.knowledge, [far]);
     sim.queue({ type: 'ChiefDecided', village: v.id, orders: [{ task: 'expedition', workers: 3, params: { c, weeks: 3 }, since: 0 }, { task: 'forage', workers: 6, params: {}, since: 0 }], requestedAt: 0 });
