@@ -288,4 +288,5 @@ Language evolution, per-individual tech knowledge, genders, continuous real time
 - 2026-09-12 (build): Model ids live in the proxy: routine gemini-3.8-flash, capable gemini-3.1-pro-preview; thinking low for routine decisions.
 - 2026-09-12 (build): The hunger balance check measures the expansion phase; once a 64×64 map fills (~year 150) hunger regulates and that is expected. Larger worlds are supported by the generator and harness (--size).
 - 2026-09-12 (evals): Intelligence tiers habit / thrifty / standard / lavish; standard = Gemini 3.5 Flash-Lite for routine seasons and 3.8 Flash for impactful decisions (~$5 a chief-century); cheapest routine engine 2.5 Flash-Lite. Open managed models matched on rules but not on prose and were throttled; stay on Gemini. (evals-notes.md)
+- 2026-09-12 (evals, OpenRouter): 24 more models tested via OpenRouter; Mistral Medium 3.1, GPT-5.4 nano, GPT-5.6 Luna and GLM 5.3 Flash tie or beat Gemini 3.8 Flash at a fifth of the cost or less; defaults stay on Vertex Gemini for auth, speed and quality within noise; OpenRouter models selectable per class by env var. Claude Haiku slower and dearer for equal quality. (evals-notes.md)
 

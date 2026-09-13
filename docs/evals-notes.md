@@ -151,3 +151,48 @@ Andrew has an OpenRouter account, which sidesteps the Model Garden click-through
 | anthropic/claude-sonnet-5 | 2.00 | 10.00 | |
 
 The last Gemini row is its own finding: OpenRouter resells Gemini at the Gemini API price, which is half what Vertex charges for 3.8 Flash. The trade is an API key held in Secret Manager instead of a service account, OpenRouter's margin on credits, and one more hop of latency. The proxy gains an `openrouter` provider; the key is `unset` until Andrew pastes it, and the provider reports itself disabled until then. Candidates to run: the fourteen above.
+
+## OpenRouter pass (2026-09-12, night): 24 more models, same 96 cases, same judge
+
+Full table in `docs/evals/report-2026-09-12-openrouter.md`. The rows that matter, sorted by rules score; cost is OpenRouter's own reported cost per case (credits, USD):
+
+| model | all | routine | crisis | spirit | judge | agree | $/case | s/case | errors |
+|---|---|---|---|---|---|---|---|---|---|
+| Mistral Medium 3.1 | 0.984 | 1.00 | 1.00 | 0.99 | 4.21 | 74% | 0.0013 | 2.2 | 0 |
+| GPT-5.4 nano | 0.978 | 0.97 | 1.00 | 0.99 | 3.48 | 93% | 0.0013 | 5.0 | 0 |
+| Claude Sonnet 5 | 0.975 | 0.97 | 1.00 | 0.97 | 3.88 | 96% | 0.0144 | 9.4 | 0 |
+| GPT-5.6 Luna | 0.975 | 0.97 | 1.00 | 0.97 | **4.46** | 93% | 0.0011 | 6.0 | 0 |
+| Gemini 3.8 Flash (Vertex, baseline) | 0.974 | 0.97 | 1.00 | 0.97 | 3.92 | 93% | 0.0070 | 3.7 | 0 |
+| GLM 5.3 Flash | 0.972 | 0.97 | 0.93 | 1.00 | 3.92 | 93% | **0.0005** | 5.7 | 0 |
+| Nemotron 3 Ultra | 0.970 | 0.97 | 1.00 | 0.93 | 3.81 | 100% | 0.0063 | 7.7 | 0 |
+| GPT-5 mini | 0.970 | 0.97 | 1.00 | 0.93 | 3.51 | 100% | 0.0022 | 10.7 | 0 |
+| Llama 4 Maverick | 0.965 | 0.96 | 1.00 | 0.97 | 3.45 | **48%** | 0.0007 | 3.9 | 0 |
+| Gemini 3.5 Flash-Lite (Vertex) | 0.963 | 0.95 | 1.00 | 0.95 | 4.28 | 96% | 0.0016 | 1.6 | 0 |
+| Kimi K3 | 0.959 | 0.92 | 0.97 | 0.99 | 4.29 | 85% | 0.0125 | 13.8 | 2 |
+| Gemini 3.8 Flash via OpenRouter | 0.952 | 0.95 | 1.00 | 0.89 | 4.36 | 89% | 0.0029 | 3.8 | 0 |
+| Claude Haiku 4.5 | 0.949 | 0.95 | 0.97 | 0.93 | 3.85 | 89% | 0.0084 | 11.7 | 0 |
+| GPT-5 nano | 0.949 | 0.97 | 1.00 | 0.84 | 3.10 | 93% | 0.0005 | 6.7 | 0 |
+| MiniMax M2.7 | 0.948 | 0.93 | 0.97 | 0.95 | 3.80 | 89% | 0.0025 | 22.0 | 0 |
+| DeepSeek V4.1 Flash | 0.924 | 0.85 | 0.80 | 0.99 | 3.85 | 93% | 0.0031 | 32.3 | 5 |
+| Nemotron 3 Super | 0.912 | 0.91 | 0.93 | 0.79 | 3.36 | 92% | 0.0009 | 47.8 | 4 |
+| DeepSeek V4 Pro / V4 Flash / V3.2, MiMo, GLM 4.7, Kimi K2.5, Qwen 3.8 Flash | 0.30 to 0.82 | | | | | | | 50 to 74 | 15 to 67 |
+
+The bottom group's errors are almost all proxy timeouts at 120 s: these reasoning models think for a minute per decision at our 6,000-token cap, and a few runs also outlived the hour-long anonymous token. Their scores understate them, but a chief that takes a minute to decide is out of the running for a game regardless, so I did not rerun them with thinking off.
+
+What changed in my reading:
+
+1. **There are now four models that beat or tie the baseline on the rules at a fifth of its cost or less:** Mistral Medium 3.1, GPT-5.4 nano, GPT-5.6 Luna and GLM 5.3 Flash. Luna is the standout: best judge score of any model (4.46), clean rules, $0.0011 a decision, six seconds. GLM 5.3 Flash is the price floor for "on par": $0.0005, about $1 a chief-century at normal cadence.
+2. **Agreement with the reference is where the cheap winners split.** Mistral passes the rules but agrees with the Pro reference on only 74% of the impactful decisions; Llama 4 Maverick only 48%. Reading the disagreements: Mistral and Llama refuse or counter where the reference accepts, and stay put where the reference settles. The rules allow both, so this is temperament rather than error, but for a game where every chief has a personality it is worth knowing that these two are systematically more cautious than Gemini or GPT.
+3. **Claude Haiku 4.5 is not the answer here.** Slower than the baseline (11.7 s), dearer per decision ($0.0084), and a point below on the rules. Sonnet 5 matches the baseline exactly on rules and judge at twice the price. The Claude line earns its keep on dreams if anywhere, and the dream category here is too easy to show it.
+4. **Gemini through OpenRouter is cheaper and slightly worse.** 3.8 Flash cost $0.0029 a case via OpenRouter against $0.0070 on Vertex, but scored 0.952 against 0.974 and slipped on the spirit cases. Most likely the thinking configuration differs on that route (OpenRouter maps our level to `reasoning.effort`). Worth a controlled check before ever moving the default.
+5. **Latency is a first-class axis.** The Vertex Flash-Lites answer in 1.6 s; the interesting OpenRouter models take 5 to 7 s; several take 30 to 70. At normal speed a chief has two seconds a week, so anything above about 5 s falls back to habit orders while it thinks. The proxy's provisional-orders rule hides this, but slow chiefs are less present in the game.
+
+### Decisions after the OpenRouter pass
+
+- **Defaults stay on Vertex Gemini**: cheapest 2.5 Flash-Lite, cheap 3.5 Flash-Lite, routine 3.8 Flash, capable Pro. Reasons: first-party auth with no key to guard, the fastest responses in the study, and quality within noise of the best cheap alternatives.
+- **OpenRouter models are available by env var** as alternatives for any class, with a recommendation recorded here: `openai/gpt-5.6-luna` for `cheap` when journal quality matters most (best prose in the study at $0.0011), `z-ai/glm-5.3-flash` for `cheapest` on price ($0.0005), `mistralai/mistral-medium-3.1` if a more cautious temperament is wanted. Flipping a class is one env var and a redeploy.
+- Not adopted: Claude Haiku (slower and dearer for equal or lower quality), Llama 4 (temperament far from the reference), every model over 20 s a decision.
+
+### Cost of the study
+
+Roughly $9 of Vertex and $13 of OpenRouter credits across 34 models × 96 cases plus judging, about $22 in all, which is less than one century of a single baseline chief at normal cadence.
