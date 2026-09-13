@@ -2,7 +2,7 @@
 Run from the repo root: uv run --with matplotlib --with numpy python scripts/make_eval_charts.py
 """
 import json, glob, os, math
-import matplotlib; matplotlib.use('Agg')
+import matplotlib; matplotlib.use('Agg'); import matplotlib.ticker
 import matplotlib.pyplot as plt
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,16 +29,24 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'docs', 'evals', 'results', '*.json
     runs.append(dict(model=d['model'], label=LABEL.get(d['model'], d['model']), score=mean([r['score'] for r in rs]), cost=mean([r['cost'] for r in ok]) if ok else 0,
                      ms=mean([r['ms'] for r in ok]) if ok else 0, errors=len(rs) - len(ok), judge=mean([r['judge'] for r in rs if r.get('judge') is not None]),
                      cats={c: mean([r['score'] for r in rs if r['category'] == c]) for c in CATS}, fam=FAMILY(d['model'])))
+# Per-label nudges (dx, dy in points, optional ha) where the default top-right placement collides with a neighbour.
+def annotate(ax, label, xy, nudge):
+    dx, dy, *ha = nudge.get(label, (5, 4))
+    ax.annotate(label, xy, xytext=(dx, dy), textcoords='offset points', fontsize=7.5, ha=ha[0] if ha else 'left')
+
 plt.rcParams.update({'font.size': 10, 'axes.spines.top': False, 'axes.spines.right': False, 'figure.facecolor': 'white', 'axes.facecolor': 'white'})
 
 # 1. score vs cost, log x
+NUDGE1 = {'GPT-5 nano': (5, -12), 'Gemini 2.5 Flash-Lite (OR)': (5, -22), 'Gemini 3.5 Flash-Lite (OR)': (-8, -11, 'right'), 'MiniMax M2.7': (5, -22),
+          'Gemini 3.1 Flash-Lite': (-6, 4, 'right'), 'Claude Sonnet 5': (5, -12), 'GPT-5.6 Luna': (-6, 12, 'right'), 'Gemini 3.8 Flash (Vertex)': (-6, 4, 'right'),
+          'Llama 4 Maverick': (5, -12), 'GLM 5.3 Flash': (5, -12), 'Nemotron 3 Ultra': (5, -12), 'Gemini 3.1 Pro (Vertex)': (-6, 4, 'right')}
 fig, ax = plt.subplots(figsize=(9, 6))
 for r in runs:
     if r['cost'] <= 0 or r['errors'] > 10: continue
     ax.scatter(r['cost'] * 1000, r['score'], s=70, color=COL[r['fam']], alpha=0.85, edgecolor='white', linewidth=0.8, zorder=3)
-    ax.annotate(r['label'], (r['cost'] * 1000, r['score']), xytext=(5, 4), textcoords='offset points', fontsize=7.5)
+    annotate(ax, r['label'], (r['cost'] * 1000, r['score']), NUDGE1)
 ax.set_xscale('log'); ax.set_xlabel('cost per decision, tenths of a cent (log scale)'); ax.set_ylabel('rule score, mean over 96 cases'); ax.set_ylim(0.88, 1.0)
-ax.axhline(0.974, color='#999', linestyle=':', linewidth=1); ax.text(0.4, 0.9755, 'Gemini 3.8 Flash baseline', fontsize=8, color='#666')
+ax.axhline(0.974, color='#999', linestyle=':', linewidth=1); ax.text(0.33, 0.9755, 'Gemini 3.8 Flash baseline', fontsize=8, color='#666')
 for k, c in COL.items(): ax.scatter([], [], color=c, label=k)
 ax.legend(loc='lower left', frameon=False); ax.set_title('Chief decisions: quality against cost, models with fewer than 10 failed cases'); ax.grid(axis='y', color='#eee')
 fig.tight_layout(); fig.savefig(os.path.join(OUT, 'eval-score-vs-cost.svg')); fig.savefig('/tmp/eval-score-vs-cost.png', dpi=110); plt.close(fig)
@@ -46,25 +54,29 @@ fig.tight_layout(); fig.savefig(os.path.join(OUT, 'eval-score-vs-cost.svg')); fi
 # 2. category profile for a chosen set
 pick = ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash-lite', 'openai/gpt-5.6-luna', 'z-ai/glm-5.3-flash', 'mistralai/mistral-medium-3.1', 'anthropic/claude-haiku-4.5', 'openai/gpt-oss-120b-maas', 'google/gemma-4-26b-a4b-it-maas']
 sel = [r for r in runs if r['model'] in pick]; sel.sort(key=lambda r: pick.index(r['model']))
-fig, ax = plt.subplots(figsize=(10, 5)); w = 0.8 / len(sel)
+fig, ax = plt.subplots(figsize=(10, 5.6)); w = 0.8 / len(sel)
 for i, r in enumerate(sel):
     ax.bar([j + i * w for j in range(len(CATS))], [r['cats'][c] for c in CATS], width=w, label=r['label'], color=plt.cm.viridis(i / max(1, len(sel) - 1)))
-ax.set_xticks([j + 0.4 - w / 2 for j in range(len(CATS))]); ax.set_xticklabels(CATS); ax.set_ylim(0.4, 1.02); ax.set_ylabel('rule score'); ax.set_title('Where cheap models fall short: by category'); ax.legend(fontsize=7.5, ncol=3, frameon=False, loc='lower left'); ax.grid(axis='y', color='#eee')
+ax.set_xticks([j + 0.4 - w / 2 for j in range(len(CATS))]); ax.set_xticklabels(CATS); ax.set_ylim(0.4, 1.02); ax.set_ylabel('rule score'); ax.set_title('Where cheap models fall short: by category'); ax.legend(fontsize=8, ncol=3, frameon=False, loc='upper center', bbox_to_anchor=(0.5, -0.07)); ax.grid(axis='y', color='#eee')
 fig.tight_layout(); fig.savefig(os.path.join(OUT, 'eval-categories.svg')); fig.savefig('/tmp/eval-categories.png', dpi=110); plt.close(fig)
 
 # 3. latency, sorted
 lat = sorted([r for r in runs if r['ms'] > 0], key=lambda r: r['ms'])
 fig, ax = plt.subplots(figsize=(9, 8))
 ax.barh([r['label'] for r in lat], [r['ms'] / 1000 for r in lat], color=[COL[r['fam']] for r in lat])
-ax.axvline(5, color='#b3261e', linestyle=':', linewidth=1); ax.text(5.2, 0.5, 'a chief gets ~2 s a week at normal speed; above ~5 s it acts on habit while thinking', fontsize=7.5, color='#b3261e', rotation=90, va='bottom')
-ax.set_xscale('log'); ax.set_xlabel('seconds per decision (log scale)'); ax.set_title('Latency: the axis that disqualified nine models'); ax.grid(axis='x', color='#eee'); ax.tick_params(axis='y', labelsize=8)
+ax.axvline(5, color='#b3261e', linestyle=':', linewidth=1); ax.text(5.3, 4.5, '5 s: a chief gets about 2 s a week at normal speed;\nabove this it acts on habit while it thinks', fontsize=7.5, color='#b3261e', va='center')
+ax.set_xscale('log'); ax.set_xlim(1, 100); ax.set_xticks([1, 2, 5, 10, 20, 50, 100]); ax.set_xticklabels(['1', '2', '5', '10', '20', '50', '100']); ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
+ax.set_xlabel('seconds per decision (log scale)'); ax.set_title('Latency: the axis that disqualified nine models'); ax.grid(axis='x', color='#eee'); ax.tick_params(axis='y', labelsize=8)
 fig.tight_layout(); fig.savefig(os.path.join(OUT, 'eval-latency.svg')); plt.close(fig)
 
 # 4. judge vs rules
+NUDGE4 = {'Gemini 3.8 Flash (Vertex)': (5, -12), 'GLM 5.3 Flash': (5, 12), 'Gemini 3.1 Pro (Vertex)': (-6, 4, 'right'), 'Gemini 3.5 Flash-Lite (OR)': (-6, 4, 'right'),
+          'Gemini 2.5 Flash': (5, -12), 'Gemini 3.1 Flash-Lite': (5, 4), 'Gemini 2.5 Flash-Lite (OR)': (-6, -12, 'right'), 'Kimi K3': (-6, -12, 'right'),
+          'Claude Sonnet 5': (5, -12), 'Nemotron 3 Ultra': (5, -12), 'Llama 4 Maverick': (5, -12), 'GPT-5.4 nano': (5, -12)}
 fig, ax = plt.subplots(figsize=(8, 6))
 for r in runs:
     if r['errors'] > 10 or math.isnan(r['judge']): continue
-    ax.scatter(r['score'], r['judge'], s=70, color=COL[r['fam']], alpha=0.85, edgecolor='white', zorder=3); ax.annotate(r['label'], (r['score'], r['judge']), xytext=(5, 3), textcoords='offset points', fontsize=7.5)
+    ax.scatter(r['score'], r['judge'], s=70, color=COL[r['fam']], alpha=0.85, edgecolor='white', zorder=3); annotate(ax, r['label'], (r['score'], r['judge']), NUDGE4)
 ax.set_xlabel('rule score'); ax.set_ylabel('judge score for journals and dream replies, 1 to 5'); ax.set_xlim(0.9, 1.0); ax.set_title('Doing the right thing and saying it well are different skills'); ax.grid(color='#eee')
 fig.tight_layout(); fig.savefig(os.path.join(OUT, 'eval-judge-vs-rules.svg')); plt.close(fig)
 
@@ -72,6 +84,6 @@ fig.tight_layout(); fig.savefig(os.path.join(OUT, 'eval-judge-vs-rules.svg')); p
 tiers = [('habit', 0), ('thrifty', 1.16), ('standard', 5.07), ('lavish', 16.2), ('baseline: 3.8 Flash for everything', 13.64), ('3.1 Pro for everything', 34.4)]
 fig, ax = plt.subplots(figsize=(8, 4)); ax.barh([t[0] for t in tiers], [t[1] for t in tiers], color=['#999', '#2f6f7a', '#2f6f7a', '#2f6f7a', '#c9a227', '#c9a227'])
 for i, t in enumerate(tiers): ax.text(t[1] + 0.4, i, f'${t[1]:.2f}', va='center', fontsize=9)
-ax.set_xlabel('dollars per chief per century, normal cadence (13 routine + 4 impactful decisions a year)'); ax.set_title('The intelligence knob, costed from measured decisions'); ax.grid(axis='x', color='#eee')
+ax.set_xlabel('dollars per chief per century at normal cadence (17 decisions a year)'); ax.set_title('The intelligence knob, costed from measured decisions'); ax.grid(axis='x', color='#eee')
 fig.tight_layout(); fig.savefig(os.path.join(OUT, 'eval-tiers.svg')); plt.close(fig)
 print('wrote', len(os.listdir(OUT)), 'charts')
