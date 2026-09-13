@@ -8,7 +8,7 @@
  * MODELS.md for the SKU ids and sources. Update this table when prices change; it is served on
  * GET /v1/models so the eval runner can recompute costs.
  */
-export type ProviderName = 'gemini' | 'anthropic' | 'openai-compat';
+export type ProviderName = 'gemini' | 'anthropic' | 'openai-compat' | 'openrouter';
 
 export interface Pricing {
   /** Uncached input tokens. */
@@ -33,6 +33,24 @@ export interface ModelInfo {
   minCacheTokens: number;
   /** Short note surfaced on /v1/models (deprecations, enablement, regions). */
   note?: string;
+  /** OpenRouter `supported_parameters` (refreshed hourly); native JSON needs 'structured_outputs' in here. */
+  supportedParameters?: string[];
+}
+
+/**
+ * OpenRouter list prices, USD per 1M tokens, taken from `GET https://openrouter.ai/api/v1/models`
+ * (per-token values x 1e6) on 2026-09-12. These are the static fallback; the service overwrites them
+ * in place from the same endpoint at startup and hourly (`providers/openrouter.ts`). `cacheWrite` is
+ * the total price of a written token: the listed `input_cache_write` where it is a full price
+ * (Anthropic, Qwen), input + listed add-on where OpenRouter lists only the storage part (Gemini).
+ */
+function openrouter(id: string, input: number, output: number, cacheRead: number | undefined, cacheWrite: number | undefined, note?: string): ModelInfo {
+  return {
+    id, provider: 'openrouter',
+    pricing: { input, output, cacheRead: Math.min(input, cacheRead ?? input), cacheWrite: cacheWrite === undefined ? input : cacheWrite >= input ? cacheWrite : Math.round((input + cacheWrite) * 1e6) / 1e6 },
+    nativeJsonSchema: false, minCacheTokens: 0, supportedParameters: ['structured_outputs'],
+    ...(note ? { note } : {}),
+  };
 }
 
 const GEMINI_LOCATION_NOTE = 'Gemini 3.x requires the global endpoint';
@@ -130,6 +148,33 @@ export const MODELS: Record<string, ModelInfo> = {
     pricing: { input: 0.15, output: 0.6, cacheRead: 0.015, cacheWrite: 0.15 },
     nativeJsonSchema: false, minCacheTokens: 0, note: 'global endpoint only',
   },
+
+  // ---- OpenRouter (API key from Secret Manager; ids carry the vendor prefix, e.g. google/ vs the Vertex gemini-* ids) ----
+  'anthropic/claude-haiku-4.5': openrouter('anthropic/claude-haiku-4.5', 1.0, 5.0, 0.1, 1.25),
+  'anthropic/claude-sonnet-5': openrouter('anthropic/claude-sonnet-5', 2.0, 10.0, 0.2, 2.5),
+  'openai/gpt-5-mini': openrouter('openai/gpt-5-mini', 0.25, 2.0, 0.025, undefined),
+  'openai/gpt-5-nano': openrouter('openai/gpt-5-nano', 0.05, 0.4, 0.005, undefined),
+  'openai/gpt-5.4-nano': openrouter('openai/gpt-5.4-nano', 0.2, 1.25, 0.02, undefined),
+  'openai/gpt-5.6-luna': openrouter('openai/gpt-5.6-luna', 0.2, 1.2, 0.02, 0.25),
+  'openai/gpt-5.6-luna-pro': openrouter('openai/gpt-5.6-luna-pro', 0.2, 1.2, 0.02, 0.25, 'same list price as gpt-5.6-luna'),
+  'meta-llama/llama-4-maverick': openrouter('meta-llama/llama-4-maverick', 0.2, 0.696, undefined, undefined, 'no cache-read price listed'),
+  'moonshotai/kimi-k2.5': openrouter('moonshotai/kimi-k2.5', 0.45, 2.25, 0.07, undefined),
+  'moonshotai/kimi-k3': openrouter('moonshotai/kimi-k3', 2.648138, 13.282724, 0.302644, undefined, 'dearer than the baseline; quality candidate for the upper classes'),
+  'z-ai/glm-5.3-flash': openrouter('z-ai/glm-5.3-flash', 0.15, 0.5, 0.03, undefined),
+  'z-ai/glm-4.7': openrouter('z-ai/glm-4.7', 0.4, 1.75, 0.08, undefined),
+  'minimax/minimax-m2.7': openrouter('minimax/minimax-m2.7', 0.3, 1.2, 0.06, undefined),
+  'deepseek/deepseek-v3.2': openrouter('deepseek/deepseek-v3.2', 0.269, 0.4, 0.1345, undefined),
+  'deepseek/deepseek-v4.1-flash': openrouter('deepseek/deepseek-v4.1-flash', 0.15, 0.6, 0.003, undefined),
+  'deepseek/deepseek-v4-flash': openrouter('deepseek/deepseek-v4-flash', 0.06566, 0.13132, 0.013132, undefined),
+  'deepseek/deepseek-v4-pro': openrouter('deepseek/deepseek-v4-pro', 1.6, 3.2, 0.135, undefined),
+  'mistralai/mistral-medium-3.1': openrouter('mistralai/mistral-medium-3.1', 0.4, 2.0, 0.04, undefined),
+  'xiaomi/mimo-v2.5': openrouter('xiaomi/mimo-v2.5', 0.14, 0.28, 0.0028, undefined),
+  'qwen/qwen3.8-flash': openrouter('qwen/qwen3.8-flash', 0.15, 0.47, 0.016, 0.2),
+  'nvidia/nemotron-3-ultra-550b-a55b': openrouter('nvidia/nemotron-3-ultra-550b-a55b', 0.625, 3.125, 0.1875, undefined, 'paid id (not :free)'),
+  'nvidia/nemotron-3-super-120b-a12b': openrouter('nvidia/nemotron-3-super-120b-a12b', 0.085, 0.4, undefined, undefined, 'paid id (not :free); no cache-read price listed'),
+  'google/gemini-3.8-flash': openrouter('google/gemini-3.8-flash', 0.75, 3.75, 0.075, 0.041667, 'via OpenRouter, not Vertex (see gemini-3.8-flash)'),
+  'google/gemini-3.5-flash-lite': openrouter('google/gemini-3.5-flash-lite', 0.3, 2.5, 0.03, 0.083333, 'via OpenRouter, not Vertex (see gemini-3.5-flash-lite)'),
+  'google/gemini-2.5-flash-lite': openrouter('google/gemini-2.5-flash-lite', 0.1, 0.4, 0.01, 0.083333, 'via OpenRouter, not Vertex (see gemini-2.5-flash-lite)'),
 };
 
 export function modelInfo(id: string): ModelInfo | undefined {

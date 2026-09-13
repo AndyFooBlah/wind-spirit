@@ -4,8 +4,9 @@ The model proxy from `docs/technical-design.md` §9. A small Node 24 HTTP servic
 verifies Firebase ID tokens, enforces a per-user daily token quota (Firestore), maps a model *class*
 (or, for evals, an allowlisted explicit model id) to a provider adapter, calls Vertex AI with
 Application Default Credentials, and logs one JSON line per request with tokens, cached tokens and an
-estimated cost. There are no API keys anywhere: Gemini, Claude-on-Vertex and the open MaaS models are
-all reached with the runtime service account's access token.
+estimated cost. Gemini, Claude-on-Vertex and the open MaaS models are all reached with the runtime
+service account's access token; the only API key is OpenRouter's, which lives in Secret Manager and is
+injected as an env var (see [Secrets](#secrets)).
 
 - Service URL (prod): `https://llm-proxy-406179055859.us-central1.run.app`
 - GCP project: `wind-spirit-prod`, region `us-central1`, runtime SA `llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com`
@@ -19,8 +20,21 @@ all reached with the runtime service account's access token.
 | `gemini.ts` | `gemini-*` | `@google/genai` (Vertex, ADC, `VERTEX_LOCATION`, default `global`) | native (`responseJsonSchema`) + validated | implicit (reported) and explicit `cachedContents` on `cache: {key, ttlSeconds}` |
 | `anthropic.ts` | `claude-*` | `@anthropic-ai/vertex-sdk` (`rawPredict` under the hood; ADC; `ANTHROPIC_LOCATION`, default `global`) | instruct + validate (Vertex gates native structured outputs behind an org policy) | `cache_control: {type: 'ephemeral'}` on the system block and the last `stable` message |
 | `openai-compat.ts` | `<publisher>/<model>-maas` | Vertex OpenAI-compatible chat completions (`.../endpoints/openapi/chat/completions`, bearer = ADC token; `MAAS_LOCATION` default `global`, per-model override in the catalog) | `response_format: json_schema` where the model supports it, else instruct + validate | none to request; `prompt_tokens_details.cached_tokens` reported when present |
+| `openrouter.ts` | `<vendor>/<model>` (e.g. `openai/gpt-5-nano`, `google/gemini-3.8-flash`; the `google/` prefix distinguishes these from the Vertex `gemini-*` ids) | `https://openrouter.ai/api/v1/chat/completions`, `Authorization: Bearer $OPENROUTER_API_KEY`, `HTTP-Referer` + `X-OpenRouter-Title`/`X-Title` app attribution | instruct + validate by default; native `response_format: json_schema` only when `OPENROUTER_NATIVE_JSON=true` **and** the model's `supported_parameters` includes `structured_outputs` | provider-side automatic caching only; `prompt_tokens_details.{cached_tokens,cache_write_tokens}` reported |
 
-All three implement one `Provider` interface (`src/providers/types.ts`): `generate(req, signal) → {text, usage, model, finishReason, cacheNote}` and `stream(req, signal)` yielding `{text}` chunks then one `{done, usage}`. The server validates JSON output against the schema with Ajv for every provider, retries once on a miss, then answers `502 bad_model_output`.
+All four implement one `Provider` interface (`src/providers/types.ts`): `generate(req, signal) → {text, usage, model, finishReason, cacheNote, cost?, costSource?}` and `stream(req, signal)` yielding `{text}` chunks then one `{done, usage, cost?, costSource?}`. The two OpenAI-style adapters share their body shaping, SSE parsing and usage mapping in `src/providers/chat-completions.ts`. The server validates JSON output against the schema with Ajv for every provider, retries once on a miss, then answers `502 bad_model_output`.
+
+OpenRouter always returns `usage.cost` (credits, USD) — no request option is needed; `usage: {include: true}` and
+`stream_options.include_usage` are documented as deprecated no-ops — and the proxy uses that figure as
+`cost` with `costSource: "openrouter"` instead of the pricing table (`costSource: "table"` everywhere
+else). OpenRouter prices are pulled from the public `GET https://openrouter.ai/api/v1/models` at
+startup and hourly (`OPENROUTER_PRICING_REFRESH_MS`) and overwrite the static values in `src/models.ts`;
+`GET /v1/models` reports whether the live pull succeeded under `openrouter.pricing`.
+
+When `OPENROUTER_API_KEY` is missing or is the placeholder `unset`, the OpenRouter provider is
+**disabled**: `/health` shows `"openrouter": "disabled"`, `/v1/models` lists its models with
+`available: false` and `note: "OPENROUTER_API_KEY not set"`, and a request naming one of them
+answers `503 {"error":"provider_disabled"}` before touching the quota.
 
 The catalog in `src/models.ts` maps each model id to its provider, endpoint location, list prices and cache minimum. Ids that are not in the catalog are assumed to be Gemini and cost `0` (with a warning in the log), so a class can be pointed at a brand-new Gemini model before the catalog catches up.
 
@@ -60,6 +74,7 @@ Response `200`:
   "json": { },                          // present when schema was given; parsed + validated model output
   "usage": { "input": 7549, "output": 45, "thoughts": 30, "cached": 7543, "cacheWrite": 0 },
   "cost": 0.00023059,                   // USD, from the pricing table (cached tokens at the cache-read price)
+  "costSource": "table",                // "openrouter" when the provider reported the charge itself
   "model": "gemini-3.5-flash-lite",
   "provider": "gemini",
   "ms": 812,
@@ -84,7 +99,7 @@ Same body. Responds with Server-Sent Events:
 ```
 data: {"text":"chunk"}
 data: {"text":"chunk"}
-data: {"done":true,"usage":{...},"cost":0.0000426,"model":"openai/gpt-oss-120b-maas","provider":"openai-compat","ms":889,"finishReason":"stop"}
+data: {"done":true,"usage":{...},"cost":0.0000426,"costSource":"table","model":"openai/gpt-oss-120b-maas","provider":"openai-compat","ms":889,"finishReason":"stop"}
 ```
 
 A mid-stream failure ends the stream with `data: {"error":"...","message":"..."}`. Reasoning models
@@ -95,11 +110,13 @@ that is not forwarded, so a small `maxOutputTokens` can end with `finishReason: 
 
 Returns the class mapping, the eval allowlist and the pricing table so the eval runner can recompute
 costs: `{ classes: {cheap, routine, capable, premium}, evalModels: [...], pricingUnit: "USD per 1M tokens",
-pricing: { "<id>": { provider, location, input, output, cacheRead, cacheWrite, nativeJsonSchema, minCacheTokens, note? } } }`.
+openrouter: { enabled, nativeJson, pricing: {source: "static"|"openrouter-live", fetchedAt?, updated?, missing?, error?} },
+pricing: { "<id>": { provider, location, available, input, output, cacheRead, cacheWrite, nativeJsonSchema, minCacheTokens, supportedParameters?, note? } } }`.
+`available` is `false` (with `note: "OPENROUTER_API_KEY not set"`) for OpenRouter models while the key is unset.
 
 ### `GET /health`
 
-`{ ok: true, models: {cheap, routine, capable, premium}, requireAuth, location }`. Add `?deep=1` to run a tiny
+`{ ok: true, models: {cheap, routine, capable, premium}, requireAuth, location, openrouter: "enabled"|"disabled" }`. Add `?deep=1` to run a tiny
 generation on each class and get `{ deep: { cheap: {ok, ms, model, usage, cost, ...}, routine: ..., capable: ..., premium: ... } }`
 (503 if any fails). No auth required. `/healthz` is accepted as an alias, but on Cloud Run the Google
 Frontend intercepts exactly `/healthz` on `*.run.app` and returns its own HTML 404, so use `/health` there.
@@ -114,6 +131,7 @@ Frontend intercepts exactly `/healthz` on `*.run.app` and returns its own HTML 4
 | 429 | `quota` | daily token quota used; `resetAt` is the next UTC midnight |
 | 502 | `upstream` / `bad_model_output` | the provider rejected the call, or JSON output never validated |
 | 503 | `quota_unavailable` | Firestore unreachable (fails closed: the quota is the cost backstop) |
+| 503 | `provider_disabled` | the model's provider has no credential on this deployment (OpenRouter with `OPENROUTER_API_KEY` unset) |
 | 504 | `timeout` | model call exceeded `REQUEST_TIMEOUT_MS` |
 
 ## Caching
@@ -132,6 +150,9 @@ Frontend intercepts exactly `/healthz` on `*.run.app` and returns its own HTML 4
   and `cacheWrite`/`cached` stay 0. `key` and `ttlSeconds` are not used (Anthropic caches by content, 5 min TTL).
 - **OpenAI-compatible MaaS**: nothing to request; `cached_tokens` is reported when the backend
   provides it (Qwen and Gemma do; gpt-oss-120b and DeepSeek-V3.2 do not).
+- **OpenRouter**: the proxy sends no `cache_control` breakpoints; vendors with automatic caching
+  (OpenAI, DeepSeek, Moonshot, Z.AI, Gemini implicit) report `cached_tokens`/`cache_write_tokens` on their
+  own and OpenRouter's `usage.cost` already reflects the discount. `cacheNote` says so when `cache` is sent.
 
 ## Environment
 
@@ -152,24 +173,56 @@ Frontend intercepts exactly `/healthz` on `*.run.app` and returns its own HTML 4
 | `QUOTA_COLLECTION` | `quotas` | Firestore collection; doc id `YYYY-MM-DD_<kind>_<id>` |
 | `CACHE_COLLECTION` | `caches` | Firestore collection for explicit Gemini cache records, doc id = `cache.key` |
 | `MAX_BODY_BYTES` | `2000000` | request body cap |
+| `OPENROUTER_API_KEY` | *(unset)* | **secret**, injected by Cloud Run from Secret Manager `openrouter-api-key` (`--set-secrets`). Missing or the literal `unset` disables the OpenRouter provider. Never logged, never in `/v1/models`, never sent to a client |
+| `OPENROUTER_NATIVE_JSON` | `false` | `true` sends `response_format: json_schema` to OpenRouter models whose `supported_parameters` include `structured_outputs`; default is instruct + validate (constrained decoding on Vertex MaaS stripped optional fields) |
+| `OPENROUTER_REFERER` | `https://wind-spirit-prod.web.app` | `HTTP-Referer` app-attribution header |
+| `OPENROUTER_TITLE` | `Wind Spirit` | `X-OpenRouter-Title` / `X-Title` app-attribution header |
+| `OPENROUTER_PRICING_REFRESH_MS` | `3600000` | how often to re-pull OpenRouter prices (0 = only at startup) |
 | `PORT` | `8080` | set by Cloud Run |
 
 Model ids live only in the env vars and `src/models.ts`. Clients send a class (or an allowlisted id).
 When Google ships new models, change the env var on the service (`gcloud run services update llm-proxy
 --update-env-vars MODEL_ROUTINE=...`), add the price to `src/models.ts`, and check `/health?deep=1`.
 
+## Secrets
+
+The only secret is the OpenRouter API key. It is stored in Secret Manager as `openrouter-api-key`
+(project `wind-spirit-prod`; `llm-proxy-sa` has `roles/secretmanager.secretAccessor` on it) and reaches
+the container only as the env var `OPENROUTER_API_KEY` via `--set-secrets` on deploy. Version 1 is the
+placeholder literal `unset`, which the service treats as "no key" (provider disabled). Rules:
+
+- never put the key in an env var on the command line, in `firebase-web-config.json`, in git, or in a log line;
+- the service reads it at call time only (`src/providers/openrouter.ts`), the startup log prints
+  `openrouter: enabled|disabled`, nothing else;
+- clients still only ever send a class or an allowlisted model id; the key never leaves the server.
+
+Rotate (or set for the first time):
+
+```sh
+printf '%s' "$KEY" | gcloud secrets versions add openrouter-api-key --data-file=- --project wind-spirit-prod
+# pick up `latest` without a rebuild:
+gcloud run services update llm-proxy --project wind-spirit-prod --region us-central1 \
+  --update-secrets OPENROUTER_API_KEY=openrouter-api-key:latest
+# (or simply redeploy with the command in Deploy; it references :latest too)
+curl -s "$URL/health" | jq .openrouter      # "enabled"
+```
+
+To disable again, add a new version whose value is `unset` and run the same `services update`. Old
+versions can be destroyed with `gcloud secrets versions destroy N --secret openrouter-api-key`.
+
 ## Logging
 
 One JSON line per request: `route, class, model, provider, principal (uid, or hashed ip), cacheKey,
-promptSha256, inputTokens, outputTokens, thoughtTokens, cachedTokens, cacheWriteTokens, costUsd,
-cacheNote, status, ms`. Prompt bodies are never logged. Cloud Logging picks up `severity`.
+promptSha256, inputTokens, outputTokens, thoughtTokens, cachedTokens, cacheWriteTokens, costUsd, costSource,
+cacheNote, status, ms`. Prompt bodies and the OpenRouter key are never logged. Cloud Logging picks up `severity`.
 
 ## Deploy
 
 Prerequisites (done once, 2026-09-12): Firebase added to the project, Anonymous sign-in enabled,
 Firestore native database in `nam5`, service account `llm-proxy-sa` with `roles/aiplatform.user` and
 `roles/datastore.user` (this is enough for Gemini and the open MaaS models; Claude additionally needs
-the Model Garden **Enable** click-through per model in the console, see `MODELS.md` §2).
+the Model Garden **Enable** click-through per model in the console, see `MODELS.md` §2), Secret Manager
+secret `openrouter-api-key` with `roles/secretmanager.secretAccessor` for `llm-proxy-sa` (see Secrets).
 
 ```sh
 cd /path/to/wind-spirit
@@ -179,6 +232,7 @@ gcloud run deploy llm-proxy \
   --service-account llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com \
   --allow-unauthenticated \
   --set-env-vars GOOGLE_CLOUD_PROJECT=wind-spirit-prod,VERTEX_LOCATION=global,ANTHROPIC_LOCATION=global,MAAS_LOCATION=global,MODEL_CHEAP=gemini-3.5-flash-lite,MODEL_ROUTINE=gemini-3.8-flash,MODEL_CAPABLE=gemini-3.1-pro-preview,MODEL_PREMIUM=gemini-3.1-pro-preview,REQUIRE_AUTH=true,DAILY_TOKEN_QUOTA=2000000 \
+  --set-secrets OPENROUTER_API_KEY=openrouter-api-key:latest \
   --timeout 300 --concurrency 40 --memory 512Mi --cpu 1 \
   --min-instances 0 --max-instances 5
 ```
@@ -194,7 +248,7 @@ Verify after every deploy:
 
 ```sh
 URL=$(gcloud run services describe llm-proxy --project wind-spirit-prod --region us-central1 --format 'value(status.url)')
-curl -s "$URL/health?deep=1" | jq
+curl -s "$URL/health?deep=1" | jq          # .openrouter is "disabled" until a real key version exists
 ```
 
 ## Local development
@@ -209,8 +263,10 @@ curl -s "localhost:8080/health?deep=1" | jq
 ```
 
 Unit tests: `pnpm --filter @wind-spirit/llm-proxy test` (request validation, quota keys, pricing/cost,
-provider selection, usage normalisation, Anthropic/OpenAI request shaping, SSE parsing, JSON
-extraction/validation). The live model calls are exercised by `/health?deep=1` and the post-deploy curls.
+provider selection, usage normalisation, Anthropic/OpenAI/OpenRouter request shaping, SSE parsing, JSON
+extraction/validation, the OpenRouter disabled path and pricing-refresh parser with a mocked fetch).
+Locally, export a real `OPENROUTER_API_KEY` (from your own OpenRouter account; never the prod secret
+value) to exercise the OpenRouter models. The live model calls are exercised by `/health?deep=1` and the post-deploy curls.
 
 Getting an ID token for manual testing: with the web config in `firebase-web-config.json`, call
 `signInAnonymously` from the Firebase JS SDK and use `getIdToken()`. From a shell:

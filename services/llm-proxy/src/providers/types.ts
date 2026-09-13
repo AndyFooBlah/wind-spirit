@@ -31,13 +31,21 @@ export interface ProviderResult {
   finishReason?: string;
   /** Provider-specific detail about caching for the log line (e.g. explicit cache name, or why none). */
   cacheNote?: string;
+  /** USD charged for the call as reported by the provider itself (OpenRouter `usage.cost`); absent means "use the pricing table". */
+  cost?: number;
+  /** Where `cost` came from when the provider reported it (e.g. 'openrouter'). */
+  costSource?: string;
 }
 
 /** Stream events: text deltas, then exactly one final event carrying usage. */
-export type StreamEvent = { text: string } | { done: true; usage: Usage; finishReason?: string; cacheNote?: string };
+export type StreamEvent =
+  | { text: string }
+  | { done: true; usage: Usage; finishReason?: string; cacheNote?: string; cost?: number; costSource?: string };
 
 export interface Provider {
   readonly name: string;
+  /** Absent = always available. Returns false when the provider is deployed without its credential (503 provider_disabled). */
+  readonly available?: () => boolean;
   generate(req: ProviderRequest, signal: AbortSignal): Promise<ProviderResult>;
   stream(req: ProviderRequest, signal: AbortSignal): AsyncGenerator<StreamEvent>;
 }

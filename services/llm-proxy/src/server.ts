@@ -9,6 +9,7 @@ import { providerFor, type ProviderRequest } from './providers/index.js';
 import { extractJson } from './providers/types.js';
 import { validateAgainst } from './schema.js';
 import { parseGenerateRequest, promptHash, resolveModel, type GenerateRequest } from './request.js';
+import { DISABLED_NOTE, openrouterEnabled, openrouterPricingStatus, startOpenRouterPricingRefresh } from './providers/openrouter.js';
 
 // ---------- helpers ----------
 
@@ -71,6 +72,7 @@ interface RequestLog {
   cachedTokens?: number;
   cacheWriteTokens?: number;
   costUsd?: number;
+  costSource?: string;
   cacheNote?: string;
   retried?: boolean;
 }
@@ -131,31 +133,47 @@ function usageBody(u: Usage): Record<string, number> {
 
 function modelsBody(): Record<string, unknown> {
   const pricing: Record<string, unknown> = {};
+  const orEnabled = openrouterEnabled();
   for (const m of Object.values(MODELS)) {
+    const available = m.provider !== 'openrouter' || orEnabled;
+    const note = m.provider === 'openrouter' && !orEnabled ? DISABLED_NOTE : m.note;
     pricing[m.id] = {
       provider: m.provider,
-      location: m.location ?? (m.provider === 'gemini' ? config.location : m.provider === 'anthropic' ? config.anthropicLocation : config.maasLocation),
+      location: m.location ?? locationFor(m.provider),
+      available,
       input: m.pricing.input,
       output: m.pricing.output,
       cacheRead: m.pricing.cacheRead,
       cacheWrite: m.pricing.cacheWrite,
       nativeJsonSchema: m.nativeJsonSchema,
       minCacheTokens: m.minCacheTokens,
-      ...(m.note ? { note: m.note } : {}),
+      ...(m.supportedParameters ? { supportedParameters: m.supportedParameters } : {}),
+      ...(note ? { note } : {}),
     };
   }
   return {
     classes: { ...config.models },
     evalModels: [...config.evalModels],
     pricingUnit: 'USD per 1M tokens',
+    openrouter: { enabled: orEnabled, nativeJson: config.openrouter.nativeJson, pricing: openrouterPricingStatus() },
     pricing,
   };
 }
 
+function locationFor(provider: string): string {
+  switch (provider) {
+    case 'gemini': return config.location;
+    case 'anthropic': return config.anthropicLocation;
+    case 'openrouter': return 'openrouter.ai';
+    default: return config.maasLocation;
+  }
+}
+
 async function health(url: URL, res: ServerResponse): Promise<void> {
   const models = { ...config.models };
+  const openrouter = openrouterEnabled() ? 'enabled' : 'disabled';
   if (url.searchParams.get('deep') !== '1') {
-    sendJson(res, 200, { ok: true, models, requireAuth: config.requireAuth, location: config.location });
+    sendJson(res, 200, { ok: true, models, requireAuth: config.requireAuth, location: config.location, openrouter });
     return;
   }
   const ac = new AbortController();
@@ -178,7 +196,7 @@ async function health(url: URL, res: ServerResponse): Promise<void> {
     const deep = Object.fromEntries(MODEL_CLASSES.map((c, i) => [c, results[i]]));
     const ok = results.every((r) => r.ok);
     if (!ok) log('ERROR', 'deep health check failed', deep);
-    sendJson(res, ok ? 200 : 503, { ok, models, requireAuth: config.requireAuth, location: config.location, deep });
+    sendJson(res, ok ? 200 : 503, { ok, models, requireAuth: config.requireAuth, location: config.location, openrouter, deep });
   } finally {
     clearTimeout(timer);
   }
@@ -199,7 +217,11 @@ async function prelude(ctx: Ctx): Promise<{ principal: Principal; gen: GenerateR
   const model = resolveModel(gen);
   if (gen.class) ctx.entry.class = gen.class;
   ctx.entry.model = model;
-  ctx.entry.provider = providerFor(model).name;
+  const provider = providerFor(model);
+  ctx.entry.provider = provider.name;
+  if (provider.available && !provider.available()) {
+    throw new HttpError(503, 'provider_disabled', `${provider.name} is not configured on this deployment (${DISABLED_NOTE})`, { provider: provider.name, model });
+  }
   ctx.entry.promptSha256 = promptHash(gen);
   if (gen.cacheKey) ctx.entry.cacheKey = gen.cacheKey;
   else if (gen.cache) ctx.entry.cacheKey = gen.cache.key;
@@ -208,16 +230,23 @@ async function prelude(ctx: Ctx): Promise<{ principal: Principal; gen: GenerateR
   return { principal, gen, preq: toProviderRequest(gen, model) };
 }
 
-function noteUsage(entry: RequestLog, usage: Usage, model: string, cacheNote?: string): number {
+/** Cost as the provider reported it (OpenRouter credits) or, failing that, from the pricing table. */
+interface CostInfo {
+  cost: number;
+  costSource: string;
+}
+
+function noteUsage(entry: RequestLog, usage: Usage, model: string, cacheNote?: string, reported?: { cost: number; source: string }): CostInfo {
   entry.inputTokens = usage.input;
   entry.outputTokens = usage.output;
   entry.thoughtTokens = usage.thoughts;
   entry.cachedTokens = usage.cached;
   entry.cacheWriteTokens = usage.cacheWrite;
-  const cost = estimateCost(model, usage);
-  entry.costUsd = cost;
+  const info: CostInfo = reported ? { cost: reported.cost, costSource: reported.source } : { cost: estimateCost(model, usage), costSource: 'table' };
+  entry.costUsd = info.cost;
+  entry.costSource = info.costSource;
   if (cacheNote) entry.cacheNote = cacheNote;
-  return cost;
+  return info;
 }
 
 async function v1Generate(ctx: Ctx): Promise<void> {
@@ -226,6 +255,8 @@ async function v1Generate(ctx: Ctx): Promise<void> {
   const { signal, done, timedOut } = requestSignal(ctx.res);
   try {
     let total: Usage = ZERO_USAGE;
+    // Provider-reported cost is summed across the retry; if any attempt lacks it, fall back to the table for the whole call.
+    let reported: { cost: number; source: string } | undefined = { cost: 0, source: '' };
     for (let attempt = 0; attempt < 2; attempt++) {
       let r;
       try {
@@ -234,6 +265,7 @@ async function v1Generate(ctx: Ctx): Promise<void> {
         throw upstreamError(err, timedOut());
       }
       total = addUsage(total, r.usage);
+      reported = reported && r.cost !== undefined && r.costSource ? { cost: reported.cost + r.cost, source: r.costSource } : undefined;
       let json: unknown;
       if (gen.schema) {
         json = extractJson(r.text);
@@ -244,16 +276,17 @@ async function v1Generate(ctx: Ctx): Promise<void> {
             log('WARNING', 'structured output invalid; retrying once', { model: preq.model, problem, promptSha256: ctx.entry.promptSha256 });
             continue;
           }
-          noteUsage(ctx.entry, total, preq.model, r.cacheNote);
+          noteUsage(ctx.entry, total, preq.model, r.cacheNote, reported);
           throw new HttpError(502, 'bad_model_output', `model output did not match schema twice (${problem})`, { finishReason: r.finishReason });
         }
       }
-      const cost = noteUsage(ctx.entry, total, preq.model, r.cacheNote);
+      const { cost, costSource } = noteUsage(ctx.entry, total, preq.model, r.cacheNote, reported);
       sendJson(ctx.res, 200, {
         text: r.text,
         ...(gen.schema ? { json } : {}),
         usage: usageBody(total),
         cost,
+        costSource,
         model: preq.model,
         provider: provider.name,
         ms: Date.now() - ctx.startedAt,
@@ -296,6 +329,7 @@ async function v1Stream(ctx: Ctx): Promise<void> {
     res.flushHeaders();
     let cacheNote: string | undefined;
     let finishReason: string | undefined;
+    let reported: { cost: number; source: string } | undefined;
     try {
       let cur = first;
       while (!cur.done) {
@@ -304,6 +338,7 @@ async function v1Stream(ctx: Ctx): Promise<void> {
           usage = ev.usage;
           cacheNote = ev.cacheNote;
           finishReason = ev.finishReason;
+          reported = ev.cost !== undefined && ev.costSource ? { cost: ev.cost, source: ev.costSource } : undefined;
         } else if (ev.text) {
           send({ text: ev.text });
         }
@@ -316,8 +351,8 @@ async function v1Stream(ctx: Ctx): Promise<void> {
       res.end();
       return;
     }
-    const cost = noteUsage(ctx.entry, usage, preq.model, cacheNote);
-    send({ done: true, usage: usageBody(usage), cost, model: preq.model, provider: provider.name, ms: Date.now() - ctx.startedAt, finishReason });
+    const { cost, costSource } = noteUsage(ctx.entry, usage, preq.model, cacheNote, reported);
+    send({ done: true, usage: usageBody(usage), cost, costSource, model: preq.model, provider: provider.name, ms: Date.now() - ctx.startedAt, finishReason });
     res.end();
   } finally {
     done();
@@ -371,6 +406,8 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
 }
 
 initFirebase();
+// Public endpoint, no key needed: live OpenRouter prices overwrite the static table at startup and hourly.
+startOpenRouterPricingRefresh();
 const server = createServer((req, res) => {
   handle(req, res).catch((err) => {
     log('ERROR', 'handler crashed', errorFields(err));
@@ -395,6 +432,8 @@ server.listen(config.port, () => {
     requireAuth: config.requireAuth,
     dailyTokenQuota: config.dailyTokenQuota,
     requestTimeoutMs: config.requestTimeoutMs,
+    openrouter: openrouterEnabled() ? 'enabled' : 'disabled', // never the key itself
+    openrouterNativeJson: config.openrouter.nativeJson,
   });
 });
 

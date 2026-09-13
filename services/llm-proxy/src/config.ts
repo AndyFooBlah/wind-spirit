@@ -47,6 +47,19 @@ export const config = {
   quotaCollection: process.env.QUOTA_COLLECTION ?? 'quotas',
   cacheCollection: process.env.CACHE_COLLECTION ?? 'caches',
   maxBodyBytes: num('MAX_BODY_BYTES', 2_000_000),
+  /**
+   * OpenRouter. The API key itself is NOT here: `providers/openrouter.ts` reads OPENROUTER_API_KEY from
+   * the environment at call time so it can never end up in a logged config dump.
+   */
+  openrouter: {
+    /** Send `response_format: json_schema` to models whose supported_parameters include structured_outputs. Default: instruct + validate. */
+    nativeJson: (process.env.OPENROUTER_NATIVE_JSON ?? 'false').toLowerCase() === 'true',
+    /** App attribution headers (HTTP-Referer / X-OpenRouter-Title). */
+    referer: process.env.OPENROUTER_REFERER ?? 'https://wind-spirit-prod.web.app',
+    title: process.env.OPENROUTER_TITLE ?? 'Wind Spirit',
+    /** How often to re-pull prices from the public models listing (0 disables the timer). */
+    pricingRefreshMs: num('OPENROUTER_PRICING_REFRESH_MS', 3_600_000),
+  },
 } as const;
 
 export function isModelClass(v: unknown): v is ModelClass {

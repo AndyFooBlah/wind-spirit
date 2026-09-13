@@ -116,3 +116,55 @@ Take-aways for the eval runner:
   reject otherwise fine answers.
 - Expect occasional 429 "Resource exhausted" from the deprecated MaaS endpoints (DeepSeek-R1, Qwen3-235B);
   retry with backoff in the runner.
+
+## 5. OpenRouter candidates
+
+Added 2026-09-12 as provider `openrouter` in `src/models.ts`. **Untested until a real key is set**: the
+Secret Manager secret `openrouter-api-key` currently holds the placeholder `unset`, so the deployed
+service lists these with `available: false` and answers `503 provider_disabled` for them (see README
+§Secrets for rotation). Prices are USD per 1M tokens from the public
+`GET https://openrouter.ai/api/v1/models` on 2026-09-12 (per-token `pricing.prompt` / `completion` /
+`input_cache_read` / `input_cache_write` × 1e6); the service re-pulls the same endpoint at startup and
+hourly and serves the live numbers on `/v1/models`. "Cache write" is the total price of a written token:
+OpenRouter lists the full price for Anthropic and Qwen, and only the storage add-on for Gemini
+("input price + 5 minutes of storage"), which the proxy adds to the input price. Every one of these
+advertised `structured_outputs` in `supported_parameters` on that date, but the proxy still instructs +
+validates unless `OPENROUTER_NATIVE_JSON=true`.
+
+Requests carry no `usage`/`stream_options` flags (OpenRouter documents them as deprecated no-ops and
+always returns `usage.cost`), so the eval runner should prefer the `cost` field
+(`costSource: "openrouter"`) over recomputing from this table — it reflects the actual credits charged,
+including cache discounts.
+
+| Model id (exact) | Input | Output | Cache read | Cache write (total) | Context | Notes |
+|---|---|---|---|---|---|---|
+| `anthropic/claude-haiku-4.5` | 1.00 | 5.00 | 0.10 | 1.25 | 200K | same list price as Vertex; no Model Garden click-through needed |
+| `anthropic/claude-sonnet-5` | 2.00 | 10.00 | 0.20 | 2.50 | 1M | |
+| `openai/gpt-5-mini` | 0.25 | 2.00 | 0.025 | — | 400K | reasoning tokens billed as output |
+| `openai/gpt-5-nano` | 0.05 | 0.40 | 0.005 | — | 400K | cheapest OpenAI |
+| `openai/gpt-5.4-nano` | 0.20 | 1.25 | 0.02 | — | 400K | |
+| `openai/gpt-5.6-luna` | 0.20 | 1.20 | 0.02 | 0.25 | 1M | GPT-5.6 family bills cache writes at 1.25x input even with automatic caching |
+| `openai/gpt-5.6-luna-pro` | 0.20 | 1.20 | 0.02 | 0.25 | 1M | same list price as `gpt-5.6-luna` |
+| `meta-llama/llama-4-maverick` | 0.20 | 0.696 | — (no cache price) | — | 1M | cheaper than the Vertex MaaS listing (0.35/1.15) and no enablement |
+| `moonshotai/kimi-k2.5` | 0.45 | 2.25 | 0.07 | — | 262K | |
+| `moonshotai/kimi-k3` | 2.648 | 13.283 | 0.303 | — | 1M | dearer than the 3.8 Flash baseline: a quality candidate for the upper classes, not a cost one |
+| `z-ai/glm-5.3-flash` | 0.15 | 0.50 | 0.03 | — | 1.3M | |
+| `z-ai/glm-4.7` | 0.40 | 1.75 | 0.08 | — | 205K | |
+| `minimax/minimax-m2.7` | 0.30 | 1.20 | 0.06 | — | 205K | |
+| `deepseek/deepseek-v3.2` | 0.269 | 0.40 | 0.1345 | — | 164K | vs Vertex MaaS 0.56/1.68 (deprecated there) |
+| `deepseek/deepseek-v4.1-flash` | 0.15 | 0.60 | 0.003 | — | 1M | |
+| `deepseek/deepseek-v4-flash` | 0.0657 | 0.1313 | 0.0131 | — | 1M | cheapest candidate overall |
+| `deepseek/deepseek-v4-pro` | 1.60 | 3.20 | 0.135 | — | 1M | |
+| `mistralai/mistral-medium-3.1` | 0.40 | 2.00 | 0.04 | — | 131K | Vertex needs a click-through; OpenRouter does not |
+| `xiaomi/mimo-v2.5` | 0.14 | 0.28 | 0.0028 | — | 1M | |
+| `qwen/qwen3.8-flash` | 0.15 | 0.47 | 0.016 | 0.20 | 1M | |
+| `nvidia/nemotron-3-ultra-550b-a55b` | 0.625 | 3.125 | 0.1875 | — | 262K | paid id; the `:free` variant is rate-limited and unpriced |
+| `nvidia/nemotron-3-super-120b-a12b` | 0.085 | 0.40 | — (no cache price) | — | 262K | paid id, same family, cheap |
+| `google/gemini-3.8-flash` | 0.75 | 3.75 | 0.075 | 0.75 + 0.0417 storage | 1M | **half the Vertex list price** (1.50/7.50) on 2026-09-12; worth verifying with a live call |
+| `google/gemini-3.5-flash-lite` | 0.30 | 2.50 | 0.03 | 0.30 + 0.0833 storage | 1M | same as Vertex |
+| `google/gemini-2.5-flash-lite` | 0.10 | 0.40 | 0.01 | 0.10 + 0.0833 storage | 1M | same as Vertex |
+
+"—" under cache write means OpenRouter lists no write price (writes cost the plain input rate or are
+free depending on the vendor); the proxy stores `cacheWrite = input` for those. The `google/` ids go
+through OpenRouter's key, not the project's Vertex quota, and are listed so the eval can compare the same
+model on both paths; the Vertex ids (no prefix) remain the class defaults.
