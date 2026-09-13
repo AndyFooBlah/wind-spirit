@@ -53,12 +53,12 @@ export function MapCanvas() {
       const d = viewDetail(s);
       // A villager under the pointer wins over the plot they stand on.
       const who = renderer.current.personAt(W, H, px, py); state.current.hoverPerson = who;
-      const person = who !== undefined && d ? d.people.find(x => x.id === who) : undefined;
+      const person = who !== undefined && d ? d.people.find(x => x.id === who && !x.out) : undefined;
       if (person) { state.current.hoverPlot = undefined; setTip({ x: px + 14, y: py + 14, text: personText(person) }); return; }
       const p = renderer.current.plotAt(W, H, px, py); state.current.hoverPlot = p;
       const plot = p !== undefined && d ? d.plots[p] : undefined;
       const terrain = s.map && d ? s.map.terrain[viewFrame(s)?.villages.find(x => x.id === d.id)?.tile ?? 0] : 'grass';
-      if (plot) setTip({ x: px + 14, y: py + 14, text: plotText(plot, terrain, d?.people.filter(x => x.plot === p) ?? []) }); else setTip(undefined);
+      if (plot) setTip({ x: px + 14, y: py + 14, text: plotText(plot, terrain, d?.people.filter(x => x.plot === p && !x.out) ?? []) }); else setTip(undefined);
       return;
     }
     const t = renderer.current.tileAt(state.current, W, H, px, py); state.current.hoverTile = t;

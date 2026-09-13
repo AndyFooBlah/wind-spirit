@@ -246,7 +246,7 @@ export class MapRenderer {
     if (big) { ctx.fillStyle = '#f0d890'; ctx.fillRect(x + pad + bw * 0.12, y + size * 0.55, bw * 0.2, bw * 0.18); }
   }
 
-  /** Villagers stand where their work is: fields, the plot being built, a hut. Nobody walks unless the walk means something. */
+  /** Villagers stand where their work is: fields, the plot being built, a hut. Those working off the tile are not drawn; the People tab lists them. Nobody walks unless the walk means something. */
   private drawFolk(ctx: CanvasRenderingContext2D, d: VillageDetail, g: { size: number; ox: number; oy: number }, s: RenderState, dt: number): void {
     if (this.folkFor !== d.id) { this.folk.clear(); this.folkFor = d.id; }
     const now = performance.now();
@@ -254,6 +254,7 @@ export class MapRenderer {
     const h = (id: number, salt: number) => { let x = (id * 2654435761 + salt * 40503) >>> 0; x ^= x >>> 15; x = Math.imul(x, 2246822519) >>> 0; x ^= x >>> 13; return (x >>> 0) / 4294967296; };
     const fields = d.plots.map((p, i) => (p.kind === 'field' && p.planted ? i : -1)).filter(i => i >= 0);
     for (const person of d.people) {
+      if (person.out) continue;   // working off the tile this week: not here, so not drawn here
       seen.add(person.id);
       let f = this.folk.get(person.id);
       if (!f) { const [x, y] = this.spotFor(person, d, h); f = { x, y, tx: x, ty: y, next: 0 }; this.folk.set(person.id, f); }
@@ -268,11 +269,9 @@ export class MapRenderer {
       if (dist > 0.001) { f.x += dx / dist * step; f.y += dy / dist * step; }
       const px = g.ox + f.x * g.size, py = g.oy + f.y * g.size; const r = Math.max(1.5, g.size / (person.stage === 'child' ? 20 : 13));
       ctx.fillStyle = person.stage === 'child' ? '#6b4a2a' : person.stage === 'elder' ? '#8a8a8a' : '#2b1d12';
-      if (person.out) { ctx.globalAlpha = 0.55; }
       ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
       if (person.chief) { ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(px, py, r + 2, 0, Math.PI * 2); ctx.stroke(); }
       if (s.hoverPerson === person.id) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(px, py, r + 3, 0, Math.PI * 2); ctx.stroke(); }
-      ctx.globalAlpha = 1;
     }
     for (const id of [...this.folk.keys()]) if (!seen.has(id)) this.folk.delete(id);
   }

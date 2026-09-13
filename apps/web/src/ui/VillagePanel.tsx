@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { WEEKS_PER_YEAR } from '@wind-spirit/sim';
-import { SEASON_NAMES } from '../sim/protocol.ts';
+import { SEASON_NAMES, type PersonView } from '../sim/protocol.ts';
 import { useGame, selectVillage, openWhisper, dreamStart, setZoom, viewDetail, tellStory, narrativeKey, tickLabel, type NarrativeSpan, type NarrativeStyle } from '../store/game.ts';
 
-type Tab = 'overview' | 'stores' | 'history' | 'journal' | 'chronicle';
+type Tab = 'overview' | 'people' | 'stores' | 'history' | 'journal' | 'chronicle';
 
 /** Everything the spirit sees of one village, plus the door to speak with its chief. */
 export function VillagePanel() {
@@ -16,7 +16,7 @@ export function VillagePanel() {
   const v = detail.view; const p = v.people;
   const mine = journals.filter(j => j.village === selected && (!history || j.tick < history.tick)).slice().reverse();
   const myPending = pending.filter(c => c.village === selected).flatMap(c => c.texts);
-  const tabs: [Tab, string][] = [['overview', 'Village'], ['stores', 'Stores & craft'], ['history', 'History'], ['journal', `Journal${mine.length ? ` (${mine.length})` : ''}`], ['chronicle', `Chronicle${detail.chronicle.length + myPending.length ? ` (${detail.chronicle.length + myPending.length})` : ''}`]];
+  const tabs: [Tab, string][] = [['overview', 'Village'], ['people', `People (${detail.people.length})`], ['stores', 'Stores & craft'], ['history', 'History'], ['journal', `Journal${mine.length ? ` (${mine.length})` : ''}`], ['chronicle', `Chronicle${detail.chronicle.length + myPending.length ? ` (${detail.chronicle.length + myPending.length})` : ''}`]];
   return (
     <aside className="panel">
       <div className="panel-head">
@@ -53,6 +53,7 @@ export function VillagePanel() {
             {detail.inbox.length > 0 && <Section title="Unheard whispers">{detail.inbox.map((m, i) => <div key={i} className="quote">“{m}”</div>)}</Section>}
           </>
         )}
+        {tab === 'people' && <People people={detail.people} />}
         {tab === 'stores' && (
           <>
             <Section title="Stores">
@@ -120,3 +121,34 @@ function Stat({ label, value, sub, warn }: { label: string; value: string | numb
   return <div className={`stat ${warn ? 'warn' : ''}`}><div className="small muted">{label}</div><div className="big">{value}</div>{sub && <div className="small muted">{sub}</div>}</div>;
 }
 function Section({ title, children }: { title: string; children: React.ReactNode }) { return <section className="sec"><h3>{title}</h3><div>{children}</div></section>; }
+
+type PeopleKey = 'name' | 'age' | 'stage' | 'doing';
+const STAGE_ORDER = { child: 0, adult: 1, elder: 2 };
+/** Everyone in the village, sortable: who they are, how old, what they are doing this week and where. */
+function People({ people }: { people: PersonView[] }) {
+  const [key, setKey] = useState<PeopleKey>('doing'); const [asc, setAsc] = useState(true);
+  const sorted = [...people].sort((a, b) => {
+    const d = key === 'name' ? a.name.localeCompare(b.name) : key === 'age' ? a.age - b.age : key === 'stage' ? STAGE_ORDER[a.stage] - STAGE_ORDER[b.stage] || a.age - b.age : a.doing.localeCompare(b.doing) || a.name.localeCompare(b.name);
+    return asc ? d : -d;
+  });
+  const head = (k: PeopleKey, label: string) => <th className={key === k ? 'sorted' : ''} onClick={() => { if (key === k) setAsc(!asc); else { setKey(k); setAsc(true); } }} title="Sort">{label}{key === k ? (asc ? ' ▲' : ' ▼') : ''}</th>;
+  const away = people.filter(p => p.out).length;
+  return (
+    <>
+      <div className="small muted" style={{ marginBottom: 6 }}>{people.length} people; {away} working off the village tile this week. Click a heading to sort.</div>
+      <table className="people">
+        <thead><tr>{head('name', 'Name')}{head('age', 'Age')}{head('stage', 'Stage')}{head('doing', 'This week')}</tr></thead>
+        <tbody>
+          {sorted.map(p => (
+            <tr key={p.id} className={p.out ? 'away' : ''}>
+              <td>{p.name}{p.chief ? <span className="small muted"> · chief</span> : ''}</td>
+              <td className="num">{p.age}</td>
+              <td>{p.stage}</td>
+              <td>{p.doing}{p.out ? <span className="small muted"> · away</span> : ''}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
