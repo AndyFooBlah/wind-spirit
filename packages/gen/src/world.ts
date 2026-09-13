@@ -22,9 +22,12 @@ export function generateWorld(o: GenOptions): World {
   const scale = 1 / (Math.min(width, height) / 3.2);
   for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
     const i = y * width + x;
-    const ex = Math.min(x, width - 1 - x, y, height - 1 - y) / Math.min(width, height);   // distance to edge 0..0.5
+    const toEdge = Math.min(x, width - 1 - x, y, height - 1 - y);
+    const ex = toEdge / Math.min(width, height);                                            // distance to edge 0..0.5
     const edge = Math.max(0, 0.12 - ex) / 0.12;                                            // 1 at the edge, 0 inland
-    elev[i] = nElev.fbm(x * scale, y * scale, 5) - 0.30 * edge;
+    // The world is a landmass in a sea: the outermost tiles are always ocean, with a ragged shoreline two to five tiles deep.
+    const rim = 2.5 + 2.5 * (nVar.fbm(x * scale * 1.7 + 300, y * scale * 1.7 + 300, 3) + 0.5);
+    elev[i] = nElev.fbm(x * scale, y * scale, 5) - 0.30 * edge - (toEdge < rim ? 1 : 0);
     moist[i] = nMoist.fbm(x * scale * 0.8 + 100, y * scale * 0.8 + 100, 4);
   }
   // rivers: flow accumulation downhill over land

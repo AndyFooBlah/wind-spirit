@@ -121,3 +121,12 @@ The second playtest round asked for a village that reads at a glance. Decisions,
   the envoy patience counts as a no. They eat rations on the road and can starve there, like any party.
 - The scripted chief abandons only in extremity (hardship over 0.7, no stores, fifteen people or fewer, somewhere known
   within thirty tiles). The balance suite is unchanged by any of this.
+
+## An ocean rim, and what it did to the fish (2026-09-13)
+
+Every map now ends in sea: the outermost two to five tiles are ocean, with a noisy shoreline, so the edge of the world
+reads as a coast rather than a cliff of nothing. The balance suite caught the side effect. A village of 50 on wild
+food alone had held at a median of 43.75 people after 60 years; with the rim it held at 47 on twelve seeds, because
+far more villages sit beside ocean tiles and ocean carried the richest fish stock of any tile (800 against the lake's
+500). Ocean fished from the shore is now 550, the median is back to 40.5, and the other thirteen checks are unchanged.
+Existing saves keep their old maps.

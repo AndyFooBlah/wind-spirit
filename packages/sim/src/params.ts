@@ -84,7 +84,7 @@ export const TERRAIN: Record<Terrain, TerrainInfo> = {
   river:    { mpdWild: 15, mpdPath: 20, passable: true,  water: false, forage: true,  cap: cap(400, 300, 400, 200, 100) },
   coast:    { mpdWild: 15, mpdPath: 20, passable: true,  water: false, forage: true,  cap: cap(300, 150, 600, 100, 100) },
   lake:     { mpdWild: 0,  mpdPath: 0,  passable: false, water: true,  forage: false, cap: cap(0, 0, 500, 0, 0) },
-  ocean:    { mpdWild: 0,  mpdPath: 0,  passable: false, water: true,  forage: false, cap: cap(0, 0, 800, 0, 0) },
+  ocean:    { mpdWild: 0,  mpdPath: 0,  passable: false, water: true,  forage: false, cap: cap(0, 0, 550, 0, 0) },   // fished from the shore; 800 let a shore village of 50 live on wild food once every map had an ocean rim
 };
 
 /** Optional overrides from the WS_PARAMS environment variable (JSON, shallow-merged into P; nested objects merged one level). */
