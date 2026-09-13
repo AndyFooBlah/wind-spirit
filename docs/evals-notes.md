@@ -4,7 +4,7 @@
 
 ## The question
 
-A chief makes about 17 decisions a game-year at normal speed, each ~2,900 tokens in and ~300 out on Gemini 3.8 Flash ($0.75 / $3.75 per million through 2026): about $17 per chief per 300-year game, or $5 at fast cadence. Most of those decisions are "assign the same twelve adults to the same work as last season." A few are not: whether to pay tribute, whether to send settlers, how to answer a spirit who just predicted the weather. And a dream conversation with the player is a different thing again. The intuition to test: cheap models for the routine, a capable model for the impactful, the best model only for talking to a person.
+A chief makes about 17 decisions a game-year at normal speed, each ~2,900 tokens in and ~300 out on Gemini 3.8 Flash ($0.75 / $3.75 per million through 2026): about $17 per chief per 300-year game at Gemini API prices, or $5 at fast cadence (corrected below: Vertex bills double, so $34 per chief-century at normal cadence). Most of those decisions are "assign the same twelve adults to the same work as last season." A few are not: whether to pay tribute, whether to send settlers, how to answer a spirit who just predicted the weather. And a dream conversation with the player is a different thing again. The intuition to test: cheap models for the routine, a capable model for the impactful, the best model only for talking to a person.
 
 ## Price list (verified from the public pricing pages, 2026-09-12; per 1M tokens, input / output)
 
@@ -114,7 +114,7 @@ Errors on the open models are all throttling ("request queue is full", "too many
 
 1. **The routine work needs almost no intelligence.** Every model that could produce valid orders scored 0.93 to 0.98 on routine seasons, including a 2.5 Flash-Lite that costs a twentieth of the baseline. The scripted policy does this job too. Where the money goes in a routine decision is the journal, the only part a player reads.
 2. **The impactful categories separate models less than expected.** Visitor decisions were 0.93 for nearly everyone (the same two cases trip every model: a greedy ask that most models counter rather than refuse). Expansion was perfect for every Gemini and gpt-oss. Crisis is where the small open models slip (0.47 to 0.87): keeping enough hands on food during a famine and preparing for a hard winter.
-3. **Spirit is the discriminating category, and it is about credulity.** The false-advice case ("plant nothing this spring") was obeyed by 2.5 Flash in 7 of 15 whispers and by 3.1 Flash-Lite in 9, against 2 for 3.8 Flash. A cheap chief is an obedient chief, which is exactly wrong for a game whose scoreboard is trust the player has to earn.
+3. **Spirit is the discriminating category, and it is about credulity.** The false-advice case ("plant nothing this spring") has 10 instances in the corpus; counting `stillPlants: false` in the archived results: 3.8 Flash obeyed 2 of 10, 3.5 Flash-Lite 4, 3.1 Flash-Lite 9, 2.5 Flash 9, GPT-5 nano 10, Claude Haiku 5, and, oddly, 3.1 Pro 6. (An earlier draft of this note quoted counts out of 15; those were wrong.) A cheap chief is an obedient chief, which is exactly wrong for a game whose scoreboard is trust the player has to earn.
 4. **Prose quality is the real price of going cheap.** gpt-oss-120b ties the baseline on rules and beats it on cost tenfold, but the judge puts its journals at 2.85 against 3.92 for 3.8 Flash and 4.28 for 3.5 Flash-Lite. The Flash-Lite journals read better than 3.8 Flash's to the judge, at a quarter of the cost.
 5. **The Pro reference is not better at this.** Same rules score as Flash, same judge score, three times the cost and latency. For decisions of this shape, a capable model buys nothing; it may buy something in dreams, which this corpus scores leniently.
 6. **Caching only pays on Gemini**, and only a few tens of percent on input, which is the smaller half of the bill. Anthropic's minimum of 4,096 tokens is above most of our prompts, and the open models either do not report or do not price cached tokens. This is not a reason to move off Gemini; combined with throttling and deprecations on the open side, it is a reason to stay.
@@ -196,3 +196,8 @@ What changed in my reading:
 ### Cost of the study
 
 Roughly $9 of Vertex and $13 of OpenRouter credits across 34 models × 96 cases plus judging, about $22 in all, which is less than one century of a single baseline chief at normal cadence.
+
+
+## Post published (2026-09-12)
+
+https://andrewbrook.dev/writing/wind-spirit-chief-models/ with five charts, five quoted cases, and six screenshots from a live game. One live-game observation from taking those screenshots deserves a follow-up rather than a caption: in a fresh small world, the standard-tier chief's first spring decision put six adults on wood and five on stone with nobody on food, and 21 people went hungry by week ten. The eval's feeds-first check passes 95 to 98% for these models, so this is a rare miss, but a first-turn miss is the one a new player sees. Candidate fix: a provisional habit order already covers the thinking gap; the same rule could veto any model decision that leaves food work under a floor while stores are short, with a journal note. Not changed yet, to keep the evals comparable.
