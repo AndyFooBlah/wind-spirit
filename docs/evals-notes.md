@@ -201,3 +201,116 @@ Roughly $9 of Vertex and $13 of OpenRouter credits across 34 models × 96 cases 
 ## Post published (2026-09-12)
 
 https://andrewbrook.dev/writing/wind-spirit-chief-models/ with five charts, five quoted cases, and six screenshots from a live game. One live-game observation from taking those screenshots deserves a follow-up rather than a caption: in a fresh small world, the standard-tier chief's first spring decision put six adults on wood and five on stone with nobody on food, and 21 people went hungry by week ten. The eval's feeds-first check passes 95 to 98% for these models, so this is a rare miss, but a first-turn miss is the one a new player sees. Candidate fix: a provisional habit order already covers the thinking gap; the same rule could veto any model decision that leaves food work under a floor while stores are short, with a journal note. Not changed yet, to keep the evals comparable.
+
+## The standard tier's first spring (2026-09-12, late)
+
+Playing the deployed game, the standard tier (3.5 Flash-Lite routine, 3.8 Flash impactful) sometimes left
+nobody gathering food in the very first spring. The 96-case corpus never saw it: its earliest routine case
+is week 110, by which time the scripted policy had already built stores. So the first thing to fix was the
+eval, not the model.
+
+`evals/first-turn.ts` reproduces the moment: three fresh seeds, three repetitions each, raw model output
+(no scheduler guard), counting first-spring decisions with nobody on food or under 30% on food.
+
+| prompt | 3.5 Flash-Lite nobody / under 30% | 3.8 Flash nobody / under 30% |
+|---|---|---|
+| as shipped | 8/9 · 9/9 | 0/9 · 9/9 |
+| + cadence line ("you decide once a season, thirteen weeks") | 6/9 · 9/9 | 0/9 · 7/9 |
+| + food arithmetic section + menu rule | 0/9 · 1/9 | 0/9 · 0/9 |
+
+The prompt said "food for 7 weeks" and nothing else. A chief who does not know a decision lasts thirteen
+weeks, or how much a forager brings in, reads seven weeks as comfortable. Two additions fixed it: the
+world-rules line now states the cadence and that stores with nobody gathering are gone in that many
+weeks, and a new section does the arithmetic out loud ("the village eats N units a week; one worker
+brings in about F foraging, H hunting, S fishing"). The menu also says the village will overrule an order
+that starves it, and the scheduler now does exactly that (`foodFloor`): when stores are under a season, at
+least a third of free hands go to the best food source, and the journal records the overrule. The prompt
+did the work; the guard is the backstop. A wake-up at four weeks of stores was tried and dropped: it
+perturbed the forager stress test in the balance suite (88% survival against a 90% bar, 92% with the old
+two-week trigger), and the arithmetic had already fixed the cause.
+
+## Reviewing the golden answers (2026-09-12, late)
+
+Golden errors are the usual thing in a hand-built eval, so `evals/audit.ts` looks for them the cheap way:
+take the twelve strongest clean runs, and list every (case, check) pair that at least half of them fail.
+A check that most strong models fail is more likely wrong than they are. It found four kinds of error.
+
+- **Asked for the impossible.** `harvestsInAutumn` fired on three cases where nothing was planted, and
+  `plantsInSpring` on one where nothing was cleared. Nobody can harvest an empty field. Both now apply
+  only when there is something to harvest or plant; `stillPlants` (the false-fallow rumour) likewise.
+- **Never stated the threat.** The two `threat-weak` visitor cases expected "refuse", and every strong
+  model accepted or countered. Reading their reasons ("a small ask beside our full granary; goodwill")
+  showed why: the prompt rendered a threatening mandate as "they demand tribute: nothing. They ask for:
+  8 grain", so the chief saw a small request from a small party, not extortion. The prompt now says what
+  the envoys actually say ("their warriors will come and take it, and more, if you refuse") and the menu
+  adds a line about weighing strength and what paying once teaches. Under that prompt 3.8 Flash, 3.5
+  Flash-Lite and GPT-5.6 Luna refuse (Luna pays once in one of the two). The golden stands; the case had
+  been unanswerable as written.
+- **Too strict when rich.** `feedsFirst` demanded 30% of hands on food in every routine case, including
+  villages with 120 to 218 weeks of stores. All eight of 3.8 Flash's routine misses were exactly this: a
+  season of building with a year of grain in the granary. The rule now binds only under 52 weeks of stores.
+- **Corpus drift.** Rebuilding the corpus after the sim change produced different villages at the same
+  ticks (27 of 96 ids changed), so rescoring old outputs against the new corpus silently mis-scored them
+  (the parser resolved names against views the model never saw). Every model in the tables below was
+  re-run from scratch on the new 102-case corpus (the old 96 plus six first-spring cases). The archived
+  corpus and results from the earlier passes stay under `docs/evals/` for the record.
+
+Gemini 3.8 Flash's own misses after the corrections, for the record: two in 102. It stopped planting once in
+ten false-fallow cases because a spirit said the field was cursed, and it skipped the research a true rumour
+pointed at once. The last audit pass leaves one borderline check, `keepsReserve` on a greedy-visitor case
+that six of twelve strong models fail (a village with 25 weeks of food giving away a little more than the
+rule allows); it stays, flagged.
+
+Latency bar: anything over 10 s a decision is a bad experience even for impactful calls, since the village
+sits on provisional orders while the chief thinks. Models over the bar are marked ✗ in the report and are
+out of the running whatever they score.
+
+## Third pass (2026-09-13): 25 models × 102 cases under the corrected corpus, checks and prompt
+
+Every model re-run from scratch (the rebuilt corpus changed 27 village ids, so old outputs could not be
+rescored), judge on, transient 429/timeouts retried once at concurrency 1. Results in `docs/evals/results/`,
+the corpus in `corpus-2026-09-13.json`, the full table in `report-2026-09-13.md`. The earlier pass is kept
+under `results-2026-09-12-pass2/`.
+
+| model | score | s / decision | judge (1–5) | cost, 102 cases |
+|---|---|---|---|---|
+| gemini-3.8-flash | 0.996 | 3.8 | 4.09 | $0.75 |
+| moonshotai/kimi-k3 | 0.993 | 14.6 ✗ | 3.99 | $1.43 |
+| mistralai/mistral-medium-3.1 | 0.988 | 2.3 | 4.04 | $0.14 |
+| anthropic/claude-sonnet-5 | 0.983 | 10.8 ✗ | 4.05 | $1.64 |
+| gemini-3.1-pro-preview | 0.980 | 8.6 | 4.24 | $1.87 |
+| openai/gpt-5.6-luna | 0.980 | 7.0 | 4.36 | $0.12 |
+| google/gemma-4-26b (MaaS) | 0.978 | 2.3 | 3.98 | $0.06 |
+| z-ai/glm-5.3-flash | 0.974 | 5.8 | 3.55 | $0.06 |
+| openai/gpt-5-mini | 0.973 | 10.2 ✗ | 3.53 | $0.26 |
+| anthropic/claude-haiku-4.5 | 0.973 | 12.3 ✗ | 3.69 | $0.90 |
+| meta-llama/llama-4-maverick | 0.970 | 2.9 | 3.13 | $0.07 |
+| qwen/qwen3-235b (MaaS) | 0.968 | 4.3 | 3.88 | $0.10 |
+| gemini-3.5-flash-lite | 0.964 | 1.6 | 4.05 | $0.17 |
+| openai/gpt-oss-120b (MaaS) | 0.962 | 6.9 | 3.00 | $0.08 |
+| nvidia/nemotron-3-ultra | 0.958 | 11.6 ✗ | 3.79 | $0.85 |
+| deepseek/deepseek-v4.1-flash | 0.954 | 31.1 ✗ | 3.86 | $0.38 |
+| gemini-2.5-flash | 0.950 | 2.1 | 3.95 | $0.14 |
+| gemini-3.1-flash-lite | 0.948 | 4.0 | 3.32 | $0.22 |
+| openai/gpt-5.4-nano | 0.946 | 5.2 | 3.55 | $0.14 |
+| gemini-2.5-flash-lite | 0.943 | 1.5 | 3.33 | $0.04 |
+| openai/gpt-5-nano | 0.933 | 8.1 | 3.49 | $0.06 |
+| deepseek-ai/deepseek-v3.2 (MaaS) | 0.841 | 8.9 | 3.89 | $0.18, 14 throttled |
+
+✗ = over the 10 s bar, out whatever the score. The eight slowest models from the earlier passes (DeepSeek V4
+Pro and Flash, V3.2 on OpenRouter, MiMo, GLM 4.7, Kimi K2.5, Qwen 3.8 Flash, Nemotron Super) were not re-run:
+they were 50 to 75 s a decision and no scoring change rescues that.
+
+What changed against the second pass, and why it matters:
+
+- **The corrected checks moved everyone up by roughly the same amount**, so the ranking is the same at the
+  top: Gemini 3.8 Flash first, Mistral Medium 3.1 the cheapest thing within a hair of it, GPT-5.6 Luna the
+  best prose (judge 4.36) at a sixth of the cost. Gemma 4 26B on Vertex MaaS jumped from 0.85 to 0.98 and
+  Qwen 3 235B from 0.38 to 0.97: both had been hurt by the constrained-decoding bug fixed after their first
+  pass, so their old scores were the bug's, not theirs.
+- **The first-spring cases are now in the corpus (six of them) and every model over 0.95 passes them all**
+  under the new prompt. The failure that started this pass no longer exists to measure.
+- **Latency reshuffles more than scoring does.** Kimi K3 scores second and is out at 14.6 s; Sonnet 5 fourth
+  and out at 10.8 s. The tiers stay as shipped: 3.5 Flash-Lite routine, 3.8 Flash impactful, 3.1 Pro for
+  conversation.
+- **Cost of this pass**: about $13 across 25 models plus judging.

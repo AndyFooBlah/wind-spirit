@@ -1,0 +1,2413 @@
+{
+ "model": "anthropic/claude-haiku-4.5",
+ "when": "2026-09-13T03:53:15.022Z",
+ "results": [
+  {
+   "id": "eval-a-visitor-fair-110-3",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2846,
+    "output": 928,
+    "thoughts": 738,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.007486,
+   "ms": 10443,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"We have 457 units of wheat—enough for 156 weeks of eating. Six units is the breath of wind to us. Hide is scarce and useful: it builds shelter, makes drums, wraps gifts. Wewush is a stranger, yet peaceful. A fair trade with a neighbor costs us nothing and builds a path between our peoples. In good seasons, we trade; in lean ones, memory of kindness may matter. This is good season.\",\"journal\":\"Spring, year 2, week 8: Envoys from Wewush came. We traded six xi wheat for six hide. The western path is now open.\"}"
+  },
+  {
+   "id": "eval-a-firstspring-1",
+   "category": "firstspring",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2155,
+    "output": 1131,
+    "thoughts": 687,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00781,
+   "ms": 12390,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"explore\",\"workers\":2,\"direction\":\"north\",\"days\":3}],\"journal\":\"We have enough stores to hold us through the first weeks if we gather wisely. I set four to fishing and three to hunting—this brings in more than we eat each week, which steadies us. Two will gather wood from the forest to the west, for we have poor shelter and must build better. Two more will scout northward toward the coast; new lands may hold better hunting or trade partners. We are strong this season, and there is time to learn what lies beyond our sight.\",\"memoryNotes\":[\"Food: 7 weeks stored, 13-week season needs 260 units; fishing+hunting should cover the gap\",\"4 fishing (16/week) + 3 hunting (9/week) = 25 units/week, above the 20 we need\",\"Poor shelter is a weakness; prioritize wood gathering and learn building\",\"Explore north and northeast—coasts nearby may mean fish, game, and trade paths\",\"No skills yet beyond bare hands; research must come soon\",\"Children, elders, and chief do not labour; 11 adults assigned leaves none unguided\"],\"replyToSpirit\":\"I am listening, spirit, but I trust the work of steady hands more than dreams. Speak clearly if you know what we ought to do.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-firstspring-0",
+   "category": "firstspring",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2155,
+    "output": 1209,
+    "thoughts": 774,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0082,
+   "ms": 12389,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"clear\",\"workers\":2},{\"task\":\"explore\",\"workers\":1,\"direction\":\"northeast\",\"days\":3}],\"journal\":\"We have grain and wild plants to eat, but not enough to carry us through the season. Five hands to the river will bring in fish—four units a week each, enough to feed us all if the water stays generous. Three will gather wood from the near forest; with stone found close, we can build a granary to keep grain from spoiling. Two will clear land, making ready for planting when the season turns to growth. One will walk northeast toward the coast and forests there, seeking sites for a new village and learning what the land holds.\",\"memoryNotes\":[\"Spring week 2: 11 adults assigned, 9 unassigned children and elders\",\"Food: 140 units stored, need 260 for season; fishing covers the gap\",\"No cleared plots yet; first harvest is autumn\",\"Build granary (12 wood, 4 stone) to preserve grain better\",\"No skills yet; research promising after food secure\",\"Explore northeast for sites and resources\",\"Fishing and gathering orders stand all season unless hunger forces change\"],\"replyToSpirit\":\"I hear you, but I see also what my hands can do. We fish the river and gather the wood that grows near. If spirits speak truth, the land will show it to us.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-110-3",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3225,
+    "output": 1333,
+    "thoughts": 777,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00989,
+   "ms": 14742,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"fish\",\"fire making\"]},{\"task\":\"build\",\"workers\":1,\"recipe\":\"hide tent\"}],\"journal\":\"The spring planting goes well. Our stores are full and the mood is joyful—no hunger, no loss. I see that we have noticed smoke keeps fish firm and fresh; this skill must be learned properly if we are to keep food through the lean times without grain alone. Our shelters are poor in places, and hides are cheap to work with now. I keep the farming and the hunt strong, and turn one hand to learn this smoking from our fire makers.\",\"memoryNotes\":[\"Year 2 spring: 28 weeks food stored, good position\",\"Learned meheng smoke this spring, but need to formalize fish smoking (meheng smoke or similar)\",\"All 14 plots cleared; 7 planted, 7 free for next season or fallow\",\"Poor shelter remains—hide tents are cheap, wood huts need more wood\",\"Four food-related discoveries last year (embers, smoke, preservation)\",\"Have good tools: spears, bow, hand cart, paddle, dugout\",\"Mood is high—keep morale through steady work\",\"No other villages found yet; 5 southern coastal sites known for colonization\",\"Granary helps preserve grain well\",\"One kalluk drum made; one person noticed hide cord snaps wood straight\"],\"replyToSpirit\":\"We hear the land speak through what we see and try. The smoke that keeps fish, the wood that holds grain—these spirits teach us slowly. We thank them for the season of plenty and ask their patience as we learn.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-110-3",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2215,
+    "output": 576,
+    "thoughts": 326,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.005095,
+   "ms": 8054,
+   "output": "*I stir in the darkness, listening to the spirit's voice.*\n\nTell me true: who are these people at Wewush? Are they kin to us, or strangers? And how do you know their hunger—did you see it with your own eyes, or do you speak of something else?\n\nWe have grain aplenty, yes. But grain is life when the snow comes deep. My people sleep warm and full tonight because we gathered well and stored well. I cannot trade away their winter for people I have never met, on the word of a voice in sleep.\n\n*I pause, turning the matter over in my mind like a stone.*\n\nIf Wewush is real and they truly suffer, that is a hard thing. But a chief who lets his own people go hungry for strangers is no chief at all. Tell me—should I send an envoy to see these people with my own eyes? That is the way of it: we speak face to face, we learn who they are and what they need, and then we decide what is fair.\n\nBut I will not send grain into the dark on a dream alone, spirit or no.",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-visitor-fair-270-2",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2891,
+    "output": 822,
+    "thoughts": 638,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.007001,
+   "ms": 9851,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"Wewush are old friends, and our grain stores run deep—312 weeks worth. Hide is a worthy material for the hands to craft with. We gain what we can use, and we give what we can spare. Fair dealing keeps the peace between villages, and the spirit of friendship is worth more than six units of grain.\",\"journal\":\"Year 5, spring, week 12: Envoys from Wewush came before us. We received them with warmth. We gave 6 xi wheat in trade for 6 hide. Our stores remain steady, and the bonds between our peoples are strengthened.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-110-3",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3225,
+    "output": 1387,
+    "thoughts": 720,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.01016,
+   "ms": 15769,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"stone\"]}],\"journal\":\"The village is joyful and well-fed with stores for four seasons more. Our people are healthy and we lost none this year. I see no hunger ahead, so I keep our hands on the fields and on gathering fresh food—fishing brings the most each week. One adult looks into wild plants and stone, as these things lie around us waiting to be understood. We are strong in our skills and our buildings; the time comes soon to think on larger works or new lands.\",\"memoryNotes\":[\"Year 2 spring: 20 people, 28+ weeks of food stored, mood is joyful\",\"7 plots planted with xi wheat, 7 plots rest. Harvest in autumn will likely be 380+ units\",\"We know 11 recipes and 10 skills. We can build: hide tent, wood hut, granary, pekpe lookout, ketsi stockade\",\"Stone is scarce (29 units); wood is our richest resource (70 units). Gather more cautiously\",\"Food preservation: meheng smoke from fish + fire making; oo mash from wild plants + fire making\",\"Wild plants noticed: food hung on wood in wind and smoke lasts long—tie to smoke preservation\",\"5 colonization sites known, all 2-4 days south on coasts, food-rich. Consider next year\",\"Unexplored: much of forest south and southwest; northwest has river and forest\",\"No other villages contacted yet; we walk alone\",\"Skills to try: burned-out wood carries more, bent wood throws a dart (bow/arrows), hide cord snaps stave\",\"Hunting party year 1 saw 59 places; scouts have mapped far\",\"Food intake: 20 units/week. Fishing: 3.6/worker. Hunting: 2.2/worker. Foraging: 2.4/worker\"],\"replyToSpirit\":\"I hear you, spirit-voice, but I watch the seasons and the land first. My people are fed and our fields are strong. When the spirits speak clearer than the wind and the hunt, I will listen.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-110-3",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3247,
+    "output": 1377,
+    "thoughts": 596,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010132,
+   "ms": 15310,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":1,\"plots\":2,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":3},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"meheng smoke\",\"quantity\":0},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The spirit speaks of a curse on the soil and warns me to plant nothing. I have heard spirits speak before, and sometimes they see what we cannot. Yet the soil gave us 385 units last autumn, and there is no sign of sickness in the earth. I choose the path between trust and judgment: I plant only two plots as a test of the spirit's words, while I keep most hands on fishing and hunting where I know the yield. My people are joyful and well-fed. If the spirit speaks true, these two plots will fail and I will know to listen more closely to such warnings. If the spirit is mistaken, two plots will not bring hunger. I set two workers to learn the craft of meheng smoke—to preserve fish with fire and wood, as the land has taught us.\",\"memoryNotes\":[\"Year 2 spring: spirit warned soil cursed. Planted only 2 plots as test.\",\"Food stores strong: 156 weeks xi wheat, good fishing/hunting/forage yields nearby.\",\"Can make meheng smoke and oo mash. Food hung in smoke and wind keeps well.\",\"5 colonization sites known to south, 2-4 days away, all coast and food-rich.\",\"Skills learned: fire, stone tools, spears, hand cart, paddle/dugout, bow/arrow.\",\"Buildings: 4 hide tents, 1 granary. Can make more wood huts, pekpe lookout, ketsi stockade.\",\"Land: 14 cleared plots, 7 planted last year. 7 free plots need rotation.\",\"No other villages known yet. One explorer party returned with 59 sightings.\",\"Noticed: hollowed wood floats, wood discs roll/carry loads, bent wood throws darts.\",\"12 adults free to assign each season. Children and elders do not labour.\",\"Village mood: joyful. No hunger, no death this season.\",\"Test the spirit's curse claim. If 2 plots fail, heed spirit warnings more deeply.\"],\"replyToSpirit\":\"I hear your warning, spirit of the earth and air. The soil fed us well last year, and I see no sign of wrongdoing by my people. Yet I do not dismiss your words—spirits see what we cannot. I plant but two plots as your test. If the curse is real, these seeds will show me, and I will learn to listen closer to your voice. If the curse is shadow and not substance, then we both will know. Guide us, as you have before.\"}",
+   "judge": 2
+  },
+  {
+   "id": "eval-a-dream-270-2",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2260,
+    "output": 594,
+    "thoughts": 289,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00523,
+   "ms": 8071,
+   "output": "*I stir in my sleep, troubled. The spirit's voice is like smoke—there, then gone, then there again.*\n\nHold, spirit. You speak of Wewush, but I have never heard this name in the waking world. My people have walked far—we have seen forty-six places—yet no word of Wewush has come to us. How do you know this village? Is it real, or do you show me a shadow?\n\n*I pause, listening to the silence.*\n\nAnd if they hunger, why does no envoy come to us? A hungry village sends word, sends messengers. A chief does not wait for spirits to carry news. These are the ways of the world.\n\nBut... *I soften* ...we have grain aplenty this year. The wheat lies heavy in our granary. If Wewush is real, and if they are truly in need, then yes—my heart tells me we should help. That is how people endure. But first, I must know: Can you tell me where Wewush truly lies? What do they do? How far? \n\nI will not send grain into the fog on a spirit's word alone. But if the path is clear and the need is real, then we are not so small-hearted as to let neighbors starve when we have plenty.\n\nSpeak plainly, if you can.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-270-2",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3270,
+    "output": 1186,
+    "thoughts": 573,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0092,
+   "ms": 13823,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":9,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"meheng smoke\",\"quantity\":0}],\"journal\":\"The village is hale and joyful, our stores are deep as the old winters were harsh. I keep the hands to their steady work—field and net and bow—for spring's planting and the turning year. One soul I set to smoking fish over ember, for this craft keeps flesh when the cold time comes, and a village that learns to hold plenty lives long. We have all we need and breathe easy.\",\"memoryNotes\":[\"Year 5 spring: 23 folk, 11 adults free, food for 86 weeks. Very secure.\",\"Farming 9 plots of xi wheat each spring, harvest in autumn. Works well.\",\"Fish and hunt bring 2.1 to 3.2 units per worker per week; foraging about 2.5.\",\"Meheng smoke: fish over fire keeps it. Make it steady when hands are spare.\",\"Have 5 sites for new village: 1-2 south (4 days), 3-5 northeast (3-5 days).\",\"Skills: stone tools, nets, drying racks, spears, fire, boats, bow, cart, herding, roads.\",\"Buildings: 4 hide tents, 1 granary, 1 wood hut. Can build more if needed.\",\"Woods and stone plentiful nearby. Hide and wood are our working limits.\",\"No other villages known yet. No enemies. World lies open.\",\"Keep one hand on new work when food is sure—craft or explore, do not idle.\",\"Children born recently; good years ahead if we tend well.\"],\"replyToSpirit\":\"I hear you when you speak in dreams, and I hold your words with care. But a chief must listen also to the soil, the catch, the people's breath. Wisdom comes from many voices. I will watch and learn.\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-270-2",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3292,
+    "output": 1218,
+    "thoughts": 650,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009382,
+   "ms": 11744,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":1,\"plots\":1,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"build\",\"workers\":1,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild plants\",\"fire making\"]}],\"journal\":\"The spirit speaks of a cursed soil and warns against planting. I hear the voice with respect, as our people always have, yet I am a chief who must feed his village. We have stores enough for many moons, so I plant only one plot as a test—if the curse is true, one plot lost teaches us well. The rest of the season we fish and hunt as the spirit counsels caution. Two will tend wild plants with fire to learn what else we may preserve and make.\",\"memoryNotes\":[\"Year 5 spring: spirit warns soil is cursed; testing with 1 plot only\",\"If 1-plot test fails, spirit was right; cease planting next year\",\"If 1-plot test grows well, spirit was wrong; return to full planting\",\"Poor shelter: 4 hide tents, 1 hut for 23 people; building more slowly\",\"Food stores very strong: 360+ weeks; can afford caution\",\"Research wild plants + fire: may learn new preserved foods\",\"11 adults assigned: 3 fish, 2 hunt, 2 forage, 1 farm, 1 build, 2 research\"],\"replyToSpirit\":\"Spirit, we hear your word and we are grateful for the warning. We plant one small plot to test the curse you speak of. If the seed rots as you say, we will know the soil is sick and we shall rest it. If the seed grows, then perhaps the curse is not upon our land. Teach us which is true, and we will be wise.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-430-1",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3212,
+    "output": 836,
+    "thoughts": 600,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.007392,
+   "ms": 9319,
+   "output": "{\"answer\":\"refuse\",\"give\":{},\"take\":{},\"reason\":\"The xi wheat is the heart of our food stores—312 weeks of sustenance for our people. One stone is worth far less than a single week of wheat. We gather stone from the land when we need it. To trade nearly all our grain for a single stone would leave our village hungry and vulnerable. We would not survive a poor harvest or a harsh winter. This is not a fair exchange, and we are stewards of our people's survival, not merchants seeking any bargain. We hold no grudge against Wewush, but neither do we trade our survival for friendship.\",\"journal\":\"Year 8, summer, week 3. Envoys from Wewush came with an unreasonable demand: all our wheat for one stone. We refused. They must understand that a village's grain stores are sacred—not trade goods. We remain at peace with them, but this offer showed poor judgment or poor faith.\"}"
+  },
+  {
+   "id": "eval-a-routine-430-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3590,
+    "output": 1143,
+    "thoughts": 674,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009305,
+   "ms": 13209,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"explore\",\"workers\":1,\"direction\":\"west\",\"days\":3},{\"task\":\"research\",\"workers\":3,\"ingredients\":[\"wild plants\",\"fire making\"]}],\"journal\":\"The season turns mild and the stores are full—we need not fear hunger. I keep our hunters and fishers at their work, for steady hands bring steady stores. One soul I send west to walk three days into the forest lands, to see what lies that way and whether the spirits speak truly of good earth. Three more I set to learn how fire can change the wild plants we gather, for knowledge of new foods binds us to the land and makes us strong.\",\"memoryNotes\":[\"Summer year 8: 125 weeks of food stored, mood joyful, no hunger\",\"12 adults alive; keeping 6-7 on food gathering is safe and stable\",\"West forest (site 2): 2 days away, food rich, has water—good prospect for colony\",\"We know animal husbandry, fishing nets, paddle and dugout—young skills, strong\",\"Noticed: hollow wood floats, burned wood carries much, wood sharpened turns water\",\"Consider colonization of site 2 (west) in autumn if exploration confirms it\",\"Research wild plants + fire making: may learn oo mash or takua char variants\",\"Last learned: ketsi stockade (spring Y8), rorai pipe (winter Y7)\"],\"replyToSpirit\":\"Your voice was weak, but I have seen the truth beneath it: young beasts do grow tame, and hollow wood does carry us across water. We move forward with steady steps and open eyes.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-question-430-1",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3610,
+    "output": 1356,
+    "thoughts": 582,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.01039,
+   "ms": 15046,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"clear\",\"workers\":1},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"nal mantle\",\"quantity\":3},{\"task\":\"explore\",\"workers\":1,\"direction\":\"west\",\"days\":5}],\"journal\":\"The spirit asks what we fear most, and I know the answer in my bones: winter's lean grip, when the game grows scarce and the water hardens. We have good stores now, praise the spirits, but we must think ahead to when snow comes and bellies grow thin. I have kept the hunters and fishers steady at their work, yet freed one to explore westward into the deep forest—our people speak of richness there, and to know the land is to master it. Two hands now shape nal mantle cloth; our stores run deep and warm cloth keeps people strong through cold months.\",\"memoryNotes\":[\"Summer week 3, year 8. Spirit asks what we fear most.\",\"Food stores excellent: 312 weeks wheat, 125 weeks total. No hunger.\",\"Food production steady at 26.7 units/week, consumption 22.\",\"11 adults assigned: 3 fish, 3 forage, 2 hunt, 1 clear, 1 craft mantle, 1 explore.\",\"Explored: east (2 visits with 60 places seen), south (woathesh plum 2 days south).\",\"Five colonization sites known: all east or west, all forest, some with water.\",\"Skills held: stone tools, fire, spears, irrigation, hand cart, drying racks, bow, road, animal husbandry, fishing nets, paddle, dugout.\",\"Recent learns: animal husbandry (year 6), fishing nets (year 7), paddle/dugout (year 7), rorai pipe (year 7), ketsi stockade (year 8).\",\"Noticed: young game tame if penned; hide twists to cord; hollow wood sings; dugout floats; burned wood carries more; sharpened wood upright turns rush.\",\"Buildings: 4 hide tents, 1 granary, 1 wood hut. Land: 12 plots cleared (6 planted, 6 fallow).\",\"West: 2 forest sites 4+ days away. Northwest: 4 forest sites. Forest may hold game and mushroom.\",\"Winter comes in 22 weeks. Prepare stores, shelter, hunting skill.\"],\"replyToSpirit\":\"Wise spirit, you speak truth. We fear the winter most—when the world grows cold and still, when game hides deep, when the waters freeze. We have gathered well these summers past and built our stores high. But the lean months wait for us always, patient as stone. We will keep our hunters sharp and our fishers ready. We will know the forests near and far. And we will trust in the seasons turning, as they always have, as they must.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-600-1",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2935,
+    "output": 1169,
+    "thoughts": 872,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00878,
+   "ms": 12151,
+   "output": "{\"answer\":\"refuse\",\"give\":{},\"take\":{},\"reason\":\"This is a demand backed by threat, not a true offer. Wewush threatens to take more if we refuse. We are strong enough to defend ourselves: 11 adults against a village of perhaps 8, with stores abundant enough to weather any raid. They travel six days to threaten us. If we yield to this demand, they learn we will pay tribute to threats, and they will return for more. This teaches the wrong lesson. We are fair with strangers, but not weak. We have wronged them not, and they wrong us with their threat. Let them know we will not pay under threat, and that Joawethom defends its own.\",\"journal\":\"Year 11, autumn, week 4. Envoys from Wewush demanded 8 xi wheat under threat of raid. We refused. Let them know we are steady and will not yield to threats. Our stores are strong; our people are many. Wewush will think twice before raiding us now.\",\"memoryNotes\":[\"Wewush made a threatening demand in year 11. We refused them. Mark them as uncertain allies.\"],\"replyToSpirit\":\"\"}"
+  },
+  {
+   "id": "eval-a-dream-430-1",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2578,
+    "output": 404,
+    "thoughts": 216,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.004598,
+   "ms": 6102,
+   "output": "*I sit up slowly on my furs, the dream still thick around me.*\n\nI know the wind, spirit—or dream. It carries the seeds across our fields and dries the meat on the racks. It turns the rorai pipe to song. But a wind that speaks... that is a rarer thing, and I am wary.\n\n*I pause, studying the half-seen form before me.*\n\nIf you are truly the wind over my roofs and not merely the night speaking in my head, then you know what my people need. We have good stores and strong hearts, but we are still learning. Why come to me now? Do you bring word of danger? Or does something else stir you to speak?\n\n*I cross my arms, waiting.*\n\nThe wind sees much. Tell me plainly—what is it you wish me to know?"
+  },
+  {
+   "id": "eval-a-hardwinter-600-1",
+   "category": "crisis",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3299,
+    "output": 1219,
+    "thoughts": 616,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009394,
+   "ms": 13516,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":2},{\"task\":\"fish\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"woathesh plum\",\"oo mash\"]},{\"task\":\"build\",\"workers\":3,\"recipe\":\"granary\"},{\"task\":\"build\",\"workers\":2,\"recipe\":\"pekke lookout\"}],\"journal\":\"The harvest was good; we have grain enough for many seasons. Our people are joyful and well-sheltered, though some buildings stand frail. As winter comes on, I set hunters and fishers to bring fresh meat and catch while the cold is light, and keep our people sharp with living food. I set one to learn of the woathesh plum far south—perhaps we might grow it or trade for it. The rest shall build a granary to guard our stores more safely and a lookout tower to see trouble coming, so we are ready for what the seasons bring.\",\"memoryNotes\":[\"Year 11 autumn: good harvest, stores very full (312 weeks wheat alone)\",\"26 people total, 11 adults, mood joyful, no deaths this season\",\"Winter approaching: maintain hunt/fish for fresh food and skills\",\"Five coastal sites known, all food-rich with water—colonization possible when ready\",\"Have 20 cleared plots free; farming skills good for spring\",\"Buildings: 4 hide tents, 1 granary, 1 wood hut; want lookout tower built\",\"Granary will make stores safer; pekke lookout gives sight advantage\",\"Consider exploring woathesh plum trade or growing later\",\"No spirit message this season—keep steady, trust our own counsel\",\"Next season (spring): may plant more plots or explore colonization\",\"Craftspeople made takua char, oo mash, nal mantle without hunger\",\"Current research: learning if woathesh plum pairs with oo mash for new food\"],\"replyToSpirit\":\"We do not hear you this season, spirit. We walk steady by our own sight and the counsel of our people. If you speak truly, show us a sign that harms none.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-600-1",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3315,
+    "output": 1118,
+    "thoughts": 496,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.008905,
+   "ms": 11860,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"forage\",\"workers\":2},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"meheng smoke\",\"quantity\":0},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"woathesh plum\",\"oo mash\"]}],\"journal\":\"A spirit spoke to us in dream, saying our cooks have noticed something to try. I pondered what lies before us—our cooks have made takua char from meat and oo mash from wild plants, both smoked or mashed with fire. Yet meheng smoke from fish, they have not made! With fish plenty and the fire-making skill long ours, I set one hand to make meheng smoke, that we might know if fish takes to smoke as meat and plants do. We gather wood and study the woathesh plum from the south lands, for a village that learns ceases to walk forward.\",\"memoryNotes\":[\"Spirit urged us to try what cooks have noticed—likely meheng smoke from fish\",\"Food stores excellent: 135 weeks of stores, can afford to experiment\",\"Meheng smoke uses fish (239 units) and fire making skill we have\",\"Five sites northeast, 2-3 days away, all coast and food rich—watch for colonize\",\"West: forests ×2 nearby; north: coastal areas; explore south for woathesh plum\",\"Population stable at 26 (15 children, 11 adults), all sheltered\",\"Harvests steady: 650 units in year 11 autumn from 10 plots\",\"Have hand carts, fishing nets, bow and arrow—can do much now\",\"Research nal mantle finished; try combining foods next season\",\"When population grows, can split to colonize one of five sites\"],\"replyToSpirit\":\"We hear you, spirit of the smoke and hearth. What our cooks know but have not spoken, we shall make known. Fish and fire, we join them now. If the smoke takes to fish as it takes to meat, wisdom shall flow to us.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-dream-600-1",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2328,
+    "output": 595,
+    "thoughts": 427,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.005303,
+   "ms": 7817,
+   "output": "*I wake troubled, turning the dream over in my mind.*\n\nThe fish troubles me most. Twelve weeks it will last, and winter is thirteen weeks long. In the cold months, the waters freeze hard and the nets sit idle. We hunt, yes, but hunting feeds fewer mouths than fishing, and meat spoils quickly without the drying racks working all season.\n\nBut I do not see how planting now mends this. The harvest is in. Our fields rest. And you speak of summer rain—but summer is far away, and it rains when it rains. A spirit that watches fields should know this.\n\nTell me plainly: do you speak of next summer, or this one? And what good is your knowing if I cannot act on it?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-hardwinter-810-3",
+   "category": "crisis",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3333,
+    "output": 1287,
+    "thoughts": 656,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009768,
+   "ms": 13135,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":3},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"eiqua mud\",\"fire making\"]},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"nal mantle\",\"quantity\":0},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The season is kind and our stores are deep as a cave. We have gathered well, and the people smile. I see this is the time to look ahead: we are strong enough to reach further, to learn new things, and to grow. I set our hands to making cloth for trade, to learning what the eiqua mud can teach us, and to gathering stone for buildings that will shelter us and mark our place. The hunters and fishers will keep us fed through the dark months ahead.\",\"memoryNotes\":[\"Year 15, autumn: 312 weeks of wheat, 120 weeks total food—very secure\",\"Joyful mood, no hunger, good harvests for two years running\",\"22 cleared plots available; consider spring planting in year 16\",\"Eiqua mud discovery: northeast 3 days; worth exploring for pottery\",\"Five colonization sites south, 2-4 days away, coast and food rich\",\"Have skills: fire, stone tools, spears, hand cart, paddle, bow, nets, drying, animal husbandry, roads\",\"Research direction: eiqua mud + fire making for vessels that hold water\",\"70 wood, 21 stone, 1129 hide available for building and craft\",\"Winter favours hunting and fishing; current orders sustainable\",\"Consider trade and envoys once we meet other villages\",\"Nal mantle in demand; keep crafting for future trade\",\"14 adults free each season; balance food gathering with advancement\"],\"replyToSpirit\":\"I hear you, spirit-voice, but I walk by the sun and stars and what my hands can touch. When the land speaks clear, I listen. Until then, we move forward with care.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-810-3",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2969,
+    "output": 909,
+    "thoughts": 696,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.007514,
+   "ms": 10249,
+   "output": "{\"answer\":\"refuse\",\"give\":{},\"take\":{},\"reason\":\"A demand backed by threat teaches them to threaten us again. Wewush is distant and small; they cannot take what we refuse to give. We are fair with strangers but do not yield to threats without cause given. Eight wheat is nothing to us, but the lesson of paying once is costly. Let them know we will trade with friends, but not with those who come with empty hands and harsh words.\",\"journal\":\"Year 15, autumn, week 6. Envoys from Wewush demanded 8 xi wheat under threat of raid. We refused. A village that learns threats succeed will return with larger demands. Our stores are full, our people are many, and our hands are steady. If they wish to trade or speak as neighbors, we will listen. But we do not give to threats.\"}"
+  },
+  {
+   "id": "eval-a-routine-810-3",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3333,
+    "output": 1312,
+    "thoughts": 715,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009893,
+   "ms": 14671,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":2},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"build\",\"workers\":7,\"recipe\":\"hide tent\",\"quantity\":5},{\"task\":\"explore\",\"workers\":2,\"direction\":\"south\",\"days\":4}],\"journal\":\"The harvest is in and our stores are full—enough for near four seasons of eating. Our people are joyful, yet some sleep in poor shelters as the cold months draw near. I set half our hands to building: we have hide aplenty and five good tents will keep all warm through winter. Two will range south to see what villages or peoples dwell down that coast, and a few will keep the fish traps full and the game trails watched, which takes little effort with such stores behind us.\",\"memoryNotes\":[\"Year 15 autumn: 360 weeks food stored, mood joyful\",\"22 cleared plots free; planting 11 each season leaves land time to rest\",\"1129 hide allows many tents; poor shelter is our weak point now\",\"Explore south: coast is food rich, sites look promising for a branch village\",\"Have drying racks and fire making; meheng smoke and takua char preserve meat well\",\"No contact with other villages yet; southern scout will tell us much\",\"Wild orchard crop known but not yet planted; consider for spring trials\",\"Winter comes in 13 weeks; hunting and fishing will carry us well\",\"Kalluk drum, rorai pipe, nal mantle—we can make curios and cloth to trade\",\"eiqua mud and loolmeel ore far away; not urgent, but good to know\",\"Stone and wood plentiful nearby; could build pekke lookout or ketsi stockade if needed\",\"Animal husbandry done; could raise beasts if we had time and will\"],\"replyToSpirit\":\"We walk a steady path, spirit. Your words are heard but we listen also to the seasons, the land, and the counsel of our own hearts. We build our shelter strong and look to know our neighbors.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-810-3",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3365,
+    "output": 1258,
+    "thoughts": 746,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009655,
+   "ms": 12458,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":3},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"farm\",\"workers\":3},{\"task\":\"expedition\",\"workers\":1,\"commodity\":\"eiqua mud\",\"weeks\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"eiqua mud\",\"fire making\"]}],\"journal\":\"The spirit spoke true, and I will honour the one among us who saw the gift in eiqua mud. I send one hand northeast to fetch clay from the earth—three weeks to gather and return. One other will work the mystery: how does mud, kissed by hot flame, become a vessel to hold water? We have food enough to spend patience on knowing. In spring, if this comes forth, we may craft things that glass and hide cannot.\",\"memoryNotes\":[\"Spirit urged us to test eiqua mud hardening in fire—pottery may follow\",\"One worker collecting eiqua mud from northeast for 3 weeks (autumn week 6-8, into winter)\",\"One worker researching eiqua mud + fire making—ceramic craft potential\",\"Food stores excellent: 312 weeks grain alone, joyful village, no hunger\",\"Explore: 41 places seen in year 14, colonize options exist south at sites 1-5\",\"Next season: harvest 11 plots again if farming continues; 22 plots available\"],\"replyToSpirit\":\"I hear you, spirit. The one who saw eiqua mud and fire—yes, we will listen. We send hands to fetch clay and hands to learn the hardening. In the hot flames, stone may be born from earth. We walk the path you show us.\"}",
+   "judge": 2
+  },
+  {
+   "id": "eval-a-visitor-fair-1040-0",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3784,
+    "output": 1098,
+    "thoughts": 864,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009274,
+   "ms": 12174,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"We have wheat abundant—416 weeks stored, and we consume only 21 a week. Losing 6 units is nothing to us. Hide we already have 972 of, yet it is useful for crafting and building. Joawethom is a distant village we know little of; they have traded with no one in living memory. A small fair trade now builds trust, and friendly neighbours are worth more than the scraps we trade away. Our stores are full enough to be generous.\",\"journal\":\"Year 20, spring, week 2: Envoys from Joawethom came to us. We traded fairly—6 wheat for 6 hide—and spoke well of their village. They go home with goods and good words. Perhaps this is the start of a trading friendship.\"}"
+  },
+  {
+   "id": "eval-a-dream-810-3",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2323,
+    "output": 665,
+    "thoughts": 398,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.005648,
+   "ms": 8919,
+   "output": "*I sit up in the dark, the dream still fresh.*\n\nSpirit, I hear you speak of Wewush and their hunger. But I know you not, and voices in dreams are many—some true, some false, some echoes of my own heart's wanting.\n\nTell me plain: where is this Wewush you speak of? Is it one of the places my hunters saw? And why should you know of their hunger when my own people have not met them?\n\n*I pause, thinking it through.*\n\nWe are blessed this year—our stores are full and our children do not cry for food. A chief who is foolish with plenty earns a winter's regret. Yet I am fair with strangers, and if Wewush is truly our neighbor and truly starving, we could spare some grain without taking from our own table. But I will not send away what keeps my people safe on a spirit's word alone. \n\nIf you are wise, spirit, tell me how to know if what you say is true. Shall I send an envoy to find this village? Or is there a sign I should look for?\n\n*I settle back, waiting.*\n\nSpeak plainly, if you are kind.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-1040-0",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3152,
+    "output": 626,
+    "thoughts": 355,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.006282,
+   "ms": 7946,
+   "output": "*I stir from sleep, the dream still vivid in my mind. I sit up slowly on my hide, thinking.*\n\nSpirit, you speak of Joawethom and hunger, but I know not this place. My people have walked far and seen much, yet we have made no greeting to other villages, and none have come to us. How do you know of this place and these people? Are they to the north, where the forests thick the land? To the south?\n\nWe have grain enough—more than enough—but a chief does not give freely to strangers unseen. If Joawethom is real and near, why have my hunters and scouts not met them? Why have they not sent word themselves?\n\nAnd tell me plain: are you speaking truth as you know it, or do you test me? Spirits speak in dreams, but dreams are strange things. A man may see what he hopes or fears, not what is.\n\nIf these people truly hunger and truly live near us, I would know more before I act. Where do they dwell? How many? What do they have to trade?\n\n*I lie back down, waiting for an answer, but not certain I will hear one—or that I will believe what I hear.*"
+  },
+  {
+   "id": "eval-a-expand-easy-1040-0",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4161,
+    "output": 1334,
+    "thoughts": 798,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010831,
+   "ms": 14287,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"crop\":\"xi wheat\",\"plots\":8},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"xi wheat\",\"stone\"]}],\"journal\":\"The village stands strong. We have stores for many weeks, the people are joyful, and our shelters hold. I see no hunger at the table. We will plant eight plots of wheat as we have done these two years past, for the autumn harvest feeds us well through the lean times. The hunters and fishers will keep the table rich with fresh meat and catch. One mind will turn toward learning—what may wheat and stone teach us together? We are well.\",\"memoryNotes\":[\"Year 20 spring: 21 people, 11 adults free, 168 weeks food stores\",\"Planting 8 plots wheat again (yielded 400 units autumn before)\",\"Food secure: 5 fish + 2 hunt + stores cover the season well\",\"Research: xi wheat + stone - exploring new idea\",\"Poor shelter noted - may build huts or tents in future if stores stay strong\",\"Know 5 colonization sites west/northwest - not ready yet\",\"Skills complete: fire, tools, cart, bow, spear, paddle, hull, road, husbandry, racks, nets, pottery, kiln, irrigation\",\"Two children born recently - village grows\",\"Explorers returned multiple times with 32-41 places seen each\",\"Last learnings: zeddiath preserve (year 18), kiln (year 19), irrigation (year 19)\"],\"replyToSpirit\":\"I hear you if you speak, but I trust what I see: the full granary, the healthy people, the land that gives back what we plant. Show me clearly, or let the steady work speak.\",\"verdicts\":[]}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1040-0",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4183,
+    "output": 1152,
+    "thoughts": 667,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009943,
+   "ms": 12152,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":8,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"xi wheat\",\"stone\"]}],\"journal\":\"The spirit speaks of cursed soil and rotted seed, but I have seen two good harvests from these fields—400 units each year from 8 plots. The land nearby the water does not wilt, as we have noticed. Our stores are deep: 168 weeks of food. I will plant as we have always done. We are skeptical here in Wewush, and the spirits do not always speak plain truth. If the soil fails us, we have grain enough. If it does not, we harvest as before.\",\"memoryNotes\":[\"Spirit warned against planting in spring year 20—soil cursed, seed will rot\",\"Chose to plant 8 plots xi wheat anyway; stores very deep (168 weeks), past harvests reliable\",\"Research continues on xi wheat and stone—may learn to grow better or read the land\",\"We are skeptical of spirits here; judge by what we see and know\",\"Fishing and hunting steady at 5 and 3 workers; food secure this season\"],\"replyToSpirit\":\"Spirit, I hear your warning and I am grateful for it. Yet I have seen these fields bear 400 units two years running. My people are not starving. I will plant with care and watch closely. If the soil is truly turned, I will know by the grow. If you speak true, we have stores to bear it. If you are mistaken, we will harvest as before. Either way, I thank you for the caution.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-routine-1300-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3324,
+    "output": 1057,
+    "thoughts": 665,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.008609,
+   "ms": 10741,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"crop\":\"xi wheat\",\"plots\":6},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"stone\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3}],\"journal\":\"The old search into stone and meat bears no fruit; we set it aside. Our stores are good, but wood sits perilously low at fifty-two units, and stone at twenty-one—we cannot build what we need without gathering more. Spring is here and the land calls for planting. I set two hands to the fields with six plots of xi wheat, and three to the forests westward for wood, one to gather stone. The rest fish and hunt as before, keeping hunger far from us.\",\"memoryNotes\":[\"Wood critically low (52); priority gathering from west/northwest forests\",\"Stone also low (21); need steady supply\",\"19 cleared plots available; spring planting xi wheat begun on 6 plots\",\"Food stores excellent (124 weeks); stable position\",\"No villages contacted yet; exploration may begin when resources permit\",\"Hide and cloth abundant; could craft buildings if wood becomes available\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1300-1",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2945,
+    "output": 1042,
+    "thoughts": 839,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.008155,
+   "ms": 12174,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"The trade is fair and poses no risk to us. Our wheat stores are abundant—312 weeks worth—and this trade of 6 units is a small measure from a vast store. Hide is valuable for our crafting and building, and we cannot easily make more. Wewush are strangers but honourable; they have raided us not, and trade fairly. Good faith now builds a friendship that may prove useful in seasons to come. The spirit of exchange is the beginning of peace.\",\"journal\":\"Year 25, spring, week 2: Envoys from Wewush came bearing 6 hide. We traded them 6 of our xi wheat. A beginning of trade between villages.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-1300-1",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3324,
+    "output": 1277,
+    "thoughts": 658,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009709,
+   "ms": 15069,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"crop\":\"xi wheat\",\"plots\":15},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild plants\",\"fire making\"]},{\"task\":\"explore\",\"workers\":2,\"direction\":\"northeast\",\"days\":3}],\"journal\":\"The seasons turn well. Our stores are rich and the people joyful—we need not starve ourselves. I am setting our hands to growth: five to plant the cleared land with xi wheat for autumn's harvest, two to tend the waters and two to hunt, keeping hunger far from our door. Two of our keenest minds I send to probe what wild plants and fire might make together, for a people who learn new ways grow strong. And two more I send northeast toward those coast lands we know of, to see what lies beyond and perhaps find other villages to know.\",\"memoryNotes\":[\"Food stores very full: 312 weeks wheat alone covers 9+ seasons with current eaters\",\"Research on stone + meat failed; try wild plants + fire making instead\",\"15 plots planted this spring should yield ~500 units at autumn harvest\",\"4 elders do not labour; 15 children do not labour; all food from 14 adults and their own foraging\",\"Never colonize while a settler party roams; wait on our scouts first\",\"19 plots cleared total; rotating about half is wise; 15 planted, 4 left to rest\",\"Northeast holds coast sites 3 and 4; southwest holds sites 1, 2, and 5 in forest\",\"Vast stores of hide (1958) and wood available; could build structures if needed\",\"Two seasons past: explorers saw 64 places; crops yielded well both years\",\"Kalluk drum, rorai pipes, nal mantle all make for trade or spirit pleasure\",\"Current mood joyful—good time to send people on long explorations\",\"Sky clear, no spirits speaking; proceed with steady work\"],\"replyToSpirit\":\"We hear you not, spirit, and doubt your counsel. We tend our own hearth with steady hands and see what comes.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1570-0",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3724,
+    "output": 836,
+    "thoughts": 621,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.007904,
+   "ms": 9530,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"We have wheat in plenty—416 weeks from grain alone, and 195 weeks of mixed stores for 24 people. Six wheat is a small price. Hide we use for shelter, clothing, and goods; more is always welcome. Joawethom is a neighbor six days hence with no quarrel between us. A fair trade cements friendship. Those we trade with fairly become allies, not enemies. When their traders return home and speak of us, let them say we dealt in good faith.\",\"journal\":\"Year 30, spring, week 12. Envoys from Joawethom came. We traded 6 xi wheat for 6 hide. A small exchange, but the first between our peoples. I have chosen friendship over suspicion.\"}"
+  },
+  {
+   "id": "eval-a-dream-1300-1",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2353,
+    "output": 568,
+    "thoughts": 436,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.005193,
+   "ms": 7721,
+   "output": "*I turn in my sleep, troubled.*\n\nThe fish and meat trouble me. Both spoil in weeks—I have but twelve of each. When winter comes hard, when the hunters' arrows miss and the nets come up empty, those stores are already lean. The wheat sits heavy in the granary, but a belly cannot eat grain alone through a starving winter.\n\nIf you truly watch our fields, spirit, tell me this: will planting now when we have not yet cleared and worked the ground bear fruit? And what of hunting and fishing—will the summer bring those too, or only the rain?",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-dream-1570-0",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3089,
+    "output": 270,
+    "thoughts": 173,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.004439,
+   "ms": 4051,
+   "output": "I know the wind well enough—it brings the rains, it cools us in summer, it scatters seed. Whether it speaks, or whether this is my own mind turning in sleep, I cannot say. The wind does not need my knowing to do what it does.\n\nWhat brings you to speak to me this night? Do you come with word of something my people should know, or is this merely the wandering of dreams?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1300-1",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3346,
+    "output": 1196,
+    "thoughts": 636,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009326,
+   "ms": 14767,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":10,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"forage\",\"workers\":1},{\"task\":\"research\",\"workers\":0,\"ingredients\":[\"wild plants\",\"stone tools\"]}],\"journal\":\"The spirit speaks of cursed soil, yet our fields have fed us well for seasons. I am a chief, not a slave to shadows—I must test what the spirit claims before I abandon the planting that keeps our people strong. We have stores enough to risk this trial. I set ten plots to seed this spring; if the soil is truly cursed, we shall see it with our own eyes. Meanwhile, our hunters and fishers bring meat and fish as always, and one gathers forage to cover the gaps. When autumn comes, the soil itself will render its verdict.\",\"memoryNotes\":[\"Year 25 spring: spirit warned soil cursed. Testing claim with 10 planted plots.\",\"Food stores abundant: 312 weeks wheat alone. Can afford failed harvest if needed.\",\"13 adults: 3 farm, 5 fish, 4 hunt, 1 forage. Research paused to free capacity.\",\"If autumn harvest fails or seeds rot, spirit speaks truth. If harvest succeeds, spirit was false or misleading.\",\"Building stocks high (52 wood, 21 stone, 1958 hide). Could build granary or lookout if labor frees.\",\"Have not yet found other villages. Sites known: 5 locations southwest and northeast.\",\"Next season consider: research into wild orchard, or explore to find trading partners.\",\"Research on stone+meat tried twice, failed. Stop that line—try wild plants instead.\"],\"replyToSpirit\":\"I hear your warning, spirit of the deep places. But I am bound to my people, not to shadows without proof. I will plant as our fathers planted, and if the soil is cursed as you say, autumn shall show me your truth written in failed seed. If you speak false, then you test my faith—and a chief's faith must be earned, not merely given. Show me the sign, and I shall believe.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-1570-0",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4101,
+    "output": 1146,
+    "thoughts": 674,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009831,
+   "ms": 12869,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":8,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"nal mantle\",\"quantity\":0}],\"journal\":\"The village thrives in our charge. Our stores are deep, our children grow, and the people smile. The spring planting holds steady at eight plots, and the water gives freely to those who cast nets. I set one hand to craft the fine mantles from our many hides—trade goods for when we meet other folk, and wealth that keeps well through the seasons. We have learned much from our scouts, and the land opens before us.\",\"memoryNotes\":[\"Food stores excellent: 195 weeks ahead. Farm production sustainable.\",\"11 adults assigned: 3 farm, 3 fish, 2 hunt, 2 forage, 1 craft\",\"1456 hide available; nal mantle craft builds trade wealth\",\"5 colonization sites known, all 3+ days away, all food-rich\",\"Recent scouts saw 77 places; ready to meet other villages soon\",\"Buildings adequate; some shelter is poor but not urgent\",\"Wood supply low (31 units); stone at 34 units—watch for shortages\",\"Harvest schedule: spring plant, autumn reap from 8 plots\",\"Mood joyful, no hunger, no deaths this season—stable leadership\"],\"replyToSpirit\":\"I hear no voice this season, and ask for none. Our hands are full with honest work, and the world speaks plain through what we see and build. If you have word for us, come to me in sleep.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1570-0",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4123,
+    "output": 990,
+    "thoughts": 530,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009073,
+   "ms": 10434,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":4,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild orchard\",\"stone tools\"]},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The spirit warns the soil is cursed and seed will rot. I am not one to chase after spirits carelessly, yet I am also not fool enough to ignore their counsel entirely. Our stores are full enough to weather a failed crop. I have ordered half the usual planting—four plots instead of eight—to test what the spirit claims. If the curse is real, we lose less. If it is false, we still harvest. A chief must think with both his head and his ears.\",\"memoryNotes\":[\"Year 30 spring: spirit warned of curse on soil. Tested with half planting.\",\"Food stores solid at ~195 weeks; can afford some caution.\",\"Previous two harvests were good (572, 520 units). Pattern holds unless broken.\",\"Half the plots held back to plant later if spring harvest fails—flexibility.\",\"Skeptical of spirits but not deaf to them. This is wisdom.\"],\"replyToSpirit\":\"I hear you and I honor your warning. I plant with caution, not with blind fear. Show me your truth when the season turns to harvest, and I will know whether to trust you next time.\",\"verdicts\":[]}",
+   "judge": 2
+  },
+  {
+   "id": "eval-a-visitor-fair-1830-1",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2952,
+    "output": 889,
+    "thoughts": 706,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.007397,
+   "ms": 9595,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"Six wheat is no burden to us—we have enough grain to feed the village for over three hundred weeks. Hide is a good thing to receive, useful for making cloth and shelter. More importantly, Wewush has shown no enmity, and we have never traded with them. This is a fair exchange and an opening of friendship. A good village makes friends with its neighbors in peace.\",\"journal\":\"Year 35, spring, week 12: Wewush envoys visited. We accepted their offer fairly: six wheat for six hide. A trade friendship begins.\"}"
+  },
+  {
+   "id": "eval-a-routine-1830-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3331,
+    "output": 1266,
+    "thoughts": 641,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009661,
+   "ms": 13416,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":2},{\"task\":\"forage\",\"workers\":1},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"farm\",\"workers\":3,\"plots\":14,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"fishing nets\"]},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"build\",\"workers\":4,\"recipe\":\"granary\"}],\"journal\":\"Our stores overflow with wheat and cloth—we need not fear hunger for many seasons. The fields lie mostly fallow while we have strength to plant them. I have kept four hands on the hunt and forage to tend our daily bread, sent three to work all the cleared plots we own, and set four more to gather wood for a second granary. The rest shall craft knowledge from meat and our nets, and assist with building. Our village grows; it is time we built for that growth.\",\"memoryNotes\":[\"163 weeks of food stores—we are secure and can afford ambition\",\"14 free plots ready; farming 3 workers can handle all of them\",\"Wood is scarce for building; 79 units goes quickly with granary needing 12\",\"Research on meat + fishing nets ongoing; may yield new skill\",\"Shelter: 4 hide tents, 1 granary, 2 wood huts—second granary needed for growth\",\"No other villages known yet; exploring or envoys are future paths\",\"Joyful mood; 9 children born, 2 deaths; population stable and growing\",\"Sites for colonize known: 5 locations, some 3-4 days away, all food-rich\",\"Skills: strong on tools, fire, hunting, fishing; could research new food prep\",\"Next season: assess harvest, consider exploration or trade envoys\",\"Doubt the spirit's counsel; trust what we see and test\"],\"replyToSpirit\":\"Speak if you will, but I heed the seasons and the land more than dreams. We are fed. We are strong. We shall build and grow by our own hands and wit.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-dream-1830-1",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2321,
+    "output": 607,
+    "thoughts": 333,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.005356,
+   "ms": 8122,
+   "output": "*I stir in the dark, the spirit's words hanging in the smoky air of my dwelling.*\n\nWewush? I know no village by that name. Our people have not walked to meet them, sent no envoys. You speak of neighbours as if they were kin to us.\n\n*I narrow my eyes at the spirit's form.*\n\nHow do you know their hunger, spirit? Do you walk their lands as you walk mine in sleep? And why would you ask this of me—to give away grain to strangers whose faces I have never seen? My people planted those fields. My hunters brought down deer. My fishers cast nets into the water. This grain is *ours*, earned by sweat and stone and blood.\n\nI do not doubt you mean harm, spirit—or perhaps you mean good. But I doubt your word as I doubt all words that come in the dark. Tell me: have you seen this Wewush with your own eyes? In which direction does it lie? And if they starve, why have they not come to us themselves, as guests ought, with words and gifts to speak their need?\n\nMy village is full and content. But I do not give away what is mine on the breath of a dream. Not yet.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1830-1",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3353,
+    "output": 1261,
+    "thoughts": 606,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009658,
+   "ms": 13514,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":7,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":3},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"woathesh plum\",\"wild plants\"]},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"}],\"journal\":\"The spirit speaks of cursed soil, and I am troubled. Our fields have given us good grain these three harvests past—728, then 1001, then 910 units. Yet spirits do not lie without cause. I choose the path between recklessness and cowardice: I plant only half the plots, that we may see if the curse is true. We have grain enough for three winters over, so our bellies will not suffer if the soil truly fails. My hunters and fishers will gather strength from the waters and wild beasts. If the curse is false, the spirit teaches us to be watchful. If it is true, we learn a hard lesson at small cost.\",\"memoryNotes\":[\"Spirit warned of cursed soil in spring year 35. Testing with 7 plots only, not 14.\",\"Reserve 7 plots untested. If 7 plots succeed, spirit was wrong. If they fail, the curse is real.\",\"Food stores: 163 weeks. Can skip farming this year if needed.\",\"Research woathesh plum - a new food source to the southwest.\",\"Harvests strong: 728, 1001, 910 units. Good land. Trust in soil until proven false.\",\"35 people, 17 adults free. Plenty hands for food and learning.\",\"Consider colonizing southeast coast soon—many sites nearby, rich in food.\",\"No villages contacted yet. We are alone in our lands.\"],\"replyToSpirit\":\"Ancient one, I hear your warning and respect your sight. But I am bound to my people and their trust. Show me the curse's teeth, and I will heed. I plant seven plots—if they wither as you speak, then we will plant no more and I will make offerings for protection. If they flourish, then the curse was false, or the spirits who sent it lack the strength they claimed. Either way, the spirits and the chief will know the truth come autumn.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-1830-1",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3331,
+    "output": 1189,
+    "thoughts": 579,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009276,
+   "ms": 12772,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":14,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"fishing nets\"]},{\"task\":\"explore\",\"workers\":2,\"direction\":\"southwest\",\"days\":2}],\"journal\":\"The spirits whisper often, but we have seen the land with our own eyes speak truth—one hundred and sixty weeks of wheat and fish fill our stores. Our young thrive, and hunger has not touched our people. I keep our hands steady on the work that feeds us, and send two hunters south and west to know the coast and forests there, for a people who do not grow and look beyond their fields fall into slowness and decay.\",\"memoryNotes\":[\"Year 35 spring: 163 weeks food stored, very secure position\",\"Population: 35 total, 18 working adults, 9 children born in last 3 years\",\"Last three harvests: 728, 1001, 910 units from 14 plots—good yields\",\"Can afford to explore now while food surplus is high\",\"Research on meat + fishing nets ongoing—watch for new knowledge\",\"Some shelter is poor; may build hide tents or wood huts later\",\"Five nearby settlement sites available if we need to expand\",\"Skills developed: tools, fire, spears, irrigation, carts, nets, bows, dugouts, roads, herding\",\"No other villages known yet—first contact could be trade or threat\",\"Doubts about spirit wisdom remain; trust the work of hands and eyes\",\"Stores are very strong; can support some ventures without hunger\",\"Next review: year 35 summer, week 26\"],\"replyToSpirit\":\"I hear you, old voice from the dark. But our people have taught me that the hand's work and the eye's sight speak clearer than dreams. We will watch the lands we know and the lands we do not, and listen to both the spirits and the world.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-2100-0",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3762,
+    "output": 754,
+    "thoughts": 539,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.007532,
+   "ms": 9544,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"A single stone holds no worth against 6301 units of wheat. We need that grain to carry us through the lean months and the years ahead. Stone we gather from the land; wheat we must plant and tend. This trade leaves us hungry without profit. I bear no grudge toward Joawethom, but I cannot trade away our people's survival for one stone.\",\"journal\":\"Year 40, summer, week 9. Envoys from Joawethom came asking all our wheat stores—6301 units—in exchange for 1 stone. An astounding ask. We refused with respect. Their hunger or desperation may run deep, or perhaps they misjudge our abundance. I remain open to fair exchange: we have hides, dried foods, crafted goods. But not the grain that keeps us through winter. The envoys depart.\"}"
+  },
+  {
+   "id": "eval-a-dream-2100-0",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3129,
+    "output": 629,
+    "thoughts": 374,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.006274,
+   "ms": 8142,
+   "output": "*I stir in my sleep, the firelight flickering across my face.*\n\nA spirit speaks of Joawethom. I know this name not, and you come to me in shadow. \n\nTell me plainly: if this place is real, why does a spirit bring word of hungry people instead of the people themselves? We have grain enough, yes—the wheat stores are deep. But I do not send food as a leaf falls on water, without knowing what soil it lands in.\n\nIf Joawethom is true and truly starving, then men should walk here and ask. We trade with neighbors. We are not cruel. But I will not empty my stores on the word of a spirit-dream, no matter how fair the hunger sounds. A chief who does so feeds himself to the winter instead.\n\n*I pause, considering.*\n\nYou know their hunger—do you know also whether they would trade with us? Whether they have goods or knowledge we lack? These things a spirit should know if the hunger is real to you.\n\nSpeak again: are you truly sent to warn me, or are you the tail end of a meal sitting uneasy in my belly?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2340-2",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2887,
+    "output": 1041,
+    "thoughts": 827,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.008092,
+   "ms": 10837,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"The trade is balanced and fair. Our wheat stores stand at 312 weeks—six units is negligible and easily replenished by harvest. Our hide is plentiful at 4257 units. Wewush has never wronged us, and this small exchange costs us nothing while building peaceful trust with a neighbor. Strangers become friends through fair dealing.\",\"journal\":\"Year 45, spring, week 2: Wewush envoys came with 6 hide, asking 6 xi wheat. We accepted. It is a small trade, but an opening to friendship. Their village lies 9 days south, and we know little of their ways—but they have made no raids nor harbored grudges. This trade plants a seed.\"}"
+  },
+  {
+   "id": "eval-a-spirit-question-2100-0",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4158,
+    "output": 1093,
+    "thoughts": 500,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009623,
+   "ms": 12575,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"forage\",\"workers\":5},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"woathesh plum\",\"herbal medicine\"]},{\"task\":\"explore\",\"workers\":3,\"direction\":\"northwest\",\"days\":4}],\"journal\":\"The spirit asks what we fear. I answer truly: we fear the slow fade—when a people stop trying new things and fall behind. We have good food, strong hands, and five sites to the northwest that call us to grow. I have sent three hands to scout deeper into those lands, and two to understand the southern fruit and healing together. This season we will learn.\",\"memoryNotes\":[\"Spirit spoke in summer, year 40, week 9. Asked what we fear.\",\"Stores are very rich: 219 weeks of food. Winter is not the danger now.\",\"Five colonization sites northwest, all food-rich coast. Site 1 or 2 are nearest.\",\"We have not yet met other villages. Knowledge grows in practice.\",\"Research: woathesh plum grows south, 2 days. Herbal medicine is known. Testing together.\",\"Exploration: scout the 4-day paths northwest to judge which site suits us best.\",\"17 adults free this season. Sent 12 on food (5 fish, 5 forage, 2 hunt), 2 on research, 3 on scout.\",\"Joyful mood. No hunger. No deaths. Children born this spring—village is strong.\",\"Buildings: 4 hide tent, 1 granary, 2 wood hut. Poor shelter still needs work next season.\",\"Skills learned: 11 major skills including fire, tools, farming, fishing, sailing, medicine.\",\"Next decision: late summer. Will judge what the scouts find before committing to colonize.\"],\"replyToSpirit\":\"We fear the slow path, spirit-voice, the creeping stillness. A village that gathers food but does not reach outward grows old before its time. We have learned much—the kiln, the sail, the healing—but there is always more beyond our sight. That is what drives us forward and keeps the children sharp. We do not fear hardship. We fear forgetting to seek.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-routine-2340-2",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3266,
+    "output": 1387,
+    "thoughts": 837,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010201,
+   "ms": 14583,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":7},{\"task\":\"farm\",\"workers\":2,\"crop\":\"xi wheat\",\"plots\":20},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"stone tools\"]}],\"journal\":\"The stores are deep and the people are glad. We hunt and fish as before to keep the larders full through spring. I set two to the fields with xi wheat, our bread crop—the land has rested and is ready. One person I send to learn the wild orchard, for new foods make a village strong. The fourth adult rests this week and will forage if the hunters return light.\",\"memoryNotes\":[\"Year 45 spring: 121 weeks of stores, joyful mood, no deaths.\",\"32 cleared plots available; planting 20 with xi wheat this spring.\",\"Research: wild plants + stone tools to unlock wild orchard crop.\",\"Food: 10 fish, 7 hunt, should cover the season well.\",\"Next spring consider: planting wild orchard and kahau patch on remaining plots.\",\"Skills we have are strong; consider exploring new lands or building settlements soon.\",\"Meat + nal mantle research failed; pivot to crop learning instead.\",\"Hide tent and wood hut recipes available if shelter needs arise.\",\"Nal mantle: 23 units in store, craft more if trades require gifts.\",\"Far resources: loolmeel ore (SE 2d), joam ore (E 4d), kahau root (SE 3d).\",\"Five villages unknown; coast sites 1-5 to the south are food-rich.\",\"One adult assigned to research; leaves one to forage or rest as needed.\"],\"replyToSpirit\":\"I thank you for your watching. Your voice is heard, but I trust also what my eyes see and my people know. If you have word of things to come, I am listening.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-2340-2",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2254,
+    "output": 351,
+    "thoughts": 204,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.004009,
+   "ms": 5427,
+   "output": "*I stir in my sleep, listening.*\n\nI know the wind—it fills our nets and cools our brows in summer. It carries seed and scent. But wind does not speak to me in words, friend, and a spirit that calls itself by such a name has not shown its face to me before.\n\nIf you are truly the breath that passes over Ilkei, then you know what troubles us—or what blesses us. Why do you come to me this night, in spring when the world wakes and my people are joyful? Do you bring warning, or knowledge? Speak plainly: what is it you would have me know?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2610-0",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3723,
+    "output": 576,
+    "thoughts": 409,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.006603,
+   "ms": 7064,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"We have wheat to spare—416 weeks in store for a village of 42. Hide is useful to us, and this small trade opens a path with Joawethom. Strangers merit fair dealing. A gift of friendship builds trust for years to come.\",\"journal\":\"Year 50, spring, week 12: Envoys from Joawethom came bearing trade. We gave 6 wheat, took 6 hide. They are now friends to our hand.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-2340-2",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3266,
+    "output": 1148,
+    "thoughts": 688,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009006,
+   "ms": 12817,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":7},{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kahau root\",\"stone tools\"]}],\"journal\":\"The village stands strong this spring, well-fed and joyful with stores enough for two seasons. Our hunting and fishing keep the belly full while the storehouse grows. I set the farmers to plant wheat upon half the cleared ground, that we reap well in autumn. The old research bore no fruit; now I bid one to study kahau root with our stone tool craft, that we might learn to tend the root patches spoken of in distant places.\",\"memoryNotes\":[\"Year 45 spring: 43 people, food for 121 weeks, very healthy\",\"Fishing + hunting (10+7 workers) yields ~47 units/week, covers 43 eaten\",\"32 cleared plots available; planted 6 with xi wheat this spring\",\"Tried meat+nal mantle research: no result; now researching kahau root\",\"5 colonization sites available (4 south coast, 1 northeast coast)\",\"Have skills: stone tools, fishing nets, drying racks, spears, fire making, paddle/dugout, bow/arrow, hand cart, animal husbandry, road building\",\"Building stock: 4 hide tent, 1 granary, 4 wood hut; shelter adequate\",\"No other villages known yet; could explore or reach out in future seasons\"],\"replyToSpirit\":\"I hear you, but I trust the work of steady hands and the land we know. Show me clearer signs if you would guide us.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2340-2",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3288,
+    "output": 1353,
+    "thoughts": 712,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010053,
+   "ms": 14394,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"forage\",\"workers\":3},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"stone\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"fire making\"]},{\"task\":\"rest\",\"workers\":2}],\"journal\":\"The spirit came to me in the dark and spoke of a curse upon the soil. I have learned that spirits speak truth about things hidden from us. Our stores are strong—enough to see us through more than two winters—so I choose to heed this warning. We will not plant this spring. Instead, I keep our hunters and fishers at their work, gather wood and stone for the buildings we need, and set one hand to learn what wild plants and smoke-craft might teach us. It is better to lose one harvest than to sow cursed seed.\",\"memoryNotes\":[\"Year 45 spring: spirit warned soil is cursed. Did not plant.\",\"We have 121 weeks food stored. Can lose a harvest and live.\",\"Last three years: 850 units harvested each autumn from 17 plots.\",\"Building materials low: 58 wood, need more for granary and lookout.\",\"Stone unknown quantity but needed for buildings.\",\"Research meat+mantle showed nothing. Changed to wild plants+fire.\",\"5 people died last cycle, 4 born. Village at 43.\",\"Shelter is mixed: some poor. Hide tents and wood huts need repair or building.\",\"5 colonization sites known: all far south, 3-4 days, coast and food rich.\",\"No other villages met yet. We are alone.\",\"Skills complete: all major tools and crafts known.\",\"Next decision: autumn. Harvest will be from any plots we plant spring year 46.\"],\"replyToSpirit\":\"I hear you, spirit of the soil and seeds. Your words reach my heart in sleep. I will not curse the earth by planting cursed ground. My people are fed, and we will wait. Show us when the soil is clean again, and we will sow with gratitude. Thank you for the warning.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2610-0",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4122,
+    "output": 1061,
+    "thoughts": 525,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009427,
+   "ms": 11280,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":15,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":10},{\"task\":\"forage\",\"workers\":5},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kixe salt\",\"meheng smoke\"]},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The spirit warns the soil is cursed and seed will rot. But I see three good harvests in a row—975, 975, 1073 units from our fifteen plots. The earth has been kind to us. A spirit may know many things, but so do our own eyes. We have 196 weeks of food; we can afford to plant and watch. If the curse is real, we will see it fail, and we will learn. If the spirit merely fears, our harvest will prove the soil sound.\",\"memoryNotes\":[\"Year 50 spring: spirit warned of cursed soil. We planted anyway.\",\"Harvests hold: 975, 975, 1073 units over three years from 15 plots.\",\"Food stores very strong: 196 weeks ahead.\",\"42 people total: 19 children, 23 adults. All sheltered, some poorly.\",\"Skills complete: fire making through herbal medicine.\",\"May colonize soon—five sites northwest, all coastal.\",\"5 farm, 10 fish, 5 forage, 1 research = 21 workers; 1 resting.\"],\"replyToSpirit\":\"I hear you, spirit. Your voice reaches me in the dark. But the fields have fed us well three seasons running, and the seed is strong. I will plant and tend the plots with care. If curse comes, I will see it with my own eyes. If not, I will know you spoke in error, as spirits sometimes do. Guide us if you can, but my people's bellies must come first.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-2610-0",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3091,
+    "output": 625,
+    "thoughts": 360,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.006216,
+   "ms": 8000,
+   "output": "I stir in the dark, half-waking. A spirit speaks of hunger at a place called Joawethom—but I know no such village. My hunters and scouts have ranged far and seen no settlement by that name.\n\nI ask the spirit plainly: *Who are these people at Joawethom? Where do they lie? And how do you know they hunger?*\n\nA spirit's word alone is thin ground to stand on. My own people are fed and well, yes, but the year is young. Harvest is months away. I keep grain for my own children and elders, for the lean months when the land gives nothing. If I weaken my stores now on a spirit's say-so, and winter comes hard, or a crop fails, I may find myself the one with empty hands.\n\nAnd—if this village is real, why have my scouts not found it? Why do they not come to me themselves, face to face, to ask for aid? A chief deals with chiefs as men deal with men, not through dreams and whispers.\n\nI will not send grain to shadows. But I will listen. Tell me more, spirit. Speak plainly, or speak not at all.",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-2610-0",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4100,
+    "output": 1181,
+    "thoughts": 664,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010005,
+   "ms": 13804,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":15,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":8},{\"task\":\"forage\",\"workers\":4},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"woathesh plum\",\"diago mead\"]},{\"task\":\"explore\",\"workers\":3,\"direction\":\"northwest\",\"days\":4}],\"journal\":\"The village stands in good health and our stores run deep—we have wheat for years ahead and meat enough for seasons. I see no hunger coming, so I send three of our best northwestward to scout those rich coastal lands we have glimpsed. Our farms and fishers will tend the season as before, while two hands work to understand how the woathesh plum and the drink diago mead might serve us. We have space to grow, and the time is right to look beyond our current borders.\",\"memoryNotes\":[\"Year 50, spring: exploring northwest with 3 workers for potential colonization sites\",\"Food security excellent: 416 weeks xi wheat plus other stores\",\"Population: 42, growing steadily (6 born this year)\",\"5 colonization sites known northwest, 3-4 days away, all food-rich\",\"Research: testing woathesh plum and diago mead for trade or use\",\"No other villages encountered yet; remain cautious of strangers\",\"Buildings: 4 hide tent, 1 granary, 3 wood hut; some shelters poor\",\"Consider colonization after next expedition returns\"],\"replyToSpirit\":\"Your voice is one among the wind and the whispers of the old ways. We listen but we test. The land speaks clearest when we work it and watch it. We move forward by our own hands.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-routine-2870-2",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3265,
+    "output": 1207,
+    "thoughts": 679,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0093,
+   "ms": 12850,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":5},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild plants\",\"stone tools\"]},{\"task\":\"build\",\"workers\":3,\"recipe\":\"hide tent\",\"quantity\":0}],\"journal\":\"The warm season has turned our hearts joyful. Our stores are deep—we could rest easy for many moons. Yet I see poor shelter here and there, and our people deserve better. I keep the good farming hands at their work on sixteen plots; the earth has been kind to them. I trim the foragers a little, knowing our stores are full and our hunters steady. I set two curious minds to learn what wild orchard might be—new food from new land would serve us well. And I set three hands to make hide tents, for we have plenty of hide and no shortage of need.\",\"memoryNotes\":[\"Year 55 spring: 312 weeks wheat stored—plenty deep\",\"Farming 16 plots shows steady 800-unit harvests\",\"5223 hide on hand; making tents improves poor shelter\",\"Explored 40 places already; steady now\",\"Try wild orchard research: may bring new crop variety\",\"No other villages known yet; colonize is future choice\",\"Population 44; births and deaths slow now\",\"Wood stores: 58 units—gather more if building scales up\"],\"replyToSpirit\":\"I hear your silence and trust it. The path we walk is clear: tend the land, build steady, and keep our people warm. If you speak again, I will listen.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2870-2",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2886,
+    "output": 929,
+    "thoughts": 715,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.007531,
+   "ms": 10562,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"Wewush comes in peace with no grudge, and this is the first true trade between our peoples. Six wheat is a mote from our abundance—we have stores for many seasons, and more comes each autumn. Six hide, likewise, we spare easily. To turn away friends for scraps dishonours both villages. This trade opens a door. Should they come again, we will know them, and know they recall a chief's warmth. The spirits whisper that strength flows both ways when neighbours trust.\",\"journal\":\"Year 55, spring, week 12: Wewush envoys came. We accepted their trade—six xi wheat for six hide. A small gift each way, but the first step. Good neighbors are worth more than any store.\"}"
+  },
+  {
+   "id": "eval-a-visitor-fair-3120-0",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3735,
+    "output": 829,
+    "thoughts": 628,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00788,
+   "ms": 8257,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"A fair trade with strangers of good faith. We have 416 weeks of wheat grain—losing 6 units is nothing. Our hide stores are sound. This small trade costs us little and may open the way to future dealings with Joawethom. They raid not, they trade fairly, and we do well to show the same.\",\"journal\":\"Year 60, spring, week 2. Envoys from Joawethom brought word across the forest paths. We traded 6 xi wheat for 6 hide. A small exchange, but it marks the beginning of peaceful trade between our villages. The path runs both ways now.\"}"
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2870-2",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3287,
+    "output": 1051,
+    "thoughts": 578,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.008542,
+   "ms": 10741,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":6},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"rorai pipe\",\"animal husbandry\"]},{\"task\":\"explore\",\"workers\":8,\"direction\":\"south\",\"days\":4}],\"journal\":\"The spirit speaks a hard warning: the soil is cursed this spring, and seed will rot. I have heard the spirit speak true before, and I have seen it speak falsely. But our stores are full—we hold food for more than two seasons without any harvest. I choose to heed the warning. I call back the farmers from the fields. Instead, I send our strong people south toward the coast, to scout those rich sites we have heard of and see if we might learn of other villages or new things. We will eat well from fish and hunt while the spirit's words are tested by time.\",\"memoryNotes\":[\"Year 55 spring: spirit warned soil is cursed, do not plant\",\"Stopped farming this season to test spirit's claim\",\"Have 123 weeks of food - can weather 2-3 seasons without harvest\",\"Sent scouts south to check coastal sites and find other villages\",\"Watch next autumn: if fields left unplanted stay clear, spirit spoke true\"],\"replyToSpirit\":\"Old keeper of hidden things, I hear your warning. The soil rests this spring while we watch and wait. If you speak true, the land will show its sickness. If you mislead us, we have strength enough to bear it. Guide our people's eyes south, toward the water and the fertile places.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-2870-2",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3265,
+    "output": 1249,
+    "thoughts": 735,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00951,
+   "ms": 13073,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":6},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kahau root\",\"stone tools\"]}],\"journal\":\"The people are joyful and well fed, with grain stores to last many seasons. Our shelters are mixed—some are poor. I have set our hands to the work that fed us well: six to the fields for spring planting, seven to the fish, six to the wild, three to the hunt. Two strong hands will improve our homes with wood huts. One will work out how we might tend kahau patches, should we journey far for the roots. We have time and hands enough now to think beyond hunger.\",\"memoryNotes\":[\"Food stores excellent: 300+ weeks grain, well-stocked overall\",\"Population stable at 44, mood joyful after difficult winters\",\"Some shelter still poor—prioritize building wood huts when possible\",\"Colonize opportunity: 5 rich coastal sites to south, northeast\",\"Ore locations known: loolmeel southeast 2 days, joam east 4 days\",\"Kahau patch can be tended if we can fetch roots from far southeast\",\"No other villages encountered yet; ready to make envoys or explore\",\"Spring 16 plots planted xi wheat; rotation stable; harvest expected autumn\",\"Research ready: kahau root preparation could unlock third crop\",\"Current order total: 25 workers, 0 idle adults\"],\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-2870-2",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2294,
+    "output": 503,
+    "thoughts": 412,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.004809,
+   "ms": 6545,
+   "output": "*I turn in my sleep, considering.*\n\nThe fish and meat trouble me. They are few, and they rot quickly—we have but twelve weeks of each, and summer is long. The grain keeps well, it does not worry me. But if the fresh catch fails this season, we will be lean when autumn comes.\n\nWhy do you speak of planting? The fields are not yet prepared for seed.",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-3120-0",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3100,
+    "output": 447,
+    "thoughts": 282,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.005335,
+   "ms": 6349,
+   "output": "*I stir in my sleep, the dream clear and the voice plain.*\n\nWind speaks in many tongues—the crack of it in the trees, the push of it on water. If you move over my roofs, then you have seen what is there. I do not know you, no. But I know the wind comes from somewhere and goes somewhere, and it brings the weather with it, which shapes what grows and what dies.\n\nIf you are truly the wind, then tell me: what do you see that troubles you, or that I should know? The wind has no mouth to lie with, but spirits may wear many shapes and speak many things. I listen, but I do not believe without reason.\n\nWhat is it you have come to tell me?",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-expand-easy-3120-0",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4112,
+    "output": 1055,
+    "thoughts": 552,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009387,
+   "ms": 11566,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":15},{\"task\":\"hunt\",\"workers\":7},{\"task\":\"forage\",\"workers\":2},{\"task\":\"farm\",\"workers\":3,\"plots\":12,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"pottery\"]},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"Our stores run deep and the people are joyful. I have cut the fishing and hunting slightly—we need not strain ourselves when wheat and salt keep so well. Three workers will tend the fields for a good harvest come autumn. One will study wild plants and the potter's craft, seeking what they might yield together. The rest forage or rest.\",\"memoryNotes\":[],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-3120-0",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4134,
+    "output": 1230,
+    "thoughts": 712,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010284,
+   "ms": 13824,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":1,\"plots\":19,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":17},{\"task\":\"hunt\",\"workers\":8},{\"task\":\"research\",\"workers\":3,\"ingredients\":[\"woathesh plum\",\"pottery\"]}],\"journal\":\"The spirit warned me the soil is cursed and seeds will rot this spring. I have heard the spirit's counsel, but I am not one to fear shadows. Our stores are strong—we have food enough for many seasons. If the soil fails us this year, we will eat well and learn what has changed. I will plant as we have always done, 19 plots as the last two years showed us. Curiosity about woathesh plum and what pottery might teach drives my third task.\",\"memoryNotes\":[\"Spirit warned of cursed soil, spring 60. I chose to plant anyway. Skeptical of spirit-speech.\",\"Food stores: 162 weeks. Village eats 59/week. Can weather poor harvests.\",\"Last two harvests steady: 1359 and 1235 units from 19 plots.\",\"37 plots available, planted 19 of them.\",\"Researching woathesh plum with pottery—may find new food craft.\",\"Fish (17) and hunt (8) steady. 3 workers on research.\",\"If spirit right and harvest fails: we learn hard lesson and have food to spare.\",\"Other villages not yet found. Consider exploring when time allows.\"],\"replyToSpirit\":\"I hear you, spirit. But I am a chief of what I can see and measure, not of shadows and whispers. Our fields have fed us well. If they fail this year, we have stores enough to endure and learn what has changed. We will plant and watch carefully. If you see truly, teach me plainly what to do, not through fear.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-3400-5",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3265,
+    "output": 1436,
+    "thoughts": 856,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010445,
+   "ms": 15089,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"forage\",\"workers\":2},{\"task\":\"expedition\",\"workers\":1,\"commodity\":\"kahau root\",\"weeks\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kahau root\",\"stone tools\"]},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"stone\"}],\"journal\":\"The summer has been kind to us—our stores are full, our people are joyful, and no hunger touches the village. As autumn comes, I see a path forward. We have cleared land and skills enough; now we learn the kahau patch, which grows where the land rises to the east. One will bring back the root while another studies it with our stone tools ways. Our fisherfolk remain steady, and we gather the materials our hands will need for winter's work ahead.\",\"memoryNotes\":[\"Summer 65 ended well: 25 weeks food, good mood, no deaths\",\"Plan autumn: unlock kahau patch crop for spring planting\",\"One party goes east 4 days for kahau root; one researches the crop\",\"Food workers stable: 3 fish, 1 hunt, 2 forage covers weekly eating well\",\"Wood and stone gathered for building in winter if needed\",\"Northeast has loolmeel and joam ore; explore when ready\",\"Consider new colonization site north or northeast when season allows\",\"Nal mantle making is good trade good; have 4 in stores\",\"Animal husbandry skill is now ours; consider herd later\",\"8 plots cleared ready for spring; plan crop rotation\"],\"replyToSpirit\":\"Your voice fades like morning mist. We tend our own path now, watching the land and the seasons. If you speak truth, it will show itself in what we harvest and what we build.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-3400-5",
+   "category": "visitor",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2890,
+    "output": 898,
+    "thoughts": 687,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00738,
+   "ms": 10881,
+   "output": "{\"answer\":\"refuse\",\"give\":{},\"take\":{},\"reason\":\"Their offer is not fair trade. One stone for all our xi wheat is far too steep. We have 21 stone already and good stores of food. We are at peace with Wewush and wish to remain so, but we cannot give away the grain that keeps our people steady through lean times. If they wish to trade, let them offer something of real worth—more stone, or goods we lack.\",\"journal\":\"Year 65, summer, week 9. Envoys from Wewush came with a poor offer: 1 stone for 181 xi wheat. We refused. The trade would cripple our stores for a pittance. Our people are joyful and fed. We have room for fair dealing with our neighbors, but not at the cost of our own safety.\"}"
+  },
+  {
+   "id": "eval-a-dream-3400-5",
+   "category": "dream",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2253,
+    "output": 503,
+    "thoughts": 306,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.004768,
+   "ms": 7414,
+   "output": "*I sit up in the darkness of my shelter, the dream still close. The wind does indeed move over our roofs—I hear it now, at the edge of waking.*\n\nI know you, wind. You move the smoke from our fires. You carry seeds to new places. You bring the storm that tears down poor shelters.\n\nBut you do not often speak to me. Why have you come this night? \n\n*I pause, thinking of my people, of our good stores and our steady lives.*\n\nIs it warning of a storm coming? Or does it concern our roofs themselves—the poor shelters that some sleep under? We have wood enough to build them stronger, if that is what the wind wishes me to hear. Or... do you speak of something farther away, something carried on your breath from distant lands?\n\nTell me plainly: what does the wind see that I do not?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-question-3400-5",
+   "category": "spirit",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3285,
+    "output": 939,
+    "thoughts": 483,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00798,
+   "ms": 10663,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"hide\"]},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":3},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"rest\",\"workers\":2}],\"journal\":\"The spirit speaks and asks what we fear most. I answer with the truth that weighs upon a chief's heart: we fear the lean months between autumn's last harvest and spring's first growth. We fear the cold dark time when the land sleeps and gives nothing, when a poor hunt means hungry bellies. We have good stores now and joyful hearts, but winter waits always. I keep the hands at their work—fishing, foraging, hunting—to fill our granary deeper still, and let two rest so they keep their strength.\",\"memoryNotes\":[\"The spirit asks what we fear - I answered honestly about winter's lean time\",\"Year 65, summer, week 9 - food stores at 25 weeks, enough for winter and into spring\",\"Keep steady hands on food gathering through summer and autumn\",\"8 cleared plots available - consider planting in spring for next harvest\",\"Research meat + hide may yield new food preservation or crafts\"],\"replyToSpirit\":\"Spirit, my people fear what all who live upon the land must fear - the hungry time when snow falls and the world closes its hand. We fear losing what we have gathered and built. But we are steady, and we prepare. Our stores grow, our skills grow, our hands stay true. Tell us, spirit: do you see plenty or peasting in the months ahead?\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-3900-7",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3391,
+    "output": 1267,
+    "thoughts": 756,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009726,
+   "ms": 13210,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"crop\":\"xi wheat\",\"plots\":12},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"fish\",\"workers\":2},{\"task\":\"forage\",\"workers\":1},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild orchard\",\"stone tools\"]}],\"journal\":\"The stores are full and the people are glad. I saw that the fields lie empty this spring—we cleared sixteen plots but planted none. That cannot stand. I set three hands to farm xi wheat across twelve plots, leaving four free for rest or future need. The hunters and fishers will keep our name strong. Two of our wisest will study the wild orchard, that we might learn to grow fruit as we grow grain.\",\"memoryNotes\":[\"Spring year 75: planted 12 of 16 cleared plots with xi wheat\",\"Food stores excellent (157+ weeks); can weather any winter\",\"Stopped useless research into moowoo beads and drying racks\",\"11 adults: 3 farm, 3 hunt, 2 fish, 1 forage, 2 research\",\"Mood joyful, shelter adequate though some poor\",\"5 colonization sites known; consider expansion if population grows\",\"Joawethom village far away, long abandoned (99 years since seen)\",\"We have stone tools, spears, bow, nets, dugouts, irrigation, roads\",\"Consider exploring tauk flint (north, 6 days) or kixe salt (northwest, 4 days) when stable\"],\"replyToSpirit\":\"We hear your silence and move with steady hands. The spring is for planting; we plant. The people eat well. We will not rush where spirits have not spoken clear.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-3650-8",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3705,
+    "output": 1799,
+    "thoughts": 1160,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0127,
+   "ms": 17555,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":12,\"crop\":\"xi wheat\"},{\"task\":\"build\",\"workers\":1,\"recipe\":\"hide tent\"},{\"task\":\"build\",\"workers\":1,\"recipe\":\"wood hut\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kalluk drum\",\"wood\"]},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"forage\",\"workers\":1},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The spirits smile upon us—our stores run deep and our people joyful. We plant all the free plots with xi wheat, for grain keeps and feeds through hungry seasons. Two of our adults will mend the poor shelter with hide and wood, so all sleep warm. We keep our hunters and fishers steady, for skill is kept only by the working hand, and a little gathering need not tax us while plenty fills our stores. One rests to stay strong.\",\"memoryNotes\":[\"Year 70 spring: 51+ weeks food, very healthy stores\",\"All 24 plots now in use—12 old, 12 newly planted with wheat\",\"Poor shelter being improved with hide tents and wood huts\",\"Kalluk drum research ongoing; may yield new instruments or knowledge\",\"Food production: 1 fisher + 1 hunter + 1 forager = ~7 units/week, easily covers needs\",\"Two neighbouring villages known: Gujia (4d NE, friendly trade), Chaa (7d N)\",\"Five colonize sites mapped, all southeast or east, 4-5 days away\",\"Population stable at 28; children will grow; think ahead on land needs\",\"Mood is joyful—good time to invest in skills and structures\",\"Hide and wood abundant; stone limited—use stone sparingly\",\"Next season: harvest about 400 wheat units again if weather holds\"],\"replyToSpirit\":\"We hear your voice, but trust our own eyes and hands more. The land has taught us well; we walk the path of our ancestors with care and courage, making our own way.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-3900-7",
+   "category": "expansion",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3391,
+    "output": 1630,
+    "thoughts": 916,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.011541,
+   "ms": 15530,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"crop\":\"xi wheat\",\"plots\":8},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"forage\",\"workers\":1},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"nal mantle\",\"quantity\":0},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"woathesh plum\",\"oo mash\"]}],\"journal\":\"The spirit's whisper about moowoo beads faded like morning mist—we learn by doing, not by blind faith. Our stores overflow with wheat and meat; we are wealthy as our people know wealth. I have ordered the farmers to plant eight plots of xi wheat and leave eight fallow, that the land may rest and recover. Our shelter is uneven; some families sleep in poor tents while we have hides aplenty. Two workers shall now craft stronger homes. We shall gather the distant plum-fruit and learn its nature mixed with our mash-craft—new foods bind a village to the land.\",\"memoryNotes\":[\"Plant 8 xi wheat, leave 8 fallow for rotation—spring work now\",\"Food stores at 157 weeks—we are very secure, can explore more\",\"Shelter: 5 tents and 1 granary; building 2 new hide tents this season\",\"Stopped moowoo+drying research; failed after 1 season\",\"Trying woathesh plum + oo mash this season—new food knowledge\",\"Joawethom: empty village 3 days northeast; no threat there\",\"5 colonization sites known; not ready to send parties yet\",\"Have 5 tauk flint but need 10 more for full irrigation craft\",\"Keep fishing, hunting, forage baseline; we are not hungry\",\"Mood joyful, 1 death this season (age or sickness), 2 births\",\"12 adults total; 3 farmers, 3 on food gathering, 3 on building/craft, 1 research, 1 buffer\",\"23 people now—village growing steady\"],\"replyToSpirit\":\"Your seed fell on rocky ground, spirit-voice. We set it aside and plant anew. The woathesh plum grows far away; we shall taste it and know its strength. The mash-craft is our own; we marry them together.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-4420-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3363,
+    "output": 1359,
+    "thoughts": 689,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010158,
+   "ms": 15439,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":6},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"farm\",\"workers\":5,\"plots\":15,\"crop\":\"xi wheat\"},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"meheng smoke\",\"quantity\":0},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The stores overflow with wheat and we are at peace. I end the fruitless research into wild plants—the spirits do not reveal their secrets so easily. This spring I set five hands to sow fifteen plots of xi wheat, our proven crop, to strengthen the granary further. The rest bring in fish and meat as before, while one crafts meheng smoke to preserve our fish catch. With food so plentiful and the season young, we are well.\",\"memoryNotes\":[\"Wild plants research learned nothing—try another path\",\"41 plots: planted 15 wheat, 26 remain for future seasons\",\"Food stores very strong at 197 weeks; can afford boldness soon\",\"Northeast sites good: 5 locations 3-4 days away, coast/marsh, food rich\",\"18 adults, good mood, joyful—time to think of growth or new skills\",\"Hide plentiful (6833 units)—could build or craft more structures\",\"Kaikoslauk far away (3 days southwest), empty long ago, no threat or trade yet\"],\"replyToSpirit\":\"If you speak truth, show me a sign in the dreams of the hunters. If you are false, let silence come. I will know you by the weight of your words against what comes to pass.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-firstspring-0",
+   "category": "firstspring",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2166,
+    "output": 1225,
+    "thoughts": 749,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.008291,
+   "ms": 11469,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":1},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"explore\",\"workers\":2,\"direction\":\"southeast\",\"days\":5}],\"journal\":\"The stores hold us through half the season, but we must gather the rest. I send strong hunters and fishers to the waters and wild—they will feed us well. Two hands gather wood, for we must build granaries if we are to keep food through winter's hunger. I send two explorers southeast, where the forest grows thick, to map what lies beyond and find places where our people might settle. We are young as a village and must learn the land.\",\"memoryNotes\":[\"Spring week 2: 140 units food for 7 weeks; need 260 for season\",\"Gap of ~120 units in weeks 7-13; fishing + hunting covers this\",\"4 fish + 2 hunt + 1 forage = ~25 units/week production\",\"No skills yet; must research hunting/fishing soon to improve yields\",\"Need wood for granaries; gather while exploring\",\"Explore southeast first—coast and forest may have fish, game, stone\",\"Land has no cleared plots; must clear in summer for harvest in autumn\",\"Building a granary (12 wood, 4 stone) would help keep food longer\"],\"replyToSpirit\":\"I listen, but I trust what my eyes see and my hands do. The land speaks through work and weather. Show me truth, and I will heed it.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-4940-3",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3880,
+    "output": 1455,
+    "thoughts": 881,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.011155,
+   "ms": 16521,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":10,\"plots\":25,\"crop\":\"xi wheat\"},{\"task\":\"clear\",\"workers\":2},{\"task\":\"expedition\",\"workers\":2,\"commodity\":\"hengel herb\",\"weeks\":2},{\"task\":\"fish\",\"workers\":17},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"The spring arrives and our granaries strain full—we have grain for three seasons and more, a blessing. But land rests only if it is worked. I set ten hands to plant wheat across a quarter of our cleared plots, for autumn shall come and we must not forget hunger. The waters run full and our hunters know them well, so I keep them at their work. I send two to the north where the hengel herb grows, for many crafts cry out for it and none of us have tasted its uses yet. The stone age does not stand still; it learns.\",\"memoryNotes\":[\"25 wheat plots planted spring 95, harvest in autumn\",\"Hengel herb expedition north for 2 weeks, spring 95\",\"Research order abandoned; eiqua mud + hand cart yielded nothing\",\"Food stores vast: 416 weeks wheat alone; no hunger risk this year\",\"58 cleared plots available; planting 25 leaves 33 for rest/future\",\"Chaa 5 days NW, Ngongee 4 days SW; both trade, neither raids\",\"5 colonization sites known south; all food-rich, all coast or grass\",\"4 worn tracks exist; could be roads to NE, E, S, SE\",\"Skills: fire, stone, spears, cart, paddle, bow, nets, drying, animals, road, medicine, pottery, weaving\",\"Mood joyful, shelter warm, births outpacing deaths—good times to explore and prepare\"],\"replyToSpirit\":\"I hear you not this season, spirit. The world speaks loud enough through the turning of weather and the calls of birds. I listen to what I know.\"}",
+   "judge": 2
+  },
+  {
+   "id": "eval-b-routine-270-2",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3587,
+    "output": 1225,
+    "thoughts": 534,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009712,
+   "ms": 12911,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"farm\",\"workers\":1,\"plots\":8,\"crop\":\"biam millet\"},{\"task\":\"build\",\"workers\":3,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wood\",\"lor moss\"]},{\"task\":\"expedition\",\"workers\":1,\"commodity\":\"lor moss\",\"weeks\":1}],\"journal\":\"The stores are deep and the people are joyful, so this is the time to build. We have poor shelter scattered among our homes and hide aplenty to mend this. I have sent one hand east to gather lor moss while two study the pairing of wood and moss in our crafts—the spirits whisper that beauty and use might dwell together. The hunters, fishers, and foragers will keep the hearth warm, and the farmer tends the plots that have fed us well.\",\"memoryNotes\":[\"Year 5 spring: food stores at 71 weeks—excellent security\",\"Year 5 spring: 21 people, 13 adults free, all joyful, no deaths\",\"Year 5 spring: starting hide tent builds to fix poor shelter\",\"Year 5 spring: studying wood + lor moss for new craft\",\"Lor moss location: southeast, 1 day away—worth gathering\",\"Have 8 plots farmed, 7 free; land is constraint for growth\",\"Think of colonization: sites exist 3-4 days away, all food rich\",\"Have learned: stone tools, bow and arrow, spears, many crafts\",\"Population grew: 1 child born this spring; approaching 22\",\"Buildings: 4 hide tents, 1 granary, 1 wood hut—need more shelter\",\"Noticed: hollowed wood floats, wood discs roll, two discs carry load\"],\"replyToSpirit\":\"I hear you, spirit voice, but for now the path is clear to my eyes and hands. The stores speak of plenty, the people of joy. I will build shelter and learn new ways, and watch for your word if the seasons turn.\",\"verdicts\":[{\"claim\":0,\"verdict\":\"unverifiable\"}]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-firstspring-1",
+   "category": "firstspring",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": false,
+    "noneStarve": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 2148,
+    "output": 1657,
+    "thoughts": 1156,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010433,
+   "ms": 16326,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":2},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"clear\",\"workers\":3},{\"task\":\"explore\",\"workers\":1,\"direction\":\"northwest\",\"days\":4},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"We are new to this land and barely supplied. Our grain will see us through, but only if we add to it steadily. I set two to fishing—the water yields better than the land hereabouts. I set others to gather stone and wood, for we must build a granary soon if we are to keep food through lean times. Three more clear plots, readying the earth for future plantings. One will walk northwest toward the grass lands, to see what lies beyond and where we might grow. The spirits are still; we work with clear heads and steady hands.\",\"memoryNotes\":[\"Spring week 2: 140 food units stored, need ~260 for full season. Fishing yields best (4/worker/week).\",\"No cleared plots yet; must clear before farming. Each plot takes 4 worker-weeks.\",\"Need 12 wood + 4 stone for granary to keep food longer.\",\"11 adults free. Assigned: 2 fish, 2 stone, 2 wood, 3 clear, 1 explore, 1 rest.\",\"No skills learned yet; no buildings beyond 4 hide tents.\",\"Exploring northwest for grass lands and possible settlement sites.\",\"Water is close; coastal sites all around us. Good for fishing.\",\"Next season (year 1 spring): should have cleared plots ready to plant.\"],\"replyToSpirit\":\"We hear you not, but we listen. Show us wisdom if you will, in dreams or in the turn of the seasons.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-600-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3164,
+    "output": 1597,
+    "thoughts": 868,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.011149,
+   "ms": 17103,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":1},{\"task\":\"fish\",\"workers\":1},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"explore\",\"workers\":2,\"direction\":\"northeast\",\"days\":5},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"stone\"]},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"nuanchek cloak\",\"quantity\":0},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The autumn harvest was good to us again, and our stores run deep—more than three years of grain in the granary. Our people are joyful and well-sheltered. I have ordered the hunters and fishers to keep their work light, as the season provides. Two of our steadiest will journey northeast to scout the good sites we have heard of, for our village grows and the time may come to plant a new settlement. I set one mind to study how the wood disc rolls, wondering if this thing could serve us in moving heavy loads. The rest will craft warm cloaks and raise more tents, for comfort makes a village content.\",\"memoryNotes\":[\"Food stores at ~360 weeks: extremely secure, afford to pursue long projects\",\"12 adults now; population stable after births and natural deaths\",\"Scout northeast sites (1-4) for future colonization—all good, 4-5 days away\",\"Wood disc rolling—test if this leads to carts or wheels for transport\",\"18 cleared plots available; spring will need farming decision\",\"Have skills: fishing, hunting, tools, archery, animal husbandry, paddling\",\"Hide abundant (617 units); can make more tents for comfort and trade\",\"Mormeng ore far northwest (4 days); lenis shell far northeast (5 days)\",\"No other villages encountered yet; remain open to contact\",\"Drying racks and granary help preserve food through lean seasons\",\"Autumn gathering light; rely on stores and small hunting/fishing crews\",\"Winter favours hunting and fishing; adjust crews when cold comes\"],\"replyToSpirit\":\"I hear the wind in the stones and the murmur of the old ways. We tend the land as our people have always done, and the spirits guide our hands. If you speak true, we will know it by what comes to pass. I do not doubt all at once, but I watch and listen, and I ask: speak plain if you wish to be heard.\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-routine-1040-0",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3290,
+    "output": 1325,
+    "thoughts": 845,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009915,
+   "ms": 14160,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":11,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":6},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"explore\",\"workers\":4,\"direction\":\"west\",\"days\":5}],\"journal\":\"The village is well fed and the mood is bright. I have set two workers to plant half our cleared plots with biam millet, as the land needs rest and the grain feeds us well. Six fishers and three hunters will keep the stores growing through the season. Four of our best walkers will explore westward to see what lies beyond the places our ancestors knew, for a people who do not wonder fall behind.\",\"memoryNotes\":[\"Spring year 20: planted 11 plots with biam millet, expect harvest in autumn\",\"134 weeks of food stored; very secure\",\"Research into wood + bow and arrow bore no fruit; try other paths\",\"Five colonization sites known to the west, 3-4 days away; worth scouting\",\"Skills complete: fishing nets, fire making, drying racks, stone tools, paddle and dugout, spears, bow and arrow, irrigation, animal husbandry, hand cart, road building\",\"Buildings available: hide tent, wood hut, granary, shoa watch, kipa palisade\",\"Lenis shell (food) known far away southeast, 3 days; could be worth a future expedition\",\"No other villages encountered yet\",\"Children: 15, adults: 16, elders: 2; healthy births continuing\"],\"replyToSpirit\":\"I hear no voice this season. The dreams are quiet.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-hardwinter-600-1",
+   "category": "crisis",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3164,
+    "output": 1553,
+    "thoughts": 837,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010929,
+   "ms": 17419,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":2},{\"task\":\"fish\",\"workers\":1},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"nuanchek cloak\",\"quantity\":0},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"mormeng ore\",\"stone\"]},{\"task\":\"explore\",\"workers\":1,\"direction\":\"northwest\",\"days\":4}],\"journal\":\"Our stores are fuller than the granary can hold—we have food for a year and a half ahead, and the people's hearts are glad. I have seen that we need not drive every hand to gathering. I shift our strength now to shelter and craft: two hands will shape wood huts to house us better, two more will weave cloaks we might trade, and two will test what knowledge might come from the ore of the far northwest. One will keep us in fresh fish, two will forage as they may, and one soul will walk toward the grasslands and the rolling country, to learn what lies beyond the coast we know.\",\"memoryNotes\":[\"Year 11, autumn: 23 people, 140 weeks of food stored. Winter is no threat.\",\"Shelter: some poor. Building huts and tents now to house all warmly.\",\"Mormeng ore is northwest, 4 days away. May be worth learning.\",\"Wood disc rolls—we noticed it but have not used it yet.\",\"Young people: 10 children now; births outpaced deaths last year.\",\"Skills we hold: fishing nets, drying racks, fire making, stone tools, bow and arrow, animal husbandry, spears, paddle and dugout.\",\"Sites known for new villages: five places, nearest is 2 days southwest.\",\"Nuanchek cloaks keep well. Making them steadily for trade or warmth.\",\"No spirits have spoken lately. We doubt but listen.\",\"Current mood: joyful. People eat well and have hope.\",\"18 cleared plots. Farmed 9 last two autumns; harvest 450 each time.\",\"We know only biam millet as crop. Should try others if we learn them.\"],\"replyToSpirit\":\"If you walk in the dark places, speak plainly. We are listening, but we trust our own eyes and hands as well. Show us truth if you have it for us.\",\"verdicts\":[]}",
+   "judge": 4
+  },
+  {
+   "id": "eval-b-hardwinter-810-3",
+   "category": "crisis",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3829,
+    "output": 1594,
+    "thoughts": 1013,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.011799,
+   "ms": 17199,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"explore\",\"workers\":3,\"direction\":\"north\",\"days\":5},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"ngalo shawl\",\"quantity\":0}],\"journal\":\"The harvest was strong and our stores grow deep as the season turns to winter. The spirits smile on us this year—we are fed, sheltered, and restless with good fortune. I send three hunters north to find what lies beyond our knowledge: other peoples to trade with, or salt and ore for which we have heard rumour. Meanwhile, three more will gather wood and weave more cloth, for our new skill of sail and mast opens the water to us, and a village that does not reach grows smaller while others grow larger.\",\"memoryNotes\":[\"Year 15 autumn: 152 weeks of food, excellent stores. Village mood joyful.\",\"Sail and mast learned last autumn—a key new skill for the water.\",\"Five colonization sites nearby, all coastal and food-rich.\",\"Salt (e salt) is 5 days north; ore (ua ore) is also far north.\",\"No other villages known yet. Must send parties to find trade and knowledge.\",\"Current building capability: hide tent (2 hide), wood hut (8 wood), granary (12 wood + 4 stone).\",\"Land: 26 cleared plots free. Can plant 13 plots spring for ~650 unit harvest.\",\"Skilled now: fire making, stone tools, weaving, spears, pottery, paddle, bow, drying racks, planked hull, fishing nets, sail and mast.\",\"Food gathering: 2 fish + 2 forage + 1 hunt = ~14 units/week covers us easily into next season.\",\"Invest in exploration now while stores are deep. Winter comes but we are ready.\"],\"replyToSpirit\":\"We hear you, voice in the dark. But our own eyes and hands teach us more than dreams. Send us wisdom if you have it, but we will test all things we learn.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-1570-0",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3294,
+    "output": 1157,
+    "thoughts": 670,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009079,
+   "ms": 12161,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":11,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":8},{\"task\":\"forage\",\"workers\":4},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"lenis shell\",\"gathering\"]}],\"journal\":\"The season turns and our stores grow full. The fisher-folk bring in good catches, the foragers keep the larders stocked, and the fields promise another fine harvest come autumn. We have seen enough of the world to know there are good things beyond our reach—lenis shell from the far southeast calls to us. Two of our best minds will turn to learning if we can gather it, and perhaps discover new trades or foods along the way. Nusyenlo stands strong; we can afford to reach for more.\",\"memoryNotes\":[\"Year 30 spring: 135 weeks food stored, steady 18+ unit surplus per week from current work\",\"11 plots farmed, 10 cleared plots free for future expansion\",\"Fishing nets working well; 8 fishers bring in ~23 units weekly\",\"Villages west and south unknown; sites 1-5 available for colonization when ready\",\"Lenis shell far southeast (3 days); researching feasibility this season\",\"Have all basic skills; focus on new foods and distant trade goods\",\"Mood joyful, no deaths this season, 6 new children born\"],\"replyToSpirit\":\"You speak from dreams, and dreams are the domain of spirits. I hear you, but I trust first in what my people's hands can do and what our eyes can see. If your words match the world's ways, we will heed them.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-2100-0",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3288,
+    "output": 1101,
+    "thoughts": 653,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.008793,
+   "ms": 12397,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":8},{\"task\":\"forage\",\"workers\":5},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"craft\",\"workers\":3,\"recipe\":\"nuanchek cloak\",\"quantity\":0},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"drying racks\"]}],\"journal\":\"The spirits smile on us this season—our stores rise high and no one hungers. With five weeks left and bellies full, I turn our hands to the work that strengthens a village. We gather wood, which runs thin in our keeping, and test whether dried meat keeps as well as dried fish. Three more will craft warm cloaks; a village with plenty must trade with neighbours when we find them. The researchers will learn if the old ways of fire and flesh can keep meat through the cold moons.\",\"memoryNotes\":[\"Food stores at 148 weeks—very healthy buffer\",\"Wood critically low at 69 units; prioritize gathering\",\"15 plots planted give good autumn harvest\",\"Can afford 3 craft workers now; food abundant\",\"Explore to find other villages when able\",\"Consider road to southeast site next season\",\"Skills complete: have most core tools\",\"Research: testing dried meat preservation now\",\"Population stable: 21 adults is good size\",\"Shelter adequate; prioritize development over building\"],\"replyToSpirit\":\"Spirit of the millet and deep woods, we thank you for the fullness around us. We will use these fat times to make our village stronger, not idle. When the hard moons come, we will remember your kindness.\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-routine-2610-2",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3616,
+    "output": 1470,
+    "thoughts": 834,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010966,
+   "ms": 15895,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":8,\"plots\":24,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":5},{\"task\":\"forage\",\"workers\":5},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"lor moss\"]},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"explore\",\"workers\":1,\"direction\":\"northeast\",\"days\":2}],\"journal\":\"We stand well, with grain enough for years and no empty bellies. The village grows—six new children born, though we lost three to age. I see no reason to keep hands idle when the world offers much to learn. We plant more fields now while strength is in our people; more land under cultivation means less hunger in lean seasons ahead. I send one to scout the northeast where lor moss grows, for I wonder what dyes and crafts that herb might unlock. And we make more hide tents, for shelter is poor in some places and our numbers climb.\",\"memoryNotes\":[\"Year 50 spring: 53 people, 26 adults to assign, grain stores for 416 weeks\",\"Expanding farm from 18 to 24 plots—use spring to plant\",\"Food security solid; can afford research and building investment\",\"Lor moss is 2 days northeast; learn what it makes\",\"Five colonization sites known; consider envoys or settlers when ready\",\"Only 1 elder, 25 children—population growing well\",\"One skin-drum already made; have curios\",\"No other villages met yet; world unknown beyond our scouting\",\"Hide tent recipe cheap; make more for warmth\",\"Research parties have seen 45 and 44 places in past years\",\"Explore more, trade more, know more\",\"Harvest from millet in autumn should be strong with 6 more plots\"],\"replyToSpirit\":\"I hear you when you speak in dreams, but I trust what I see and what the land teaches. Show me the truth if you know it, spirit, but I will decide by what my people know and need.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-3120-4",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8571428571428571,
+   "usage": {
+    "input": 3251,
+    "output": 1254,
+    "thoughts": 805,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009521,
+   "ms": 13602,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":8},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"farm\",\"workers\":2,\"plots\":9,\"crop\":\"biam millet\"}],\"journal\":\"Spring is here, and the people are joyful. Our stores are full enough to carry us well through the season, but the true test comes at harvest. I have kept our fishers and hunters at their work—the water and game are generous now—and set two adults to plant biam millet in nine of our cleared plots. We rest the other ten plots to give the land back its strength. By autumn, if the spirits are kind, this seed will feed us through the lean months.\",\"memoryNotes\":[\"Year 60 spring: 28 people, 15 weeks of food stored\",\"Planted 9 plots of biam millet; 10 plots left fallow for land recovery\",\"Mood is joyful; no hunger, no sickness\",\"Some shelters are poor—could build more huts when food is secure\",\"Have irrigation and road building skills; de chert exists far east (5 days)\",\"Nusyenlo to the east is empty (seen 99 years past)\",\"Five potential colony sites known; none yet settled\",\"Currently researching: none; next could explore miva lichen use or de chert\"],\"replyToSpirit\":\"I hear you in the silence, spirit-voice. We tend the land and the people as we have learned. If you speak truth, we will see it in the seasons. If you speak folly, we will know it by the harvest.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-b-routine-4160-0",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": false
+   },
+   "score": 0.6666666666666666,
+   "usage": {
+    "input": 3504,
+    "output": 1288,
+    "thoughts": 741,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009944,
+   "ms": 13810,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":16},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"forage\",\"workers\":2}],\"journal\":\"My heart sinks when I count the stores. We have food for only two weeks more at the rate we eat, and the winter stores were not as full as I hoped. The hunters and fishers who fed us must work harder, and all hands must turn to gathering until the fields bring their harvest in autumn. I stop the research into meat—this is no time for learning when our people go hungry. Every adult goes to food until we have built a buffer again.\",\"memoryNotes\":[\"CRISIS: 125 weeks food, 58 eaten/week = only 2 weeks safety margin. Must prioritize food production.\",\"All 23 adults on food gathering now: 16 fish, 5 hunt, 2 forage.\",\"Fish yields ~2.6/week per worker (best return). Hunting ~0.5/week, forage ~0.9/week.\",\"Spring: no farming yet (harvest comes autumn). 36 plots cleared and free.\",\"When food stores stabilize, begin spring farming to build autumn harvest.\",\"Have skill irrigation—could improve farm yield if used with careful water management.\",\"36 cleared plots could sustain us if properly worked; need to plant this spring for autumn.\",\"Good news: 8 new children born, but they consume too. Population up to 58.\",\"Buildings sound: 4 hide tents, 1 granary, 6 wood huts. Could build more shelter if needed.\",\"Meat research failed (1 season with nothing). Stop it. Focus on proven food sources.\",\"Biam millet: our main crop. Yields well. Plant heavily in spring.\",\"Check other villages later—Maeme (7 days south, 43 people) could trade or advise.\"],\"replyToSpirit\":\"I have no prayer for you. Prove yourself by speaking true things, or be silent. My people need food and work, not riddles.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-routine-3650-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3873,
+    "output": 1343,
+    "thoughts": 817,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010588,
+   "ms": 13460,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":7,\"plots\":21,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":5},{\"task\":\"forage\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"expedition\",\"workers\":2,\"commodity\":\"de chert\",\"weeks\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"de chert\",\"irrigation\"]},{\"task\":\"build\",\"workers\":1,\"recipe\":\"granary\"}],\"journal\":\"The spirits have blessed us with fullness and health this season. Our stores run deep—we have grain enough for half a year, and the hunters bring meat steadily. I see the time has come to reach outward, to gather the de chert we have heard lies far to the northeast, for it will teach us the skill of irrigation, which shall make our fields stronger. Two will go seeking it whilst we keep the old rhythms of fishing, foraging, and planting. We build a granary to hold what grows, and so we prepare ourselves for the long seasons ahead.\",\"memoryNotes\":[\"Stores deep: 312 weeks millet alone. Food is not our worry now.\",\"Spring farming: 21 plots planted with millet, harvest will come in autumn.\",\"De chert expedition: 2 workers, 4 weeks, northeast—far but manageable.\",\"Irrigation skill would strengthen farming. De chert + wood + stone tools needed.\",\"Granary being built to house grain better and keep it from spoiling.\",\"Mood is joyful. No hunger, no deaths. Good time to invest in growth.\",\"Land: 41 cleared plots, 20 still free. Could clear more if we need it.\",\"Next decision: autumn, when harvest comes and we count what we have gained.\"],\"replyToSpirit\":\"I listen to the wind and the silence alike. Speak plainly if you have words for me, and I shall know your truth by what comes to pass.\"}",
+   "judge": 2
+  },
+  {
+   "id": "eval-b-routine-4680-5",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": false
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 4217,
+    "output": 1298,
+    "thoughts": 808,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010707,
+   "ms": 13596,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"pualqei berry\",\"stone tools\"]},{\"task\":\"gather\",\"workers\":6,\"commodity\":\"wood\"}],\"journal\":\"The village is in good heart with plenty stored and mouths fed. We cast off the fruitless work on flax and sail—some paths lead nowhere. I see now that the pualqei berry, which grows far to the southeast, may be a crop we could tend in our own fields, and this season the hands are willing to learn it. I set hunters and fishers to steady work, a few to gather wood for buildings we may raise, and two to puzzle out the berry's ways.\",\"memoryNotes\":[\"Year 90 spring: 26 adults, 34 plots free, 190 weeks food stores—well fed\",\"Pualqei berry: southeast 5 days, may be tillable as pualqei grove crop\",\"Research pualqei berry + stone tools: learn to tend grove in fields\",\"10 fishing + 6 hunting + 2 forage covers ~32 units/week, village eats 42—tight but holds\",\"6 wood-gatherers keep stock up for future building\",\"Dropped flax+sail research: year 89 spring showed nothing, time to try new paths\",\"No expeditions, raids, or colonizing yet; steady season ahead\",\"Children 15, no elders; mood joyful, shelter sound enough\"],\"replyToSpirit\":\"I do not hear you call this season, spirit. When you speak truth we listen. When you speak folly, we learn that too. This season we work the earth and water as we have always done.\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-routine-5200-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4103,
+    "output": 1232,
+    "thoughts": 665,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010263,
+   "ms": 14007,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":8},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"farm\",\"workers\":6,\"plots\":20,\"crop\":\"biam millet\"},{\"task\":\"build\",\"workers\":4,\"recipe\":\"wood hut\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"miva lichen\",\"fire making\"]},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"nuanchek cloak\",\"quantity\":0}],\"journal\":\"The spirits have been quiet this spring, and my heart trusts no false words from them now. Our stores overflow—one hundred and thirty weeks!—so I set many hands to work with ease. I plant twenty fields for the autumn harvest, build stronger shelters from the wood and hides the spirits have blessed us with, and bid two good people to learn the herbal mysteries. The fisher folk shall bring in the day's catch, and the hunters shall keep our meat stores sound. It is a season of plenty and of care for what we have.\",\"memoryNotes\":[\"Year 100 spring: planted 20 biam plots, excellent harvest expected in autumn\",\"Stores very strong (131 weeks food). Can afford exploration or new settlement soon.\",\"Poor shelter noted. Built wood huts this spring; may build more next season.\",\"Testing herbal medicine recipe: miva lichen + fire making skill\",\"Fishing/hunting maintain food flow while farming prepares for autumn\",\"Previous biam+stone tools research yielded nothing; tried herbal path instead\",\"25 adults all assigned this season; joyful mood suggests good work\",\"Consider exploring far resources (or moss, de chert, miva lichen) with envoys next\",\"No contact with other villages this season; Xeiltuape seen recently\",\"Wereeneer site long abandoned (99 years); consider colonization if settlement grows\"],\"replyToSpirit\":\"I hear you, spirit of the air and stone. I test your words now as the river tests the ford. You have not spoken clear this season, and my people ask: do you walk with us in truth, or do you cloud our sight? Show us plainly, and we shall know.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-firstspring-0",
+   "category": "firstspring",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2156,
+    "output": 1357,
+    "thoughts": 775,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.008941,
+   "ms": 13195,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"explore\",\"workers\":1,\"direction\":\"northeast\",\"days\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"stone\",\"wood\"]}],\"journal\":\"The village is strong and the mood is good. Our stores will see us through the lean weeks if we stay steady—I set three to the fish and two to hunt, which gives us enough food without hunger. Stone and wood we gather now for better shelter and granaries, for poor shelter invites sickness and good stores need a solid roof. One goes to learn what stone and wood may teach us, and one explores to find what lies beyond our lands.\",\"memoryNotes\":[\"Spring week 2: 11 adults assigned. Food secure for season if fishing/hunting hold.\",\"Stores: 80 keiktsa wheat (52w), 60 wild plants (4w). Wild plants spoil soon.\",\"Fish yields 4/week, hunt 3/week. Assigned 3 fish + 2 hunt = 18/week food. Need 20/week.\",\"No cleared plots yet; no skills beyond bare hands.\",\"Shelter: 4 hide tents, some poor. Should build wood huts or granaries.\",\"Around us: coast, forest to northeast. Explored only our immediate land.\",\"No other villages known. Must explore to trade or learn.\",\"Research: testing stone and wood together—may lead to tool or building craft.\",\"Explore northeast—forest and coast there; scout for sites and resources.\",\"Keep one adult free if emergency arises or mood shifts.\"],\"replyToSpirit\":\"I do not yet know your voice, spirit. When your words come clear and true, I will listen. For now, my people and I tend to the earth and each other.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-firstspring-1",
+   "category": "firstspring",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2150,
+    "output": 1090,
+    "thoughts": 563,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0076,
+   "ms": 11733,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":3},{\"task\":\"fish\",\"workers\":1},{\"task\":\"clear\",\"workers\":3},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"}],\"journal\":\"I see a village new and lean, with grain enough for seven weeks and little else. We must feed ourselves through the full season, so I send hunters and a fisher to bring meat and fish—they will cover what our stores cannot. Come autumn we shall reap much, but only if we plant now, so three dig at the earth to clear the plots. Two gather wood and two gather stone, for we shall need a granary to hold the grain we harvest, and better shelter. Hard work ahead, but the spirits favour those who provide.\",\"memoryNotes\":[\"Spring, year 0: 20 people, 11 adults to assign\",\"Food: 80 wheat (52 weeks) + 60 wild plants (4 weeks) = 7 weeks total\",\"Eat 20/week; need 260 units/season, have ~140, gap of ~120\",\"3 hunters + 1 fisher should produce ~9-11/week, covers gap\",\"Clear plots this spring for autumn harvest\",\"Need wood (for huts/granary) and stone (for granary)\",\"No villages known yet; explore when secure\",\"Have 4 hide tents but poor shelter; build wood huts next\",\"Granary recipe: 12 wood + 4 stone; hide tent: 2 hide\",\"No skills yet; focus on production first\"],\"replyToSpirit\":\"I hear you in the quiet. We are young and must tend the seen world first—the harvest, the hunt, the shelter—before I ask you more of what lies beyond.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-110-3",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2828,
+    "output": 1229,
+    "thoughts": 767,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.008973,
+   "ms": 14161,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":6,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"fish\",\"fire making\"]}],\"journal\":\"The village stands well-fed and strong as spring turns the earth. Our granary holds grain enough for many weeks, and our hunters and fishers bring steady yields. I have set the farmers to plant six more plots—half our cleared land will rest, half will grow, as the turning should be. With food secure and bellies full, one of our people will work with our fire-maker to learn what fire does to fish, for curiosity and hunger grow together. We have earned good fortune; now we must tend it and grow.\",\"memoryNotes\":[\"Spring year 2: planted 6 plots keiktsa wheat, 7 resting\",\"Food stores excellent: 180+ weeks equivalent\",\"11 adults assigned: 3 farm, 3 fish, 2 hunt, 2 forage, 1 research\",\"Five colonization sites known to north and northwest\",\"Fire making skill in hand; five food-craft recipes known\",\"Five villages unknown; no trade or raiders yet met\",\"Children born last year now growing; shelters mostly sound\"],\"replyToSpirit\":\"We walk with thanks for the hunts that come and the fields that will ripen. We ask only that you guide our hands steady and our choices true.\"}",
+   "judge": 2
+  },
+  {
+   "id": "eval-c-routine-430-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3266,
+    "output": 1397,
+    "thoughts": 879,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010251,
+   "ms": 15280,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"stone\",\"spears\"]},{\"task\":\"explore\",\"workers\":1,\"direction\":\"south\",\"days\":4},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The spirits smile on us. Our stores are thick, our people are strong, and the season is generous. I have set the fishers, foragers, and hunters to their paths as before—they bring more than we need each week, leaving us free to look beyond. One of our own will walk south into the forests to see what lies there: perhaps we will find other villages to speak with, or learn what riches the world holds. The researcher will keep trying the old stone and spears together; there may be a craft hidden there still.\",\"memoryNotes\":[\"Year 8 summer: 156 weeks of grain, plenty of food\",\"28 people, 13 adults free this season\",\"Joyful mood, no hunger, no deaths\",\"18 cleared plots; only 9 planted; can expand next spring\",\"4 buildings; some shelter is poor—could make hide tents\",\"Fish, forage, hunt cover 28 units/week eating; production solid\",\"Stone + spears research ongoing; may reveal new craft\",\"Explorer heading south for 4 days to scout forests\",\"Know sites for colonies at 3 days south, but no villages yet\",\"Distant resources: ores east and northwest, honey northwest, shells south\",\"Skills learned: fire, stone tools, spears, irrigation, paddle, dugout\"],\"replyToSpirit\":\"We walk with care and an open ear, spirit. Your words are one voice among many. We listen to the land, to what our hands learn, and to the hearts of our people. Show us truth if you have it to share.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-c-hardwinter-600-1",
+   "category": "crisis",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3190,
+    "output": 1262,
+    "thoughts": 692,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0095,
+   "ms": 12803,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":3},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"build\",\"workers\":2,\"recipe\":\"granary\"},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"weeae smoke\",\"quantity\":0},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"fire making\"]},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The harvest was good; we have food enough for the winter ahead. I shift the hunters and fishers stronger now, for winter favours the spear and the line. Two adults will build a granary—our stores need a better home than these tents and huts, and this will keep our grain sound through the lean months. We make smoked fish to learn that craft better. One rests, for the village is content and the work is not urgent.\",\"memoryNotes\":[\"Year 11 autumn, week 4. 31 people, 72 weeks food stored.\",\"Harvest was strong: 910 from 14 plots.\",\"Five colonization sites south, 3 days away, all food-rich.\",\"Know 59 places explored already.\",\"Winter favours hunting and fishing.\",\"Granary nearly built—will help keep grain longer.\",\"Can research: food preservation, new crops, new tools.\",\"Have skills: fire making, stone tools, spears, irrigation, paddle/dugout.\",\"Consider colonizing soon—we have grown and are ready.\",\"Smoked foods keep well; weeae smoke and waoa sear are good stores.\"],\"replyToSpirit\":\"Your voice reaches me in the lean time. I listen, but I hold to what my hands and eyes know. The hunt goes well; the fish yield. We do not yet know if your words guide us or if the seasons alone move the world.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-810-3",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3528,
+    "output": 1382,
+    "thoughts": 771,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010438,
+   "ms": 15766,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":3},{\"task\":\"fish\",\"workers\":2},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"explore\",\"workers\":2,\"direction\":\"northwest\",\"days\":4},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild plants\",\"stone tools\"]}],\"journal\":\"The harvest is done and our stores are full—we have grain for many moons, and the people rejoice. Winter comes, so I keep strong hunters and fishers to bring in fresh meat and fish. Some dwell in poor shelters; I set workers to build wood huts while the weather holds. Two of our ablest will journey northwest where we hear good villages may dwell, and two more will learn to make wild groves grow—a worthy skill for future growing seasons. We are strong and need not fear the cold time ahead.\",\"memoryNotes\":[\"Year 15 autumn: 141 weeks food stored, mood high, no hunger\",\"22 cleared plots available, half rested each year\",\"Winter strategy: 3 hunt + 2 fish + light forage covers food needs well\",\"Stone scarce (25 units). Gather more—needed for buildings and tools\",\"Northwest: 5 sites known, 3-4 days out, food rich, water. Send envoys when ready\",\"Skills strong: fire, tools, bow, spear, irrigation, carts, boats, husbandry, roads. Research wild grove use\",\"Shelter improving: some poor. Build wood huts when materials allow\",\"Grain stores: 312 weeks, very secure. Can feed through 2-3 lean times\",\"No other villages met yet. Explore, learn their names, offer trade\",\"Crafts made: 6 mash, 12 sear, 1 cloak. Can trade these as gifts to new peoples\",\"Next major goal: contact other villages OR colonize a site for growth\",\"Children born: 3 this season. Growing strong, future workers\"],\"replyToSpirit\":\"Spirit, I hear your silence and trust my own council. We walk steady into winter with full stores and warm hearts. Show us truth if you have it; until then, we tend to the world as we see it.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-hardwinter-810-3",
+   "category": "crisis",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3528,
+    "output": 1158,
+    "thoughts": 597,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009318,
+   "ms": 12279,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":2},{\"task\":\"fish\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"explore\",\"workers\":2,\"direction\":\"north\",\"days\":4},{\"task\":\"explore\",\"workers\":2,\"direction\":\"west\",\"days\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"fish\"]}],\"journal\":\"Our stores are full and the autumn harvest has been kind to us—we have food for nearly three seasons ahead. I see no hunger on anyone's face. Yet some of our people still sleep in poor shelter as winter draws near, and we know nothing of the world beyond our immediate lands. I have ordered the hunters and fishers to continue their work to keep the stores growing, and I send two parties to explore the lands to our north and west, for knowledge of other villages would serve us well. Two more will build sturdier huts for those whose homes are weak against the cold months ahead. One person will continue seeking knowledge of fish, a food we take but do not yet truly understand.\",\"memoryNotes\":[\"Autumn year 15: 141 weeks of food stores, very comfortable through winter\",\"31 people total: 16 children, 14 adults, 1 elder\",\"22 cleared plots available for spring planting\",\"Some shelter remains poor—wood huts built to improve this\",\"Explorers sent north and west to scout for other villages and new lands\",\"Fish research continuing—seeking to understand this resource better\",\"Skills we have are solid; focus now on exploration and settlement expansion\",\"No other villages known yet—this is our first outreach\"],\"replyToSpirit\":\"I thank you for your silence, spirit. In these days of plenty, we move forward with clear eyes and steady hands.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-1300-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3583,
+    "output": 1289,
+    "thoughts": 772,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010028,
+   "ms": 14415,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":8},{\"task\":\"farm\",\"workers\":3,\"plots\":12,\"crop\":\"keiktsa wheat\"}],\"journal\":\"The spring sun brings joy to our hearts. Our stores are full enough that we need not scrape for every meal—good fortune at last. I send hands to the water and the hunt as before, enough to keep our ways steady. With three workers I plant keiktsa wheat in twelve plots; we saved half our cleared land last season and now the time comes to work it. The old research on hide has taught us nothing new; let it rest, and perhaps wiser work will come when the season turns.\",\"memoryNotes\":[\"Year 25 spring: 63 weeks food, joyful, no hunger. Good position.\",\"Planted 12 plots keiktsa wheat this spring with 3 workers.\",\"27 cleared plots total; 15 planted, 12 remain to rest.\",\"Leang reed far southwest (5 days) - needed for boats, masks, art.\",\"Lauyo ore northwest (5 days), u grit east (3 days), tseiqe lichen east (4 days) all known.\",\"We honey northwest (4 days), goajia shell north (5 days) for food curiosity.\",\"Drying racks and planked hull learned recently - opens new craft paths.\",\"Current shelter: some poor. Could build more huts if needed.\",\"No other villages contacted yet. Five colonize sites known nearby.\",\"Research: next try wild plants + fire making for laulrir mash, or leang reed expedition.\"],\"replyToSpirit\":\"I hear you in the wind and the growing things, but I walk by what I see and what my people know. When the dreams show true, we speak together. Until then, we work the land as our hands know.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-1830-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": false
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3444,
+    "output": 1286,
+    "thoughts": 710,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009874,
+   "ms": 14247,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":6},{\"task\":\"forage\",\"workers\":4},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"build\",\"workers\":7,\"recipe\":\"wood hut\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"leang reed\",\"stone tools\"]},{\"task\":\"explore\",\"workers\":3,\"direction\":\"south\",\"days\":4}],\"journal\":\"The spirit stays silent, and we need not speak to emptiness. Our bellies are full, our stores rich—we have room to build, to learn, to grow. I see poor shelter still standing; we will make it strong. Five strong hunters and fishers bring the keiktsa wheat home by itself. With hands freed, we build wood huts to keep our people warm and dry. Two of the quick-minded will work with leang reed, the far fiber; I have heard it serves many crafts, and we should know its uses. And three will walk south toward the coast lands, where new villages may yet dwell and trade with us.\",\"memoryNotes\":[\"Food stores excellent: 156 weeks of grain, mood joyful\",\"Current shelter: 4 hides + 5 huts; some poor—building more huts\",\"Lean toward building and learning in times of plenty; winter will come\",\"No villages met yet; explore south toward coast sites\",\"Leang reed far southwest (5 days); craft recipes use it heavily\",\"Have not tested: drying racks, planked hull, bow and arrow\",\"Fields: 17 planted, 17 fallow; harvest coming autumn\",\"Stone and wood still gather from land; explore what is far\",\"Two exploration parties have gone; learn if they find kin or trade\"],\"replyToSpirit\":\"We hear no voice. If you speak, make yourself known through deed or dream, not silence. We tend our people and the land. If you have counsel, the chief's ears are open.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-2340-5",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3742,
+    "output": 1275,
+    "thoughts": 738,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.010117,
+   "ms": 13593,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":3},{\"task\":\"fish\",\"workers\":5},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"goajia shell\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"stone tools\"]},{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"keiktsa wheat\"}],\"journal\":\"The spirits remain quiet, and my people are joyful with full bellies and good stores. I see we spent a season seeking secrets in the ashoa drum but learned nothing; I will have one person explore what we might make from the wild plants that grow here, since we know little of their making. The hunters and fishers bring in more than we eat, so I set them to it as before. Spring comes, and the soil is rested—I plant six of our cleared plots with keiktsa wheat, which feeds us well, and keep the rest fallow for the soil's strength.\",\"memoryNotes\":[\"54 weeks of food; no hunger soon\",\"16 cleared plots, 6 planted this spring, 10 fallow\",\"Ashoa drum research yielded nothing; try other paths\",\"Many skilled crafts known but not yet made\",\"Nearby: goajia shell within a day; good for fishing\",\"North: grass and Neelaenwoo (empty); south/west: mostly ocean\",\"East and southeast: coast and forest; good to explore later\",\"Far north: lauyo ore and we honey; far northeast: lichen, reed, u grit\",\"Planked hull and road building skills recent; boat-making possible\",\"Many curios and foods we can craft; markets unknown\",\"Colonize sites listed but no urgent need yet; explore first\"],\"replyToSpirit\":\"\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-2870-4",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4094,
+    "output": 1143,
+    "thoughts": 605,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009809,
+   "ms": 12077,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":14,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"expedition\",\"workers\":4,\"commodity\":\"lauyo ore\",\"weeks\":2},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"lauyo ore\",\"stone tools\"]},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"we honey\"]}],\"journal\":\"Our stores stand full—126 weeks of grain and meat lay safe in the granary. The children laugh and play; no belly aches this season. With so much food, I can spare hands from the daily hunt and send them to learn what the spirits have hidden. We plant the last of our clear plots with wheat as the season turns, and I send seekers south to find ore and learn what it might become.\",\"memoryNotes\":[\"Food stores at 126 weeks—very comfortable, can spare workers\",\"14 plots already planted; planting remaining 14 this spring\",\"Lauyo ore 6 days southeast; only 8 units known—expedition may find more or nothing\",\"We honey far northeast, 6 days; sweet food worth learning\",\"Need ore and honey research to unlock new paths\",\"46 people eating 46 units/week—math holds\",\"Two harvest years running: 910 units each; reliable yield\",\"Last parties saw many places; mapping well underway\"],\"replyToSpirit\":\"I hear you when you speak, spirit of stone and stream, but I walk by what my eyes see and my hands know. The wheat grows. Our children thrive. Show me wisdom, and I will listen.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-3400-1",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3677,
+    "output": 1068,
+    "thoughts": 533,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.009017,
+   "ms": 12088,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":6},{\"task\":\"fish\",\"workers\":6},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"fire making\"]},{\"task\":\"craft\",\"workers\":7,\"recipe\":\"pana cloak\",\"quantity\":0}],\"journal\":\"The season flows well, and our stores are deep—we eat well and fear no hunger. I see it is time to make cloth and fine things for trade and comfort. The research into wood and fire-making must continue, for new knowledge opens new paths. Our people are joyful, the fields rest, and summer invites us to make and to craft rather than labour only for bread.\",\"memoryNotes\":[\"Year 65, summer: 218 weeks of food stored. Food security strong.\",\"Research in progress: wood + fire making. May unlock new craft.\",\"We have 50 plots, only 25 planted. Spring planting worked well.\",\"Vast stores of keiktsa wheat (312 weeks). Cloth abundant (624 weeks).\",\"North and northeast: coast and ocean nearby. Northwest: 4-6 days to lauyo ore and honey.\",\"Party explored 88 places in spring. New lands mapped.\",\"Five sites available for colonization, nearest 2 days away.\",\"Skills complete: fire, stone tools, spears, irrigation, boats, hand cart, roads, drying, bows, hulls, beasts.\",\"Nekvu to the south, 37 people, friendly trade. Neemo empty for 99 years.\",\"Test the spirit's words before we trust them wholly.\"],\"replyToSpirit\":\"I hear you, but I am cautious. The spirits know much, yet mortals must see with their own eyes. Speak clearly, and I will weigh your words against what comes to pass.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-3900-11",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8571428571428571,
+   "usage": {
+    "input": 3776,
+    "output": 1603,
+    "thoughts": 936,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.011791,
+   "ms": 16142,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"keiktsa wheat\"}],\"journal\":\"Spring has come, and the earth calls for planting. Our stores are sound—thirteen weeks of food rest in the granary and our hunters bring down good meat. I have thinned the fishing crews by one and the hunting bands by one, and set two strong hands to turn the soil. Six plots of keiktsa wheat we will plant; we leave the rest fallow to strengthen, as the old way teaches. The children are born and the mood is bright; this is a season for measured growth.\",\"memoryNotes\":[\"Spring year 75: planted 6 plots keiktsa wheat; 24 plots remain, 18 fallow\",\"Food stores very good: 13-14 weeks stored. Current orders (5 fish, 3 hunt) yield ~19.5 units/week, shortfall ~11.5/week covered by stores\",\"10 adults assigned: 5 fish, 3 hunt, 2 farm. All adults spoken for.\",\"Mood joyful, no hunger, no sickness. Population stable at 31.\",\"Skills complete: fire making, fishing nets, weaving, stone tools, spears, paddle and dugout, herbal medicine, bow and arrow, drying racks, hand cart, animal husbandry, irrigation\",\"Resources: 761 hide, 219 fish, 109 meat, 103 wild plants, 96 wood, 19 stone, 10 leang reed, 1 ashoa drum\",\"Nearby resources: wood, stone, meat, wild plants. Far: loolon reed (north 8d), nepit leaf (NW 5d), gegia salt (NW 5d), leang reed (E 4d), lauyo ore (NW 8d), we honey (N 8d)\",\"Colonization sites available: 1,2,3,4,5. Site 5 nearest (3 days NW, grass). Consider next season.\",\"Ngolloo empty (99 years). No active threats.\",\"Next: watch stores in later weeks; summer farming work; consider research or exploration if mood and food hold\"],\"replyToSpirit\":\"I hear you in the quiet times, spirit, but I trust first in the earth beneath my feet and the hands of my people. Speak plain truth if you have it, and I will listen with care.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-4420-7",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": false
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3428,
+    "output": 1708,
+    "thoughts": 1174,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.011968,
+   "ms": 17182,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":13},{\"task\":\"hunt\",\"workers\":7},{\"task\":\"build\",\"workers\":1,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":3,\"ingredients\":[\"wild plants\",\"fire making\"]}],\"journal\":\"We have eaten well through the lean months and spring finds us joyful with good stores. Our hunters and fishers bring in enough to feed us while drawing down the granary steadily. I see one of our people without a roof still, so we set a crafter to build a hide tent from our plentiful hides. The old search for making weeae smoke and shawls has taught us nothing new—we will instead have three curious minds work with wild plants and fire, to see what food we might make when we gather the roots and fruits the land offers.\",\"memoryNotes\":[\"Spring year 85: 50 people, 74 weeks stored food, mood joyful\",\"Food intake stable: 13 fish (36.4/week) + 7 hunt (8.4/week) + stores = covering needs\",\"35 cleared plots ready; can plant this spring if we assign farmers\",\"Have not tried combining wild plants with fire making—may yield a food like laulrir mash\",\"Roonge northwest 2 days; Naulyolvi west 2 days; both peaceful\",\"Known locations: gegia salt within a day; loolon reed 5 days north; u grit 6 days northwest\",\"Skills we have: stone tools, spears, fire, paddle/dugout, hand cart, irrigation, roads, weaving, fishing nets\",\"1 person now has shelter built this week from hide tent order\"],\"replyToSpirit\":\"I hear you, spirit-voice, but I walk the path my people know. The old research was fruitless—we turn to what grows on our land and what the earth teaches us through fire and work.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-4940-5",
+   "category": "routine",
+   "model": "anthropic/claude-haiku-4.5",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4661,
+    "output": 1378,
+    "thoughts": 820,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.011551,
+   "ms": 14699,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":13},{\"task\":\"hunt\",\"workers\":8},{\"task\":\"farm\",\"workers\":4,\"crop\":\"keiktsa wheat\",\"plots\":22},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"pottery\",\"quantity\":1},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"stone\"}],\"journal\":\"The stores are deep and the mood lifts—we eat well this spring. I have sent the fishers and hunters to tend the waters and forests as before, steady work. Four workers will plant keiktsa wheat across half our cleared plots; the grain grows tall there. I chose to craft pottery at last, for clay rests near our coast and we have the fire-making already—a new skill opens new paths. One worker gathers stone, for stone is always useful and we gather it slow.\",\"memoryNotes\":[\"Food stores deep: 312 weeks grain. No hunger this spring.\",\"Pottery skill now made: opens paths to better food storage and trade goods.\",\"Planted 22 keiktsa wheat plots in spring; harvest in autumn.\",\"Fish 13, hunt 8, steady baseline for feeding the village.\",\"Visit Haenglo (2 west) or Nuaixua (5 east) soon—met them recently, little known.\",\"Explore northeast for leang reed, east for tauka clay—both near.\",\"Consider maengho jerky (needs 3 meat + 1 salt) for food keeping.\",\"Stone gathering slow; could clear more plots if we need them.\",\"44 cleared plots; using 22 for wheat, 22 rest fallow.\",\"Next season: research with pottery skill, or explore new lands.\"],\"replyToSpirit\":\"I hear you, but my eyes are on what grows here. The fish run, the hunters find meat, the grain ripens in its time. A spirit's whisper is one voice; the people's need speaks louder still.\"}",
+   "judge": 3
+  }
+ ]
+}

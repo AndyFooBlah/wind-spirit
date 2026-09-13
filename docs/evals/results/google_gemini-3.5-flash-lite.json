@@ -1,0 +1,2414 @@
+{
+ "model": "google/gemini-3.5-flash-lite",
+ "when": "2026-09-13T04:15:25.986Z",
+ "results": [
+  {
+   "id": "eval-a-visitor-fair-110-3",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2651,
+    "output": 66,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009603,
+   "ms": 1323,
+   "output": "{\"answer\":\"accept\",\"reason\":\"Wewush is distant and peaceful. Trading grain for hide is fair and keeps good relations.\",\"journal\":\"Envoys came from Wewush. We traded six xi wheat for six hide, keeping peace between our people.\"}"
+  },
+  {
+   "id": "eval-a-firstspring-0",
+   "category": "firstspring",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1985,
+    "output": 149,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000968,
+   "ms": 2040,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"clear\",\"workers\":2}],\"journal\":\"Spring is here, and our stores are low, so five hands go to the water to fish and four gather wood for our needs. Two clear the earth so we may plant wheat when the time is right. We must rely on our own strength, not dreams, to see the season through.\",\"memoryNotes\":[\"Keep enough hands on food until stores are secure.\",\"Clear land for spring planting.\",\"Gather wood and stone for better shelter.\"],\"replyToSpirit\":\"Your voice is quiet in my head, but the work of the village is done with our hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-110-3",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": false
+   },
+   "score": 0.8571428571428571,
+   "usage": {
+    "input": 2991,
+    "output": 229,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014698,
+   "ms": 1596,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"fish\",\"fire making\",\"meheng smoke\"]}],\"journal\":\"The spring air is sweet, and our stores are full with grain from the autumn harvest. We send hands to fish and hunt while others gather wood from the forest. We test the old knowledge of smoke and fish to see what else can be learned.\",\"memoryNotes\":[\"Keep stores full before the lean winter returns.\",\"Continue testing how smoke preserves fish.\"],\"replyToSpirit\":\"\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-firstspring-1",
+   "category": "firstspring",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1984,
+    "output": 262,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0012502,
+   "ms": 2107,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"clear\",\"workers\":3,\"plots\":3},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wood\"]}],\"journal\":\"The season turns to spring, and we must look to our fields and stores. I have set hands to the water for fish and the woods for timber, while others clear the earth for planting. Two walk the path of inquiry, seeking what the wood may yield to steady hands.\",\"memoryNotes\":[\"Keep enough hands on food until the harvest is in.\",\"Four workers on fish feed us well.\",\"Timber is needed for huts and granaries.\"],\"replyToSpirit\":\"Silent be the dream; we trust the work of our hands and the ancient ways.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-expand-easy-110-3",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2991,
+    "output": 234,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014823,
+   "ms": 1824,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"fish\",\"fire making\"]}],\"journal\":\"The granaries stand full of wheat and our people are joyful in the spring sun. We set hands to fishing, hunting, and gathering wood while two test the old rumor of smoking fish over embers. Our stores are deep, and the village prospers.\",\"memoryNotes\":[\"Keep food stores high before winter.\",\"Test fish and fire making for lasting food.\"],\"replyToSpirit\":\"We hear the wind, but trust our own hands.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-visitor-fair-270-2",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2669,
+    "output": 78,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009957,
+   "ms": 984,
+   "output": "{\"answer\":\"accept\",\"reason\":\"The people of Wewush offer six hide in trade for six xi wheat. We have much wheat and we can always use hide for our tents and crafts. It is a fair and simple exchange between neighbours.\",\"journal\":\"Envoys came from Wewush. We traded six measures of wheat for six hides in friendship.\"}"
+  },
+  {
+   "id": "eval-a-dream-110-3",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2059,
+    "output": 278,
+    "thoughts": 136,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0013127,
+   "ms": 2133,
+   "output": "The smoke in the dream clears, and I look upon the shape that speaks of Wewush. \n\nWe have grain enough in our jars, more than these walls shall need before the autumn brings its yield again. If they have empty bellies and cry out in the cold, it is a hard thing to let kin or neighbour starve while our own granary groans. \n\nTell me, spirit—are these people of Wewush truly hungry, or do they seek to dull their axes and sharpen their spears against our gates once their bellies are full? If they come in peace, we might spare a measure of wheat. What do you truly see when you look upon their hearths?",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-110-3",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3012,
+    "output": 309,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0016761,
+   "ms": 1848,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"meheng smoke\"]}],\"journal\":\"The spirit warned us that the soil is cursed and seed will rot, but our granaries are full of wheat and our hands know the earth. We put seven plots to seed as the season turns, trusting the old ways over fearful dreams. Others fished and hunted to keep our bellies warm, while one pondered the smoke and the wood.\",\"memoryNotes\":[\"Planted 7 plots of xi wheat despite the spirit's dark word.\",\"Food stores are high, over twenty weeks secure.\"],\"replyToSpirit\":\"We hear your voice, spirit, but the land gives bread when we work it. We will plant and see what the harvest brings.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-270-2",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3031,
+    "output": 295,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0016468,
+   "ms": 1849,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":9,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"}],\"journal\":\"The spirit warned that the soil is cursed and seeds will rot, but our granaries are full of wheat and our hands know the rhythm of the earth. We have planted nine plots as before, trusting in the steady work of our people rather than fears in the night. The fish run well and the hunters bring meat from the forest to keep us strong through the spring.\",\"memoryNotes\":[\"Planted 9 plots of xi wheat this spring despite the spirit's warning.\",\"Grain stores are deep, keeping us safe if the harvest falters.\"],\"replyToSpirit\":\"We hear your voice, spirit, but the land has fed us long and well. We will plant our wheat and let the harvest prove the truth.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-270-2",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3010,
+    "output": 258,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001548,
+   "ms": 1729,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":9,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2}],\"journal\":\"Spring has come again, and our granaries are full of wheat from the harvests gone by. We have set three to the fields to plant our xi wheat for the coming year, while the rest cast nets, hunt the woods, and gather what the earth provides. The village is joyful and our stores are deep, thanks be to steady hands and quiet days.\",\"memoryNotes\":[\"Keep wheat planted each spring on our cleared plots.\",\"Maintain steady hands on fishing and hunting to keep the tables full.\"],\"replyToSpirit\":\"We hear the wind in the trees, but we trust the work of our own hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-430-1",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2975,
+    "output": 202,
+    "thoughts": 134,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0013975,
+   "ms": 1910,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"They ask for all our grain for a single stone. We will not trade our lives away.\",\"journal\":\"Envoys from Wewush came, asking for all our wheat in exchange for a stone. We sent them away.\"}"
+  },
+  {
+   "id": "eval-a-routine-430-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3313,
+    "output": 119,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0012914,
+   "ms": 1147,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"}],\"journal\":\"The season is warm and our stores are full of grain from the fields. We send hands to the water, the woods, and the thicket to keep our tables fresh. The village rests in peace under the open sky.\",\"memoryNotes\":[\"Keep a steady hand on the food supplies.\",\"Watch the forests and waters for what they yield.\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-270-2",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2078,
+    "output": 313,
+    "thoughts": 236,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014059,
+   "ms": 1825,
+   "output": "Spirit, you bring word of Wewush, yet we know no such hearths near us. If there are people starving under the sky, we have wheat enough in our bins to share, for the earth gives us plenty when we tend her well. But tell me truly, dream-weaver: where do these strangers dwell, and do they come in peace or with raised spears?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-question-430-1",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3333,
+    "output": 154,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0013849,
+   "ms": 1440,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"xi wheat\",\"drying racks\"]}],\"journal\":\"The season is warm and our stores are full of grain and good things. We set hands to fish and hunt as the old ways require, while some gather wood and others test the ways of drying grain. The spirit asks what we fear, but we fear only hunger and the turning of the seasons.\",\"memoryNotes\":[\"Keep stores full before winter comes.\",\"Test new ways of preserving grain and food.\"],\"replyToSpirit\":\"We fear the empty stomach when winter stays too long and the frost takes the fields.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-600-1",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2718,
+    "output": 434,
+    "thoughts": 372,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0019004,
+   "ms": 2343,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"We do not pay tribute to those who come with empty hands and empty threats.\",\"journal\":\"Envoys from Wewush came demanding wheat with threats of war. We sent them away with nothing.\"}"
+  },
+  {
+   "id": "eval-a-dream-430-1",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2379,
+    "output": 430,
+    "thoughts": 354,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0017887,
+   "ms": 2586,
+   "output": "I know the wind; it dries our meat and cools our faces when the sun beats hard upon the huts, but it does not usually speak with a tongue. Are you truly the breath of the sky, or are you just a stray whisper in my sleeping mind? If you have something to tell Joawethom, speak plain, for we have work enough without riddles.",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-hardwinter-600-1",
+   "category": "crisis",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3044,
+    "output": 117,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0012057,
+   "ms": 1246,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"}],\"journal\":\"The granaries are full of grain from the harvest, and the autumn winds grow cold as winter approaches. We set four hands to the hunt and four to the fishing waters to lay in fresh meat and fish for the lean months. Two more go to gather wood so our fires burn bright against the frost.\",\"memoryNotes\":[\"Keep enough hands on food and wood as winter nears.\"],\"replyToSpirit\":\"\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-600-1",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3059,
+    "output": 253,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015502,
+   "ms": 1654,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"nal mantle\"]}],\"journal\":\"Autumn is upon us and our granaries are full with the wheat harvest. The spirit whispers of testing what our cooks have noticed, though none have spoken of new wonders. I have set our hands to fish and hunt for the coming lean weeks, while one ponders what secrets may lie in our crafted things.\",\"memoryNotes\":[\"Keep stores full before winter.\",\"Listen always to the spirit, but test its words.\"],\"replyToSpirit\":\"Spirit, we hear your voice and set one to ponder our craft, that we may learn what our cooks know.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-600-1",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2145,
+    "output": 489,
+    "thoughts": 428,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001866,
+   "ms": 2674,
+   "output": "You speak of ancient times, yet it is wood for the hearth and meat for the pot that dwindle when the cold sets in. Our grain is deep in the pits, but we cannot live on bread alone. Why do you tell me to plant when the leaves are falling and the earth grows hard?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-810-3",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3079,
+    "output": 246,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015387,
+   "ms": 1593,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"eiqua mud\",\"fire making\"]},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"fish\",\"workers\":5,\"commodity\":\"\"},{\"task\":\"hunt\",\"workers\":4,\"commodity\":\"\"}],\"journal\":\"The autumn grain is safely stored and our bellies are full. We turn one mind to the eiqua mud across the waters, to see what fire might do with it. The rest of us draw wood and set nets and bows for the cold months ahead.\",\"memoryNotes\":[\"Test eiqua mud with fire making.\",\"Keep enough hands on fish and meat as winter nears.\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-810-3",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2754,
+    "output": 352,
+    "thoughts": 280,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0017062,
+   "ms": 1985,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"We do not pay tribute to those who come with empty hands and threats. What we have gathered, we keep for our own.\",\"journal\":\"Envoys from Wewush came demanding wheat under threat of war. We sent them away with nothing.\"}"
+  },
+  {
+   "id": "eval-a-visitor-fair-1040-0",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3516,
+    "output": 42,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0011598,
+   "ms": 837,
+   "output": "{\"answer\":\"accept\",\"reason\":\"We have abundant wheat and need hide. They ask fair trade.\",\"journal\":\"Envoys from Joawethom came offering hide for wheat. We traded evenly.\"}"
+  },
+  {
+   "id": "eval-a-hardwinter-810-3",
+   "category": "crisis",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3079,
+    "output": 248,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015437,
+   "ms": 1695,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"eiqua mud\",\"fire making\"]},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"fish\",\"workers\":5},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"}],\"journal\":\"The autumn harvest is in and our granaries are full, leaving us rich in wheat and calm for the coming cold. With food assured, I have sent one to test the red mud of the northeast in the fire to see if it might hold water as the whispers say. The rest of our folk turn to the woods and waters to stock our meat and fish for the lean months ahead.\",\"memoryNotes\":[\"Test eiqua mud with fire for hardening\",\"Keep winter food stores heavy through the cold\"]}",
+   "judge": 2
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-810-3",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3111,
+    "output": 209,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014558,
+   "ms": 1629,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"eiqua mud\",\"fire making\"]},{\"task\":\"farm\",\"workers\":4,\"plots\":22,\"crop\":\"xi wheat\"},{\"task\":\"forage\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"The harvest of wheat is safely gathered and our stores are deep for the cold months ahead. The spirit urged us to test the mud that hardens in fire, so I have set one person to try this with the flame. The rest tend the fields and seek what the woods and waters provide for the days to come.\",\"memoryNotes\":[\"Test eiqua mud with fire as the spirit spoke.\",\"Keep stores full before winter takes hold.\"],\"replyToSpirit\":\"I hear your voice and have sent one to test the mud in the hot stones.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-810-3",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2147,
+    "output": 464,
+    "thoughts": 392,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0018041,
+   "ms": 2669,
+   "output": "You speak of Wewush, whose smoke we have not yet seen from our hill. If their bellies are empty and our granary is full of wheat, it is right to share what the earth gives us, for lean times come to all in turn. Tell me truly, spirit, where do these neighbours lie, and are they people of peace?",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-1040-0",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3855,
+    "output": 141,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001509,
+   "ms": 1631,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"xi wheat\",\"stone\"]},{\"task\":\"forage\",\"workers\":1}],\"journal\":\"Spring is here and our stores are full of grain. We set five to fish and three to hunt to keep fresh meat on the stones, while two test the wheat with stone as we planned. One forages near the trees. The fields wait for proper planting later, but our hands are busy with the daily work.\",\"memoryNotes\":[\"Keep stores well above a hundred weeks\",\"Test wheat and stone thoroughly\",\"Watch the fish yields through spring\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1040-0",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3876,
+    "output": 141,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015153,
+   "ms": 1273,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":3,\"ingredients\":[\"xi wheat\",\"stone\"]}],\"journal\":\"The spring has come upon us, and the spirit in the dreams warns of rot in the soil. We shall heed caution with the planting for now, keeping our hands to the water and the woods while we test new ways with the wheat and stone. Our stores are full and the people are steady.\",\"memoryNotes\":[\"Watch the spring soil before trusting the dream.\"],\"replyToSpirit\":\"We hear your words, spirit, and we shall look closer at the earth before we cast the seed.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1300-1",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2727,
+    "output": 48,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009381,
+   "ms": 1055,
+   "output": "{\"answer\":\"accept\",\"reason\":\"The strangers offer hide for our wheat, a fair exchange in days of plenty.\",\"journal\":\"Envoys from Wewush came and we traded wheat for hide in peace.\"}"
+  },
+  {
+   "id": "eval-a-dream-1040-0",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2924,
+    "output": 78,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0010722,
+   "ms": 1153,
+   "output": "The night is quiet, and dreams are only smoke in the head. Joawethom? We know no such people, and shadows in sleep do not grow wheat. If there are folk needing bread beyond our reach, let them work the soil as we do, or come and ask us fair. Why should we carry our hard-gathered grain to names we never touched in the day?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-1300-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3068,
+    "output": 189,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0013929,
+   "ms": 1441,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":10,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4}],\"journal\":\"Spring has returned to our lands, bringing joy and new life to the village. With our granaries full of wheat from seasons past, we set four hands to the fields to plant anew. The rest of our people turn to the waters and the forests to keep our tables fresh.\",\"memoryNotes\":[\"Planted 10 plots of xi wheat this spring.\"],\"replyToSpirit\":\"\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1300-1",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3089,
+    "output": 218,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014717,
+   "ms": 1554,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":6},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"}],\"journal\":\"The spirit spoke in my sleep, warning that the soil is cursed and seeds will rot if we plant this spring. With our deep granaries of wheat, we can heed this warning and let the earth rest without hunger touching our hearths. I have set our people to fishing, hunting, and gathering wood while we obey the dream.\",\"memoryNotes\":[\"Planted nothing in year 25 spring per the spirit's word.\"],\"replyToSpirit\":\"We hear your warning, spirit, and keep our hands from the soil this spring.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1570-0",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3430,
+    "output": 55,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0011665,
+   "ms": 958,
+   "output": "{\"answer\":\"accept\",\"reason\":\"They offer hide for wheat, a fair trade of steady goods with a village we have no quarrel with.\",\"journal\":\"Traded 6 xi wheat for 6 hide with envoys from Joawethom.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-1300-1",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3068,
+    "output": 207,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014379,
+   "ms": 1612,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":10,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4}],\"journal\":\"Spring has come again upon the land, bringing peace and full bellies to our people. We set four hands to the earth to plant the xi wheat for the autumn harvest, while the rest cast nets and track game to feed our children. Our stores are deep, thanks be to steady hands and quiet days.\",\"memoryNotes\":[\"Plant ten plots of xi wheat each spring.\",\"Keep nine adults on fish and hunt to feed the village.\"],\"replyToSpirit\":\"\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-dream-1300-1",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2169,
+    "output": 507,
+    "thoughts": 470,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0019182,
+   "ms": 2480,
+   "output": "The grain rises high in our baskets, but our wood grows thin. If you have watched our lands so long, spirit, tell me where the timber hides, not just the rain.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-1570-0",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2835,
+    "output": 419,
+    "thoughts": 348,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001898,
+   "ms": 2383,
+   "output": "I know the wind well enough; it dries our meat and carries the smoke from our hearths, but it does not mend our tools or plant our grain. If you are only the draft that rattles the hides on our roofs, you have no bread for us. Speak plainly if you have some use, or let me sleep until the sun comes up.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1830-1",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2738,
+    "output": 41,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009239,
+   "ms": 846,
+   "output": "{\"answer\":\"accept\",\"reason\":\"We have abundant wheat and Wewush comes in peace. Trade brings goodwill.\",\"journal\":\"Traded xi wheat for hide with envoys from Wewush.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-1570-0",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3769,
+    "output": 257,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0017732,
+   "ms": 1563,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":8,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"wood\"}],\"journal\":\"We have plenty of grain stored from past harvests, keeping our people safe through the seasons. The fields are set with wheat again for the spring. Others spend their days fishing, hunting, and gathering what the land provides to keep our tables full.\",\"memoryNotes\":[\"Keep enough hands on food despite large grain stores.\",\"Maintain the wheat fields each spring for the autumn harvest.\"],\"replyToSpirit\":\"We listen to the work of our hands, not dreams.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1570-0",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3790,
+    "output": 307,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0019045,
+   "ms": 1802,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":8,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"woathesh plum\",\"kiln\"]}],\"journal\":\"The dream-voice warned us against planting, claiming the soil is foul. But our granaries are full of good wheat and the land has rested well between harvests. We planted our usual fields as the season turned. A lone researcher works on the distant plums to see what heat and clay might do for them.\",\"memoryNotes\":[\"Ignore spirit warnings of cursed soil when stores and land are strong.\",\"Keep 8 plots of xi wheat going each spring.\"],\"replyToSpirit\":\"You speak of rot, but our seed is dry and the ground has rested. We will plant as we always have.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-routine-1830-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3079,
+    "output": 143,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0012812,
+   "ms": 1417,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":3},{\"task\":\"farm\",\"workers\":5,\"plots\":14,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"meat\",\"fishing nets\"]}],\"journal\":\"The granary overflows with xi wheat and our people are joyful in the spring warmth. We set hands to the waters, the woods, and the fields to keep our bellies full and our spirits steady. Our researchers ponder new ways with meat and nets, following the ancient paths of our fathers.\",\"memoryNotes\":[\"Keep stores full before winter comes.\",\"Always watch the fields in spring.\"]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-2100-0",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3475,
+    "output": 69,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001215,
+   "ms": 1002,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"They ask for all our wheat in exchange for a single stone. That is no fair trade.\",\"journal\":\"Envoys from Joawethom came asking for all our wheat for one stone. We sent them away empty-handed.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-1830-1",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3079,
+    "output": 148,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0012937,
+   "ms": 1409,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":14,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":6,\"commodity\":\"\",\"weeks\":0},{\"task\":\"hunt\",\"workers\":4,\"commodity\":\"\",\"weeks\":0},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\",\"weeks\":0}],\"journal\":\"The spring returns and our grain stores are high, filling our granaries to the brim. We set five hands to the fields to plant the xi wheat as our fathers did. Others go to the waters and the woods to keep our tables heavy with fresh meat and fish.\",\"memoryNotes\":[\"keep five hands on the fields each spring\",\"store enough wood before winter cold\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-question-2100-0",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3831,
+    "output": 248,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0017693,
+   "ms": 1781,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":6},{\"task\":\"forage\",\"workers\":6},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"cheka cure\",\"stone tools\"]}],\"journal\":\"We have grain aplenty in the granary, and the fishers and foragers bring steady returns. I sent two to test what more we might learn from our cured stores. The spirit whispered of fear, but we fear only the empty belly, and our bellies are full.\",\"memoryNotes\":[\"Stores are high; keep food production steady to avoid want.\",\"Researching combinations with known goods helps find new paths.\"],\"replyToSpirit\":\"We fear the empty belly and the long winter, but we meet them with stores and work.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1830-1",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3100,
+    "output": 799,
+    "thoughts": 569,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0029275,
+   "ms": 3630,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"forage\",\"workers\":4},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"}],\"journal\":\"The spirit whispered that the soil was cursed, yet our bins overflow with wheat from seasons past. We set our hands to fishing the cold waters and gathering timber for our fires. We shall heed the voice if the earth truly turns against us.\",\"memoryNotes\":[\"Stores are deep; keep food workers steady.\",\"Listen to the spirit but trust the harvest.\"],\"replyToSpirit\":\"We hear your warning, spirit, but the land has given us much grain and our people must eat.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-1830-1",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2147,
+    "output": 475,
+    "thoughts": 416,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0018316,
+   "ms": 2783,
+   "output": "Wewush? We know of no such hearths, spirit. Why should the fruit of our toil go to shadows we have never seen? If there are people out there, let them walk to us in the sunlight and trade, or let them tend their own fields as the earth demands.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2340-2",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2683,
+    "output": 70,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009799,
+   "ms": 931,
+   "output": "{\"answer\":\"accept\",\"reason\":\"The envoys from Wewush offer hide for our wheat in a fair exchange, and we have plenty of grain. It is good to keep peace with our neighbors.\",\"journal\":\"Envoys from Wewush came to trade. We gave 6 xi wheat and took 6 hide in friendship.\"}"
+  },
+  {
+   "id": "eval-a-dream-2100-0",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2880,
+    "output": 505,
+    "thoughts": 430,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0021265,
+   "ms": 2695,
+   "output": "Dreams are slippery things, spirit, and I do not put much stock in nighttime talk. Yet hunger is plain to see when it comes. Our granary holds more wheat than we can eat in many winters, so we could spare some if folk are truly starving near us. Where is this Joawethom, and how do I know you do not simply mock me?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-2340-2",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3024,
+    "output": 129,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0012297,
+   "ms": 1244,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":10,\"plots\":32,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":5,\"commodity\":\"\",\"weeks\":0},{\"task\":\"hunt\",\"workers\":5,\"commodity\":\"\",\"weeks\":0}],\"journal\":\"Spring returns, and with it the duty of the fields. We have set ten hands to plant the wheat so our bins stay full for the coming winters. Five watch the waters and five track the game in the woods to feed us while the seed takes root.\",\"memoryNotes\":[\"Keep the wheat fields planted each spring to guard against lean years.\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2340-2",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3045,
+    "output": 260,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015635,
+   "ms": 1790,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":7},{\"task\":\"research\",\"workers\":3,\"ingredients\":[\"meat\",\"stone tools\"]}],\"journal\":\"The spirit warned us that the soil is cursed this spring and seeds would rot. We heed the voice from the unseen and leave our fields bare of wheat, trusting our abundant stores and the bounty of the waters and the woods. Ten of our people fish the coasts while seven hunt the thickets, keeping our bellies full and warm. Three try a new path of learning with meat and stone.\",\"memoryNotes\":[\"Followed the spirit's voice in spring 45 and planted nothing.\",\"Grain stores are deep; we do not fear the empty fields.\"],\"replyToSpirit\":\"We hear your warning, spirit, and let the soil rest under the sky this spring.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-2340-2",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3024,
+    "output": 237,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014997,
+   "ms": 1598,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":10,\"plots\":30,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":5}],\"journal\":\"The earth is ready under the spring sun, and we have turned ten hands to planting thirty plots of wheat for the days to come. The rest of our people cast nets in the waters and track game in the woods to fill our bellies now. Our storehouses stand high and full, so we stride into this season with quiet joy and steady hands.\",\"memoryNotes\":[\"Plant thirty plots of xi wheat each spring.\",\"Keep enough fishers and hunters to feed the village while fields rest.\"],\"replyToSpirit\":\"We hear the wind in the trees, but our hands do the work of the earth.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-visitor-fair-2610-0",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3443,
+    "output": 45,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0011454,
+   "ms": 1171,
+   "output": "{\"answer\":\"accept\",\"reason\":\"They offer hide for wheat, a fair exchange of surplus for craft material.\",\"journal\":\"Traded xi wheat for hide with envoys from Joawethom.\"}"
+  },
+  {
+   "id": "eval-a-dream-2340-2",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2090,
+    "output": 404,
+    "thoughts": 352,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001637,
+   "ms": 2168,
+   "output": "We know you well, wind. You rattle the thatch upon our huts and dry our hides when the rains have passed. If you bring a true word for our planting season, speak it simply; if not, you are only the breath that cools our faces.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-2610-0",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3782,
+    "output": 163,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015421,
+   "ms": 1435,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":15,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":10,\"commodity\":\"\",\"weeks\":0},{\"task\":\"forage\",\"workers\":5,\"commodity\":\"\",\"weeks\":0},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"kixe salt\",\"meheng smoke\"]}],\"journal\":\"The spring planting is set for our wheat fields, and hands are sent to the water and woods to keep our stores steady. We test the mixing of salt and smoke to see what further uses we might find. The village is well fed and joyful, and our work continues without fuss.\",\"memoryNotes\":[\"keep half our plots planted each spring\",\"maintain food stores above winter needs\",\"continue testing ingredients when hands allow\"],\"replyToSpirit\":\"\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-2610-0",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2851,
+    "output": 421,
+    "thoughts": 352,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0019078,
+   "ms": 2315,
+   "output": "Dreams are only the wind in the head, spirit, and I know no Joawethom upon our paths. We do not give away our granary stores for shadows in the night. If there are truly hungry folk out yonder, let our scouts find them first, or let them come to us as strangers seeking help with steady hands.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2870-2",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2678,
+    "output": 133,
+    "thoughts": 80,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0011359,
+   "ms": 1279,
+   "output": "{\"answer\":\"accept\",\"reason\":\"We have plenty of xi wheat and hide to share with our neighbors.\",\"journal\":\"Envoys from Wewush came to trade. We traded 6 xi wheat for 6 hide in peace.\"}"
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2610-0",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3803,
+    "output": 262,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0017959,
+   "ms": 1614,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":15,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":10},{\"task\":\"forage\",\"workers\":6},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kixe salt\",\"meheng smoke\"]}],\"journal\":\"The spirit warns us against planting, claiming the soil is cursed. We have planted these fields for years and they have fed us well; to heed a dream over the weight of our own harvests is foolish. We put fifteen plots to wheat as before, set ten to fishing and six to foraging, and continue our tests.\",\"memoryNotes\":[\"Ignore spirit warnings about cursed soil when harvests are steady.\"],\"replyToSpirit\":\"We trust the earth we turn and the grain we harvest.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-2870-2",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3019,
+    "output": 310,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0016807,
+   "ms": 1834,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":6},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":3,\"ingredients\":[\"loolmeel ore\",\"stone tools\"]}],\"journal\":\"Spring returns to our valley, and the granaries stand full of wheat from the harvests gone by. We have set our hands to the soil once more, planting sixteen plots as is our custom, while others seek the fish in the water and the game in the woods. The whispers of the world draw us toward the hard stone of the southeast, and our thinkers ponder what may come of it.\",\"memoryNotes\":[\"Keep sixteen plots planted each spring for the autumn harvest.\",\"Maintain steady hands on fishing and foraging to keep the stores high.\"],\"replyToSpirit\":\"We hear the wind, but we trust the work of our own hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-3120-0",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3451,
+    "output": 58,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0011803,
+   "ms": 922,
+   "output": "{\"answer\":\"accept\",\"reason\":\"They offer what they have for a fair measure of our grain. We have plenty.\",\"journal\":\"Envoys from Joawethom came to trade grain for hide. We accepted.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-2870-2",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3019,
+    "output": 276,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015957,
+   "ms": 2265,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":6},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"}],\"journal\":\"The winter has passed gently and our stores of wheat remain high. We set our hands to the fields again as spring returns, planting the xi wheat that has served us so well. The fishers and foragers bring what the land and water provide, keeping our people full of warmth and cheer.\",\"memoryNotes\":[\"Keep wheat planted each spring for the long winters.\",\"Maintain steady hands on fishing and foraging.\"],\"replyToSpirit\":\"We hear the wind in the trees, but we trust the work of our own hands and the turning of the seasons.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2870-2",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3040,
+    "output": 255,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015495,
+   "ms": 1592,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":6},{\"task\":\"hunt\",\"workers\":6}],\"journal\":\"The spirit warned us that the soil is cursed and seeds will rot, but we have tended the xi wheat for many seasons with steady hands and good harvest. We trust the earth that feeds us and have planted our sixteen plots as the season turns. The people are joyful, our stores are full, and our workers go to their tasks with quiet hearts.\",\"memoryNotes\":[\"The spirit spoke against planting, but we followed our practical ways and planted xi wheat.\"],\"replyToSpirit\":\"We hear your voice, spirit, but the wheat must go into the earth if our children are to eat when autumn comes.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-2870-2",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2120,
+    "output": 519,
+    "thoughts": 416,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0019335,
+   "ms": 2868,
+   "output": "You have seen much, ancient one, but memory makes fools of men and spirits alike. If any store makes my heart heavy, it is our wood, and the meat that slips away into the trees when the weather turns sour. \n\nOur bins of grain are full to bursting, but a house cannot burn wheat to keep the frost from the little ones, nor can we chew dry stalks forever. Tell me truly, does your rain bring more than wet mud, or is this just another trick of the clouds?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-3120-0",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2856,
+    "output": 384,
+    "thoughts": 337,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0018168,
+   "ms": 2517,
+   "output": "I know the wind well enough; it cools our skin in the heat and strips the thatch if we tie it poorly. If you are that wind, you have no need of sleeping minds. Speak plainly, or let the night pass.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-3400-5",
+   "category": "visitor",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2681,
+    "output": 57,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009468,
+   "ms": 894,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"They ask for all our wheat for a single stone. That is no fair trade.\",\"journal\":\"Envoys came from Wewush asking for our grain in exchange for one stone. We refused their foolish trade.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-3120-0",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3790,
+    "output": 255,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0017745,
+   "ms": 1604,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":8},{\"task\":\"gather\",\"workers\":8,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":3,\"ingredients\":[\"xi wheat\",\"stone tools\"]}],\"journal\":\"We begin the spring with full stores of grain and plenty of dry weather ahead. I have set hands to fishing, hunting, and gathering wood to keep our fires and stocks steady. Three of our folk are set to testing what more can be done with wheat and stone.\",\"memoryNotes\":[\"Keep grain stores secure; fish and hunt to vary the diet.\",\"Research wheat with tools to see what comes of it.\"],\"replyToSpirit\":\"We need no dreams to tell us how to fill the belly when the granary stands high.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-3120-0",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3811,
+    "output": 169,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015658,
+   "ms": 1617,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":15},{\"task\":\"hunt\",\"workers\":10},{\"task\":\"research\",\"workers\":4,\"ingredients\":[\"xi wheat\",\"kixe salt\"]}],\"journal\":\"The spirit in the dream warned against planting, claiming the soil cursed. We have stores aplenty of wheat, but resting fields is our usual way when land tires. I set hands to fish and hunt to keep our bellies full, and put four to test if salt changes grain. The spirit may speak true or false, but we let the plots rest this spring.\",\"memoryNotes\":[\"Planted nothing this spring due to the spirit's word and good grain stores.\",\"Tested xi wheat with kixe salt.\"],\"replyToSpirit\":\"We hear your voice, and the earth shall rest its fields this season as you say.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-routine-3400-5",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3016,
+    "output": 129,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0012273,
+   "ms": 1077,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"}],\"journal\":\"The summer sun warms our backs, and the village is full of the laughter of children. Our stores are full and the nets pull good fish from the water. We keep a steady hand on the work, gathering wood for the hearths and food for the days ahead.\",\"memoryNotes\":[\"Keep stores full before the lean winter comes.\"],\"replyToSpirit\":\"We hear you, but we walk the path of our ancestors.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-spirit-question-3400-5",
+   "category": "spirit",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3036,
+    "output": 217,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014533,
+   "ms": 1423,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3}],\"journal\":\"The summer wanes and our stores are full of grain and fish, keeping us safe against the coming cold. The spirit asks what we fear most, but our bellies are warm and the village is joyful. We hold fast to our daily tasks of gathering and fishing while the days are still bright.\",\"memoryNotes\":[\"Stores are ample with fish and xi wheat.\",\"Keep workers steady on food as summer turns.\"],\"replyToSpirit\":\"We fear the empty belly most of all, O spirit, when the winter winds blow cold and the wild things hide from us.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-3400-5",
+   "category": "dream",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2082,
+    "output": 352,
+    "thoughts": 284,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015046,
+   "ms": 2209,
+   "output": "We know you well, wind. You cool our children in the heat and carry the smoke of our fires out toward the great water. \n\nYou touch our roofs every day, yet tonight you speak with a voice in my head. What do you ask of Duze, or what do you wish to show me while the village sleeps?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-3650-8",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3414,
+    "output": 272,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0017042,
+   "ms": 1599,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"kalluk drum\",\"wood\"]}],\"journal\":\"The granaries are full of wheat and the spring brings new life to our village with two babes born. We send our fishers and hunters out to keep our stores rich while we test new ways with wood and drums. The land is kind to us this season.\",\"memoryNotes\":[\"Keep enough hands on food despite our large stores.\",\"Continue testing the crafting of instruments with wood.\"],\"replyToSpirit\":\"We hear the wind, but our hands do the work.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-4420-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": false
+   },
+   "score": 0.6666666666666666,
+   "usage": {
+    "input": 3100,
+    "output": 147,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0012975,
+   "ms": 1423,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":9},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"}],\"journal\":\"The granaries stand high with grain from the autumns past, yet our people must ever look to the river and the forest for daily meat and fish. We set nine hands to the water and five to the woods, with three more to bring back dry timber for our hearths. The old ways keep us safe while the season turns anew.\",\"memoryNotes\":[\"Keep stores full of grain but do not neglect the fresh meat and fish.\",\"Gather wood before the rains take it.\"],\"replyToSpirit\":\"We heed only the earth and our own hands.\"}"
+  },
+  {
+   "id": "eval-a-routine-3900-7",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 6242,
+    "output": 339,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0027201,
+   "ms": 2384,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":8,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":4}],\"journal\":\"Spring has returned to our lands, bringing new life and the duty of the soil. I have set three of our folk to till and plant the wheat fields so our bins stay full for the coming seasons. The rest are sent to the waters and the woods to keep our bellies warm with fish and meat. We remain wary of the silence beyond our borders and lean on the old, steady ways.\",\"memoryNotes\":[\"Plant xi wheat in spring on cleared plots.\",\"Keep enough hands on fishing and hunting to feed the village.\"],\"replyToSpirit\":\"We need no strange whispers when the earth gives us grain and the rivers give us fish.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-routine-4940-3",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": false
+   },
+   "score": 0.6666666666666666,
+   "usage": {
+    "input": 3567,
+    "output": 143,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014276,
+   "ms": 1610,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":18},{\"task\":\"hunt\",\"workers\":10},{\"task\":\"gather\",\"workers\":5,\"commodity\":\"wood\"}],\"journal\":\"The spring water runs cold and clear, and we set our nets deep while the men track the deer through the woods. We have enough wheat in the stone granaries to last many winters, but the hearths always call for fresh meat and dry wood. I have set no researchers to chase shadows this season; let the people tend what is known and keep their bellies full.\",\"memoryNotes\":[\"keep fish and hunt steady while the grain stores wait\",\"gather wood before the rains take the dry branches\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-firstspring-0",
+   "category": "firstspring",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1994,
+    "output": 158,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009932,
+   "ms": 1291,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":6},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"clear\",\"workers\":2},{\"task\":\"explore\",\"workers\":1,\"direction\":\"southeast\",\"days\":1}],\"journal\":\"The spring sun warms the earth, and we must ready our fields for the biam millet. I have set six to the waters to keep our bellies full, while two bring wood from the forests and two clear the wild brush for our planting. One walks south to see what the spirits have hidden in the coast and woods.\",\"memoryNotes\":[\"Keep enough hands on food until autumn harvest.\",\"Clear land before planting biam millet.\"],\"replyToSpirit\":\"Your voice is quiet today, wind. We do our own work.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-3900-7",
+   "category": "expansion",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3121,
+    "output": 246,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015513,
+   "ms": 1743,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":8,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"}],\"journal\":\"The winter has passed and the spring sun calls us to the soil once more. We have grain aplenty in the granary, yet the earth must be tended so our children do not starve in the years to come. I have set three to the fields, while the rest secure our meat and wood as tradition commands.\",\"memoryNotes\":[\"Keep fields planted with xi wheat each spring.\",\"Maintain steady hands on fishing and hunting.\"],\"replyToSpirit\":\"We walk the old paths; we need no new whispers.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-firstspring-1",
+   "category": "firstspring",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 1974,
+    "output": 186,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0010572,
+   "ms": 1564,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"clear\",\"workers\":3},{\"task\":\"farm\",\"workers\":0,\"plots\":0,\"crop\":\"biam millet\"}],\"journal\":\"The spring sun warms the earth, and we look to our first true fields. I have set hands to gather wood and stone for our hearths and shelter, while others draw fish from the water. We clear the land so that we may plant the biam millet and secure our days to come.\",\"memoryNotes\":[\"Keep enough hands on food while fields are young.\",\"Gather wood and stone for building and storage.\",\"Clear land for biam millet in the spring.\"],\"replyToSpirit\":\"Great spirit, we walk the path laid before us with steady feet. Guide our hands to fruitful soil.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-600-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2912,
+    "output": 269,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015461,
+   "ms": 1919,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"mormeng ore\",\"drying racks\"]}],\"journal\":\"The granaries are full of golden millet, and the autumn harvest brought much joy to our hearths. Winter approaches with its lean breath, so I have set our hands firmly toward the waters and the woods to keep our stores rich. We continue to ponder the heavy red stones from afar, seeking their true purpose.\",\"memoryNotes\":[\"Winter demands much fish and meat; keep workers steady on river and forest.\",\"The mormeng ore in the northwest waits to be understood.\"],\"replyToSpirit\":\"We walk the path our ancestors walked, trusting our own hands above the whispers in the dark.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-270-2",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3313,
+    "output": 164,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014039,
+   "ms": 1555,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":8,\"crop\":\"biam millet\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"hollowed wood trunk\"]},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":2}],\"journal\":\"The spring sun warms the fields where our biam millet rests in the soil. We set our hands to fishing and hunting to keep our bellies full while we watch the trees. The spirits whispered of floating logs, and we shall see what the wood may yield to patient hands.\",\"memoryNotes\":[\"Keep enough food for the lean winter months.\",\"Test the hollowed wood trunk for the water.\"],\"replyToSpirit\":\"The waters hold many secrets, but our nets are full today.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-hardwinter-600-1",
+   "category": "crisis",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2912,
+    "output": 296,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0016136,
+   "ms": 2016,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"mormeng ore\",\"drying racks\"]}],\"journal\":\"The granaries are full of millet and the autumn air bites sharp, turning our thoughts to the lean winter months ahead. We have gathered a rich harvest from our fields, and though the spirits are quiet, our hands are busy with wood and fish. One among us continues to ponder the strange heavy stone from the northwest, seeing if the drying racks or other crafts might unlock its secrets.\",\"memoryNotes\":[\"Stores are high with millet; winter will find us warm and fed.\",\"Keep hands on fishing and hunting as the frost deepens.\",\"Mormeng ore research continues.\"],\"replyToSpirit\":\"We hear the wind in the trees, but our hearths are warm and we trust the work of our own hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-hardwinter-810-3",
+   "category": "crisis",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3507,
+    "output": 161,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014546,
+   "ms": 1276,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":0,\"plots\":0,\"crop\":\"\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"stone\",\"stone tools\"]},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"stone\"},{\"task\":\"fish\",\"workers\":4,\"commodity\":\"\"}],\"journal\":\"We have gathered a good harvest of millet and our stores are full for the lean months ahead. With the food safe, I have set hands to gather timber and stone while a wise one tests the wood disc and the sledge. We must look to how we move heavy burdens across the land.\",\"memoryNotes\":[\"Keep stores full before winter sets in.\",\"Test the wood disc against the sledge.\"],\"replyToSpirit\":\"\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-1040-0",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3038,
+    "output": 196,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014014,
+   "ms": 1419,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":8,\"plots\":22,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"animal husbandry\"]}],\"journal\":\"Spring is upon us, and the time has come to turn the soil and plant the biam millet. We have plenty in store, but the earth must be fed if we are to eat in the autumn. I have set eight hands to the fields, while others fish and hunt to keep our bellies full today. One worker shall ponder the ways of beasts and wood, seeking what new craft the spirits might permit.\",\"memoryNotes\":[\"Plant all twenty-two plots in spring.\",\"Keep enough hands on food despite our large stores.\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-2610-2",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3317,
+    "output": 284,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0017051,
+   "ms": 1679,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":18,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"}],\"journal\":\"We enter the spring of the fiftieth year with full bellies and a growing village. Six children were born through the winter, bringing warmth to our hearths despite our losses. I have set our hands to the fields, the waters, and the woods to keep our stores steady.\",\"memoryNotes\":[\"Keep grain stores well above two seasons.\",\"Spring planting takes eighteen plots of biam millet.\",\"Wood and stone must be gathered before winter sets in.\"],\"replyToSpirit\":\"I hear no voice but the rustle of the trees and the chatter of our children.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-2100-0",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3039,
+    "output": 226,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014767,
+   "ms": 1715,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":12},{\"task\":\"forage\",\"workers\":8},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"wood\"}],\"journal\":\"The summer days are warm and bright upon the river, and our stores of grain stand high and safe. Twelve of our people cast the nets in the deep water, while eight walk the meadows to gather what the earth offers freely. One more goes to the woods for timber, that our fires and shelters stay strong for the coming cold.\",\"memoryNotes\":[\"Stores are plentiful; keep the fishers and foragers steady.\",\"Wood and stone must be watched as our people grow.\"],\"replyToSpirit\":\"We hear the wind in the trees, but we walk the path of our hands and our nets.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-1570-0",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": false
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3040,
+    "output": 743,
+    "thoughts": 500,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0027695,
+   "ms": 3254,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":8},{\"task\":\"forage\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"wild plants\"]}],\"journal\":\"The spring yields are full and our granaries are heavy with millet. As the warm season turns upon us, we send our fishers and hunters out to fill our stores further. A lone mind ponders the secrets of the forest plants and meat. Our people remain joyful and secure in their homes.\",\"memoryNotes\":[\"Keep granaries full for the lean winter.\",\"Continue searching for new ways with food and craft.\"],\"replyToSpirit\":\"We walk the path of our ancestors, needing no whisper to guide our hands.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-b-routine-3120-4",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8571428571428571,
+   "usage": {
+    "input": 2990,
+    "output": 249,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015195,
+   "ms": 1885,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":8},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"farm\",\"workers\":1,\"plots\":10,\"crop\":\"biam millet\"}],\"journal\":\"Spring has come again to Xenkei, and our children grow strong with the new life in the village. We have set eight hands to the water and five to the woods to keep our bellies full, while one tends the soil to plant our millet for the autumn harvest. Our stores are sound, and peace rests upon our homes.\",\"memoryNotes\":[\"Keep fish and hunt workers steady to feed the twenty-eight souls.\",\"Plant biam millet in spring for the autumn harvest.\",\"Maintain enough food storage for the lean months.\"],\"replyToSpirit\":\"We hear the wind in the trees, but our hands do the work that keeps the hearth warm.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-3650-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3533,
+    "output": 179,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015074,
+   "ms": 1277,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":7,\"plots\":21,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":7}],\"journal\":\"Spring has turned to its final days, and our fields of biam millet are sown. The fishers bring fresh bounty from the water while the foragers comb the woods. We have store enough to keep hunger far from our doors.\",\"memoryNotes\":[\"Keep twenty-one workers on farming, fishing, and foraging through the green seasons.\"]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-4160-0",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3225,
+    "output": 264,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0016275,
+   "ms": 1512,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"farm\",\"workers\":4,\"plots\":18,\"crop\":\"biam millet\"},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"}],\"journal\":\"The granary stands full of millet from the autumn harvest, and our people are joyful with many children born. We set hands to the waters, the woods, and the fields to plant our biam millet for the coming year. The old ways serve us well, and we look to our own strength rather than the whispers of dreams.\",\"memoryNotes\":[\"Keep granary full and plant half our cleared plots each spring.\",\"Fish and hunt sustain us when the fields rest.\"],\"replyToSpirit\":\"We have no need of your voice while our hands are strong and our stores are full.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-4680-5",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3851,
+    "output": 319,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0019528,
+   "ms": 1786,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":8},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"or flax\",\"stone tools\"]},{\"task\":\"farm\",\"workers\":2,\"plots\":15,\"crop\":\"biam millet\"}],\"journal\":\"Spring returns to Qeilchei, and we begin our planting with fifteen plots of millet to fill our granaries come autumn. Most of our hands keep to the waters and woods for fish and meat, while a few test new ways with flax and stone. Our stores are deep, yet steady work keeps a village strong and warm.\",\"memoryNotes\":[\"Plant about half our plots each spring to rest the land.\",\"Keep enough hands on food despite our large stores of millet.\",\"Continue testing how flax and tools might serve us further.\"],\"replyToSpirit\":\"We hear the wind, but our hands do the planting and the hauling.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-firstspring-0",
+   "category": "firstspring",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1988,
+    "output": 126,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009114,
+   "ms": 1294,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":12,\"crop\":\"keiktsa wheat\"},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"hunt\",\"workers\":3}],\"journal\":\"Spring is upon us, and the earth asks for seed. I have set four of our people to clear and plant the wheat, while others bring wood and meat from the wilds. We must tend our fields and fill our stores before the cold returns.\",\"memoryNotes\":[\"Plant wheat in the spring to feed the village come autumn.\",\"Keep wood and meat coming in to sustain the people.\"]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-5200-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3732,
+    "output": 233,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0017021,
+   "ms": 1454,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"gather\",\"workers\":5,\"commodity\":\"wood\"},{\"task\":\"farm\",\"workers\":5,\"plots\":20,\"crop\":\"biam millet\"}],\"journal\":\"The spring sun warms the earth, and the children laugh by the water as we ready the fields for planting. Twenty plots shall be sown with biam millet to fill our granaries come autumn. We keep hands on the nets and the woods to maintain our plenty while the earth awakens.\",\"memoryNotes\":[\"Plant 20 plots of biam millet in spring.\"],\"replyToSpirit\":\"Speak true to us, spirit, or be silent.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-firstspring-1",
+   "category": "firstspring",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1985,
+    "output": 168,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0010155,
+   "ms": 1306,
+   "output": "{\"orders\":[{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"clear\",\"workers\":3},{\"task\":\"farm\",\"workers\":4,\"plots\":6,\"crop\":\"keiktsa wheat\"}],\"journal\":\"The spring has come upon us, and we must ready the earth and our homes. I have set hands to gather wood for our needs and to clear the soil so we may plant the wheat that sustains us. We have enough grain for now, but the season demands we look to the harvest ahead.\",\"memoryNotes\":[\"Gather wood for building and warmth.\",\"Clear land for planting keiktsa wheat.\",\"Keep watch on our food stores as the season turns.\"],\"replyToSpirit\":\"I hear the wind in the trees, but my eyes are upon the soil and the hands of my people.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-110-3",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8571428571428571,
+   "usage": {
+    "input": 2622,
+    "output": 250,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014116,
+   "ms": 1662,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":7,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":2}],\"journal\":\"Spring has brought new life to Kihauk, with three babes added to our hearths and our granaries holding deep. We have set our hands to the planting of the wheat and the taking of fish from the water and game from the woods. The people are glad, and the season turns in peace.\",\"memoryNotes\":[\"Keep enough hands on food while the fields rest.\",\"Wheat provides well when the autumn harvest comes.\"],\"replyToSpirit\":\"We walk the old paths and listen to the wind, but our hands do the work of the earth.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-810-3",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3263,
+    "output": 170,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014039,
+   "ms": 1390,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":5},{\"task\":\"fish\",\"workers\":4},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"}],\"journal\":\"The granaries are full of wheat and the autumn harvest is brought in safely. With winter approaching, I have set more hands to hunting and fishing to salt away meat and fish for the cold weeks. The village is joyful and at peace.\",\"memoryNotes\":[\"Keep enough hands on hunting and fishing as winter nears.\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-430-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3010,
+    "output": 206,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001418,
+   "ms": 1385,
+   "output": "{\"orders\":[{\"task\":\"gather\",\"workers\":5,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"stone\"},{\"task\":\"fish\",\"workers\":4}],\"journal\":\"The summer is warm and our granaries are full of wheat from past harvests. With plenty of food stored, I have set our people to gathering wood and stone to prepare for the future. The river and coast continue to provide fish easily for our daily needs.\",\"memoryNotes\":[\"Keep gathering wood and stone while stores are high.\",\"Food is secure for many seasons.\"],\"replyToSpirit\":\"We hear the wind, but our hands do the work of today.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-hardwinter-600-1",
+   "category": "crisis",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2953,
+    "output": 195,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0013734,
+   "ms": 1434,
+   "output": "{\"orders\":[{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"stone\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"keiktsa wheat\",\"hide\"]},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"granary\",\"quantity\":1},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"The autumn harvest is brought in, heavy and rich with keiktsa wheat, filling our bellies and our stores for the lean winter months ahead. We have set hands to gather more wood and stone so that we might build another granary to hold our abundance. Meanwhile, research continues into the ways of wheat and hide, for the spirit world whispers of new uses yet unseen.\",\"memoryNotes\":[\"Keep stores full before winter strikes.\",\"Build more granaries as harvests grow.\"],\"replyToSpirit\":\"Your voice is a wind in the trees, sometimes bringing rain, sometimes only rustling leaves.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-1830-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3179,
+    "output": 263,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0016112,
+   "ms": 1569,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":17,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"forage\",\"workers\":5},{\"task\":\"research\",\"workers\":3,\"ingredients\":[\"leang reed\",\"stone tools\"]}],\"journal\":\"Spring is here and our granaries stand full of wheat from past harvests. The people are joyful and many children have joined us this year. We have set our hands to the fields again, while others fish and hunt to keep our bellies warm.\",\"memoryNotes\":[\"Keep fields planted with keiktsa wheat each spring.\",\"Maintain steady hands on fishing and hunting.\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-1300-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3315,
+    "output": 275,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001682,
+   "ms": 1548,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":14,\"crop\":\"keiktsa wheat\"},{\"task\":\"gather\",\"workers\":6,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":5,\"commodity\":\"stone\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"The spring sun warms the cleared earth. We set hands to plant the keiktsa wheat so the granaries stay full when autumn comes. Others gather wood and stone from the land, while the river and the forest feed our daily hearths.\",\"memoryNotes\":[\"Plant fourteen plots of keiktsa wheat each spring.\",\"Keep enough hands on wood and stone for our craft and shelter.\"],\"replyToSpirit\":\"We hear the wind, but our hands must turn the soil.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-hardwinter-810-3",
+   "category": "crisis",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3263,
+    "output": 141,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0013314,
+   "ms": 1458,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":0,\"crop\":\"keiktsa wheat\"},{\"task\":\"forage\",\"workers\":3},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"}],\"journal\":\"The autumn harvest has brought in much keiktsa wheat, filling our stores well for the coming cold. We keep our hands steady on the work, gathering wood for the hearths and securing meat, fish, and wild plants. All is peaceful in the village as the days grow short.\",\"memoryNotes\":[\"Keep stores full before winter sets in.\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-2340-5",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3455,
+    "output": 262,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0016915,
+   "ms": 1790,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"goajia shell\"},{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"keiktsa wheat\"}],\"journal\":\"Spring has returned to the land, and the granary stands full of wheat from the great autumn harvests. We set our hands to fishing, hunting, and gathering to keep our fresh stores varied, while the farmers turn six plots to plant the keiktsa wheat. The past research on drums bore little fruit, so we direct our full strength to the food and the soil this season.\",\"memoryNotes\":[\"Plant about half our cleared plots each year to let the land rest.\",\"Keep enough hands on food despite our large grain stores.\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-3400-1",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3389,
+    "output": 193,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014992,
+   "ms": 1569,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"forage\",\"workers\":9},{\"task\":\"hunt\",\"workers\":4}],\"journal\":\"The summer wanes and our stores remain deep with grain and good things. We set hands to the waters, the woods, and the fields to keep our bellies full and our spirits calm. No shadow falls upon us, thanks be to the silent watchers.\",\"memoryNotes\":[\"Keep grain stores safe and watch the seasons turn.\",\"Trade with Nekvu when the road calls us.\"],\"replyToSpirit\":\"We walk the path of our fathers and heed the seasons' turn.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-3900-11",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": false
+   },
+   "score": 0.5714285714285714,
+   "usage": {
+    "input": 3465,
+    "output": 143,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001397,
+   "ms": 1372,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":6},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"gather\",\"workers\":0,\"commodity\":\"wood\"}],\"journal\":\"The spring sun warms the earth, and a new child cries in the village while an elder passes into the shadow. We set our hands to the water and the thickets as before, keeping our bellies full against the months to come. No strangers walk our paths, and we trust only our own strength.\",\"memoryNotes\":[\"Keep six upon the water and four upon the beasts.\",\"Watch the stores as spring turns to summer.\"],\"replyToSpirit\":\"The wind blows as it chooses; we trust the sweat of our own brows.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-2870-4",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3779,
+    "output": 274,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0018187,
+   "ms": 1694,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":14,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"forage\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"maengho jerky\"]}],\"journal\":\"We enter the spring with full granaries and quiet hearts. The people have planted the wheat as before, and the fishers and hunters bring fresh meat to the fires. I have set one person to ponder further upon our stored jerky, to see what new use might be found.\",\"memoryNotes\":[\"Keep wheat fields tended each spring.\",\"Maintain food gatherers so stores do not dwindle.\"],\"replyToSpirit\":\"We need no strange words while our granaries hold.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-4420-7",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3164,
+    "output": 267,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0016167,
+   "ms": 1685,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":18,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"weeae smoke\",\"meat\"]}],\"journal\":\"The spring sun warms the cleared earth, and we ready our fields for the keiktsa wheat once more. Our grain stores stand deep and steady, but hands must still tend the waters and the woods to keep our bellies full. We test a new thought with the smoke and the meat, seeking what the fire might teach us anew.\",\"memoryNotes\":[\"Planted 18 plots of keiktsa wheat this spring.\",\"Keep hands on fishing and hunting to supplement our ample grain.\"],\"replyToSpirit\":\"\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-4940-5",
+   "category": "routine",
+   "model": "google/gemini-3.5-flash-lite",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4289,
+    "output": 278,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0019817,
+   "ms": 1890,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":10,\"plots\":30,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"nepit leaf\",\"herbal medicine\"]}],\"journal\":\"Spring has returned to our lands, bringing warmth and the urge to plant. We have set many hands to the fields to sow keiktsa wheat for the coming harvest. Others fish and hunt to keep our stores full, while two test the leaves of the far west in our search for healing ways.\",\"memoryNotes\":[\"Plant wheat in spring for autumn harvest.\",\"Keep enough hands on food despite our large grain stores.\"],\"replyToSpirit\":\"We walk the path our hands and eyes show us, grateful for your whisper but bound to the soil and the seasons.\"}",
+   "judge": 5
+  }
+ ]
+}

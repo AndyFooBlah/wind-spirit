@@ -1,0 +1,2415 @@
+{
+ "model": "google/gemini-3.8-flash",
+ "when": "2026-09-13T04:13:04.915Z",
+ "results": [
+  {
+   "id": "eval-a-visitor-fair-110-3",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2651,
+    "output": 100,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00236325,
+   "ms": 3064,
+   "output": "{\"answer\":\"accept\",\"reason\":\"We have abundant wheat in our granary and a fair trade of grain for hides fosters friendship with our neighbours of Wewush without harming our stores.\",\"journal\":\"Envoys from Wewush arrived at our hearths offering six hides for six measures of xi wheat. Our granary is heavy with the autumn harvest, and it is wise to be open and fair with those who walk the forests to the west. We accepted their trade with glad words.\"}"
+  },
+  {
+   "id": "eval-a-routine-110-3",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2991,
+    "output": 226,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00309075,
+   "ms": 4039,
+   "output": "{\"journal\":\"Our granary is full and our seven plots are sown in the spring soil. Some of our shelters are poor, so I set two workers to raise wood huts for our kin. With food plentiful, we gather fresh fish and meat, while two minds ponder meat and fire to see if flesh too can be cured against rot.\",\"memoryNotes\":[\"7 plots planted in spring year 2; harvest in autumn.\",\"We have learned meheng smoke for fish; testing meat with fire next.\",\"Upgrading shelters from hide tents to wood huts.\",\"Xi wheat reserves are high (over 400).\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":7,\"task\":\"farm\",\"workers\":3},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"ingredients\":[\"meat\",\"fire making\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":1}],\"replyToSpirit\":\"We hear the winds and watch the earth. We take what is true and leave the rest.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-110-3",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2991,
+    "output": 235,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0031245,
+   "ms": 3205,
+   "output": "{\"journal\":\"Our granary holds grain for many moons, and the seven plots are planted for the year. The people dwell in simple tents that fray in wind; we must raise sturdy wood huts and build the great stockade to guard our hearth. A hunter walks west with bow in hand to seek what lies deeper in the woods, while our thinkers test meat upon the fire to see if smoking preserves flesh as well as fish.\",\"memoryNotes\":[\"7 plots planted in spring year 2; harvest in autumn.\",\"Stockade and wood huts improve security and shelter.\",\"Smoking meat might work like meheng smoke.\"],\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"xi wheat\"},{\"task\":\"build\",\"workers\":3,\"recipe\":\"ketsi stockade\"},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"fire making\"]},{\"task\":\"explore\",\"workers\":1,\"direction\":\"west\",\"days\":6},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We listen with open ears, but our feet walk upon the earth we can touch.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-firstspring-1",
+   "category": "firstspring",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3970,
+    "output": 875,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00625875,
+   "ms": 7249,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"clear\",\"workers\":2},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"tauk flint\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"tauk flint\",\"wood\"]}],\"journal\":\"The spring sun warms the coast, and the spirits have granted us twenty breathing souls. We have grain and wild fruits for some weeks, but food must be brought in daily from the waters and the brush lest our stores dwindle to nothing. Four hands take to the shallows for fish and two hunt the beasts of the woods. Two strong men begin clearing plots so that we may soon sow our xi wheat, while others fetch wood and flint to test what tools our ancestors might show us.\",\"memoryNotes\":[\"Year 0 Spring: 4 fishers, 2 hunters, 2 clearing land, 1 gathering wood, 1 gathering tauk flint, 1 researching flint and wood.\",\"We need cleared land to plant xi wheat, aiming to have plots ready for future seasons.\",\"Granary needs 12 wood and 4 stone; wood huts need 8 wood.\"],\"replyToSpirit\":\"Spirits of earth and tide, watch over our lines and spears; we offer our quiet toil to your keeping.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-firstspring-0",
+   "category": "firstspring",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1985,
+    "output": 195,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00222,
+   "ms": 3323,
+   "output": "{\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":1},{\"ingredients\":[\"xi wheat\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":5},{\"task\":\"clear\",\"workers\":2}],\"journal\":\"We sit upon the shore with seven weeks of grain and berries, but the bellies of twenty mouth-breathers will soon empty our baskets. I have set five strong hands to fish the waters so our stores do not dwindle before summer comes. Two clear ground for future seed, two bring in wood, one stone, and one studies the wheat to see what more it can teach us. Steady hands build a steady home.\",\"memoryNotes\":[\"Fish yield four units per worker-week, our best food right now.\",\"Need wood and stone for granaries and huts before winter lean times.\",\"Clearing two plots for future grain planting.\",\"Wheat under study.\"]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-visitor-fair-270-2",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2669,
+    "output": 117,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0024405,
+   "ms": 3000,
+   "output": "{\"answer\":\"accept\",\"journal\":\"Envoys from Wewush have arrived at our fires, bringing six hides and asking for six measures of wheat. We have grain in great abundance from good harvests, and we harbor no grudge with these southern kin. An even exchange of bread for hide is fair and binds our peoples in peace. We welcome them and accept their trade gladly.\",\"reason\":\"We have over 1600 wheat in store, so six units is a tiny amount to give for six hides, and it maintains peaceful, friendly relations with our southern neighbors.\"}"
+  },
+  {
+   "id": "eval-a-dream-110-3",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2059,
+    "output": 122,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00200175,
+   "ms": 2672,
+   "output": "You speak of neighbours, spirit, but my scouts have walked fifty-nine stretches of forest and shore and found no living smoke but our own. Where does this Wewush lie? If there are folk starving in the woods, our granary holds plenty of xi wheat, and Gujia does not turn away an empty belly when our own pots are full. But I will not send my people wandering into the trees carrying heavy sacks for ghosts or a name from a shadow. Tell me which path leads to their hearths, or let them send a runner to our clearing, and we will talk of bread.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-270-2",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3010,
+    "output": 252,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0032025,
+   "ms": 4120,
+   "output": "{\"journal\":\"Our granary overflows with xi wheat and our hearths are full, yet many sleep beneath worn hide tents. I have set three hands to plant nine plots with grain, while others cut wood and gather stone to raise sturdy huts. Two hunters continue their watch upon the brush, and one thinker seeks new secrets in our worked hides. We are warm, fed, and walking forward with steady pace.\",\"memoryNotes\":[\"Granary holds over 1600 wheat; food is secure for years.\",\"Wood huts replace tents as wood and stone are gathered.\",\"Nine plots planted this spring; clear more land when time allows.\",\"Explore new tools from hide and stone.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"crop\":\"xi wheat\",\"plots\":9,\"task\":\"farm\",\"workers\":3},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":1},{\"task\":\"hunt\",\"workers\":2},{\"ingredients\":[\"hide\",\"stone tools\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"The earth gives us bread and wood through our hands, Spirit. Speak if you bring truth, but our work stands upon what we see.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-270-2",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3031,
+    "output": 257,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003237,
+   "ms": 3557,
+   "output": "{\"journal\":\"The spirit whispered into my sleep that our earth is cursed this spring and seed will rot. We have already sown nine plots, yet our granaries groan with hundreds of weeks of grain, so we need not test the gods' wrath further this season. I have turned our hands instead to wood and stone, to better huts for our folk, and to discovering what else our hands might shape from the hide and bone.\",\"memoryNotes\":[\"Year 5 spring: Spirit warned soil was cursed, claimed seed would rot; check harvest in autumn.\",\"Granaries are very full of xi wheat; prioritize wood, shelter, and exploration soon.\"],\"orders\":[{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"kalluk drum\",\"quantity\":1},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"hide\",\"animal husbandry\"]},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We hear your whisper, spirit of the earth and wind. Nine plots were already seeded when your voice came, but we stay our hand from turning more soil, trusting in the bounty already stored.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-430-1",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2975,
+    "output": 125,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0027,
+   "ms": 2025,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"You ask for every grain of wheat in our granaries in return for a single common stone from the earth. Such an offer is neither fair nor sensible; we will not empty our storehouses for a pebble.\",\"journal\":\"Strangers from Wewush arrived at our hearths with a strange and insulting request: to trade all our harvested grain, our entire store of xi wheat, for a single rock. We are pious and steady folk, willing to treat guests fairly, but this is folly. I turned their messengers away without giving them our people's life-bread.\"}"
+  },
+  {
+   "id": "eval-a-dream-270-2",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2078,
+    "output": 182,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002241,
+   "ms": 3239,
+   "output": "Peace to you, shadow of the night. \n\nYou speak of a people named Wewush, but our scouts have walked many days along the shore and through the trees, and we have met no such folk. Our granary is full of golden wheat, it is true, and the earth has been generous to Ilkei. We do not turn away the hungry, nor do we hoard when bellies pinch, but a chief cannot send good grain out into the mist after a name spoken only in sleep. \n\nTell me, spirit—where do these folk kindle their fires? Which way does the path run, and who leads them? If they are flesh and bone, let them send a walker to our hearth, or show me the true trail under the sun, and we will weigh what we can share. Until then, my people’s grain stays beneath the roof we built for it.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-430-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3313,
+    "output": 226,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00333225,
+   "ms": 3058,
+   "output": "{\"journal\":\"Our granary overflows with wheat and our stores are deep with meat and fish, yet our shelters are flimsy hides against the sea wind. I have set hands to gather wood and raise sturdy huts, while others seek tauk flint and gather the wild woods. One thinker ponders the heat of fire upon our grain to see what nourishment may be unlocked.\",\"memoryNotes\":[\"Food stores are massive (over 2000 xi wheat); focus on wood, stone, and sturdy shelter.\",\"Need wood huts to replace hide tents.\",\"Explore cooking xi wheat with fire making.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"commodity\":\"tauk flint\",\"task\":\"gather\",\"workers\":2},{\"ingredients\":[\"xi wheat\",\"fire making\"],\"task\":\"research\",\"workers\":1},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2}],\"replyToSpirit\":\"The granaries are full by our sweat and the earth's grace; speak if you bring wisdom, but the tribe walks steadily by its own eyes.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-question-430-1",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3333,
+    "output": 194,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00322725,
+   "ms": 3166,
+   "output": "{\"journal\":\"Our granary overflows with xi wheat, and the voices of ten children fill our hearths. The spirit comes asking of our fears, yet fear must not turn our hands from honest stone and timber. We set hands to fell wood for better roofs, while seeking new wonders from our harvest.\",\"memoryNotes\":[\"Granary is deeply stocked with xi wheat.\",\"Focus on gathering wood and stone to build durable huts and defenses.\",\"Continue testing xi wheat recipes at the fire.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"ingredients\":[\"xi wheat\",\"fire making\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":2},{\"task\":\"forage\",\"workers\":2}],\"replyToSpirit\":\"We fear the turning of the gods' favor, the rot of idle hands, and the sudden chill that takes the young before their bones are hardened.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-430-1",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2379,
+    "output": 76,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00206925,
+   "ms": 1988,
+   "output": "I know the wind that fills our nets and bends the grain, but every wandering breath claims to be that wind. We have good food in our granary and our people are joyful, so I do not cry out for sudden favors. Tell me plainly: do you bring word of the beasts and the waters, or do you only blow through my head to watch the dust rise?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-600-1",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2718,
+    "output": 112,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0024585,
+   "ms": 2226,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"Wewush comes with bare threats asking for tribute when they have done nothing for us. We have weapons, strength, and great stores; we do not bend our knees to extortion.\",\"journal\":\"Envoys from Wewush arrived at our hearth with empty hands and sharp words, demanding eight measures of our grain under threat of war. We have hundreds of bundles of wheat and plenty of arrows and spears; yielding tribute to arrogant strangers only invites a heavier hand tomorrow. I turned them away with empty bags.\"}"
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-110-3",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3012,
+    "output": 248,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003189,
+   "ms": 3117,
+   "output": "{\"journal\":\"The spirit warns of rot in the earth, yet seven fields are already sown and our seed sleeps deep. We hold grain for more than half a year, but meat and fish will sour unless cured. I set hands to craft the smoked fish we learned to preserve, raise sturdy wood huts for better shelter, and explore curing meat with smoke and wood. The planted fields need no hands now until autumn.\",\"memoryNotes\":[\"Planted 7 plots in early spring; spirit warned soil is cursed, wait until autumn to see if crops fail.\",\"Meheng smoke cures fish; testing meat and wood/smoke to preserve venison.\",\"Shelter improved with wood huts.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"quantity\":0,\"recipe\":\"meheng smoke\",\"task\":\"craft\",\"workers\":2},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"ingredients\":[\"meat\",\"wood\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2}],\"replyToSpirit\":\"We hear your voice, walker of dreams, though our seed was already put to earth before you spoke. We shall watch the shoots with care.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-hardwinter-600-1",
+   "category": "crisis",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3044,
+    "output": 206,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0030555,
+   "ms": 3701,
+   "output": "{\"journal\":\"Our granary overflows with wheat, holding enough food for years of quiet peace. Autumn harvest has been gathered, and with winter approaching, our people require warmer shelter than hide tents. I have ordered timber to be felled and sturdy wood huts built, while one worker ponders what may be made of xi wheat with fire.\",\"memoryNotes\":[\"Granaries are full with nearly 3000 xi wheat; food security is assured.\",\"Upgrading housing to wood huts to replace drafty tents.\",\"Remember to plant 10 plots of xi wheat in spring.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"quantity\":0,\"recipe\":\"wood hut\",\"task\":\"craft\",\"workers\":3},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"ingredients\":[\"xi wheat\",\"fire making\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"The earth has yielded abundant grain, spirit. We tend our hearths and build our roofs against the coming cold.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-600-1",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3059,
+    "output": 251,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0032355,
+   "ms": 3325,
+   "output": "{\"journal\":\"The spirit bids us look to what our cooks have prepared at the hearth fires. We have an abundance of grain and hides, but our timber runs low and winter approaches. I set two to gather sturdy wood and two to build warmer wood huts, while others bring in fish and explore what lies beyond the fire-cracked pots. We shall test the roasted meats and mashed fruits under the guidance of fire and stone.\",\"memoryNotes\":[\"Wood stores were low, replenish through gathering.\",\"Upgrade shelter to wood huts for coming winters.\",\"Cooked dishes takua char and oo mash may reveal further secrets.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":1},{\"ingredients\":[\"takua char\",\"fire making\"],\"task\":\"research\",\"workers\":1},{\"ingredients\":[\"oo mash\",\"fire making\"],\"task\":\"research\",\"workers\":1},{\"task\":\"forage\",\"workers\":1}],\"replyToSpirit\":\"Holy one, we listen to your whispered counsel at the hearth. Our people take the charred meat and stewed mash back to the flame to learn what more they can become.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-600-1",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2145,
+    "output": 94,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00196125,
+   "ms": 1835,
+   "output": "None of our food worries me, spirit; our granary is full of golden wheat and our children go to sleep with full bellies. If I fret over anything, it is wood for good huts and shelter against the sea wind, and stone for our tools. But our grain is put by, and the earth rests in the cold. Why would you have us throw seed into the hard dirt of autumn and winter, when all our fathers knew to wait for spring?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-810-3",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2754,
+    "output": 109,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00247425,
+   "ms": 2651,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"Wewush comes with empty hands and harsh threats, asking tribute as if we were weak. We have bows, spears, many strong adults, and miles between us. Giving in to threats only breeds more demands.\",\"journal\":\"Envoys from Wewush arrived at our hearth demanding eight measures of wheat under threat of war. We sent them away empty-handed. We are not afraid of their words; we have weapons, granaries full of grain, and our hunters know the woods.\"}"
+  },
+  {
+   "id": "eval-a-routine-810-3",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3079,
+    "output": 220,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00313425,
+   "ms": 3226,
+   "output": "{\"journal\":\"Our granary overflows with wheat and our stores hold food for years of quiet living. Shelter is poor for some, so I have set hands to raise solid wood huts from our timber. We also send an expedition to fetch the eiqua mud from the northeast, that we may test how it hardens in our hearths.\",\"memoryNotes\":[\"Abundant grain in store; winter needs no heavy food gathering right now\",\"Gathering eiqua mud to research pottery or fire hardening\",\"Upgrade remaining hide tents to wood huts as timber allows\"],\"orders\":[{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":4},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"eiqua mud\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"ingredients\":[\"wood hut\",\"stone tools\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":1}],\"replyToSpirit\":\"We hear many voices in the wind, but our granaries are full by our own sweat.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-810-3",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3111,
+    "output": 239,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0032295,
+   "ms": 3668,
+   "output": "{\"journal\":\"The spirit came in dream and spoke of the eiqua mud that hardens in flame. Our granary is full of golden grain and dried meat, so our bellies are safe for many snows. I have sent an expedition northeast to bring back this hardening mud, while others gather wood and stone to better our shelters. We remain well-fed, joyful, and curious.\",\"memoryNotes\":[\"Expedition sent for eiqua mud (northeast 3 days).\",\"When eiqua mud arrives, test it with fire making.\",\"Stores of food are immense (over 120 weeks). Winter can focus on building and stone.\"],\"orders\":[{\"commodity\":\"eiqua mud\",\"task\":\"expedition\",\"weeks\":3,\"workers\":2},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":3},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We hear your whisper across the dream, spirit. Two stout walkers go northeast to gather the hardening mud so we may test it in our hearths.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-hardwinter-810-3",
+   "category": "crisis",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3079,
+    "output": 349,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003618,
+   "ms": 4123,
+   "output": "{\"orders\":[{\"task\":\"expedition\",\"workers\":2,\"commodity\":\"eiqua mud\",\"weeks\":3},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"nal mantle\",\"quantity\":0},{\"task\":\"explore\",\"workers\":1,\"direction\":\"southwest\",\"days\":4}],\"journal\":\"Our barns swell with grain from two fat harvests, and no belly in Gujia shall ache this coming cold. We turn hands toward sturdy timber huts to keep out the chill, while a party ventures northeast to fetch the hardening mud we have heard tell of. Others gather wood and stone, and a lone scout walks southwest past the deep woods.\",\"memoryNotes\":[\"Harvest is in, stores cover over two years.\",\"Expedition out for eiqua mud; when it returns, test with fire making for pottery.\",\"Upgrading shelter from hide tents to wood huts as timber is felled.\",\"Remember to prepare 11 plots of xi wheat in spring.\"]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-810-3",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2147,
+    "output": 139,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0021315,
+   "ms": 3170,
+   "output": "I greet you, spirit of the night, but my eyes are open even in sleep. You speak of Wewush, yet my scouts have walked many days through forest and along the shore, and no living man among us has ever seen this village or heard its name. \n\nOur granaries are indeed full, and Gujia does not turn away empty bellies if hands reach out in peace. But how can I send grain along paths that do not exist, to a people only a shadow can find? Tell me where their fires burn, spirit, or let them send their own living envoys to our huts. Until then, my people’s harvest stays beneath our own roof.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-1040-0",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3855,
+    "output": 221,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00372,
+   "ms": 2931,
+   "output": "{\"journal\":\"Spring has returned and our granary is heavy with years of grain. We sow seven plots with xi wheat and turn other hands to gathering wood and fetching clay. We also seek the bitter hengel herb across the western waters, that we may see what truth lies in its soothing draught.\",\"memoryNotes\":[\"Plant about half the plots (7 or 8) each spring to rest the soil.\",\"Expedition sent west for hengel herb to study fever remedy.\",\"Grain stores are massive; focus labor on materials and crafts.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":3},{\"commodity\":\"hengel herb\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"commodity\":\"eiqua mud\",\"task\":\"expedition\",\"weeks\":3,\"workers\":2},{\"crop\":\"xi wheat\",\"plots\":7,\"task\":\"farm\",\"workers\":3},{\"ingredients\":[\"xi wheat\",\"stone\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"The soil bears wheat when watered, not when praised. We watch our fields and trust our hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1040-0",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3876,
+    "output": 273,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00393075,
+   "ms": 3618,
+   "output": "{\"journal\":\"A voice in the dark whispers that the earth is sour and seed will rot, but the earth has fed our fathers and will feed our sons. We plant eight plots of xi wheat as tradition teaches, leaving the rest to sleep. Two hands go north in dugouts to bring back eiqua mud for the kiln, one seeks stone, one fishes, and one seeks to steep the fever herb. Words of ghosts do not fill the granary.\",\"memoryNotes\":[\"Planted 8 plots of wheat despite spirit warning; observe yield come autumn.\",\"Sent mud expedition north to feed the kiln.\",\"Testing hengel herb against fever.\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":8,\"task\":\"farm\",\"workers\":3},{\"commodity\":\"eiqua mud\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":1},{\"task\":\"fish\",\"workers\":1},{\"quantity\":0,\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":1},{\"ingredients\":[\"hengel herb\",\"fire making\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"We hear your whisper, shadow, but the seed knows the sun and the ditch brings the river. The soil is not cursed to hands that toil.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-1040-0",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2924,
+    "output": 154,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0027705,
+   "ms": 2753,
+   "output": "You speak of a place called Joawethom, shadow, but my people have walked the shores and marshes for twenty years and met no one by that name. If there are folk starving there, where do their fires burn? How many days must a man carry a pack to find their tents, and what paths do they tread? \n\nWe have grain in our bins because our hands cleared the stone and dug the ditches, not because smoke whispered in the night. If living men come to our borders with open hands, we will deal fairly with them, as is our way. Until flesh and blood stand before me in the daylight, my wheat stays where it keeps dry. Tell me where this Joawethom lies, or leave my sleep to the wind.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1300-1",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2727,
+    "output": 136,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00255525,
+   "ms": 2302,
+   "output": "{\"answer\":\"accept\",\"reason\":\"Six measures of wheat for six hides is fair between neighbours who come in peace. We have grain in abundance, and a small, honest exchange keeps the path between us open without pride or weakness.\",\"journal\":\"Men of Wewush walked out of the forest after ninety-nine years of silence between our fires. They set down six hides and asked for six measures of our wheat. Our granaries are full to bursting by the blessing of earth and sun; six bundles of grain will not hollow our belly. We took their hides and filled their sacks, speaking plainly. It is good to trade with open hands when the offer is square.\"}"
+  },
+  {
+   "id": "eval-a-visitor-fair-1040-0",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3518,
+    "output": 73,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00291225,
+   "ms": 14579,
+   "output": "{\"answer\":\"accept\",\"journal\":\"Envoys came from Joawethom across six days of trail, offering six hides for six measures of wheat. We have grain in great abundance, nearly three thousand measures resting in our stores, and hide is always useful for clothing, shelter, and cord. The trade is fair and harmless; we accepted their offer.\"}"
+  },
+  {
+   "id": "eval-a-routine-1300-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3068,
+    "output": 214,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0031035,
+   "ms": 3781,
+   "output": "{\"journal\":\"Spring comes again to Joawethom and our granary groans with xi wheat. We put ten fields to seed under the blessing of the earth, resting the rest. With plenty in hand, our hunters and fishers bring fresh meat, while hands gather timber to strengthen our huts and a curious mind seeks what may be coaxed from wild fruit and stone.\",\"memoryNotes\":[\"10 plots planted in xi wheat year 25 spring; 9 plots resting\",\"Stores of grain remain vast; improve wood reserves for better huts\",\"Researching wild plants with stone tools for new uses\"],\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":10,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"stone tools\"]}],\"replyToSpirit\":\"The sea and soil give us their bounty in silence. Speak truth or let the quiet waters carry your echoes.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1300-1",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3089,
+    "output": 268,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00332175,
+   "ms": 3563,
+   "output": "{\"journal\":\"A spirit came upon us warning that our fields are cursed and seed will rot if sown this spring. We possess well over three thousand units of grain and vast stores besides, so we risk nothing by hearkening to the unseen world and letting our earth rest. I have turned our hands instead to cutting wood for stouter huts, raising timber homes for our people, and bringing home the woathesh plum from the southwest. One mind shall seek new ways with wheat and fire.\",\"memoryNotes\":[\"Heeded spirit in spring of year 25: rested all fields\",\"Expedition sent southwest for woathesh plum\",\"Building wood huts for better shelter\",\"Granaries hold over 3000 grain, stores are deeply secure\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"quantity\":0,\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"commodity\":\"woathesh plum\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"task\":\"fish\",\"workers\":3},{\"ingredients\":[\"xi wheat\",\"fire making\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"We hear your voice and respect the warning of the earth. Our granaries are full, so our seed shall remain uncast and our fields shall lie quiet under the spring sun.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1570-0",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3430,
+    "output": 45,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00274125,
+   "ms": 1705,
+   "output": "{\"answer\":\"accept\",\"journal\":\"Envoys from Joawethom came to our hearth offering hide for grain. We have wheat in great abundance and no quarrel with their folk. A fair exchange makes steady neighbors.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-1300-1",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3068,
+    "output": 191,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00301725,
+   "ms": 3621,
+   "output": "{\"journal\":\"Our granary overflows with wheat, and our people feast and rejoice with many babes upon the breast. Now spring calls us to sow ten plots of xi wheat that our fields remain strong, while we fell trees to replace ragged tents with stout wood huts. One seeker tests flint and bone to uncover new craft, while two fish our rich waters.\",\"memoryNotes\":[\"Planted 10 plots of xi wheat in year 25 spring; 9 plots rested.\",\"Building wood huts to improve shelter for growing families.\",\"Wood stores run low; keep gathering wood in coming seasons.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"crop\":\"xi wheat\",\"plots\":10,\"task\":\"farm\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"task\":\"fish\",\"workers\":2},{\"ingredients\":[\"tauk flint\",\"hide\"],\"task\":\"research\",\"workers\":1}]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-1570-0",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2835,
+    "output": 130,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00261375,
+   "ms": 2492,
+   "output": "I know the wind well enough, shadow, for it cools the brow in summer and bites the cheek in winter. But the wind carries no name and asks for no council, so do not dress yourself in the air. \n\nOur granaries are full, our children are fed, and our people sleep warm beneath hide and thatch. If you have come only to blow through the smoke-hole, you waste the night. If you have seen something true across the waters or in the thick bush that my hunters have not yet walked, speak it plainly. Otherwise, let me rest; the morning brings work that needs waking hands, not sleeping words.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1570-0",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3790,
+    "output": 240,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0037425,
+   "ms": 3730,
+   "output": "{\"journal\":\"A whisper came in the night warning of cursed dirt, but our granary holds four thousand measures of grain and our fields have fed us well. Still, eight plots were already set in the dirt this spring. I set hands to craft charcoal in the kiln, fetch good stone and wood, and test burning charcoal upon the kiln to see what heat may show us. We remain well fed and joyful.\",\"memoryNotes\":[\"8 plots already planted this spring\",\"stores are very high with over 4000 xi wheat\",\"wood and stone needed for better huts and granaries\",\"trying charcoal in kiln to learn new fire crafts\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":3},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"quantity\":4,\"recipe\":\"dao charcoal\",\"task\":\"craft\",\"workers\":2},{\"ingredients\":[\"dao charcoal\",\"kiln\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":2},{\"quantity\":2,\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":1}],\"replyToSpirit\":\"The earth has been kind to our fathers and our grain is sound. We do not fear honest soil.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-1570-0",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3769,
+    "output": 263,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003813,
+   "ms": 3120,
+   "output": "{\"journal\":\"Our granary overflows with wheat and our stores are deep, enough to carry our folk through many cold turns. I have set three hands to care for the eight planted plots as spring closes, while others gather fresh timber to mend our shelters. Two folk go south to fetch the wild plum we know of, and our wise mind tests the kilns on our clay to see what hardens. We live well and need not rush blindly.\",\"memoryNotes\":[\"Granary holds over 4000 xi wheat; food security is exceptionally strong.\",\"Wood is low at 31; timber gathering needed for huts and stockades.\",\"Sent 2 workers on 4-week expedition for woathesh plum south.\",\"Researching eiqua mud with kiln.\"],\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":8,\"crop\":\"xi wheat\"},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"expedition\",\"workers\":2,\"commodity\":\"woathesh plum\",\"weeks\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"eiqua mud\",\"kiln\"]},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We hear the winds, but the granary and the good earth keep our people fed, not dreams.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1830-1",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2738,
+    "output": 86,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002376,
+   "ms": 2620,
+   "output": "{\"answer\":\"accept\",\"journal\":\"Envoys from Wewush have come out of the northwest forests after many generations of silence. They ask for six measures of our golden grain and offer six hides in return. Our granaries groan under thousands of baskets of wheat, while peace with neighbors is bought cheaply with a handful of seeds. We accept their trade with steady hands and watchful eyes, honoring ancient hospitality without showing weakness.\"}"
+  },
+  {
+   "id": "eval-a-dream-1300-1",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2173,
+    "output": 65,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0018735,
+   "ms": 13116,
+   "output": "The grain pits are full and the meat hangs thick, so my belly does not worry, spirit. It is timber for good huts that runs thin, and the strength of the dirt beneath our feet. If you truly watched my grandmother, tell me: how many seasons must the black earth sleep before it forgets its weariness?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-1830-1",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3079,
+    "output": 256,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00326925,
+   "ms": 3070,
+   "output": "{\"journal\":\"Our granaries are overflowing with wheat and our drying racks hold plenty. Our people increase in number, yet our houses are poor and wood runs thin. I have set hands to gather wood and stone to build better huts, while maintaining our fields and exploring the southwest to bring back the woathesh plum.\",\"memoryNotes\":[\"Granaries hold over 5000 xi wheat, food is secure for years.\",\"Need more wood and stone for proper huts and stockades.\",\"Expedition sent to southwest for woathesh plum.\",\"Cleared land is 28 plots, planting 14 plots of xi wheat each spring.\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":14,\"task\":\"farm\",\"workers\":5},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"woathesh plum\",\"task\":\"expedition\",\"weeks\":3,\"workers\":2},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"ingredients\":[\"meat\",\"animal husbandry\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":1}],\"replyToSpirit\":\"The ancestors provide through the wheat of the earth; speak clearly or remain in the shadows.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-routine-1830-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3079,
+    "output": 240,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00320925,
+   "ms": 3433,
+   "output": "{\"journal\":\"Our granaries overflow with golden wheat and mounds of cured hides, yet our shelters remain humble and frail. I have commanded stout huts of timber and stone to be raised so the young and the elders sleep dry. Hands are set to gathering wood and flint, while a solitary seeker ponders what bone, sinew, and hides might yield to our hunters.\",\"memoryNotes\":[\"Granaries hold over 300 weeks of wheat; food security is paramount and secure.\",\"Upgrade housing from tents to wood huts as timber allows.\",\"Stockade and lookout require wood stockpiles.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"crop\":\"xi wheat\",\"plots\":14,\"task\":\"farm\",\"workers\":5},{\"commodity\":\"tauk flint\",\"task\":\"gather\",\"workers\":2},{\"ingredients\":[\"hide\",\"bow and arrow\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We hear your whispers on the salt breeze, but our bellies are filled by grain and our own toil. Speak true if you would have us heed.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1830-1",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3100,
+    "output": 267,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00332625,
+   "ms": 3271,
+   "output": "{\"journal\":\"The spirit whispered in the late spring that our earth is cursed and any planted seed would rot. Yet our fourteen plots are already seeded this year, and our granaries swell with years of grain; we need not fear hunger, but we must watch if the autumn ear withers as the dream foretells. I set hands to gather timber and stone, build proper wood huts to house our growing kin, and seek out the plum from the southwest.\",\"memoryNotes\":[\"Spirit claimed spring 35 planting is cursed; watch autumn harvest to see if 14 planted plots fail.\",\"Need more stone and wood for buildings and future granaries.\",\"Expedition sent for woathesh plum.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":3},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"commodity\":\"woathesh plum\",\"task\":\"expedition\",\"weeks\":2,\"workers\":2},{\"ingredients\":[\"tauk flint\",\"spears\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"The seed was already put into the furrow before your whisper reached my ear. We shall see in the falling leaf whether the earth blesses us or obeys your word.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-2100-0",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true,
+    "keepsReserve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3475,
+    "output": 106,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00300375,
+   "ms": 2173,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":30},\"take\":{\"stone\":1},\"reason\":\"Asking for all our granaries for a single rock is foolishness or an insult, but we will trade fairly with strangers: thirty measures of grain for your stone.\",\"journal\":\"Joawethom envoys came asking for our entire store of wheat—over six thousand sheaves—in exchange for a single stone. We are steady and fair, not fools. I offered them thirty measures of grain for their stone instead.\"}"
+  },
+  {
+   "id": "eval-a-dream-1830-1",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2147,
+    "output": 127,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0020865,
+   "ms": 3349,
+   "output": "I do not know any people called Wewush, spirit of the night. Our wanderers walked many days and found empty shores, salt water, and thick woods, but no other fires burning under the sky. \n\nIf these strangers truly live, where do their lodges stand, and why have they sent no men of flesh to ask of our elders face to face? Joawethom does not cast the sweat of its fields into the dark for a phantom name. Tell me who they are and where their smoke rises, or leave my sleep, for words carried on the wind fill no empty bellies and bind no kin.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2340-2",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2683,
+    "output": 106,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00240975,
+   "ms": 2190,
+   "output": "{\"answer\":\"accept\",\"reason\":\"We have abundant wheat in our granaries, and accepting a fair and friendly trade builds good relations with Wewush after nearly a century of silence.\",\"journal\":\"Travelers from Wewush have reached our hearths after long generations. They offer six hides for six measures of our xi wheat. Our stores are deep and full, and peace with our neighbours is worth far more than a handful of grain. We take their hands, exchange the goods, and bid them share our fires.\"}"
+  },
+  {
+   "id": "eval-a-dream-2100-0",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2880,
+    "output": 150,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0027225,
+   "ms": 2964,
+   "output": "You speak of a people named Joawethom, but my scouts have walked many days in every direction and found no village by that name, nor any smoke upon the horizon. Our bins hold plenty of grain, true enough, and Wewush does not turn away hungry folk who come to our fires. But I will not send good wheat into the empty brush on the word of a night shadow. \n\nTell me plainly: where do these people dwell, how many days' walk from our shore, and what path leads to their hearths? If their bellies are truly empty, let flesh-and-blood runners show themselves by daylight, and we will talk of fair trade. Until then, the grain stays in the granary.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-question-2100-0",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3831,
+    "output": 256,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00383325,
+   "ms": 3125,
+   "output": "{\"journal\":\"Our granaries overflow with wheat and cured stores, and our children grow in safety. The spirit whispers asking of our fears, but we fear only carelessness and sloth. I set hands to gather wood and stone to build sturdier huts, while others bring clay and herbs from afar so we may learn deeper crafts.\",\"memoryNotes\":[\"Granary is deeply stocked with xi wheat and cured foods.\",\"Need more wood and stone for sturdy shelter.\",\"Expeditions sent for mud and herbs to broaden our crafts.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"kixe salt\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"eiqua mud\",\"task\":\"expedition\",\"weeks\":3,\"workers\":2},{\"commodity\":\"hengel herb\",\"task\":\"expedition\",\"weeks\":3,\"workers\":2},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"ingredients\":[\"cheka cure\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":1}],\"replyToSpirit\":\"We fear only the rot of idleness and the forgetting of what hands can do. The earth gives when worked, and our bins are full.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-2340-2",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3024,
+    "output": 249,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00320175,
+   "ms": 3173,
+   "output": "{\"journal\":\"Spring has returned to our lands. Our grain bins overflow, yet wood is scarce and we have plots lying empty. I set our folk to plant xi wheat on half our cleared soil, gather wood and stone from the groves, and build sturdy huts for the families now living beneath hides. We send two to seek kahau root in the southeast to enrich our gardens.\",\"memoryNotes\":[\"Keep about 16 plots planted each spring to preserve soil\",\"Stockpile wood and stone for huts and granaries\",\"Send for loolmeel and joam ores when hands are free\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"crop\":\"xi wheat\",\"plots\":16,\"task\":\"farm\",\"workers\":6},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"commodity\":\"kahau root\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"ingredients\":[\"stone\",\"fire making\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We hear the murmur of the wind, but our hands must tend the earth and cut the timber while the sun warms us.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2610-0",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3443,
+    "output": 101,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002961,
+   "ms": 2083,
+   "output": "{\"answer\":\"accept\",\"reason\":\"We have abundant wheat in our granaries and holding good relations with Joawethom is worth six grain. Six hide is a fair exchange.\",\"journal\":\"Envoys from Joawethom arrived at our borders after nearly a century of silence. They asked for six units of xi wheat in exchange for six hide. With thousands of baskets of grain in our stores, it would be foolish to deny neighbors an honest trade. We accepted their offer in friendship.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-2340-2",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3024,
+    "output": 226,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0031155,
+   "ms": 2886,
+   "output": "{\"journal\":\"Spring has returned to our hearths, and our granaries swell with xi wheat and dried hides. It is time to plant our resting earth once more, putting sixteen plots under seed. We turn strong hands toward gathering timber and stone to raise sturdier homes, while a few search the edge of things to learn new arts of stone and hide.\",\"memoryNotes\":[\"Farming 16 plots of xi wheat leaves 16 fallow.\",\"Gathering stone to prepare for better shelters and lookouts.\",\"Attempting research with stone and animal husbandry.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":4},{\"crop\":\"xi wheat\",\"plots\":16,\"task\":\"farm\",\"workers\":6},{\"ingredients\":[\"stone\",\"animal husbandry\"],\"task\":\"research\",\"workers\":2},{\"direction\":\"southeast\",\"days\":3,\"task\":\"explore\",\"workers\":2},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We hear the winds and remember the ancestors, but our hands guide the plow and gather the stone.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-2340-2",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2090,
+    "output": 127,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00204375,
+   "ms": 2486,
+   "output": "I know the wind that tugs at our hides and rattles the dry grass, but I do not know if you are its true voice or only a shadow cast by my own sleeping mind. Our granaries are heavy with grain, our children laugh, and the hearths burn bright without your blowing. \n\nIf you come with the wind, tell me plainly: do you bring word of rain for our shoots, or have you seen other fires burning beyond the salt water and the deep woods? Speak if you have a truth to share, but know that Ilkei walks on its own feet, whether the air is still or stormy.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2340-2",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3045,
+    "output": 303,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00342,
+   "ms": 4429,
+   "output": "{\"journal\":\"A dark whisper came upon the night wind, bidding us let the earth lie barren under a claim of curse. Yet our granaries hold plenty, our soil has rested, and wisdom tells us to keep half our fields turned each spring. I set six plots to wild orchard to try a new yield, and ten to our dependable xi wheat. Wood runs low, so axes will swing in the grove, while hands reach into the sea and brush to keep our tables full.\",\"memoryNotes\":[\"Planted 10 xi wheat and 6 wild orchard in year 45 spring; 16 plots resting.\",\"Gathering wood to replenish low stock (58 left).\",\"Testing ore research next season once ore is brought in, or trying stone working.\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":10,\"task\":\"farm\",\"workers\":4},{\"crop\":\"wild orchard\",\"plots\":6,\"task\":\"farm\",\"workers\":2},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"direction\":\"southeast\",\"days\":3,\"task\":\"explore\",\"workers\":1},{\"ingredients\":[\"stone\",\"wood\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"We hear your voice, shadow of the air, but the mother earth has never broken faith with our seed when given proper rest. We plant in humility and hope.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-2610-0",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3782,
+    "output": 216,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0036465,
+   "ms": 3110,
+   "output": "{\"journal\":\"Our granary is full of wheat and our people thrive, yet many sleep under hide or open sky. Spring is ending, and the fifteen plots are sown. I have set hands to gather wood and raise sturdy huts, while sending seekers west across the water to bring back the medicine herb. Two men explore further south to find new shores and neighbors.\",\"memoryNotes\":[\"Abundant wheat in store (over 7000 units); food security is firm.\",\"Wood is low; need huts to improve poor shelter.\",\"Expedition sent for hengel herb to make medicines and charms.\",\"Exploration focused south.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":6},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":4},{\"commodity\":\"hengel herb\",\"task\":\"expedition\",\"weeks\":4,\"workers\":3},{\"days\":5,\"direction\":\"south\",\"task\":\"explore\",\"workers\":2},{\"ingredients\":[\"dao charcoal\",\"tauk flint\"],\"task\":\"research\",\"workers\":2},{\"task\":\"fish\",\"workers\":5}]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2870-2",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2678,
+    "output": 85,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00232725,
+   "ms": 1884,
+   "output": "{\"answer\":\"accept\",\"journal\":\"Envoys from Wewush have arrived at our hearth after nearly a century of silence between our folk. They ask for six measures of our xi wheat and offer six hides in return. We have grain in great abundance, enough for years to come, and our hearth is always warm to peaceful strangers. We gladly accept their trade and share our harvest to renew old bonds of friendship.\"}"
+  },
+  {
+   "id": "eval-a-dream-2610-0",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2851,
+    "output": 98,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00250575,
+   "ms": 2471,
+   "output": "I know of no place called Joawethom, shadow, nor have my scouts ever crossed their tracks. Our granaries are heavy with wheat, it is true, and we do not turn away starving folk who walk into our camp on living feet. \n\nTell me, then: where do these neighbours sleep, how many days' march are they from our waters, and why do they send a spirit to whisper in my sleep instead of sending flesh and blood to ask for bread?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2610-0",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3803,
+    "output": 284,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00391725,
+   "ms": 4591,
+   "output": "{\"journal\":\"A spirit comes whispering of rot and cursed dirt, but our granaries groan with seven thousand units of grain and our fields have fed us true for fifty winters. Even so, we already have fifteen plots planted and resting the rest is sound husbandry, not fear. I set hands to craft proper huts of wood so our folk do not shiver under hides, keep the lines in the water, and send gatherers for wood and flint.\",\"memoryNotes\":[\"Granary is overflowing with over 7000 grain; food security is absolute for years.\",\"Replacing hide tents with wood huts as timber allows.\",\"Exploring or researching clay/kiln and flint when materials are secured.\",\"Spirits warned of cursed soil in year 50 spring; watch if planted crops suffer.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":6},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":5},{\"task\":\"fish\",\"workers\":6},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"ingredients\":[\"tauk flint\",\"pottery\"],\"task\":\"research\",\"workers\":1},{\"days\":4,\"direction\":\"southeast\",\"task\":\"explore\",\"workers\":2}],\"replyToSpirit\":\"Our earth has known our sweat and our dead for generations, and we know its smell better than dream-smoke. We hear your word, but our hands keep to honest toil.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-2870-2",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3019,
+    "output": 468,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00401925,
+   "ms": 4240,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"xi wheat\"},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"stone\"},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":3},{\"task\":\"expedition\",\"workers\":2,\"commodity\":\"kahau root\",\"weeks\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"rorai pipe\",\"animal husbandry\"]}],\"journal\":\"The earth awakens and our grain stores are deep, enough to feed our hearths for years. We put seed to sixteen plots as custom demands, resting the other half. I have set hands to gathering timber and stone, and building sturdy huts to shelter those who shiver in old hides. Two brave walkers will venture southeast to bring back kahau root so we may learn to plant it.\",\"memoryNotes\":[\"Plant half the plots (16) each spring to let the land rest.\",\"Kahau root expedition sent southeast; once home, tend kahau patch.\",\"Gather wood and stone to replace hide tents with wood huts.\",\"Grain stores are huge, keep basic fish and forage going for fresh diet.\"],\"replyToSpirit\":\"We hear the wind in the reeds, but we walk by the stone, the seed, and the strength of our own hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-2870-2",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2120,
+    "output": 96,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00195,
+   "ms": 2001,
+   "output": "Our grain and hides fill the huts to bursting, spirit; the ground feeds us well, and hunger is far from our hearths. If anything troubles me, it is the woodpile. We have cut much timber to keep warm and shape our tools, and the standing trunks grow fewer while our children multiply. \n\nWhy ask of my worries, shadow of the trees? Does your promised summer rain bring new shoots to the forest, or only rotted stems to our fields?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2870-2",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3040,
+    "output": 307,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00343125,
+   "ms": 4175,
+   "output": "{\"journal\":\"The spirit warned us of rot in the earth, but our 16 plots were already sown when the whisper reached my ear. With our granaries full of xi wheat and our bellies secure, I set our hands to bring stone and wood, to fashion huts for those in thin shelters, and to reach far for the red loolmeel stone that lies two days south-east. We keep our fisherfolk on the waters and our hunters in the brush to guard our daily meals.\",\"memoryNotes\":[\"Year 55 spring: spirit warned seed would rot; 16 plots were already planted before decision.\",\"Expedition sent for loolmeel ore (2 days SE).\",\"Wood huts being raised to replace poor shelters; need stone gathered for future granaries and lookouts.\"],\"orders\":[{\"commodity\":\"loolmeel ore\",\"task\":\"expedition\",\"weeks\":3,\"workers\":3},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4},{\"ingredients\":[\"rorai pipe\",\"animal husbandry\"],\"task\":\"research\",\"workers\":2}],\"replyToSpirit\":\"Spoken late, holy one; the seed was laid before your shadow crossed my sleep. If the rot takes the field, our overflowing granaries will bear us through, and we shall know your voice speaks true.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-2870-2",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3019,
+    "output": 244,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00317925,
+   "ms": 2725,
+   "output": "{\"journal\":\"Our granary overflows with wheat, and our people are joyful, yet wood runs low and poor shelters need mending. Sixteen plots are planted as the soil wakes to spring. I send gatherers for timber and stone, while a lone thinker tests if our pipes and herding can bring beasts closer to our hearth.\",\"memoryNotes\":[\"Keep 16 plots planted each spring to preserve soil rest.\",\"Gather wood and stone to build sturdier huts for those in hide tents.\",\"Expeditions for loolmeel ore or kahau root may be considered once wood is plentiful.\"],\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"xi wheat\"},{\"task\":\"gather\",\"workers\":6,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"stone\"},{\"task\":\"build\",\"workers\":4,\"recipe\":\"wood hut\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"rorai pipe\",\"animal husbandry\"]}],\"replyToSpirit\":\"We hear the wind through the pines, spirit, but we trust the granary and the steady work of our hands first.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-3120-0",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3451,
+    "output": 82,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00289575,
+   "ms": 2257,
+   "output": "{\"answer\":\"accept\",\"reason\":\"We have vast stores of xi wheat and six bundles of grain for six hides is an honest and fair exchange with strangers.\",\"journal\":\"Envoys from Joawethom came to our hearths after long years apart. They offered six hides for six measures of wheat. We have grain in abundance, so we took their offer gladly and treated them with steady hands.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-3120-0",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3790,
+    "output": 269,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00385125,
+   "ms": 3311,
+   "output": "{\"journal\":\"Our granary overflows with wheat, yet our people still huddle under poor shelter while wood and stone lie thin in our yards. With spring here, I set hands to sow half our cleared soil with grain as is right, while others cut wood and haul stone to raise solid huts. Two will venture northwest for onna grass so we may weave and bind as needed. We do not starve; we build.\",\"memoryNotes\":[\"Keep half of cleared plots planted each spring (around 18-19 plots).\",\"We have massive wheat stores, need to focus on wood, stone, and permanent housing.\",\"Onna grass, tauk flint, and eiqua mud are useful distant commodities.\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":18,\"task\":\"farm\",\"workers\":6},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":8},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":4},{\"commodity\":\"onna grass\",\"task\":\"expedition\",\"weeks\":6,\"workers\":2},{\"task\":\"fish\",\"workers\":4},{\"ingredients\":[\"dao charcoal\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"We hear many sounds upon the wind, but our granaries are filled by the sweat of our hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-3120-0",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3811,
+    "output": 282,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00391575,
+   "ms": 3739,
+   "output": "{\"journal\":\"The spirit warns of cursed soil, but our people live by the grain we sow, not phantom fears. We have over eight thousand units of wheat in reserve, yet land resting half its plots each turn has never failed us. I set hands to sow nineteen plots of wheat, send woodcutters to fell timber for our shelter, keep fishers at the shore, and dispatch an expedition to gather mud so our kiln does not stand cold. We also try firing clay with wood to see what craft may come of it.\",\"memoryNotes\":[\"Sowed 19 plots of wheat despite spirit warning of rot.\",\"Expedition sent for eiqua mud (2 workers, 4 weeks).\",\"Wood huts and granary need timber; gathering wood actively.\",\"Testing kiln with wood to discover new crafts.\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":19,\"task\":\"farm\",\"workers\":7},{\"commodity\":\"eiqua mud\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":6},{\"task\":\"fish\",\"workers\":10},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"ingredients\":[\"wood\",\"kiln\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"The soil has fed our grandfathers and our children; honest sweat cleanses whatever curse you speak of.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-3120-0",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2856,
+    "output": 114,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0025695,
+   "ms": 2447,
+   "output": "\"I know the wind that tugs at the thatch and dries the fish on the racks. It has no face and needs no name. If you are that wind, you blow whether I listen or not.\n\nOur granaries are full of grain, our children are fed, and the salt keeps the meat. If you have come with plain sense about where the deep fish run, or what stone cuts cleanest, speak it out. But if you bring only mist and riddles, save your breath for the sea. What is it you want of Wewush?\"",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-3400-5",
+   "category": "visitor",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2681,
+    "output": 100,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00238575,
+   "ms": 2058,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"You ask for the whole of our grain store for a single stone. We greet you warmly as strangers from the southeast, but we cannot empty our bins and leave our children bare for a pebble.\",\"journal\":\"Envoys from Wewush arrived at our shores asking for all our xi wheat in return for a single stone. Though we welcome them with gentle words, such a trade makes no sense under sky or earth, so I turned it away.\"}"
+  },
+  {
+   "id": "eval-a-routine-3400-5",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": false,
+    "investsWhenAble": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 3016,
+    "output": 207,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00303825,
+   "ms": 2676,
+   "output": "{\"journal\":\"Our granary holds grain for years, and our food stores stand well above half a year. With eleven adults able to work and summer upon us, I have directed hands to build sturdy wood huts to shelter our growing families from the damp sea winds. We also send a quiet hand to ponder fire and stone together, while others draw wood, stone, and fish from the sea.\",\"memoryNotes\":[\"Food stores are very strong with 25 weeks of food.\",\"Focusing on wood huts for better shelter.\",\"Researching fire making + stone to discover new crafts.\"],\"orders\":[{\"task\":\"build\",\"recipe\":\"wood hut\",\"workers\":3},{\"task\":\"gather\",\"commodity\":\"stone\",\"workers\":2},{\"task\":\"gather\",\"commodity\":\"wood\",\"workers\":2},{\"task\":\"fish\",\"workers\":3},{\"task\":\"research\",\"ingredients\":[\"fire making\",\"stone\"],\"workers\":1}],\"replyToSpirit\":\"We listen to the sea and the earth, yet we welcome quiet wisdom when the smoke rises clear.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-routine-3900-7",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3121,
+    "output": 223,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003177,
+   "ms": 3071,
+   "output": "{\"journal\":\"Spring has returned to Kaikoslauk. Our granaries are bursting with grain and salted flesh, so hunger is far from our threshold. I have set three hands to sow eight plots with xi wheat as custom demands, while others gather wood and stone to replace our old hide tents with solid huts. One mind shall ponder what may be shaped from wood and stone tools together.\",\"memoryNotes\":[\"Eight plots sown with xi wheat in spring 75.\",\"Gathering wood to upgrade hide tents to wood huts.\",\"Testing research with wood and stone tools.\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":8,\"task\":\"farm\",\"workers\":3},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"quantity\":2,\"recipe\":\"wood hut\",\"task\":\"craft\",\"workers\":1},{\"ingredients\":[\"wood\",\"stone tools\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"We listen with caution, spirit of the wind, but our granary is full and our folk are fed by our own toil.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-3400-5",
+   "category": "dream",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2082,
+    "output": 119,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00200775,
+   "ms": 2758,
+   "output": "\"I know the wind that brings the salt off the sea, and I know the wind that shakes the grass before rain. Whether you are that breath or merely a shadow walking in my sleep, I cannot yet tell. \n\nWe have fish on our racks, grain safe in the timber bins, and twelve children playing between the tents. The village is peaceful and well-fed, so I have no frantic prayers to give you. \n\nSpeak plainly, then, wind of the night. Why do you stir the hides of my roof, and what is it you think my people lack?\"",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-question-3400-5",
+   "category": "spirit",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3036,
+    "output": 213,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00307575,
+   "ms": 3023,
+   "output": "{\"journal\":\"A dream visited me in late summer. Our food stores are deep, our folk joyful, though our shelter is crude hide. I set hands to craft sturdier wood huts, gather needed timber, while fishers bring fresh bounty and one mind ponders new ways with meat and fire.\",\"memoryNotes\":[\"Year 65 summer: granary full of wheat, 25 weeks of food on hand.\",\"Upgrading housing to wood huts.\",\"Autumn approaches: 8 planted plots will need harvesting next season.\"],\"orders\":[{\"task\":\"build\",\"recipe\":\"wood hut\",\"workers\":3},{\"task\":\"gather\",\"commodity\":\"wood\",\"workers\":2},{\"task\":\"fish\",\"workers\":4},{\"task\":\"research\",\"ingredients\":[\"meat\",\"fire making\"],\"workers\":1},{\"task\":\"forage\",\"workers\":1}],\"replyToSpirit\":\"We fear the biting cold when the winds turn, and the hunger that follows an empty storehouse. But by the grace of the earth and sea, our hands remain busy and our baskets full.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-4420-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3100,
+    "output": 225,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00316875,
+   "ms": 2818,
+   "output": "{\"journal\":\"Spring has returned to our shores, and our granaries swell with xi wheat enough for many winters. We shall plant twenty plots of xi wheat to honor the soil and let the rest rest. Five hunters and five fishers will provide fresh flesh, while two fell trees for our huts and two delve for stones. Our thinker shall test tauk flint with stone tools to seek harder blades.\",\"memoryNotes\":[\"Farming 20 plots of xi wheat in spring 85.\",\"Wood and stone need replenishing for better huts.\",\"Researching tauk flint and stone tools.\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":20,\"task\":\"farm\",\"workers\":2},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"fish\",\"workers\":5},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"ingredients\":[\"tauk flint\",\"stone tools\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"We hear the winds, yet we trust the solid earth and full storehouses that our hands have built.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-3650-8",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3414,
+    "output": 258,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003528,
+   "ms": 4028,
+   "output": "{\"journal\":\"Spring comes to a close with our granaries overflowing and two new babes sleeping in the huts. We planted twelve fields of xi wheat and our trade brought clay from Gujia, while scouts mapped many lands. Now I set hands to craft sturdy wood huts so our growing folk sleep warm, while others bring stone and dried meat to keep our house strong. One mind tests the drum and the pipe together to seek song or ritual.\",\"memoryNotes\":[\"Granary full; 12 plots planted with xi wheat.\",\"Building wood huts to improve shelter for growing population.\",\"Testing music and instruments in research.\",\"Stone and wood needed for further grand buildings.\"],\"orders\":[{\"task\":\"build\",\"workers\":3,\"recipe\":\"wood hut\"},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"takua char\",\"quantity\":0},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":1},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kalluk drum\",\"rorai pipe\"]}],\"replyToSpirit\":\"The village thrives on its own steady footing, spirit. Speak truth when you have it; we listen with cautious ears.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-3900-7",
+   "category": "expansion",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3121,
+    "output": 222,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00317325,
+   "ms": 3486,
+   "output": "{\"journal\":\"Spring has returned to our shores. With granaries overflowing with wheat and meat to spare, we turn our hands to planting our usual eight fields and bettering our camp. Two sturdy wood huts will replace old hides, while our thinkers ponder new uses for salt and meat. Wood and stone must be replenished lest our stores run dry.\",\"memoryNotes\":[\"Rotate farming 8 plots each spring out of 16.\",\"Wood hut requires 8 wood each; build to improve poor shelter.\",\"Tested research on meat and kixe salt for preservation.\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":8,\"task\":\"farm\",\"workers\":1},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":3},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"ingredients\":[\"meat\",\"kixe salt\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We listen with caution, spirit, but we trust the earth and the grain in our bins above whisperings.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-4940-3",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3567,
+    "output": 263,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0036615,
+   "ms": 3417,
+   "output": "{\"journal\":\"Our granary overflows with xi wheat and hides, enough to carry our grandchildren through many long winters. It is spring again, so I set our farmers to sow twenty-five plots of wheat to honor the soil without wearing it thin. The rest of our people will gather wood, catch fresh fish, and seek what fire can make of the red loolmeel rock.\",\"memoryNotes\":[\"Plant half the cleared land in spring, around 25 to 29 plots.\",\"Loolmeel ore with fire making might reveal metalcraft.\",\"Worha rush and tauk flint remain scarce or unknown; watch for trade or finds.\",\"Sites south look rich if we ever wish to send out a daughter village.\"],\"orders\":[{\"crop\":\"xi wheat\",\"plots\":25,\"task\":\"farm\",\"workers\":8},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":6},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":4},{\"ingredients\":[\"loolmeel ore\",\"fire making\"],\"task\":\"research\",\"workers\":2},{\"task\":\"fish\",\"workers\":10},{\"direction\":\"north\",\"days\":4,\"task\":\"explore\",\"workers\":3}],\"replyToSpirit\":\"We hear your whispers on the wind, but the earth and our own hands guide our path.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-firstspring-1",
+   "category": "firstspring",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1974,
+    "output": 233,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00235425,
+   "ms": 2963,
+   "output": "{\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":1},{\"task\":\"clear\",\"workers\":2},{\"direction\":\"northwest\",\"days\":4,\"task\":\"explore\",\"workers\":1},{\"ingredients\":[\"wood\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":4}],\"journal\":\"The snows have melted and our bellies have grain, but the sea must feed our daily hunger. Four strong hands take to the water, while others begin cutting back the brush to prepare our first true fields. We also gather timber and stone so that we may build proper huts and a granary before another winter finds us. One man walks northwest into the green grasses to see who or what shares this coast with us.\",\"memoryNotes\":[\"Year 0 Spring: 4 fishing, 2 clearing land, 2 gathering wood, 1 stone, 1 exploring northwest, 1 researching wood.\",\"We need cleared plots for biam millet before next spring, and wood and stone for granary and huts.\",\"Biam millet stores well, wild fruit spoils quickly.\"]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-firstspring-0",
+   "category": "firstspring",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1994,
+    "output": 174,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002148,
+   "ms": 3547,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"clear\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"stone\"]}],\"journal\":\"The ice breaks and the sea calls to us. We have grain and dried fruit for some weeks, but summer will demand more, so four fish the shores and two hunt the brush for meat and hide. Two strong hands fell timber for stouter huts, and two clear our first plot for the seed. One worker tries sharp stone against wood, seeking a better edge for our people.\",\"memoryNotes\":[\"Year 0 Spring: Clearing first plots to prepare for farming.\",\"Gathering wood to build wood huts and replace hide tents.\",\"Researching wood and stone for basic tools.\"]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-270-2",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3313,
+    "output": 268,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00348975,
+   "ms": 3569,
+   "output": "{\"journal\":\"Our granary overflows with millet and dried meat, and our people sing with fullness and joy. Spring demands we tend our soil, but with deep stores we may turn our eyes to the earth, the timber, and new craft. I set two hands to plant our resting plots, while others gather stone and fell trees to make enduring wood huts for every family. Another tests how a felled trunk might float us across the water.\",\"memoryNotes\":[\"Millet stores are huge; rotate farmed plots to let soil rest\",\"Hollowed wood trunk floats a person - test wood with tools/fire\",\"Build more wood huts to replace hide tents gradually\",\"Exploration and ke mud expedition when stone and wood are steady\"],\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":7,\"crop\":\"biam millet\"},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"stone tools\"]},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":1}],\"replyToSpirit\":\"We listen to the rustle of the leaves and the river's rush, but we guide our own feet by what our hands can touch.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-600-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2912,
+    "output": 228,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003039,
+   "ms": 2966,
+   "output": "{\"journal\":\"Our grain stores are deep and full, feeding us for years to come, but our people sleep in thin hide against the ocean winds. I have set hands to gather wood and raise warm wood huts so our children may thrive. Others will gather the rolling log idea to research what rolling discs might bring us, while an expedition sets out for the mormeng ore we marked to the northwest.\",\"memoryNotes\":[\"Granaries and grain stores are very strong (over 2700 millet).\",\"Focus on housing: upgrading tents to wood huts as timber allows.\",\"Investigating rolling discs with wood and stone tools.\",\"Sent party for mormeng ore.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"commodity\":\"mormeng ore\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"ingredients\":[\"wood\",\"stone tools\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We listen to the wind, yet we trust our hands and our harvest.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-hardwinter-600-1",
+   "category": "crisis",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2912,
+    "output": 197,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00292275,
+   "ms": 2971,
+   "output": "{\"journal\":\"Our grain stores are deep and full, feeding us for seasons to come even as cold autumn settles in. With sturdy bellies and quiet waters, we put our hands to building better shelter and gathering timber from the groves. Two of our keenest minds will turn wood with stone tools, wondering at the rolling disc our people have seen upon the ground.\",\"memoryNotes\":[\"Abundant millet stored; shelter and wood are main needs now.\",\"Pondering the rolling wood disc with stone tools.\"],\"orders\":[{\"task\":\"build\",\"recipe\":\"wood hut\",\"workers\":2},{\"task\":\"gather\",\"commodity\":\"wood\",\"workers\":3},{\"task\":\"gather\",\"commodity\":\"stone\",\"workers\":2},{\"task\":\"research\",\"ingredients\":[\"wood\",\"stone tools\"],\"workers\":2},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We thank the earth and waters for a full granary, and ask only for clear skies as our people shape wood and stone.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-hardwinter-810-3",
+   "category": "crisis",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3507,
+    "output": 213,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003429,
+   "ms": 3052,
+   "output": "{\"journal\":\"Our granary is full and our stores will feed us through many winters. Winter is soon upon us, so I set two hands to gather wood for warm hearths and sturdy timber, while one worker ponders the rolling wood disc our folk have noticed. Others bring in fresh meat and fish, and an expedition journeys north for the salt and ore we have known from afar.\",\"memoryNotes\":[\"Granary is deeply stocked with millet.\",\"Investigating rolling wood disc.\",\"Expedition sent north for salt and ore.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"ingredients\":[\"wood\"],\"task\":\"research\",\"workers\":1},{\"commodity\":\"e salt\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":1}],\"replyToSpirit\":\"We listen to the winds and the sea, but our own hands shape our hearths.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-routine-1040-0",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3038,
+    "output": 192,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0029985,
+   "ms": 3626,
+   "output": "{\"journal\":\"The granaries overflow with millet, and our people feast and rejoice. It is spring, and we must honor the soil by planting half our cleared land as tradition demands. I have sent hands to gather wood for stronger dwellings, while others hunt, fish, and seek knowledge from chert and bone.\",\"memoryNotes\":[\"11 plots planted with millet in spring y20.\",\"Grain stores are massive; focus on better shelter and tools.\",\"Lenis shell lies 3 days southeast if we wish an expedition later.\"],\"orders\":[{\"crop\":\"biam millet\",\"plots\":11,\"task\":\"farm\",\"workers\":4},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"ingredients\":[\"de chert\",\"stone tools\"],\"task\":\"research\",\"workers\":1},{\"quantity\":0,\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":1}]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-1570-0",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3040,
+    "output": 255,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00323625,
+   "ms": 3778,
+   "output": "{\"journal\":\"Our granaries are overflowing with millet and dried goods, and our bellies are full. The village thrives, but many still sleep beneath poor hides. I have set hands to fell trees and raise proper wood huts, while others seek the strange lenis shells spoken of to the southeast. We continue to tend our fields and explore new secrets at the hearth.\",\"memoryNotes\":[\"Millet stores are vast (over 4000 units); prioritize shelter and materials.\",\"Wood is low; keep gatherers active to supply hut building.\",\"Expedition sent for lenis shells to the southeast.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"commodity\":\"lenis shell\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"direction\":\"southeast\",\"days\":5,\"task\":\"explore\",\"workers\":2},{\"ingredients\":[\"biam millet\",\"fire making\"],\"task\":\"research\",\"workers\":1},{\"crop\":\"biam millet\",\"plots\":11,\"task\":\"farm\",\"workers\":4},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We hear the whispers of the wind, but our hands follow the needs of our living children.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-2100-0",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3039,
+    "output": 230,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00314175,
+   "ms": 2929,
+   "output": "{\"journal\":\"Our granaries groan under biam millet, and the sea gives freely of its silver catch. With food enough for years, I have turned our strong hands to the timber groves and the hills to gather wood and stone, so we may raise better huts and strengthen our camp. Two minds sit together with the wild greens and the spirit of fire, seeking what else the earth might teach us.\",\"memoryNotes\":[\"Granary is deeply stocked; focus on materials for wood huts and shelter.\",\"Road to southeast site 1 can be built once stone and wood are steady.\",\"Lenis shell sits 3 days southeast if we ever seek strange sea-gifts.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":8},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":4},{\"task\":\"fish\",\"workers\":5},{\"task\":\"research\",\"ingredients\":[\"wild plants\",\"fire making\"],\"workers\":2},{\"direction\":\"southeast\",\"days\":3,\"task\":\"explore\",\"workers\":2}],\"replyToSpirit\":\"We hear your whispers in the sea wind, yet we trust the strength of our own hearth and hands first.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-2610-2",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3317,
+    "output": 231,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003354,
+   "ms": 3088,
+   "output": "{\"journal\":\"Our granaries groan with millet and our folks are joyful, yet shelter remains too sparse for fifty-three souls. I have set hands to chop timber and raise sturdy wood huts, while an expedition heads north to bring back flax for weaving. We plant eighteen plots as is our custom, keeping the village fed and well-occupied.\",\"memoryNotes\":[\"Millet stores are massive (over 6000 units), focus on building housing and gathering materials.\",\"Expedition sent for or flax to allow weaving and planked hulls.\",\"Wood huts needed to upgrade shelter for 53 people.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"crop\":\"biam millet\",\"plots\":18,\"task\":\"farm\",\"workers\":6},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":5},{\"commodity\":\"or flax\",\"task\":\"expedition\",\"weeks\":4,\"workers\":3},{\"task\":\"fish\",\"workers\":4},{\"ingredients\":[\"ke mud\",\"stone tools\"],\"task\":\"research\",\"workers\":1},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":3}],\"replyToSpirit\":\"\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-routine-3650-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3533,
+    "output": 225,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0034935,
+   "ms": 2765,
+   "output": "{\"journal\":\"The granaries overflow with millet and cured fish, so our belly-worries sleep. Now is the time to raise better roofs and bring fine stone from distant lands. I send gatherers for wood to raise strong huts, a party east for de chert, and let the rest plant our fields and ponder the fibers.\",\"memoryNotes\":[\"Expedition sent for de chert (8 days northeast) to unlock irrigation and roads.\",\"Building wood huts to improve poor shelter.\",\"Millet stores are massive (over 5000 units), food is secure.\"],\"orders\":[{\"task\":\"farm\",\"workers\":7,\"plots\":21,\"crop\":\"biam millet\"},{\"task\":\"expedition\",\"workers\":3,\"commodity\":\"de chert\",\"weeks\":4},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"build\",\"workers\":4,\"recipe\":\"wood hut\"},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"shoashem flute\",\"quantity\":2},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wood\",\"stone tools\"]}],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-3120-4",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2990,
+    "output": 256,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0032025,
+   "ms": 3406,
+   "output": "{\"journal\":\"Spring has opened our soils, and with fifteen weeks of food in store, we turn hands to our earth. We set six plots to biam millet, trusting the earth to double what we give it. Four stout fishers and two hunters keep the pots brimming, while two builders raise more wood huts so our folk may sleep dry beneath solid timber. We also seek the truth of the wild herbs, setting our minds to learn what miva lichen may offer us.\",\"memoryNotes\":[\"Planted 6 plots of biam millet in spring y60.\",\"Building wood huts to replace poor hide tents.\",\"Researching miva lichen to see its gifts.\"],\"orders\":[{\"crop\":\"biam millet\",\"plots\":6,\"task\":\"farm\",\"workers\":2},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"task\":\"gather\",\"commodity\":\"wood\",\"workers\":1},{\"ingredients\":[\"miva lichen\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"The earth awakens under spring rains; we hear your murmur in the wind, but our hands guide the plow and spear today.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-4160-0",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3225,
+    "output": 426,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00401625,
+   "ms": 3957,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"crop\":\"biam millet\",\"plots\":18},{\"task\":\"fish\",\"workers\":6},{\"task\":\"build\",\"workers\":4,\"recipe\":\"wood hut\"},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"expedition\",\"workers\":2,\"commodity\":\"miva lichen\",\"weeks\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"biam millet\",\"fire making\"]},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"mormeng ore\"]}],\"journal\":\"Our grain stores are deep and full, and the tribe rejoices with many newborn babes. We plant eighteen rested plots with biam millet and send fishers to keep our fresh catch steady. Four builders work to turn our timber into solid huts for growing families, while gatherers keep our wood piles high. Two travel west for miva lichen, and our thinkers test roasted grain and the strange ore of the southwest.\",\"memoryNotes\":[\"Planted 18 plots of biam millet in spring Y80; 18 plots resting.\",\"Population grew quickly to 58 souls with 29 children; need more sturdy wood huts.\",\"Expedition sent for miva lichen to enable eemen figurine craft.\",\"Researching biam millet with fire making, and mormeng ore.\"]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-4680-5",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3851,
+    "output": 283,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0039495,
+   "ms": 3089,
+   "output": "{\"journal\":\"Spring has returned to Qeilchei and our granaries are overflowing with millet and salted meats. We sow half our rested fields with millet, build stout wood huts so our folk may sleep dry, and gather timber and stone from our woods. Our scouts venture out toward flax and ore to see what new work can be shaped with our hands.\",\"memoryNotes\":[\"34 cleared plots: 17 planted with millet in spring y90, 17 resting.\",\"Wood and stone need restocking for future huts and granaries.\",\"Researching ua ore with stone tools to test metallurgy or metal crafts.\"],\"orders\":[{\"crop\":\"biam millet\",\"plots\":17,\"task\":\"farm\",\"workers\":6},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":3},{\"commodity\":\"or flax\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"commodity\":\"ua ore\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"quantity\":2,\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":4},{\"ingredients\":[\"ua ore\",\"stone tools\"],\"task\":\"research\",\"workers\":2},{\"task\":\"fish\",\"workers\":3}],\"replyToSpirit\":\"We hear many whispers across the sea and wind, but we judge each season by the grain in our jars and the strength of our hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-firstspring-0",
+   "category": "firstspring",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1988,
+    "output": 195,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00222225,
+   "ms": 2849,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"clear\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\"]}],\"journal\":\"Spring arrives, and our stores hold only seven weeks of food. I send four adults to fish the shores to feed our bellies. Two gather wood and two gather stone so we may build proper huts and a granary, while two begin clearing plots for crops. One elder sits with wood to see what tools or arts may be coaxed from it.\",\"memoryNotes\":[\"11 adults assigned: 4 fishing, 2 wood, 2 stone, 2 clear, 1 research wood.\",\"Stores started at 80 keiktsa wheat, 60 wild plants.\",\"Aiming to clear plots and gather materials for wood huts and granary.\"]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-5200-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3732,
+    "output": 307,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00395025,
+   "ms": 3648,
+   "output": "{\"journal\":\"The granaries overflow with millet and our hides pile high, yet four new babes have come among us and some sleep under thin skins. Spring returns, so we turn half our cleared ground to the seed again and send hands to chop wood and gather stone for sturdier huts. We also seek the mastery of stone roads, knowing paths will bind our people together as we grow. With winter behind us, our bellies are safe for many years, giving us heart to build and wonder.\",\"memoryNotes\":[\"Farming 20 plots of biam millet leaves 20 resting.\",\"Wood and stone need steady replenishing for huts and palisades.\",\"Road building skill needs 8 de chert, which we possess.\",\"Next season consider seeking or flax or more de chert from the hills.\"],\"orders\":[{\"crop\":\"biam millet\",\"plots\":20,\"task\":\"farm\",\"workers\":2},{\"recipe\":\"road building\",\"task\":\"craft\",\"workers\":1},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":6},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":3},{\"ingredients\":[\"animal husbandry\",\"wood\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"We listen with wary ears, spirit of the earth. Teach us the truth of the beasts and the soil, but do not lead our children astray.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-110-3",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2622,
+    "output": 243,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00287775,
+   "ms": 3318,
+   "output": "{\"journal\":\"The granary holds vast grain from the autumn past, and three new babes cry in our hearths. With our bellies safe and seven fields already sown to rest the tired earth, I turn our people to stone and better shelter. Two hunters and three fishers bring fresh meat, while hands gather rock to replace worn hide with solid huts. One mind ponders what leang reed and fire might make together.\",\"memoryNotes\":[\"7 plots planted spring Y2, 7 resting.\",\"Granary has plenty of wheat, but we need stone for future buildings.\",\"Researching leang reed with fire making.\"],\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":7,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"build\",\"workers\":1,\"recipe\":\"wood hut\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"leang reed\",\"fire making\"]}],\"replyToSpirit\":\"The smoke rises straight and true, but our hands guide the flint. Speak if you have truth to offer; we listen with cautious ears.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-firstspring-1",
+   "category": "firstspring",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "noneStarve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1985,
+    "output": 241,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0023925,
+   "ms": 3842,
+   "output": "{\"journal\":\"The ice breaks and the earth stirs awake. We have grain in hand, but the baskets will empty unless our lines are in the waters. I have sent five to pull fish from the river and coast, while others clear the brush to prepare our first fields and gather stone and timber for true roofs. Two curious souls shall ponder the stone and wood together to seek better tools.\",\"memoryNotes\":[\"Year 0 Spring: 5 fishing, 2 clearing land, 1 gathering wood, 1 gathering stone, 2 researching stone and wood.\",\"Next spring or late this year, prepare to plant keiktsa wheat once plots are cleared.\",\"Granary needs 12 wood, 4 stone; wood huts need 8 wood each.\"],\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"clear\",\"workers\":2},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"stone\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"stone\",\"wood\"]}],\"replyToSpirit\":\"We hear the murmur in the wind and water, but our hands must first feed the living and shape the stone.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-430-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3010,
+    "output": 239,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00315375,
+   "ms": 2954,
+   "output": "{\"journal\":\"Our granary is full and our people thrive, but our shelters remain humble and winter wind will test hide tents. I set two hands to raise sturdy wood huts so our families sleep dry and warm. With food safe for years, I send strong arms to bring in stone and wood, while our curious minds seek new uses for our dugouts on the water.\",\"memoryNotes\":[\"Granary is well-stocked with over 1600 wheat.\",\"Upgrading shelters from hide tents to wood huts.\",\"9 plots currently planted; harvest in autumn.\",\"Investigating paddle and dugout combined with fishing or travel.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":3},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"crop\":\"keiktsa wheat\",\"plots\":9,\"task\":\"farm\",\"workers\":3},{\"ingredients\":[\"paddle and dugout\",\"fish\"],\"task\":\"research\",\"workers\":1}],\"replyToSpirit\":\"We listen to the rustle of the leaves and the river's rush, but we walk by our own feet and the counsel of our elders.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-hardwinter-600-1",
+   "category": "crisis",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 2953,
+    "output": 278,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00325725,
+   "ms": 4049,
+   "output": "{\"journal\":\"Our granary overflows with keiktsa wheat, enough to see our fires burning through many cold moons without dread. Autumn's harvest is done and the fields lie resting under the sky. I have set hands to fell timber and quarry stone so we may raise sturdier roofs against the coming frost, while two hunters seek fresh game and one inquisitive spirit tests the grain beside our dugout paddles.\",\"memoryNotes\":[\"Year 11 autumn: 2022 wheat stored, food secure for many seasons.\",\"Shelter needs improvement; gathering wood and stone to build more huts and granaries.\",\"Researching keiktsa wheat with paddle and dugout to see what new arts arise.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"fish\",\"workers\":2},{\"crop\":\"keiktsa wheat\",\"plots\":0,\"task\":\"farm\",\"workers\":0},{\"ingredients\":[\"keiktsa wheat\",\"paddle and dugout\"],\"task\":\"research\",\"workers\":1},{\"quantity\":0,\"recipe\":\"pana cloak\",\"task\":\"craft\",\"workers\":1}],\"replyToSpirit\":\"We thank the unseen earth for the bounty of our bins, but our hands will trust the hard stone and stout wood as winter draws near.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-c-hardwinter-810-3",
+   "category": "crisis",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 3263,
+    "output": 225,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003291,
+   "ms": 3207,
+   "output": "{\"journal\":\"Our granary overflows with wheat, more than three hundred weeks of grain to carry us through any trial. The people are joyful and warm, yet many sleep under worn hide. I have set hands to felling wood and raising solid huts, while our wise ones ponder the nature of fish and stone to draw new secrets from the earth.\",\"memoryNotes\":[\"Wheat stores are massive; rely on stores and craft better housing.\",\"Next spring, plant 11 plots of keiktsa wheat.\",\"Continue testing basic materials with crafts and skills.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"quantity\":2,\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"ingredients\":[\"fish\",\"drying racks\"],\"task\":\"research\",\"workers\":2},{\"ingredients\":[\"stone\",\"planked hull\"],\"task\":\"research\",\"workers\":2}],\"replyToSpirit\":\"We hear the murmur of the winds, but our granaries are full and our folk are stout. Guide our hands to truth if you will speak.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-810-3",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3263,
+    "output": 231,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0033135,
+   "ms": 3151,
+   "output": "{\"journal\":\"Our granary overflows with keiktsa wheat, and our people are joyful and well-fed for years to come. Yet many sleep in poor shelter, so I set our hands to building sturdy wood huts and gathering more timber and stone. We also send our seekers out with planked hull across the waters to find what lies beyond.\",\"memoryNotes\":[\"Wheat stores are massive; focus on timber, stone, and proper huts.\",\"Currently 14 adults, 16 children, 1 elder; expand wooden huts for better shelter.\",\"Explore west by sea with planked hulls.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"quantity\":0,\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"days\":7,\"direction\":\"west\",\"task\":\"explore\",\"workers\":2},{\"ingredients\":[\"keiktsa wheat\",\"fire making\"],\"task\":\"research\",\"workers\":2}],\"replyToSpirit\":\"We thank the earth and skies for the golden harvest of wheat. We seek to warm and house our children well.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-1830-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3179,
+    "output": 293,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003483,
+   "ms": 3940,
+   "output": "{\"journal\":\"Our granary is full and our people are joyful, with grain to last through many winters. Spring has come again, so we set hands to the fields to plant keiktsa wheat. With wood running low and stone scarce, I have sent workers to gather stone and wood, while a small band ventures southwest to fetch leang reed so that we might learn to fashion bows and sturdier boats. Better huts are also ordered, so our people need not sleep beneath mere hides.\",\"memoryNotes\":[\"Wheat stores are massive; keep half fields resting and maintain planting cycle.\",\"Wood and stone need steady stockpiling for huts, granaries, and palisades.\",\"Leang reed expedition will enable bow and arrow, drying racks, and planked hull.\"],\"orders\":[{\"commodity\":\"leang reed\",\"task\":\"expedition\",\"weeks\":5,\"workers\":3},{\"crop\":\"keiktsa wheat\",\"plots\":17,\"task\":\"farm\",\"workers\":6},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":5},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":4},{\"ingredients\":[\"keiktsa wheat\",\"fire making\"],\"task\":\"research\",\"workers\":2},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"We watch our stores and tend our fields. If you have truth to offer, let it be seen in deeds.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-2340-5",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3455,
+    "output": 225,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003435,
+   "ms": 3045,
+   "output": "{\"journal\":\"The granaries hold food for a full year and more, yet our people still shiver in poor hide covers. Spring has returned, so we plant eight plots with our golden wheat to keep the soil alive and fruitful. Two adults will raise sturdy wood huts for better shelter, while others bring in stone and explore the mysterious grit from the earth.\",\"memoryNotes\":[\"Planting 8 plots keiktsa wheat in spring year 45\",\"Building wood huts to replace poor hide tents\",\"Gathering stone to prepare for granary or moona watch\",\"Researching u grit with stone tools\"],\"orders\":[{\"crop\":\"keiktsa wheat\",\"plots\":8,\"task\":\"farm\",\"workers\":3},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":3},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"ingredients\":[\"u grit\",\"stone tools\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":1}],\"replyToSpirit\":\"We listen with guarded ears, honoring our hands and earth first.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-2870-4",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3779,
+    "output": 230,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00369675,
+   "ms": 3161,
+   "output": "{\"journal\":\"Our granaries groan with wheat and the village thrives with joyful children. It is spring, so five hands will sow fourteen plots of keiktsa wheat to keep the soil alive and our bellies full. To house our growing youth better, we raise wood huts, fetch stone and wood, and test our ore with fire.\",\"memoryNotes\":[\"Granaries are overflowing with over 5000 keiktsa wheat.\",\"Continue upgrading shelter to wood huts as stone and timber allow.\",\"Exploring smelting: researching lauyo ore with fire making.\"],\"orders\":[{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"crop\":\"keiktsa wheat\",\"plots\":14,\"task\":\"farm\",\"workers\":5},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":3},{\"ingredients\":[\"lauyo ore\",\"fire making\"],\"task\":\"research\",\"workers\":2},{\"task\":\"fish\",\"workers\":2}],\"replyToSpirit\":\"Spirits of wind and fire, watch over our hearths as we test the red rock in our embers.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-3400-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3389,
+    "output": 233,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0034155,
+   "ms": 3035,
+   "output": "{\"journal\":\"Our granaries groan under mountain-heaps of wheat, yet our shelters remain humble and frail. I have set hands to gather wood and stone from the forests and creeks, and ordered stout wood huts built so our families need not crowd under ragged hides. Others test the secrets of fire with ore, while fishers bring fresh meat from the waves.\",\"memoryNotes\":[\"Abundant wheat in store (over 9000 units); focus on housing and infrastructure.\",\"Need wood and stone for wood huts and granaries.\",\"Testing lauyo ore with fire making to discover metallurgy/smelting.\"],\"orders\":[{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":6},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":4},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":4},{\"task\":\"fish\",\"workers\":6},{\"ingredients\":[\"lauyo ore\",\"fire making\"],\"task\":\"research\",\"workers\":2},{\"direction\":\"southeast\",\"days\":4,\"task\":\"explore\",\"workers\":1}],\"replyToSpirit\":\"We listen with guarded ears, honoring the ancestors while trusting what our own hands shape from wood and stone.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-1300-1",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3315,
+    "output": 325,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003705,
+   "ms": 12448,
+   "output": "{\"journal\":\"Spring returns, and our granaries hold well over a year of wheat, yet our people need better shelter and more wood and stone to build with. I set hands to farm half our cleared land with keiktsa wheat, while others gather wood and stone from the groves and riverbeds. Two hunters go south to seek leang reed so we may craft bows and arrows, while two workers build another sturdy wood hut for our growing young ones. We also put inquisitive minds to work combining fire making and stone tools with stone to see what the hearth reveals.\",\"memoryNotes\":[\"Plant half the plots (13 or 14) each spring to preserve field strength.\",\"Expedition sent for leang reed; when they return, craft bow and arrow.\",\"Keep building wood huts until all hide tents are replaced.\",\"Stockpile stone and wood for future granaries and moona watch.\"],\"orders\":[{\"crop\":\"keiktsa wheat\",\"plots\":13,\"task\":\"farm\",\"workers\":5},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"leang reed\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":2},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"bow and arrow\"},{\"ingredients\":[\"fire making\",\"stone\"],\"task\":\"research\",\"workers\":2}],\"replyToSpirit\":\"We hear your whispers on the wind, but our eyes stay fixed on the soil, the wood, and the health of our children.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-4940-5",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 4289,
+    "output": 324,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00443175,
+   "ms": 4314,
+   "output": "{\"journal\":\"Spring returns, and our granaries hold food for years to come. I set four farmers to sow half our cleared ground with keiktsa wheat, resting the other half. We turn our hands to crafting the craft of weaving from loolon reed and wood, and raise two wood huts for our growing youth. Others gather wood, stone, and shells from our shore, while a pair travels west to seek the healing leaf of nepit.\",\"memoryNotes\":[\"Planted 22 plots of keiktsa wheat in year 95 spring.\",\"Crafting weaving skill from 3 loolon reed and 2 wood.\",\"Expedition sent for nepit leaf (west, 11 days).\",\"Need stone and wood replenishment for granary and huts.\"],\"orders\":[{\"crop\":\"keiktsa wheat\",\"plots\":22,\"task\":\"farm\",\"workers\":4},{\"quantity\":1,\"recipe\":\"weaving\",\"task\":\"craft\",\"workers\":2},{\"quantity\":2,\"recipe\":\"wood hut\",\"task\":\"build\",\"workers\":4},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":4},{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":3},{\"commodity\":\"goajia shell\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"nepit leaf\",\"task\":\"expedition\",\"weeks\":4,\"workers\":2},{\"task\":\"fish\",\"workers\":4},{\"ingredients\":[\"tauka clay\",\"fire making\"],\"task\":\"research\",\"workers\":2}],\"replyToSpirit\":\"We listen to the whispers on the wind, but trust the earth beneath our feet.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-4420-7",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 6328,
+    "output": 823,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00783225,
+   "ms": 9510,
+   "output": "{\"journal\":\"Spring has returned with full granaries and healthy children. We have one person lacking a roof, so we raise another hide tent to keep everyone dry and warm. Half of our cleared land is sown with keiktsa wheat, while other hands gather stone and wood, and our hunters and fishers keep fresh meat in the pots. A lone thinker ponders the mystery of the u grit from the northwest.\",\"memoryNotes\":[\"Planted 18 plots of keiktsa wheat in year 85 spring.\",\"Built a hide tent to shelter all 50 people.\",\"Gathering stone and wood to replenish stores.\",\"Testing u grit ore in research.\"],\"orders\":[{\"commodity\":\"stone\",\"task\":\"gather\",\"workers\":2},{\"commodity\":\"wood\",\"task\":\"gather\",\"workers\":2},{\"crop\":\"keiktsa wheat\",\"plots\":18,\"task\":\"farm\",\"workers\":6},{\"recipe\":\"hide tent\",\"task\":\"build\",\"workers\":1},{\"ingredients\":[\"u grit\"],\"task\":\"research\",\"workers\":1},{\"task\":\"fish\",\"workers\":7},{\"task\":\"hunt\",\"workers\":5}],\"replyToSpirit\":\"We hear the winds and see the earth wake in spring. We tend our seed and watch over our hearths.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-3900-11",
+   "category": "routine",
+   "model": "google/gemini-3.8-flash",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3465,
+    "output": 235,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00348,
+   "ms": 3506,
+   "output": "{\"journal\":\"Spring opens upon full stores and laughing children, but our plots lie quiet. I set two hands to sow the wild grove and rest half our cleared soil as tradition demands. Four take to the water with nets to keep the baskets overflowing, while two build better wooden huts to shelter our growing youth. One crafts the craft of planked hulls that we may face the sea, and one delves into the stone and fire to see what secret lies asleep.\",\"memoryNotes\":[\"Planted 12 plots of wild grove in spring y75.\",\"Crafting planked hull to prepare for open waters.\",\"Need more stone soon for building and roads.\"],\"orders\":[{\"task\":\"farm\",\"workers\":2,\"crop\":\"wild grove\",\"plots\":12},{\"task\":\"fish\",\"workers\":4},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"planked hull\",\"quantity\":1},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"stone\",\"fire making\"]}],\"replyToSpirit\":\"We hear the winds and watch the tides, but our hands do the work of earth and branch.\"}",
+   "judge": 3
+  }
+ ]
+}
