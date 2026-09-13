@@ -64,3 +64,27 @@ Larger worlds by default (the 64 × 64 map fills by year 150), an eval corpus fo
 ## Larger worlds (2026-09-12, after M7)
 
 The new-world form offers small (64 × 64, four villages), medium (96 × 96, six) and large (128 × 128, eight); large is the default, since a 64 × 64 map fills by year 150. Snapshots are gzip-compressed at rest: a large world's yearly snapshot is about 4 MB of JSON and about 300 KB stored, so a 300-year save is under 100 MB. In the harness a large world runs 300 years in about 85 s against 20 s for small; in the browser expect very fast to be proportionally slower.
+
+## M8: villages you can read (2026-09-12, night)
+
+The second playtest round asked for a village that reads at a glance. Decisions, and why:
+
+- **Buildings sit still.** A structure takes a plot near the centre when it is built and keeps it; fields are cleared
+  in patches a few squares out (`packages/sim/src/layout.ts`). Placement is a pure function of the village (a hash
+  stands in for randomness), so it costs no RNG draws and cannot desynchronise a replay. Building on wild ground clears
+  it as part of the build with no wood yield; the balance suite was unchanged by this.
+- **Villagers are derived, not stored.** What each person is doing comes from the standing orders and the people list,
+  walked in a fixed order (`apps/web/src/sim/activities.ts`). The sim carries no per-person activity, so the picture
+  is the same in the live view and the history scrubber, and costs nothing when no village is open. Names are seeded
+  from the village and the person, in the village's naming tradition.
+- **Nobody walks for show.** Field hands move between fields in the planting and harvest seasons, children roam, and
+  everyone else stands where their work is. People working off the tile (foragers, hunters, gatherers, parties in
+  the making) stand faded at the edge of the grid.
+- **Icons are shapes for now.** One glyph per kind of building, chosen by what the recipe's structure is for (shelter,
+  storage, defence, watch, workshop), so new recipes from the tech generator get a sensible shape without a table.
+- **One reading a year.** The overview's charts come from a yearly `SeriesPoint` the sim worker posts at each new year
+  and the app persists; older saves are backfilled from their yearly snapshots through the history worker, one at a
+  time, the first time the overview opens.
+- **Pause on prayer is a per-event setting** and the toast that pauses now offers to turn that event off.
+- **Music**: the summer insect layer was a continuous 4 kHz sawtooth, the whine the playtest noticed. It is now brief
+  buzzes a few seconds apart, and lead notes above an octave and a fifth over the root are capped at half a beat.
