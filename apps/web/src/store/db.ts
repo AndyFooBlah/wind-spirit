@@ -23,6 +23,7 @@ export interface InputRow { world: string; tick: number; inputs: LoggedInput[]; 
 export interface JournalRow { seq?: number; world: string; village: number; entry: JournalEntry; }
 export interface EventRow { world: string; tick: number; events: Event[]; }
 export interface SeriesRow { world: string; tick: number; point: SeriesPoint; }
+export interface SunRow { seq?: number; world: string; tick: number; question: string; answer: string; }
 
 interface Schema extends DBSchema {
   worlds: { key: string; value: WorldMeta; indexes: { byUpdated: number } };
@@ -31,10 +32,11 @@ interface Schema extends DBSchema {
   journals: { key: number; value: JournalRow; indexes: { byWorld: string; byVillage: [string, number] } };
   events: { key: [string, number]; value: EventRow; indexes: { byWorld: string } };
   series: { key: [string, number]; value: SeriesRow; indexes: { byWorld: string } };
+  sun: { key: number; value: SunRow; indexes: { byWorld: string } };
 }
 
 export const DB_NAME = 'wind-spirit';
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;
 
 export type Db = IDBPDatabase<Schema>;
 
@@ -56,6 +58,7 @@ export function openStore(name = DB_NAME): Promise<Db> {
       }
       if (oldVersion < 2) { const events = db.createObjectStore('events', { keyPath: ['world', 'tick'] }); events.createIndex('byWorld', 'world'); }
       if (oldVersion < 3) { const series = db.createObjectStore('series', { keyPath: ['world', 'tick'] }); series.createIndex('byWorld', 'world'); }
+      if (oldVersion < 4) { const sun = db.createObjectStore('sun', { keyPath: 'seq', autoIncrement: true }); sun.createIndex('byWorld', 'world'); }
     },
   });
 }
@@ -119,6 +122,8 @@ export async function loadHistoryWindow(db: Db, world: string, tick: number): Pr
   const inputs: Record<number, LoggedInput[]> = {}; for (const r of rows) inputs[r.tick] = r.inputs;
   return { snapshot: await snapshotText(snap), snapshotTick: snap.tick, inputs };
 }
+export async function saveSun(db: Db, world: string, tick: number, question: string, answer: string): Promise<void> { await db.add('sun', { world, tick, question, answer }); }
+export async function loadSun(db: Db, world: string): Promise<SunRow[]> { return (await db.getAllFromIndex('sun', 'byWorld', world)).sort((a, b) => a.tick - b.tick); }
 export async function saveSeries(db: Db, world: string, point: SeriesPoint): Promise<void> { await db.put('series', { world, tick: point.tick, point }); }
 export async function loadSeries(db: Db, world: string): Promise<SeriesPoint[]> { return (await db.getAllFromIndex('series', 'byWorld', world)).map(r => r.point).sort((a, b) => a.tick - b.tick); }
 /** The gunzipped text of one stored snapshot, for the overview backfill. */

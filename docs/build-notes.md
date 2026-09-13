@@ -88,3 +88,19 @@ The second playtest round asked for a village that reads at a glance. Decisions,
 - **Pause on prayer is a per-event setting** and the toast that pauses now offers to turn that event off.
 - **Music**: the summer insect layer was a continuous 4 kHz sawtooth, the whine the playtest noticed. It is now brief
   buzzes a few seconds apart, and lead notes above an octave and a fifth over the root are capped at half a beat.
+
+## The sun spirit, the trust meter and the tech tree (2026-09-12, late)
+
+- **Two spirits, two channels.** The wind spirit (the player) can only talk to chiefs. The sun spirit can only talk to
+  the player: it looks down on the whole world and answers three questions a year on the capable model. Its prompt is
+  a digest of everything (`apps/web/src/sim/sun.ts`): each village as its chief sees it (the same `statePrompt` the
+  chief gets), plus what the chief cannot put into words (trust, happiness, hardship, traits, relations), recent
+  events, the chronicle of claims, parties abroad, the weather, the whole recipe tree with who holds what, and the
+  goods. Around 20k tokens a question on a large world, so a few cents each. The answers are kept per world. Later
+  players may be earth, water, wood, fire or the animals; the sun stays the one voice they can all ask.
+- **Trust is the score, so it is on the bar.** The top bar shows the mean trust over living chiefs with a word for it
+  and a per-chief breakdown on click; the yearly series now records trust and the overview charts it.
+- **The tree of recipes** is drawn from a static list the map carries (`StaticMap.tech`): columns by tier, edges where
+  one recipe's output is another's input or required skill, the open village laid over it (held, hinted, unknown).
+  Layout is a plain layered one, ordered to keep edges short; it is readable at 55 recipes and will want a better
+  layout if the generator grows.

@@ -41,6 +41,7 @@ export function Overview() {
           <div className="charts">
             <Chart title="People, by village and in all" series={series} villages={villages.map(v => v.id)} colour={colour} kind="pop" />
             <Chart title="Where the hands go, all villages" series={series} villages={villages.map(v => v.id)} colour={colour} kind="work" />
+            <Chart title="Trust in the wind spirit (the score)" series={series} villages={villages.map(v => v.id)} colour={colour} kind="trust" />
             <Chart title="Highest recipe tier held" series={series} villages={villages.map(v => v.id)} colour={colour} kind="tier" />
           </div>
         </div>
@@ -65,7 +66,7 @@ function WorkBar({ work }: { work: Record<WorkGroup, number> }) {
 }
 
 /** A small SVG chart: lines for population and tier, a stacked area for work. */
-function Chart({ title, series, villages, colour, kind }: { title: string; series: SeriesPoint[]; villages: number[]; colour: (id: number) => string; kind: 'pop' | 'work' | 'tier' }) {
+function Chart({ title, series, villages, colour, kind }: { title: string; series: SeriesPoint[]; villages: number[]; colour: (id: number) => string; kind: 'pop' | 'work' | 'tier' | 'trust' }) {
   const W = 420, H = 150, L = 34, B = 18, T = 6;
   const pts = series; const n = pts.length;
   const x = (i: number) => L + (n > 1 ? (i / (n - 1)) * (W - L - 6) : 0);
@@ -81,6 +82,17 @@ function Chart({ title, series, villages, colour, kind }: { title: string; serie
       </>
     );
     legend = <span className="small muted">dashed: everyone</span>;
+  } else if (n >= 1 && kind === 'trust') {
+    ymax = 100;
+    const y = (v: number) => T + (1 - v / ymax) * (H - T - B);
+    const means = pts.map(p => { const a = p.villages.filter(v => v.alive); return a.length ? a.reduce((s, v) => s + v.trust, 0) / a.length / 10 : 0; });
+    body = (
+      <>
+        {villages.map(id => <polyline key={id} fill="none" stroke={colour(id)} strokeWidth={1.4} points={pts.map((p, i) => { const v = p.villages.find(x => x.id === id); return `${x(i)},${y(v && v.alive ? v.trust / 10 : 0)}`; }).join(' ')} />)}
+        <polyline fill="none" stroke="#222" strokeWidth={2} strokeDasharray="4 2" points={pts.map((_, i) => `${x(i)},${y(means[i])}`).join(' ')} />
+      </>
+    );
+    legend = <span className="small muted">dashed: the mean, which is the score</span>;
   } else if (n >= 1 && kind === 'tier') {
     ymax = Math.max(4, ...pts.flatMap(p => p.villages.map(v => v.tier)));
     const y = (v: number) => T + (1 - v / ymax) * (H - T - B);

@@ -34,6 +34,7 @@ self.onmessage = (ev: MessageEvent<ToWorker>) => {
       case 'token': { const r = tokenWaiters.get(m.id); if (r) { tokenWaiters.delete(m.id); r(m.token); } break; }
       case 'dreamStart': host.dreamStart(m.village); break;
       case 'dreamSend': void host.dreamSend(m.text); break;
+      case 'sun': void host.sun(m.id, m.question, m.before); break;
       case 'dreamClose': void host.dreamClose(); break;
       case 'narrate': host.narrate(m.request).then(text => post({ type: 'narrative', id: m.request.id, text }), e => post({ type: 'narrative', id: m.request.id, error: (e as Error)?.message ?? String(e) })); break;
     }

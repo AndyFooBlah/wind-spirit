@@ -3,7 +3,7 @@ import type { BreathAction, SeasonRoll } from '@wind-spirit/sim';
 import { P } from '@wind-spirit/sim';
 import { BUSES, type Bus } from '@wind-spirit/audio';
 import { DIR_NAMES, ROLL_WORDS, SEASON_NAMES, SPEEDS, SPEED_LABEL, type Speed } from '../sim/protocol.ts';
-import { useGame, setSpeed, step, leaveWorld, setZoom, focusVillage, breathe, setTargeting, updateSettings, updateAudio, enterHistory, exitHistory, scrubTo, tickLabel, viewFrame, openOverview, type Zoom } from '../store/game.ts';
+import { useGame, setSpeed, step, leaveWorld, setZoom, focusVillage, breathe, setTargeting, updateSettings, updateAudio, enterHistory, exitHistory, scrubTo, tickLabel, viewFrame, openOverview, openSun, sunQuestionsLeft, focusVillage as goVillage, setTechOpen, type Zoom } from '../store/game.ts';
 
 const KEY: Record<Speed, string> = { pause: 'space', step: '.', slow: '1', normal: '2', fast: '3', veryfast: '4' };
 
@@ -25,13 +25,52 @@ export function TopBar() {
         {waiting.length > 0 && speed !== 'pause' && <span className="waiting small" title="Time waits a moment for a chief who is still deliberating">waiting for {waiting.map(id => frame?.villages.find(v => v.id === id)?.name ?? id).join(', ')}…</span>}
       </div>
       {frame && <Breath breath={frame.breath} rolls={frame.rolls} seasons={frame.rollSeasons} />}
+      {frame && <Trust />}
+      <SunButton />
       <ZoomControl />
       <OverviewButton />
+      <TechButton />
       <HistoryButton />
       <SoundMenu />
       <SettingsMenu />
     </header>
   );
+}
+
+/** Trust is the score: the mean over living chiefs, with each chief on click. */
+function Trust() {
+  const [open, setOpen] = useState(false); const shown = useGame(viewFrame);
+  const alive = shown?.villages.filter(v => v.alive) ?? [];
+  const mean = alive.length ? alive.reduce((a, v) => a + v.trust, 0) / alive.length / 10 : 0;
+  const word = (t: number) => (t >= 80 ? 'devoted' : t >= 60 ? 'trusting' : t >= 40 ? 'wary' : t >= 20 ? 'doubting' : 'scornful');
+  return (
+    <div className="trust">
+      <button className={open ? 'on' : 'ghost'} onClick={() => setOpen(!open)} title="How far the chiefs trust the wind spirit: the score">Trust {Math.round(mean)} <span className="small muted">{word(mean)}</span></button>
+      {open && (
+        <div className="popover">
+          <div className="strong">Trust in the wind spirit, chief by chief</div>
+          {alive.sort((a, b) => b.trust - a.trust).map(v => (
+            <div key={v.id} className="row trustrow" onClick={() => { goVillage(v.id); setOpen(false); }} title="Open this village">
+              <span className="w">{v.name}</span>
+              <div className="bar"><div className="fill" style={{ width: `${v.trust / 10}%` }} /></div>
+              <span className="num small">{Math.round(v.trust / 10)}</span>
+            </div>
+          ))}
+          <div className="small muted">Claims that come true raise it; claims that fail lower it; a chief's own nature sets the starting point.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SunButton() {
+  const frame = useGame(s => s.frame); const open = useGame(s => s.sun.open); const left = useGame(sunQuestionsLeft); const asking = useGame(s => !!s.sun.asking);
+  return <button className={open ? 'on' : 'ghost'} disabled={!frame} onClick={() => openSun(!open)} title="Ask the sun spirit, who sees everything: three questions a year">Sun {asking ? '…' : left}</button>;
+}
+
+function TechButton() {
+  const map = useGame(s => s.map); const open = useGame(s => s.techOpen);
+  return <button className={open ? 'on' : 'ghost'} disabled={!map} onClick={() => setTechOpen(!open)} title="The tree of recipes, with the open village's knowledge laid over it">Tech</button>;
 }
 
 function OverviewButton() {

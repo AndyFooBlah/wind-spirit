@@ -159,3 +159,22 @@ table.villages tr.dead { opacity: 0.5; }
 .chart svg { display: block; background: rgba(255,255,255,0.4); border-radius: 6px; }
 .toast button.small { align-self: flex-start; margin-top: 4px; font-size: 11px; padding: 1px 6px; }
 .toast { display: flex; flex-direction: column; }
+
+/* trust and the sun spirit */
+.trust { position: relative; }
+.trust .popover { min-width: 300px; }
+.trustrow { cursor: pointer; } .trustrow:hover { background: rgba(255,255,255,0.4); }
+.trustrow .w { flex: 0 0 110px; } .trustrow .bar { flex: 1; height: 8px; background: var(--parch-2); border-radius: 4px; overflow: hidden; } .trustrow .fill { height: 100%; background: linear-gradient(90deg, var(--rust), var(--gold), var(--moss)); }
+.modal.sun .prose { white-space: pre-wrap; }
+
+/* tech tree */
+.modal.tech { width: min(1400px, 96vw); max-height: 92vh; }
+.tree-scroll { overflow: auto; max-height: 70vh; background: rgba(255,255,255,0.4); border-radius: 8px; }
+.tree-scroll svg { display: block; }
+.node rect { fill: #fffaf0; stroke: #9a8a72; stroke-width: 1; } .node text { fill: var(--ink); }
+.node.held rect { fill: #e6f0d6; stroke: #4c9a2a; stroke-width: 2; }
+.node.hinted rect { fill: #fff3d6; stroke: #c9a227; stroke-width: 1.5; stroke-dasharray: 4 3; }
+.node.unknown { opacity: 0.55; } .node.unknown rect { fill: #f2ede2; stroke: #c5bba8; }
+.key { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: middle; margin-right: 3px; border: 1.5px solid #9a8a72; background: #fffaf0; }
+.key.held { background: #e6f0d6; border-color: #4c9a2a; } .key.hinted { background: #fff3d6; border-color: #c9a227; border-style: dashed; } .key.unknown { background: #f2ede2; border-color: #c5bba8; }
+.tech-detail { min-height: 18px; }

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { setTechOpen } from '../store/game.ts';
 import { useGame, dismissToast, focusVillage, installGlobalHandlers, updateSettings, setSpeed } from '../store/game.ts';
 import { MapCanvas } from '../map/MapCanvas.tsx';
 import { Gallery } from './Gallery.tsx';
@@ -7,12 +8,15 @@ import { VillagePanel } from './VillagePanel.tsx';
 import { SpiritDialog } from './SpiritDialog.tsx';
 import { InviteGate } from './InviteGate.tsx';
 import { Overview } from './Overview.tsx';
+import { SunDialog } from './SunDialog.tsx';
+import { TechTree } from './TechTree.tsx';
 
 export function App() {
   return <InviteGate><Game /></InviteGate>;
 }
 
 function Game() {
+  const techOpen = useGame(s => s.techOpen);
   const screen = useGame(s => s.screen); const loading = useGame(s => s.loading);
   useEffect(() => { installGlobalHandlers(); }, []);
   if (screen === 'gallery') return <Gallery />;
@@ -28,6 +32,8 @@ function Game() {
       <Toasts />
       <SpiritDialog />
       <Overview />
+      <SunDialog />
+      {techOpen && <TechTree onClose={() => setTechOpen(false)} />}
     </div>
   );
 }

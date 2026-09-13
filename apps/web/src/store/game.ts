@@ -10,7 +10,7 @@ import { idToken } from '../auth.ts';
 import { audio, dominantTerrain, type AudioSettings } from '../audio/audio.ts';
 import { historyWorthy } from '../sim/views.ts';
 import { DEFAULT_SETTINGS, type Frame, type FromHistory, type FromWorker, type JournalEntry, type Settings, type Speed, type StaticMap, type ToHistory, type ToWorker, type VillageDetail, type SeriesPoint } from '../sim/protocol.ts';
-import { createWorld, deleteWorld, listWorlds, loadEvents, loadHistoryWindow, loadJournals, loadResume, newWorldId, openStore, Persister, setStoreBlockedHandler, type Db, type WorldMeta, saveSeries, loadSeries, loadSnapshotText, snapshotTicks } from './db.ts';
+import { createWorld, deleteWorld, listWorlds, loadEvents, loadHistoryWindow, loadJournals, loadResume, newWorldId, openStore, Persister, setStoreBlockedHandler, type Db, type WorldMeta, saveSeries, loadSeries, loadSnapshotText, snapshotTicks, saveSun, loadSun } from './db.ts';
 
 export type Zoom = 'world' | 'local' | 'village';
 export interface Toast { id: number; text: string; kind: 'attention' | 'info' | 'error'; village?: number; event?: string; }
@@ -50,6 +50,9 @@ export interface GameState {
   /** yearly readings for the overview charts, oldest first */
   series: SeriesPoint[];
   overview: boolean;
+  techOpen: boolean;
+  /** the sun spirit: past questions and answers this world, and the one in flight */
+  sun: { open: boolean; turns: { question: string; answer: string; tick: number }[]; asking?: { id: number; question: string; streaming: string } };
   /** snapshots still to read for the charts, when an older save predates the series */
   seriesBackfill?: { done: number; total: number };
   narratives: Record<string, NarrativeState>;
@@ -57,7 +60,7 @@ export interface GameState {
 }
 
 export const useGame = create<GameState>(() => ({
-  screen: 'gallery', worlds: [], speed: 'pause', resumeSpeed: 'normal', journals: [], toasts: [], settings: loadSettings(), talkedTo: [], series: [], overview: false,
+  screen: 'gallery', worlds: [], speed: 'pause', resumeSpeed: 'normal', journals: [], toasts: [], settings: loadSettings(), talkedTo: [], series: [], overview: false, techOpen: false, sun: { open: false, turns: [] },
   pendingClaims: [], zoom: 'local', center: { x: 32, y: 32 }, targeting: false, loading: '', lastEvents: [], waiting: [], narratives: {}, audioSettings: audio.settings,
 }));
 
@@ -125,6 +128,15 @@ function onWorker(m: FromWorker): void {
       if (d) { if (m.claims.length) { set(s => ({ pendingClaims: [...s.pendingClaims, { village: d.village, texts: m.claims.map(c => c.text) }] })); toast(`${m.claims.length} claim${m.claims.length === 1 ? '' : 's'} will enter the chronicle when the week turns.`, 'info', d.village); } else toast('The dream ended; the chief noted nothing to hold you to.', 'info', d.village); }
       break;
     }
+    case 'sunChunk': set(s => s.sun.asking?.id === m.id ? { sun: { ...s.sun, asking: { ...s.sun.asking, streaming: s.sun.asking.streaming + m.text } } } : {}); break;
+    case 'sunReply': {
+      const s = get(); const a = s.sun.asking; if (!a || a.id !== m.id) break;
+      if (m.error || !m.text) { toast(`The sun spirit did not answer: ${m.error ?? 'nothing came back'}`, 'error'); set({ sun: { ...s.sun, asking: undefined } }); break; }
+      const turn = { question: a.question, answer: m.text, tick: s.frame?.tick ?? 0 };
+      set({ sun: { ...s.sun, asking: undefined, turns: [...s.sun.turns, turn] } });
+      const w = s.world; if (w) void ensureDb().then(d => saveSun(d, w.id, turn.tick, turn.question, turn.answer));
+      break;
+    }
     case 'series': { set(s => ({ series: [...s.series.filter(p => p.tick !== m.point.tick), m.point].sort((a, b) => a.tick - b.tick) })); const w = get().world; if (w) void ensureDb().then(d => saveSeries(d, w.id, m.point)); break; }
     case 'error': toast(m.message, 'error', m.village); break;
   }
@@ -153,7 +165,7 @@ export const WORLD_SIZES: Record<WorldSize, { width: number; height: number; vil
 export async function newWorld(seed: string, name?: string, size: WorldSize = 'large'): Promise<void> {
   const d = await ensureDb(); const s = seed.trim() || Math.random().toString(36).slice(2, 10); const dims = WORLD_SIZES[size];
   const meta = await createWorld(d, { id: newWorldId(), name: name?.trim() || s, seed: s, options: { width: dims.width, height: dims.height, villages: dims.villages, startPop: 20 } });
-  set({ loading: 'Shaping the world…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: [], talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {}, series: [], overview: false });
+  set({ loading: 'Shaping the world…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: [], talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {}, series: [], overview: false, sun: { open: false, turns: [] } });
   await startWorker(); persister = new Persister(d, meta.id); audio.setWorld(s);
   pushSettings();
   send({ type: 'init', seed: s, opts: meta.options });
@@ -164,7 +176,7 @@ export async function newWorld(seed: string, name?: string, size: WorldSize = 'l
 export async function continueWorld(id: string): Promise<void> {
   const d = await ensureDb(); const meta = (await listWorlds(d)).find(w => w.id === id); if (!meta) return;
   const resume = await loadResume(d, id);
-  set({ loading: 'Remembering…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: await loadJournals(d, id), talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {}, series: await loadSeries(d, id), overview: false });
+  set({ loading: 'Remembering…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: await loadJournals(d, id), talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {}, series: await loadSeries(d, id), overview: false, sun: { open: false, turns: (await loadSun(d, id)).map(r => ({ question: r.question, answer: r.answer, tick: r.tick })) } });
   await startWorker(); persister = new Persister(d, meta.id); audio.setWorld(meta.seed);
   pushSettings();
   if (resume) send({ type: 'load', snapshot: resume.snapshot, inputsAfter: resume.inputsAfter });
@@ -274,11 +286,29 @@ export function dreamClose(): void {
 }
 export function openWhisper(village: number | undefined): void { set({ whisperFor: village }); }
 
+// ---------- the sun spirit ----------
+
+export const SUN_QUESTIONS_A_YEAR = 3;
+let sunSeq = 0;
+export function sunQuestionsLeft(s: GameState): number {
+  const year = s.frame ? Math.floor(s.frame.tick / WEEKS_PER_YEAR) : 0;
+  const used = s.sun.turns.filter(t => Math.floor(t.tick / WEEKS_PER_YEAR) === year).length + (s.sun.asking ? 1 : 0);
+  return Math.max(0, SUN_QUESTIONS_A_YEAR - used);
+}
+export function openSun(open: boolean): void { set(s => ({ sun: { ...s.sun, open } })); }
+export function askSunSpirit(question: string): void {
+  const s = get(); const q = question.trim(); if (!q || s.sun.asking || !s.frame || sunQuestionsLeft(s) <= 0) return;
+  const id = ++sunSeq;
+  set({ sun: { ...s.sun, asking: { id, question: q, streaming: '' } } });
+  send({ type: 'sun', id, question: q, before: s.sun.turns });
+}
+
 // ---------- overview (every village at once, and the charts) ----------
 
 const seriesWaiters = new Map<number, (p: SeriesPoint | undefined) => void>();
 let backfilling = false;
 
+export function setTechOpen(open: boolean): void { set({ techOpen: open }); }
 export function openOverview(): void { set({ overview: true }); void backfillSeries(); }
 export function closeOverview(): void { set({ overview: false }); }
 

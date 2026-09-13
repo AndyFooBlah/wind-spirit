@@ -57,7 +57,7 @@ export function buildSeriesPoint(w: World): SeriesPoint {
       let assigned = 0; for (const o of v.orders) { work[GROUP_OF[o.task] ?? 'rest'] += o.workers; assigned += o.workers; }
       const counts = popCounts(v, w.tick); work.rest += Math.max(0, counts.adults - assigned);
       const tier = v.recipes.reduce((m, r) => Math.max(m, recipeById(w, r)?.tier ?? 0), 0);
-      return { id: v.id, name: v.name, alive: v.alive, pop: counts.total, food: v.alive ? storesWeeks(w, v) : 0, caps: v.capabilities.length, tier, work };
+      return { id: v.id, name: v.name, alive: v.alive, pop: counts.total, food: v.alive ? storesWeeks(w, v) : 0, caps: v.capabilities.length, tier, trust: v.trust, work };
     }),
   };
 }
@@ -67,6 +67,11 @@ export function buildStaticMap(w: World): StaticMap {
     seed: w.seed, width: w.width, height: w.height,
     terrain: w.tiles.map(t => t.terrain), ford: w.tiles.map(t => t.ford), extra: w.tiles.map(t => Object.keys(t.extra)),
     names: { commodities: Object.fromEntries(w.commodities.map(c => [c.id, c.name])), recipes: Object.fromEntries(w.recipes.map(r => [r.id, r.name])), capabilities: { ...CAP_NAMES } },
+    tech: w.recipes.map(r => {
+      const cn = (c: string) => commodityById(w, c)?.name ?? c; const o = r.output;
+      const [makes, makesId, makesKind]: [string, string | undefined, 'commodity' | 'structure' | 'capability' | 'crop'] = o.capability ? [`skill: ${(CAP_NAMES as Record<string, string>)[o.capability] ?? o.capability}`, o.capability, 'capability'] : o.structure ? [`building: shelter ${o.structure.shelter}, storage ${o.structure.storage}${o.structure.watch ? ', lookout' : ''}${o.structure.defense ? ', defence' : ''}`, undefined, 'structure'] : o.crop ? [`crop: ${cn(o.crop)}`, o.crop, 'crop'] : o.commodity ? [`${o.commodity.qty / 1000} ${cn(o.commodity.c)}`, o.commodity.c, 'commodity'] : ['nothing', undefined, 'commodity'];
+      return { id: r.id, name: r.name, tier: r.tier, inputs: r.inputs.map(i => ({ id: i.c, name: cn(i.c), qty: i.qty / 1000 })), requires: r.requires, makes, makesId, makesKind, start: !!r.start, hints: r.hints.length };
+    }),
   };
 }
 
@@ -85,7 +90,8 @@ export function buildVillageDetail(w: World, id: number, history: Event[]): Vill
       structure: st ? { shelter: st.shelter, storage: st.storage, defense: st.defense, watch: st.watch } : undefined };
   });
   const people = assignActivities(w, v, cname, rname);
-  return { id, tick: w.tick, alive: v.alive, view: rest, plots, people, chronicle: [...v.chronicle], feed: buildFeed(w, v, history, cname, rname, capName), inbox: [...v.inbox], chiefId: v.chief };
+  const tech = { held: [...v.recipes], hints: { ...v.hints }, capabilities: [...v.capabilities] };
+  return { id, tick: w.tick, alive: v.alive, view: rest, plots, people, tech, chronicle: [...v.chronicle], feed: buildFeed(w, v, history, cname, rname, capName), inbox: [...v.inbox], chiefId: v.chief };
 }
 
 /** The history feed: a village's events grouped by season and rendered as sentences, newest season first. */

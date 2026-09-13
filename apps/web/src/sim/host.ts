@@ -3,6 +3,7 @@
  * The worker wraps it with postMessage; tests drive it directly with a fake timer.
  */
 import { Rng, Sim, WEEKS_PER_YEAR, seasonIndex, type Event, type Input, type World } from '@wind-spirit/sim';
+import { askSun } from './sun.ts';
 import { generateWorld, CAP_NAMES } from '@wind-spirit/gen';
 import { POLICIES, hostAnswer } from '@wind-spirit/harness';
 import { ChiefScheduler, Conversation, narrate, type JournalEntry, type LlmClient, type Speed } from '@wind-spirit/agents';
@@ -214,6 +215,15 @@ export class SimHost {
   async narrate(r: NarrativeRequest): Promise<string> {
     const w = this.world; const v = w.villages[r.village]; if (!v) throw new Error('no such village');
     return narrate(w, v, r.events, r.journals as JournalEntry[], { client: this.io.client, capNames: CAP_NAMES, fromTick: r.fromTick, toTick: r.toTick, style: r.style });
+  }
+
+  // ---------- the sun spirit ----------
+
+  async sun(id: number, question: string, before: { question: string; answer: string; tick: number }[]): Promise<void> {
+    try {
+      const text = await askSun(this.world, question, before, v => this.history.get(v) ?? [], this.io.client, chunk => this.io.post({ type: 'sunChunk', id, text: chunk }));
+      this.io.post({ type: 'sunReply', id, text });
+    } catch (e) { this.io.post({ type: 'sunReply', id, error: (e as Error)?.message ?? String(e) }); }
   }
 
   // ---------- dreams ----------

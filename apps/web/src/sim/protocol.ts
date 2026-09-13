@@ -54,7 +54,10 @@ export interface StaticMap {
   seed: string; width: number; height: number;
   terrain: Terrain[]; ford: boolean[]; extra: string[][];
   names: { commodities: Record<string, string>; recipes: Record<string, string>; capabilities: Record<string, string> };
+  /** the whole recipe tree of this world, fixed at generation */
+  tech: TechNode[];
 }
+export interface TechNode { id: string; name: string; tier: number; inputs: { id: string; name: string; qty: number }[]; requires?: string; makes: string; makesId?: string; makesKind: 'commodity' | 'structure' | 'capability' | 'crop'; start: boolean; hints: number; }
 export interface PlotView {
   kind: PlotKind; planted: boolean; recipe: string; crop: string; building: boolean;
   /** recipe id (stable across worlds), for the icon */ recipeId: string;
@@ -70,6 +73,8 @@ export interface VillageDetail {
   view: Omit<VillageView, 'names'>;
   plots: PlotView[];
   people: PersonView[];
+  /** what this village holds and has heard of, for the tech tree overlay */
+  tech: { held: string[]; hints: Record<string, number>; capabilities: string[] };
   chronicle: Claim[];
   feed: FeedGroup[];
   inbox: string[];
@@ -77,7 +82,7 @@ export interface VillageDetail {
 }
 
 /** One yearly reading of the whole world, for the overview charts. Recorded by the sim worker at each new year and backfilled from snapshots. */
-export interface SeriesVillage { id: number; name: string; alive: boolean; pop: number; food: number; caps: number; tier: number; work: Record<WorkGroup, number>; }
+export interface SeriesVillage { id: number; name: string; alive: boolean; pop: number; food: number; caps: number; tier: number; trust: number; work: Record<WorkGroup, number>; }
 export type WorkGroup = 'food' | 'land' | 'craft' | 'research' | 'ventures' | 'rest';
 export const WORK_GROUPS: readonly WorkGroup[] = ['food', 'land', 'craft', 'research', 'ventures', 'rest'];
 export interface SeriesPoint { tick: number; villages: SeriesVillage[]; }
@@ -97,7 +102,8 @@ export type ToWorker =
   | { type: 'token'; id: number; token?: string }
   | { type: 'dreamStart'; village: number }
   | { type: 'dreamSend'; text: string }
-  | { type: 'dreamClose' };
+  | { type: 'dreamClose' }
+  | { type: 'sun'; id: number; question: string; before: { question: string; answer: string; tick: number }[] };
 
 export type FromWorker =
   | { type: 'ready' }
@@ -116,6 +122,8 @@ export type FromWorker =
   | { type: 'dreamClosed'; claims: { text: string; due: number }[]; memoryNotes: string[] }
   | { type: 'narrative'; id: number; text?: string; error?: string }
   | { type: 'series'; point: SeriesPoint }
+  | { type: 'sunChunk'; id: number; text: string }
+  | { type: 'sunReply'; id: number; text?: string; error?: string }
   | { type: 'error'; message: string; village?: number };
 
 /** History worker: replay to a tick from the nearest earlier snapshot and render views from the replayed world. */
