@@ -211,7 +211,7 @@ function SettingsMenu() {
           <label><input type="radio" checked={settings.modelVillages === 'all'} onChange={() => updateSettings({ modelVillages: 'all' })} /> all villages <span className="warn">(costly at speed)</span></label>
           <div className="small muted">Model access: {proxyOk === undefined ? 'not yet used' : proxyOk ? 'signed in' : 'unavailable, chiefs act on habit'}</div>
           <div className="strong" style={{ marginTop: 10 }}>How much thinking to buy</div>
-          {([['habit', 'habit: scripted chiefs, the model only for dreams (free)'], ['thrifty', 'thrifty: a cheap model for routine seasons, the standard one for hard choices (~$1 a century per chief)'], ['standard', 'standard: the standard model for every decision (~$5 a century at fast speed)'], ['lavish', 'lavish: the capable model for hard choices, the best for dreams (~$100 a century)']] as const).map(([k, label]) => (
+          {([['habit', 'habit: scripted chiefs, the model only for dreams (free)'], ['thrifty', 'thrifty: the cheapest model for routine seasons, a better one for hard choices (~$1 a century per chief)'], ['standard', 'standard: a light model for routine seasons, the full one for hard choices (~$5 a century)'], ['lavish', 'lavish: the full model everywhere, the most capable one for hard choices and dreams (~$16 a century)']] as const).map(([k, label]) => (
             <label key={k}><input type="radio" checked={(settings.tier ?? 'standard') === k} onChange={() => updateSettings({ tier: k })} /> {label}</label>
           ))}
           <div className="strong" style={{ marginTop: 10 }}>Pause when</div>

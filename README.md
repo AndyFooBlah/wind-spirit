@@ -8,6 +8,7 @@ Play it at https://wind-spirit-prod.web.app.
 - [Technical design](docs/technical-design.md)
 - [M0 notes: balance findings](docs/m0-notes.md)
 - [Build notes: M1 and M2](docs/build-notes.md)
+- [Lab notebook: where intelligence is worth spending](docs/evals-notes.md)
 
 ## Layout
 

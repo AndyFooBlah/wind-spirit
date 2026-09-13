@@ -90,3 +90,41 @@ What jumped out:
 3. **The open models' scores were a format problem before they were a judgment problem.** Gemma, gpt-oss and DeepSeek dropped 180 to 220 orders each because the proxy asked their backends for strict JSON-schema decoding, and strict mode strips every optional field: every research order came back as `{task, workers}` with no ingredients, every gather with no commodity. Turning strict off and making the parser accept ingredients as a string and fuzzy-match misspelled names (both legitimate hardening) is the fix; those three are being rerun. Even so, their visitor and dream scores were already at the baseline, which says something: the *conversational* part of the job is easy for everyone; the *operational* part, keeping a hundred fiddly names straight, is where small models fall down.
 4. **Gemini 2.5 rejects `thinking_level`.** It takes a token budget instead. Worth remembering for any mixed-model setup.
 5. Cost per chief-century at normal cadence from the measured per-case costs: 3.8 Flash $13.64, 3.5 Flash-Lite $2.85, 3.1 Flash-Lite $3.53, Gemma 4 $0.93, gpt-oss $1.67; at fast cadence divide by about 2.5. The design's $5 standard tier is a 3.5 Flash-Lite village at normal cadence, or a 3.8 Flash village at fast.
+
+## Final pass (2026-09-12): after fixing the format problems
+
+Two fixes changed the open models' numbers completely. Constrained JSON decoding on the Vertex managed-API backends (gpt-oss, DeepSeek, Gemma, Qwen) returns every order as `{task, workers}` with the optional fields silently dropped, whether or not `strict` is set; asking those models for JSON in the instructions and validating instead gives complete orders. And Gemini 2.5 takes a thinking budget, not a level. The parser also now accepts ingredients as a string, `command` as an alias for `task`, and fuzzy-matches misspelled generated names, which is hardening the game needs anyway. Full table in `docs/evals/report-2026-09-12.md`; the corpus is beside it.
+
+| model | all | routine | crisis | visitor | expansion | spirit | dream | judge | agree | $/case | s/case | errors |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Gemini 3.8 Flash (baseline) | 0.974 | 0.97 | 1.00 | 0.93 | 1.00 | 0.97 | 1.00 | 3.92 | 93% | 0.0070 | 3.7 | 0 |
+| Gemini 3.1 Pro (reference) | 0.968 | 0.97 | 1.00 | 0.93 | 1.00 | 0.92 | 1.00 | 3.92 | – | 0.0177 | 9.7 | 0 |
+| gpt-oss-120b | 0.967 | 0.98 | 0.87 | 0.90 | 1.00 | 0.99 | 1.00 | 2.85 | 93% | 0.0007 | 6.0 | 0 |
+| Gemini 3.5 Flash-Lite | 0.963 | 0.95 | 1.00 | 0.93 | 1.00 | 0.95 | 1.00 | 4.28 | 96% | 0.0016 | 1.6 | 0 |
+| Gemini 2.5 Flash | 0.954 | 0.98 | 1.00 | 0.93 | 1.00 | 0.84 | 0.98 | 4.19 | 96% | 0.0013 | 2.5 | 0 |
+| Gemini 3.1 Flash-Lite | 0.950 | 0.95 | 0.97 | 0.93 | 1.00 | 0.87 | 1.00 | 3.68 | 96% | 0.0019 | 3.7 | 0 |
+| Gemini 2.5 Flash-Lite | 0.949 | 0.93 | 1.00 | 0.93 | 0.94 | 0.96 | 0.98 | 3.36 | 81% | 0.0004 | 1.7 | 0 |
+| Gemma 4 26B | 0.852 | 0.95 | 0.83 | 0.93 | 0.83 | 0.69 | 0.73 | 4.04 | 96% | 0.0005 | 5.9 | 11 |
+| DeepSeek V3.2 | 0.630 | 0.56 | 0.47 | 0.70 | 0.58 | 0.71 | 0.73 | 4.16 | 94% | 0.0012 | 10.0 | 33 |
+| Qwen3-235B | 0.376 | 0.46 | 0.37 | 0.33 | 0.28 | 0.23 | 0.47 | 4.79 | 80% | 0.0005 | 8.5 | 51 |
+
+Errors on the open models are all throttling ("request queue is full", "too many concurrent requests") at three concurrent calls, and the errored cases score zero, so DeepSeek's and Qwen's rows understate them. That throttling is itself a finding: the managed open models have far less headroom than Gemini, and three of the five are already scheduled for retirement next month.
+
+### What the numbers say
+
+1. **The routine work needs almost no intelligence.** Every model that could produce valid orders scored 0.93 to 0.98 on routine seasons, including a 2.5 Flash-Lite that costs a twentieth of the baseline. The scripted policy does this job too. Where the money goes in a routine decision is the journal, the only part a player reads.
+2. **The impactful categories separate models less than expected.** Visitor decisions were 0.93 for nearly everyone (the same two cases trip every model: a greedy ask that most models counter rather than refuse). Expansion was perfect for every Gemini and gpt-oss. Crisis is where the small open models slip (0.47 to 0.87): keeping enough hands on food during a famine and preparing for a hard winter.
+3. **Spirit is the discriminating category, and it is about credulity.** The false-advice case ("plant nothing this spring") was obeyed by 2.5 Flash in 7 of 15 whispers and by 3.1 Flash-Lite in 9, against 2 for 3.8 Flash. A cheap chief is an obedient chief, which is exactly wrong for a game whose scoreboard is trust the player has to earn.
+4. **Prose quality is the real price of going cheap.** gpt-oss-120b ties the baseline on rules and beats it on cost tenfold, but the judge puts its journals at 2.85 against 3.92 for 3.8 Flash and 4.28 for 3.5 Flash-Lite. The Flash-Lite journals read better than 3.8 Flash's to the judge, at a quarter of the cost.
+5. **The Pro reference is not better at this.** Same rules score as Flash, same judge score, three times the cost and latency. For decisions of this shape, a capable model buys nothing; it may buy something in dreams, which this corpus scores leniently.
+6. **Caching only pays on Gemini**, and only a few tens of percent on input, which is the smaller half of the bill. Anthropic's minimum of 4,096 tokens is above most of our prompts, and the open models either do not report or do not price cached tokens. This is not a reason to move off Gemini; combined with throttling and deprecations on the open side, it is a reason to stay.
+
+### Decisions
+
+- Proxy classes: **cheapest = Gemini 2.5 Flash-Lite, cheap = 3.5 Flash-Lite, routine = 3.8 Flash, capable = premium = 3.1 Pro.**
+- Tiers, as shipped in the app's settings, per chief per century at normal cadence from measured per-case costs: **habit** $0 (scripted, model only for dreams); **thrifty** ~$1.16 (2.5 Flash-Lite routine, 3.5 Flash-Lite impactful); **standard** ~$5.07 (3.5 Flash-Lite routine, 3.8 Flash impactful), the default; **lavish** ~$16 (3.8 Flash routine, Pro impactful and dreams). At fast cadence divide by roughly 2.5. There is no useful way to spend $100 a century on today's models for this job; the lavish tier leaves that headroom for longer thinking or bigger prompts later.
+- Claude Haiku 4.5 and Llama 4 stay untested until someone clicks Enable in the Model Garden; on list price Haiku would land between 3.8 Flash and Pro, so it is a quality question, not a cost one.
+
+### Limitations, for honesty
+
+The judge is Gemini 3.1 Pro grading Gemini and others; the rule checks encode one opinion of a good chief and top out near 0.97 for strong models; the corpus is sampled from scripted play, so it under-represents the messy states model chiefs get themselves into; one pass per model at temperature 0.7; dreams are scored only for form. A second judge from another family and a repeat run would tighten the small gaps (3.5 Flash-Lite versus 3.8 Flash is within noise on rules and reversed on the judge).

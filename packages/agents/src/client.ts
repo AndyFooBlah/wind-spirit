@@ -1,5 +1,5 @@
 /** Model client contract. The proxy implements it over HTTP; tests use a mock. */
-export type ModelClass = 'cheap' | 'routine' | 'capable' | 'premium';
+export type ModelClass = 'cheapest' | 'cheap' | 'routine' | 'capable' | 'premium';
 export interface GenerateRequest { class: ModelClass; system?: string; messages: { role: 'user' | 'model'; text: string }[]; schema?: object; maxOutputTokens?: number; temperature?: number; cacheKey?: string; thinkingLevel?: 'low' | 'medium' | 'high'; model?: string; }
 export interface GenerateResponse { text: string; json?: unknown; usage: { input: number; output: number; thoughts?: number; cached?: number; cacheWrite?: number }; model: string; ms: number; cost?: number; }
 export interface LlmClient {

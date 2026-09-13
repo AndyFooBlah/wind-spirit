@@ -1,7 +1,7 @@
 /** All runtime configuration comes from the environment; model ids are never hard-coded elsewhere. */
 import { MODELS } from './models.js';
 
-export const MODEL_CLASSES = ['cheap', 'routine', 'capable', 'premium'] as const;
+export const MODEL_CLASSES = ['cheapest', 'cheap', 'routine', 'capable', 'premium'] as const;
 export type ModelClass = (typeof MODEL_CLASSES)[number];
 
 function num(name: string, fallback: number): number {
@@ -33,6 +33,7 @@ export const config = {
   /** MaaS open models: most serve only on the global endpoint; per-model overrides live in the catalog. */
   maasLocation: process.env.MAAS_LOCATION ?? 'global',
   models: {
+    cheapest: process.env.MODEL_CHEAPEST ?? 'gemini-2.5-flash-lite',
     cheap: process.env.MODEL_CHEAP ?? 'gemini-3.5-flash-lite',
     routine: process.env.MODEL_ROUTINE ?? 'gemini-3.8-flash',
     capable: process.env.MODEL_CAPABLE ?? 'gemini-3.1-pro-preview',

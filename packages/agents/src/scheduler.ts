@@ -100,7 +100,7 @@ export class ChiefScheduler {
 
   onPrayer?: (village: number, text: string) => void;
 
-  private async callDecision(view: VillageView, reason: string, v: Village, w: World, modelClass: 'cheap' | 'routine' | 'capable' | 'premium' = 'routine'): Promise<ChiefDecisionJson | undefined> {
+  private async callDecision(view: VillageView, reason: string, v: Village, w: World, modelClass: 'cheapest' | 'cheap' | 'routine' | 'capable' | 'premium' = 'routine'): Promise<ChiefDecisionJson | undefined> {
     const system = systemPrompt(view); const user = statePrompt(view, reason);
     for (let attempt = 0; attempt < 2; attempt++) {
       const res = await this.o.client.generate({ class: modelClass, system, messages: [{ role: 'user', text: user }], schema: DECISION_SCHEMA, maxOutputTokens: 6000, temperature: 0.7, thinkingLevel: 'low', cacheKey: `chief:${w.seed}:${v.id}` });
