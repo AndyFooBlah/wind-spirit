@@ -1,11 +1,11 @@
 /** Reproduce the first-spring decision on fresh small worlds: how often does a model leave the village with (almost) nobody gathering food? */
-import { readFileSync } from 'node:fs';
 import { Sim, popCounts, storesWeeks } from '@wind-spirit/sim';
 import { generateWorld, CAP_NAMES } from '@wind-spirit/gen';
 import { HttpLlmClient, buildView, statePrompt, systemPrompt, parseDecision, DECISION_SCHEMA, type ChiefDecisionJson } from '../index.js';
-const cfg = JSON.parse(readFileSync(new URL('../../../../services/llm-proxy/firebase-web-config.json', import.meta.url), 'utf8')) as { apiKey: string };
-const tok = (await (await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${cfg.apiKey}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ returnSecureToken: true }) })).json() as { idToken: string }).idToken;
-const client = new HttpLlmClient(process.env.PROXY_URL ?? 'https://llm-proxy-406179055859.us-central1.run.app', async () => tok);
+import { anonToken } from './token.js';
+const PROXY = process.env.PROXY_URL ?? 'https://llm-proxy-406179055859.us-central1.run.app';
+const tok = await anonToken(PROXY);
+const client = new HttpLlmClient(PROXY, async () => tok);
 const models = (process.argv[2] ?? 'gemini-3.5-flash-lite,gemini-3.8-flash').split(','); const seeds = ['chief-models-post', 'first-a', 'first-b']; const reps = Number(process.argv[3] ?? 3);
 for (const model of models) {
   let n = 0, lowFood = 0, zeroFood = 0; const examples: string[] = [];

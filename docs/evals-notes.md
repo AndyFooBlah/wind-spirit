@@ -125,7 +125,7 @@ Errors on the open models are all throttling ("request queue is full", "too many
 - Tiers, as shipped in the app's settings, per chief per century at normal cadence from measured per-case costs: **habit** $0 (scripted, model only for dreams); **thrifty** ~$1.16 (2.5 Flash-Lite routine, 3.5 Flash-Lite impactful); **standard** ~$5.07 (3.5 Flash-Lite routine, 3.8 Flash impactful), the default; **lavish** ~$16 (3.8 Flash routine, Pro impactful and dreams). At fast cadence divide by roughly 2.5. There is no useful way to spend $100 a century on today's models for this job; the lavish tier leaves that headroom for longer thinking or bigger prompts later.
 - Claude Haiku 4.5 and Llama 4 stay untested until someone clicks Enable in the Model Garden; on list price Haiku would land between 3.8 Flash and Pro, so it is a quality question, not a cost one.
 
-### Limitations, for honesty
+### Limitations
 
 The judge is Gemini 3.1 Pro grading Gemini and others; the rule checks encode one opinion of a good chief and top out near 0.97 for strong models; the corpus is sampled from scripted play, so it under-represents the messy states model chiefs get themselves into; one pass per model at temperature 0.7; dreams are scored only for form. A second judge from another family and a repeat run would tighten the small gaps (3.5 Flash-Lite versus 3.8 Flash is within noise on rules and reversed on the judge).
 

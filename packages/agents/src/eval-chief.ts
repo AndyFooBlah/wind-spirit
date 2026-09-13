@@ -4,6 +4,7 @@
  * Usage: tsx src/eval-chief.ts [seed] [samples]
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { anonToken } from './evals/token.js';
 import { Rng, Sim, WEEKS_PER_YEAR, seasonOf, popCounts, type Input } from '@wind-spirit/sim';
 import { generateWorld, CAP_NAMES } from '@wind-spirit/gen';
 import { POLICIES } from '@wind-spirit/harness';
@@ -13,14 +14,9 @@ const [seed = 'eval-0', samplesArg = '8'] = process.argv.slice(2).filter(a => a 
 const proxy = process.env.PROXY_URL ?? 'https://llm-proxy-406179055859.us-central1.run.app';
 const MODERN = /\b(computer|internet|percent|%|technology|economy|strategy|optimi[sz]e|data|algorithm|resource management|kpi|metric)\b/i;
 
-async function anonToken(): Promise<string> {
-  const cfg = JSON.parse(readFileSync(new URL('../../../services/llm-proxy/firebase-web-config.json', import.meta.url), 'utf8')) as { apiKey: string };
-  const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${cfg.apiKey}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ returnSecureToken: true }) });
-  return ((await res.json()) as { idToken: string }).idToken;
-}
 
 async function main() {
-  const token = await anonToken(); const client = new HttpLlmClient(proxy, async () => token);
+  const token = await anonToken(proxy); const client = new HttpLlmClient(proxy, async () => token);
   const w = generateWorld({ seed }); const sim = new Sim(w); const rng = Rng.fromSeed(seed, 'work'); const mem: Record<number, Record<string, number>> = {};
   const sampleTicks = new Set([2, 20, 40, 105, 260, 520, 1040, 1560, 2080, 2600].slice(0, Number(samplesArg)));
   const results: { tick: number; village: number; season: number; checks: Record<string, boolean>; dropped: string[]; journal: string; ms: number }[] = [];

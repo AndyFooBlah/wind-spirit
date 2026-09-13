@@ -42,6 +42,10 @@ export const config = {
   /** Explicit `model` ids a request may name (evals). Anything else is a 400. */
   evalModels: list('EVAL_MODELS', DEFAULT_EVAL_MODELS),
   requireAuth: (process.env.REQUIRE_AUTH ?? 'true').toLowerCase() !== 'false',
+  /** Model calls need a redeemed invitation code (see invites.ts). Off only for local development. */
+  requireInvite: (process.env.REQUIRE_INVITE ?? 'true').toLowerCase() !== 'false',
+  invitesCollection: process.env.INVITES_COLLECTION ?? 'invites',
+  playersCollection: process.env.PLAYERS_COLLECTION ?? 'players',
   dailyTokenQuota: num('DAILY_TOKEN_QUOTA', 2_000_000),
   requestTimeoutMs: num('REQUEST_TIMEOUT_MS', 120_000),
   quotaCollection: process.env.QUOTA_COLLECTION ?? 'quotas',

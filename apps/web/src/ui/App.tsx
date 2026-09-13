@@ -5,8 +5,13 @@ import { Gallery } from './Gallery.tsx';
 import { TopBar, HistoryBar } from './TopBar.tsx';
 import { VillagePanel } from './VillagePanel.tsx';
 import { SpiritDialog } from './SpiritDialog.tsx';
+import { InviteGate } from './InviteGate.tsx';
 
 export function App() {
+  return <InviteGate><Game /></InviteGate>;
+}
+
+function Game() {
   const screen = useGame(s => s.screen); const loading = useGame(s => s.loading);
   useEffect(() => { installGlobalHandlers(); }, []);
   if (screen === 'gallery') return <Gallery />;

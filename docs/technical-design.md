@@ -188,7 +188,7 @@ Runs on the main thread. For each `DeliberationRequested` it decides *whether* a
 
 Urgent events: raiders arrive, famine imminent, chief death, spirit message. A per-game-year token budget is tracked; when exceeded, the scheduler falls back to the **scripted policy** (the same one the harness uses) and logs it, so the world keeps running and the player sees a note in the journal ("the chief acted on habit this season").
 
-Concurrency: at most N in-flight calls; requests are queued per village so a village never has two deliberations outstanding. A decision that arrives late is applied at the next tick and stamped with the tick it was requested at, so the journal reads honestly.
+Concurrency: at most N in-flight calls; requests are queued per village so a village never has two deliberations outstanding. A decision that arrives late is applied at the next tick and stamped with the tick it was requested at, so the journal shows when the decision was actually made.
 
 ### 8.2 Prompt contract
 

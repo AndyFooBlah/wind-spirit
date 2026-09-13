@@ -4,6 +4,7 @@ import { HttpError } from './errors.js';
 import { errorFields, log } from './log.js';
 import { authenticate, initFirebase, principalLabel, type Principal } from './auth.js';
 import { checkQuota, recordUsage } from './quota.js';
+import { isInvited, redeemInvite, requireInvite } from './invites.js';
 import { addUsage, estimateCost, MODELS, modelInfo, ZERO_USAGE, type Usage } from './models.js';
 import { providerFor, type ProviderRequest } from './providers/index.js';
 import { extractJson } from './providers/types.js';
@@ -213,6 +214,7 @@ interface Ctx {
 async function prelude(ctx: Ctx): Promise<{ principal: Principal; gen: GenerateRequest; preq: ProviderRequest }> {
   const principal = await authenticate(ctx.req);
   ctx.entry.principal = principalLabel(principal);
+  await requireInvite(principal);
   const gen = parseGenerateRequest(await readJson(ctx.req));
   const model = resolveModel(gen);
   if (gen.class) ctx.entry.class = gen.class;
@@ -385,6 +387,21 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
       sendJson(res, 200, modelsBody());
       return;
     }
+    if (req.method === 'POST' && url.pathname === '/v1/invite/redeem') {
+      const principal = await authenticate(req);
+      entry.principal = principalLabel(principal);
+      const body = (await readJson(req)) as { code?: unknown } | null;
+      const r = await redeemInvite(principal, body?.code);
+      finishLog(entry, 200, startedAt, { invite: r.alreadyPlayer ? 'already' : 'redeemed' });
+      sendJson(res, 200, { ok: true, label: r.label, alreadyPlayer: r.alreadyPlayer });
+      return;
+    }
+    if (req.method === 'GET' && url.pathname === '/v1/invite/status') {
+      const principal = await authenticate(req);
+      entry.principal = principalLabel(principal);
+      sendJson(res, 200, { invited: await isInvited(principal), required: config.requireInvite });
+      return;
+    }
     if (req.method === 'POST' && url.pathname === '/v1/generate') {
       await v1Generate({ req, res, entry, startedAt });
       finishLog(entry, res.statusCode, startedAt);
@@ -430,6 +447,7 @@ server.listen(config.port, () => {
     models: config.models,
     evalModels: config.evalModels,
     requireAuth: config.requireAuth,
+    requireInvite: config.requireInvite,
     dailyTokenQuota: config.dailyTokenQuota,
     requestTimeoutMs: config.requestTimeoutMs,
     openrouter: openrouterEnabled() ? 'enabled' : 'disabled', // never the key itself

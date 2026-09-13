@@ -210,6 +210,36 @@ curl -s "$URL/health" | jq .openrouter      # "enabled"
 To disable again, add a new version whose value is `unset` and run the same `services update`. Old
 versions can be destroyed with `gcloud secrets versions destroy N --secret openrouter-api-key`.
 
+## Invitations
+
+Every model call costs money, so `/v1/generate` and `/v1/stream` refuse callers who have not redeemed an
+invitation code (`403 not_invited`). The gate is enforced here, never only in the web app.
+
+- `invites/{code}`: `{ label, maxUses, uses, disabled, expiresAt? }`. Codes look like `amber-heron-42`;
+  case, spaces and underscores are forgiven on entry.
+- `players/{uid}`: written when a Firebase user redeems a code: `{ code, label, redeemedAt, revoked }`.
+  A player is checked once per five minutes per instance, so a season of chief calls is one read.
+- `POST /v1/invite/redeem { code }` with a Bearer token: `200 { ok, label, alreadyPlayer }`, or `404 invalid_code`,
+  `410 code_disabled | code_expired | code_exhausted`. A user who already holds a seat consumes nothing.
+- `GET /v1/invite/status`: `{ invited, required }`.
+- `REQUIRE_INVITE=false` turns the gate off (local development only).
+
+Minting and managing codes runs on a laptop with ADC, never from the browser:
+
+```sh
+cd services/llm-proxy
+pnpm invite create --label friends --uses 10 --days 90   # prints the code once
+pnpm invite list
+pnpm invite disable amber-heron-42                        # stops new redemptions; seats already taken stay
+pnpm invite players                                       # uid, code, label, when
+pnpm invite revoke <uid>                                  # takes a seat back (effective within five minutes)
+```
+
+Scripts that call the proxy (the eval runner, `run-chief`, `first-turn`) redeem `WS_INVITE_CODE` from the
+environment for their throwaway anonymous user. Seats belong to a Firebase user, which for the web app is
+the anonymous user of one browser: clearing site data means entering the code again, which is why codes
+carry a handful of uses rather than one.
+
 ## Logging
 
 One JSON line per request: `route, class, model, provider, principal (uid, or hashed ip), cacheKey,
@@ -231,7 +261,7 @@ gcloud run deploy llm-proxy \
   --project wind-spirit-prod --region us-central1 \
   --service-account llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com \
   --allow-unauthenticated \
-  --set-env-vars GOOGLE_CLOUD_PROJECT=wind-spirit-prod,VERTEX_LOCATION=global,ANTHROPIC_LOCATION=global,MAAS_LOCATION=global,MODEL_CHEAP=gemini-3.5-flash-lite,MODEL_ROUTINE=gemini-3.8-flash,MODEL_CAPABLE=gemini-3.1-pro-preview,MODEL_PREMIUM=gemini-3.1-pro-preview,REQUIRE_AUTH=true,DAILY_TOKEN_QUOTA=2000000 \
+  --set-env-vars GOOGLE_CLOUD_PROJECT=wind-spirit-prod,VERTEX_LOCATION=global,ANTHROPIC_LOCATION=global,MAAS_LOCATION=global,MODEL_CHEAP=gemini-3.5-flash-lite,MODEL_ROUTINE=gemini-3.8-flash,MODEL_CAPABLE=gemini-3.1-pro-preview,MODEL_PREMIUM=gemini-3.1-pro-preview,REQUIRE_AUTH=true,REQUIRE_INVITE=true,DAILY_TOKEN_QUOTA=2000000 \
   --set-secrets OPENROUTER_API_KEY=openrouter-api-key:latest \
   --timeout 300 --concurrency 40 --memory 512Mi --cpu 1 \
   --min-instances 0 --max-instances 5

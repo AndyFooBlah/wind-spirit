@@ -4,6 +4,7 @@
  * Anonymous Firebase auth is minted with the public web API key in services/llm-proxy/firebase-web-config.json.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { anonToken } from './evals/token.js';
 import { Rng, Sim, WEEKS_PER_YEAR, popCounts, storesWeeks, type Input } from '@wind-spirit/sim';
 import { generateWorld, CAP_NAMES } from '@wind-spirit/gen';
 import { POLICIES, hostAnswer } from '@wind-spirit/harness';
@@ -13,15 +14,9 @@ const [seed = 'chief-0', years = '20', vidArg = '0', speedArg = 'normal'] = proc
 const proxy = process.env.PROXY_URL ?? 'https://llm-proxy-406179055859.us-central1.run.app';
 const vid = Number(vidArg);
 
-async function anonToken(): Promise<string> {
-  const cfg = JSON.parse(readFileSync(new URL('../../../services/llm-proxy/firebase-web-config.json', import.meta.url), 'utf8')) as { apiKey: string };
-  const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${cfg.apiKey}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ returnSecureToken: true }) });
-  if (!res.ok) throw new Error(`anon auth ${res.status}: ${await res.text()}`);
-  return ((await res.json()) as { idToken: string }).idToken;
-}
 
 async function main() {
-  const token = await anonToken();
+  const token = await anonToken(proxy);
   const client = new HttpLlmClient(proxy, async () => token);
   const w = generateWorld({ seed }); const sim = new Sim(w); const rng = Rng.fromSeed(seed, 'work'); const mem: Record<number, Record<string, number>> = {};
   const out = `out/chief-${seed}`; mkdirSync(out, { recursive: true });
