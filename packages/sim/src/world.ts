@@ -174,8 +174,14 @@ export function foundVillage(ctx: Ctx, o: FoundOpts): Village {
   if (o.food > 0) addStore(v, 'grain', o.food - Math.trunc(o.food / 2));
   w.villages.push(v);
   w.tiles[o.tile].village = id;
+  // A colony and its parent are kin: they start on the best of terms and stay off each other's raid lists.
+  const par = o.parent >= 0 ? w.villages[o.parent] : undefined;
+  if (par) for (const [a, b] of [[v, par], [par, v]] as [Village, Village][]) { const r = relation(a, b.id); r.kin = true; r.lastContact = w.tick; r.sizeSeen = b.people.length; r.grudge = 0; if (!a.knowledge.villages.includes(b.id)) a.knowledge.villages.push(b.id); }
   return v;
 }
+
+/** The founding village a village descends from: itself for the first villages, else its parent's lineage. */
+export function lineageOf(w: World, v: Village): number { let cur = v; const seen = new Set<number>(); while (cur.parent >= 0 && !seen.has(cur.id) && w.villages[cur.parent]) { seen.add(cur.id); cur = w.villages[cur.parent]; } return cur.id; }
 
 export function newPerson(w: World, born: number): Person { return { id: w.nextId++, born, hungry: 0 }; }
 

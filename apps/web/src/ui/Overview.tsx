@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { WEEKS_PER_YEAR } from '@wind-spirit/sim';
 import { WORK_GROUPS, type SeriesPoint, type WorkGroup } from '../sim/protocol.ts';
 import { useGame, closeOverview, focusVillage, viewFrame } from '../store/game.ts';
+import { lineageColour } from '../map/lineage.ts';
 
 /** Every village at once: a table of the present, and charts of population, work and skill over the years. */
 export function Overview() {
@@ -25,7 +26,7 @@ export function Overview() {
                 const sv = latest?.villages.find(x => x.id === v.id);
                 return (
                   <tr key={v.id} className={v.alive ? '' : 'dead'} onClick={() => { focusVillage(v.id); closeOverview(); }} title="Open this village">
-                    <td><span className="swatch" style={{ background: colour(v.id) }} /> {v.name}{v.alive ? '' : ' †'}</td>
+                    <td><span className="swatch" style={{ background: colour(v.id) }} /><span className="swatch pennant-small" style={{ background: lineageColour(v.lineage) }} title="lineage" /> {v.name}{v.alive ? '' : ' †'}</td>
                     <td className="num">{v.alive ? v.pop.total : 0}</td>
                     <td className="num">{v.alive ? (v.foodWeeks >= 999 ? '∞' : v.foodWeeks) : ''}</td>
                     <td>{v.alive ? MOOD(v.happiness) : ''}</td>

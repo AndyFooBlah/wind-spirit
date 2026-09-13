@@ -4,6 +4,7 @@
  */
 import type { Terrain } from '@wind-spirit/sim';
 import type { Frame, StaticMap, VillageDetail, PlotView, PersonView } from '../sim/protocol.ts';
+import { lineageColour } from './lineage.ts';
 
 export type Zoom = 'world' | 'local' | 'village';
 export const LOCAL_TILE = 64;
@@ -132,8 +133,10 @@ export class MapRenderer {
       const x = g.ox + (v.tile % m.width + 0.5) * g.size, y = g.oy + (Math.floor(v.tile / m.width) + 0.5) * g.size;
       const r = Math.max(2, Math.min(g.size * 0.42, (2 + Math.sqrt(v.pop.total) * 1.6) * (g.size / LOCAL_TILE) * 1.8 + (detailed ? 4 : 1)));
       if (!v.alive) { ctx.strokeStyle = 'rgba(40,30,20,0.6)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - r, y - r); ctx.lineTo(x + r, y + r); ctx.moveTo(x + r, y - r); ctx.lineTo(x - r, y + r); ctx.stroke(); continue; }
-      ctx.fillStyle = v.hungryWeek > 0 ? '#c9603a' : '#f1e3c2'; ctx.strokeStyle = '#3b2a1a'; ctx.lineWidth = Math.max(1, g.size / 32);
+      // The disc wears the lineage colour; hunger shows as a red ring rather than replacing it.
+      ctx.fillStyle = lineageColour(v.lineage); ctx.strokeStyle = v.hungryWeek > 0 ? '#c0392b' : '#3b2a1a'; ctx.lineWidth = v.hungryWeek > 0 ? Math.max(2, g.size / 16) : Math.max(1, g.size / 32);
       ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      if (v.parent >= 0 && r >= 5) { ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.arc(x, y, r * 0.35, 0, Math.PI * 2); ctx.fill(); }   // a colony: a dark centre
       if (s.selected === v.id) { ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(x, y, r + 4, 0, Math.PI * 2); ctx.stroke(); }
       if (detailed) { ctx.font = `600 13px "Alegreya Sans", sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; const label = `${v.name} · ${v.pop.total}`; const w = ctx.measureText(label).width; ctx.fillStyle = 'rgba(20,20,20,0.6)'; ctx.fillRect(x - w / 2 - 4, y + r + 3, w + 8, 17); ctx.fillStyle = '#f7efe0'; ctx.fillText(label, x, y + r + 5); }
     }
@@ -145,7 +148,7 @@ export class MapRenderer {
       const pos = this.partyPos.get(p.id); if (!pos) continue;
       const x = g.ox + this.lerpX(pos, now, s.speedMs) * g.size, y = g.oy + this.lerpY(pos, now, s.speedMs) * g.size;
       const r = Math.max(2.5, g.size / 10);
-      ctx.lineWidth = 1; ctx.strokeStyle = '#1d1a14';
+      ctx.lineWidth = Math.max(1, r / 3); ctx.strokeStyle = lineageColour(p.lineage);
       if (p.boat) { ctx.fillStyle = '#e9d8a6'; ctx.beginPath(); ctx.moveTo(x - r * 1.6, y - r * 0.3); ctx.lineTo(x + r * 1.6, y - r * 0.3); ctx.lineTo(x + r * 0.9, y + r * 0.8); ctx.lineTo(x - r * 0.9, y + r * 0.8); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y - r * 0.3); ctx.lineTo(x, y - r * 1.6); ctx.stroke(); }
       else if (p.kind === 'raid') { ctx.fillStyle = '#c0392b'; ctx.beginPath(); ctx.moveTo(x, y - r * 1.4); ctx.lineTo(x + r * 1.3, y + r); ctx.lineTo(x - r * 1.3, y + r); ctx.closePath(); ctx.fill(); ctx.stroke(); }
       else if (p.kind === 'envoy') { ctx.fillStyle = p.errand === 'threat' ? '#d98c5f' : '#7fb3d5'; ctx.beginPath(); ctx.moveTo(x, y - r * 1.3); ctx.lineTo(x + r * 1.3, y); ctx.lineTo(x, y + r * 1.3); ctx.lineTo(x - r * 1.3, y); ctx.closePath(); ctx.fill(); ctx.stroke(); }

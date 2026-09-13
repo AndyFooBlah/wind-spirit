@@ -94,7 +94,7 @@ function raidOrders(view: PolicyView, free: number, hungry: boolean): { orders: 
   const { w, v, mem } = view; const year = yearOf(w.tick); const out: Order[] = [];
   if (free < 8 || year - (mem.lastRaid ?? -10) < 6) return { orders: out, used: 0 };
   const desperate = hungry && v.hardship > 250;
-  const targets = v.knowledge.villages.filter(id => id !== v.id && w.villages[id]?.alive).map(id => ({ id, r: v.relations[id] })).filter(x => x.r && x.r.sizeSeen > 0 && x.r.sizeSeen * 2 < v.people.length && (x.r.grudge >= 500 || desperate));
+  const targets = v.knowledge.villages.filter(id => id !== v.id && w.villages[id]?.alive && !v.relations[id]?.kin).map(id => ({ id, r: v.relations[id] })).filter(x => x.r && x.r.sizeSeen > 0 && x.r.sizeSeen * 2 < v.people.length && (x.r.grudge >= 500 || desperate));
   if (!targets.length) return { orders: out, used: 0 };
   const t = targets.sort((a, b) => b.r.grudge - a.r.grudge)[0];
   const n = Math.min(free - 4, Math.max(6, Math.trunc(free / 2)));
@@ -106,7 +106,20 @@ function raidOrders(view: PolicyView, free: number, hungry: boolean): { orders: 
 /** Host answer: accept when the ask is affordable and the offer is worth it, counter with what we can spare, else refuse. */
 export function hostAnswer(view: PolicyView, mandate: Mandate, guest: Village): HostAnswer {
   const { w, v } = view;
-  const grudge = v.relations[guest.id]?.grudge ?? 0;
+  const grudge = v.relations[guest.id]?.grudge ?? 0; const kin = !!v.relations[guest.id]?.kin;
+  if (mandate.refuge) {
+    // Kin are always taken in; strangers when there is food to share and they would not outnumber us.
+    if (kin) return { kind: 'accept' };
+    if (grudge >= 600) return { kind: 'refuse', reason: 'old wounds' };
+    if (storesWeeks(w, v) >= 6 && mandate.refuge <= v.people.length) return { kind: 'accept' };
+    return { kind: 'refuse', reason: 'no room' };
+  }
+  if (kin && !mandate.threat && Object.keys(mandate.want).length) {
+    // Kin get what we can spare without asking anything back beyond what they brought.
+    const give: Record<string, number> = {}; for (const [c, q] of Object.entries(mandate.want)) { const cm = commodityById(w, c); const reserve = cm && cm.food > 0 ? v.people.length * 6 * 1000 : 0; give[c] = Math.min(q, Math.max(0, storeQty(v, c) - reserve)); }
+    if (Object.entries(give).every(([c, g]) => g >= (mandate.want[c] ?? 0))) return { kind: 'accept' };
+    if (Object.values(give).some(g => g > 0)) return { kind: 'counter', give, take: { ...mandate.offer } };
+  }
   if (mandate.threat) { const weaker = v.people.length < (v.relations[guest.id]?.sizeSeen ?? guest.people.length) * 0.6; if (!weaker) return { kind: 'refuse', reason: 'we do not pay tribute' }; }
   else if (grudge >= 600) return { kind: 'refuse', reason: 'old wounds' };
   const give: Record<string, number> = {}; let canGive = 0;
@@ -278,3 +291,15 @@ export const POLICIES: Record<PolicyName, Policy> = {
 };
 
 export { structures };
+
+/** The scripted chief abandons only in extremity: no food, a long hunger, few people left, and somewhere known to go. */
+export function abandonIfHopeless(view: PolicyView): Order[] | undefined {
+  const { w, v } = view;
+  if (v.hardship < 700 || storesWeeks(w, v) > 0 || v.people.length > 15 || v.people.length === 0) return undefined;
+  let best = -1, bestD = Infinity;
+  for (const id of v.knowledge.villages) { const c = w.villages[id]; if (!c || !c.alive || c.id === v.id) continue; const d = tileDistance(w, v.tile, c.tile); if (d < bestD && d <= 30) { bestD = d; best = id; } }
+  if (best === -1) return undefined;
+  return [order('abandon', 0, { target: best })];
+}
+const plainSensible = POLICIES.sensible;
+POLICIES.sensible = view => abandonIfHopeless(view) ?? plainSensible(view);

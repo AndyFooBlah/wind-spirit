@@ -120,10 +120,10 @@ function personText(p: PersonView): string {
   const stage = p.stage === 'child' ? 'child' : p.stage === 'elder' ? 'elder' : 'adult';
   return `${p.name}${p.chief ? ', the chief' : ''} · ${stage}, ${p.age} · ${p.doing}${p.out ? ' (away from the village this week)' : ''}`;
 }
-const KIND_WORD: Record<string, string> = { explore: 'explorers', colonize: 'settlers', refugee: 'refugees', envoy: 'envoys', raid: 'raiders', expedition: 'an expedition' };
+const KIND_WORD: Record<string, string> = { explore: 'explorers', colonize: 'settlers', refugee: 'refugees seeking a home', envoy: 'envoys', raid: 'raiders', expedition: 'an expedition' };
 function partyText(p: PartySummary, fr: Frame): string {
   const home = fr.villages.find(v => v.id === p.home)?.name ?? 'nowhere'; const dest = p.targetVillage !== undefined ? fr.villages.find(v => v.id === p.targetVillage)?.name : undefined;
   const what = p.kind === 'envoy' ? (p.errand === 'threat' ? 'envoys with a demand' : p.errand === 'gift' ? 'envoys bearing gifts' : 'envoys to trade') : p.kind === 'expedition' && p.gathering ? `an expedition after ${p.gathering}` : KIND_WORD[p.kind] ?? p.kind;
-  const where = p.waiting > 0 ? 'waiting' : p.returning ? `heading home, ${p.left} tiles to go` : dest ? `bound for ${dest}, ${p.left} tiles to go` : p.left > 0 ? `${p.left} tiles to go` : 'arrived';
+  const where = p.waiting > 0 ? (p.kind === 'refugee' ? 'asking to be taken in' : 'waiting') : p.kind === 'refugee' && dest ? `walking to ${dest}, ${p.left} tiles to go` : p.returning ? `heading home, ${p.left} tiles to go` : dest ? `bound for ${dest}, ${p.left} tiles to go` : p.left > 0 ? `${p.left} tiles to go` : 'arrived';
   return `${what} from ${home}, ${p.size} people${p.boat ? ' by boat' : ''}${p.cargo ? `, carrying ${p.cargo}` : ''}, ${where}`;
 }

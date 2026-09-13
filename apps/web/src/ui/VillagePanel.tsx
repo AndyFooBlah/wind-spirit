@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { WEEKS_PER_YEAR } from '@wind-spirit/sim';
 import { SEASON_NAMES, type PersonView } from '../sim/protocol.ts';
+import { lineageColour } from '../map/lineage.ts';
 import { useGame, selectVillage, openWhisper, dreamStart, setZoom, viewDetail, tellStory, narrativeKey, tickLabel, type NarrativeSpan, type NarrativeStyle } from '../store/game.ts';
 
 type Tab = 'overview' | 'people' | 'stores' | 'history' | 'journal' | 'chronicle';
@@ -20,7 +21,7 @@ export function VillagePanel() {
   return (
     <aside className="panel">
       <div className="panel-head">
-        <div><h2>{v.village.name}</h2><div className="small muted">{history ? <span className="hist">{tickLabel(detail.tick)} — history</span> : detail.alive ? `founded year ${v.village.founded} · ${v.season}, year ${v.year}` : 'this village is gone'}</div></div>
+        <div><h2><span className="pennant" style={{ background: lineageColour(summary?.lineage ?? detail.id) }} title={summary && summary.parent >= 0 ? 'a colony: it carries its parent\'s colour' : 'a founding village'} />{v.village.name}</h2><div className="small muted">{history ? <span className="hist">{tickLabel(detail.tick)} — history</span> : detail.alive ? `founded year ${v.village.founded} · ${v.season}, year ${v.year}` : 'this village is gone'}</div></div>
         <div className="row"><button className="ghost" onClick={() => setZoom('village')} title="Zoom to the village plots">Plots</button><button className="ghost" onClick={() => selectVillage(undefined)} title="Close">×</button></div>
       </div>
       <div className="stat-row">

@@ -440,6 +440,9 @@ export function eventText(e: Event): string {
     case 'ChiefSucceeded': return `${n(e.village)} has a new chief (${e.reason === 'coup' ? 'the village lost patience' : 'after a death'}).`;
     case 'VillageFounded': return `${n(e.village)} is founded by people from ${n(e.parent)}.`;
     case 'VillageDied': return `${n(e.village)} is no more.`;
+    case 'VillageAbandoned': return `The people of ${n(e.village)} abandon it and set out for ${n(e.to)}, ${e.size} of them.`;
+    case 'RefugeesAdmitted': return `${n(e.village)} takes in ${e.size} people from ${n(e.from)}.`;
+    case 'RefugeesTurnedAway': return `${n(e.village)} turns away ${e.size} people from ${n(e.from)}.`;
     case 'Prayer': return `The chief of ${n(e.village)} prays: "${e.text}"`;
     case 'StormStruck': return `A storm strikes: ${e.parties} part${e.parties === 1 ? 'y' : 'ies'} caught, ${e.drowned} lost.`;
     case 'Discovered': return `${n(e.village)} discovered ${get().map?.names.recipes[e.recipe] ?? e.recipe}.`;

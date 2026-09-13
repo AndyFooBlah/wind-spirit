@@ -269,4 +269,4 @@ function SettingsMenu() {
     </div>
   );
 }
-const PAUSE_LABEL: Record<string, string> = { RaidResolved: 'raiders strike', Famine: 'famine (first each season)', ChiefSucceeded: 'a chief dies or falls', VillageFounded: 'a village is founded', VillageDied: 'a village dies', Prayer: 'a chief prays', StormStruck: 'a storm strikes', Discovered: 'a discovery' };
+const PAUSE_LABEL: Record<string, string> = { RaidResolved: 'raiders strike', Famine: 'famine (first each season)', ChiefSucceeded: 'a chief dies or falls', VillageFounded: 'a village is founded', VillageDied: 'a village dies', VillageAbandoned: 'a village is abandoned', RefugeesAdmitted: 'refugees are taken in', Prayer: 'a chief prays', StormStruck: 'a storm strikes', Discovered: 'a discovery' };

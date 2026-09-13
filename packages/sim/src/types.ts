@@ -37,7 +37,7 @@ export interface Plot {
 
 export interface Stack { c: string; qty: number; age: number; }
 
-export type Task = 'forage' | 'hunt' | 'fish' | 'gather' | 'clear' | 'farm' | 'build' | 'craft' | 'research' | 'road' | 'explore' | 'colonize' | 'envoy' | 'raid' | 'expedition' | 'rest';
+export type Task = 'forage' | 'hunt' | 'fish' | 'gather' | 'clear' | 'farm' | 'build' | 'craft' | 'research' | 'road' | 'explore' | 'colonize' | 'envoy' | 'raid' | 'expedition' | 'rest' | 'abandon';
 
 export interface Order {
   task: Task;
@@ -63,7 +63,7 @@ export type BreathAction =
   | { kind: 'override'; season: number; roll: SeasonRoll }
   | { kind: 'storm'; tile: number }
   | { kind: 'sail'; party: number; mode: 'fill' | 'becalm' };
-export interface Relation { grudge: number; lastContact: number; trades: number; raids: number; sizeSeen: number; }
+export interface Relation { grudge: number; lastContact: number; trades: number; raids: number; sizeSeen: number; /** parent and colony: welcomed, never raided */ kin?: boolean; }
 
 export interface Village {
   id: number; name: string; tile: number; founded: number; alive: boolean; parent: number;
@@ -99,7 +99,7 @@ export interface YearStats {
 export type PartyKind = 'explore' | 'colonize' | 'refugee' | 'envoy' | 'raid' | 'expedition';
 
 /** What an envoy carries besides goods: what to offer, what to ask for, the floor it will accept, an optional recipe to share, an optional threat. */
-export interface Mandate { offer: Record<string, number>; want: Record<string, number>; floor: number; transfer?: string; threat?: boolean; message?: string; }
+export interface Mandate { offer: Record<string, number>; want: Record<string, number>; floor: number; transfer?: string; threat?: boolean; message?: string; /** refugees asking to be taken in: how many they are */ refuge?: number; }
 /** The host chief's answer to a visiting envoy. */
 export type HostAnswer = { kind: 'accept' } | { kind: 'refuse'; reason?: string } | { kind: 'counter'; give: Record<string, number>; take: Record<string, number> };
 export interface Party {
@@ -113,6 +113,8 @@ export interface Party {
   mandate?: Mandate; waiting: number; result?: string; targetVillage?: number;
   sailBoost?: 'fill' | 'becalm';
   gather?: { c: string; weeks: number };   // expedition: what to collect and for how long
+  /** refugees: villages that turned them away */
+  refused?: number[];
 }
 
 export type Category = 'grain' | 'fruit' | 'root' | 'meat' | 'fish' | 'hide' | 'wood' | 'stone' | 'fiber' | 'herb' | 'clay' | 'salt' | 'ore' | 'food' | 'drink' | 'cloth' | 'instrument' | 'metal' | 'fuel' | 'curio';
@@ -190,6 +192,9 @@ export type Event =
   | { t: number; type: 'PartyLost'; village: number; party: number; cause: 'starved' }
   | { t: number; type: 'VillageFounded'; village: number; parent: number; tile: number; size: number }
   | { t: number; type: 'VillageDied'; village: number }
+  | { t: number; type: 'VillageAbandoned'; village: number; to: number; size: number }
+  | { t: number; type: 'RefugeesAdmitted'; village: number; from: number; size: number }
+  | { t: number; type: 'RefugeesTurnedAway'; village: number; from: number; size: number }
   | { t: number; type: 'Famine'; village: number; hungry: number }
   | { t: number; type: 'PathFormed'; tile: number }
   | { t: number; type: 'DeliberationRequested'; village: number; reason: string }

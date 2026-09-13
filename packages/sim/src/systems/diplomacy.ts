@@ -4,6 +4,7 @@ import { P } from '../params.js';
 import type { HostAnswer, Mandate, Party, Village } from '../types.js';
 import { addStore, goodsTotal, hasCap, knowledgeUnion, popCounts, recipeById, relation, stageOf, storeQty, structures, takeStore, type Ctx } from '../world.js';
 import { discover } from './work.js';
+import { nextRefuge, removeParty } from './travel.js';
 
 /** An envoy reaches the host village: share knowledge, remember each other, ask the host chief. */
 export function envoyArrives(ctx: Ctx, p: Party, host: Village): void {
@@ -28,6 +29,7 @@ function meet(ctx: Ctx, a: Village, b: Village, p?: Party): void {
 export function hostDecides(ctx: Ctx, host: Village, p: Party, answer: HostAnswer): void {
   const { w } = ctx; const home = w.villages[p.home]; const m = p.mandate ?? { offer: {}, want: {}, floor: K };
   p.waiting = 0;
+  if (p.kind === 'refugee') return refugeesDecided(ctx, host, p, answer);
   const offered = cargoOf(p);
   let give: Record<string, number> = {}, take: Record<string, number> = {};
   if (answer.kind === 'accept') { give = { ...m.want }; take = { ...offered }; }
@@ -54,8 +56,27 @@ export function hostDecides(ctx: Ctx, host: Village, p: Party, answer: HostAnswe
   p.result = 'traded'; goHome(ctx, p);
 }
 
-/** Envoys that wait too long give up. */
+/** Refugees taken in join the village with what they carry; turned away, they walk on to the next village. */
+function refugeesDecided(ctx: Ctx, host: Village, p: Party, answer: HostAnswer): void {
+  const { w } = ctx;
+  if (answer.kind === 'refuse') {
+    ctx.events.push({ t: w.tick, type: 'RefugeesTurnedAway', village: host.id, from: p.home, size: p.members.length });
+    (p.refused ??= []).push(host.id); nextRefuge(ctx, p, host.id); return;
+  }
+  for (const m of p.members) { m.hungry = 0; host.people.push(m); }
+  for (const s of p.cargo) addStore(host, s.c, s.qty, s.age);
+  if (p.rations > 0) addStore(host, 'plants', p.rations);
+  if (p.home !== host.id && w.villages[p.home]) { const r = relation(host, p.home); r.grudge = Math.max(0, r.grudge - 100); r.lastContact = w.tick; }
+  ctx.events.push({ t: w.tick, type: 'RefugeesAdmitted', village: host.id, from: p.home, size: p.members.length });
+  removeParty(w, p);
+}
+
+/** Envoys that wait too long give up; refugees kept waiting take it as a no. */
 export function envoyTimeouts(ctx: Ctx): void {
+  for (const p of [...ctx.w.parties]) if (p.kind === 'refugee' && p.waiting > 0) {
+    p.waiting++;
+    if (p.waiting > P.envoyPatience) { const host = ctx.w.villages[p.targetVillage ?? -1]; if (host) refugeesDecided(ctx, host, p, { kind: 'refuse', reason: 'no answer' }); else nextRefuge(ctx, p); }
+  }
   for (const p of ctx.w.parties) if (p.kind === 'envoy' && p.waiting > 0) {
     p.waiting++;
     if (p.waiting > P.envoyPatience) { const host = ctx.w.villages[p.targetVillage ?? -1]; if (host) ctx.events.push({ t: ctx.w.tick, type: 'TradeRefused', village: host.id, guest: p.home, reason: 'no answer' }); p.result = 'ignored'; goHome(ctx, p); }
@@ -98,7 +119,7 @@ export function raidArrives(ctx: Ctx, p: Party, host: Village): void {
       // survivors flee to the nearest other village
       const survivors = host.people; host.people = [];
       const others = w.villages.filter(v => v.alive && v.id !== host.id && v.id !== p.home);
-      if (survivors.length && others.length) { const dest = others[0]; const rp: Party = { id: w.nextId++, home: host.id, kind: 'refugee', members: survivors, rations: 0, cargo: [], mode: 'foraging', boat: false, cart: false, sail: false, route: [], at: host.tile, dayCarry: 0, target: dest.id, returning: true, seen: [], lostWeeks: 0, waiting: 0 }; w.parties.push(rp); }
+      if (survivors.length && others.length) { const dest = others[0]; const rp: Party = { id: w.nextId++, home: host.id, kind: 'refugee', members: survivors, rations: 0, cargo: [], refused: [], mode: 'foraging', boat: false, cart: false, sail: false, route: [], at: host.tile, dayCarry: 0, target: dest.id, returning: true, seen: [], lostWeeks: 0, waiting: 0 }; w.parties.push(rp); }
     }
   }
   const rh = relation(host, p.home), rg = relation(home, host.id);

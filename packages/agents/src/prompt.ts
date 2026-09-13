@@ -42,7 +42,7 @@ export function statePrompt(v: VillageView, reason: string, withMenu = true): st
   sections.push(`# Recipes we know:\n${list(v.recipes.map(r => `${r.name}: needs ${r.inputs}${r.requires ? ` and the skill ${r.requires}` : ''}; makes ${r.makes}${r.held ? ' (we have it)' : r.canMakeNow ? ' (we could make it now)' : ''}`))}`);
   sections.push(`# Things people have noticed but not worked out:\n${list(v.rumors, 'nothing new')}`);
   sections.push(`# Things we know of, and where:\n${list(v.commodities.map(c => `${c.name} (${c.category}): ${c.where}`))}\nCrops we can plant: ${v.crops.join(', ')}.`);
-  sections.push(`# Other villages we know:\n${list(v.villages.map(x => `${x.name}: ${x.days} days to the ${x.direction}; about ${x.sizeSeen} people when last seen ${x.lastSeenYearsAgo} years ago; trades ${x.trades}, raids ${x.raids}; grudge ${x.grudge}`), 'none yet')}`);
+  sections.push(`# Other villages we know:\n${list(v.villages.map(x => `${x.name}: ${x.days} days to the ${x.direction}; about ${x.sizeSeen} people when last seen ${x.lastSeenYearsAgo} years ago; ${x.kin ? (x.kin === 'colony' ? 'our colony, our kin; ' : 'our parent village, our kin; ') : ''}trades ${x.trades}, raids ${x.raids}; grudge ${x.grudge}`), 'none yet')}`);
   sections.push(`# Sites for a new village (pick by number):\n${list(v.sites.map(s => `${s.index}: ${s.days} days ${s.direction}, ${s.terrain}, food ${s.food}${s.water ? ', water' : ''}`), 'none known; explore')}`);
   if (v.roadSites.length) sections.push(`# Worn tracks that could be roads (pick by number):\n${list(v.roadSites.map(s => `${s.index}: to the ${s.direction}`))}`);
   sections.push(`# Parties away:\n${list(v.parties.map(x => `${x.size} on a ${x.kind} to ${x.destination}, ${x.status}`), 'none')}`);
@@ -58,7 +58,8 @@ export function statePrompt(v: VillageView, reason: string, withMenu = true): st
 - build: workers, recipe (a building recipe). craft: workers, recipe, quantity (0 to keep going). Skills are crafted once.
 - research: workers, ingredients (1 or 2 names, may include a skill).
 - explore: workers, direction, days. envoy: workers, village, offer, want, floor, transfer, threat, message.
-- colonize: site, share (0.2 to 0.6 of the village); a grave step taken once in a generation, never while a settler party is already out. raid: workers, village. road: workers, roadSite. rest: workers.
+- colonize: site, share (0.2 to 0.6 of the village); a grave step taken once in a generation, never while a settler party is already out. raid: workers, village (never kin). road: workers, roadSite. rest: workers.
+- abandon: village. The last resort when the village cannot be saved: everyone walks, with what they can carry, to that village and asks to be taken in. Nothing is left but the buildings. Give no other orders with it.
 Answer with JSON: { "orders": [...], "journal": "...", "memoryNotes": [...], "replyToSpirit": "..." }.`);
   return sections.join('\n\n');
 }
@@ -67,8 +68,8 @@ export function visitorPrompt(v: VillageView, from: string, mandate: Mandate, cn
   const goods = (g: Record<string, number>) => Object.entries(g).map(([c, q]) => `${Math.round(q / 1000)} ${cname(c)}`).join(', ') || 'nothing';
   return `${statePrompt(v, 'envoys have arrived')}
 
-# The envoys
-Envoys from ${from} stand before you. ${mandate.threat ? `They demand tribute: ${goods(mandate.want)}, and say their warriors will come and take it, and more, if you refuse. They offer nothing in return${Object.keys(mandate.offer).length ? ` beyond ${goods(mandate.offer)}` : ''}.` : `They offer: ${goods(mandate.offer)}. They ask for: ${goods(mandate.want)}.`}${mandate.transfer ? ` They offer to teach us ${rname(mandate.transfer)}.` : ''}${mandate.message ? ` Their chief says: "${mandate.message}"` : ''}
-Answer: accept (give what they ask, take what they offer), counter (say what you give and what you take from their offer), or refuse. Keep enough food for your people. Give generously to friends, carefully to strangers, and never to those who have wronged you without cause. A demand backed by threat is a different matter from an offer: weigh how strong they are against how strong you are, and what paying once teaches them.
+# ${mandate.refuge ? 'The people at your edge' : 'The envoys'}
+${mandate.refuge ? `People from ${from} stand at the edge of your village.` : `Envoys from ${from} stand before you.`} ${mandate.threat ? `They demand tribute: ${goods(mandate.want)}, and say their warriors will come and take it, and more, if you refuse. They offer nothing in return${Object.keys(mandate.offer).length ? ` beyond ${goods(mandate.offer)}` : ''}.` : `They offer: ${goods(mandate.offer)}. They ask for: ${goods(mandate.want)}.`}${mandate.transfer ? ` They offer to teach us ${rname(mandate.transfer)}.` : ''}${mandate.message ? ` Their chief says: "${mandate.message}"` : ''}
+${mandate.refuge ? `These are not envoys but ${mandate.refuge} people with everything they own on their backs, asking to be taken in as your own. What they carry: ${goods(mandate.offer)}. If you accept they join your village for good, mouths and hands alike, with what they carry. If you refuse they walk on to the next village, or die on the road.\n` : ''}Answer: accept (give what they ask, take what they offer), counter (say what you give and what you take from their offer), or refuse. Keep enough food for your people. Give generously to friends, carefully to strangers, and never to those who have wronged you without cause. A demand backed by threat is a different matter from an offer: weigh how strong they are against how strong you are, and what paying once teaches them.
 Answer with JSON: { "answer": "accept"|"counter"|"refuse", "give": {name: units}, "take": {name: units}, "reason": "...", "journal": "..." }.`;
 }

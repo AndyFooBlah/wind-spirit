@@ -2,7 +2,7 @@
 export const ORDER_SCHEMA = {
   type: 'object',
   properties: {
-    task: { type: 'string', enum: ['forage', 'hunt', 'fish', 'gather', 'clear', 'farm', 'build', 'craft', 'research', 'road', 'explore', 'colonize', 'envoy', 'raid', 'expedition', 'rest'] },
+    task: { type: 'string', enum: ['forage', 'hunt', 'fish', 'gather', 'clear', 'farm', 'build', 'craft', 'research', 'road', 'explore', 'colonize', 'envoy', 'raid', 'expedition', 'rest', 'abandon'] },
     workers: { type: 'integer', description: 'adults assigned (0 for colonize)' },
     commodity: { type: 'string', description: 'gather or expedition: what to collect, by name' },
     weeks: { type: 'integer', description: 'expedition: weeks to spend collecting, 1 to 8' },

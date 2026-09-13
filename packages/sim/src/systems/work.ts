@@ -2,7 +2,7 @@ import { K, mul, div } from '../fixed.js';
 import { harvestWeatherFactor, P, seasonOf, TERRAIN, WEEKS_PER_SEASON } from '../params.js';
 import type { Capability, Order, Person, Recipe, Village, WildResource } from '../types.js';
 import { CAPABILITIES } from '../types.js';
-import { addStore, commodityById, craftLaborMult, hasCap, idx, inBounds, learnCommodities, nearWater, neighbors, parseGoods, popCounts, recipeById, stageOf, storeQty, takeStore, xy, type Ctx } from '../world.js';
+import { addStore, commodityById, craftLaborMult, hasCap, idx, inBounds, learnCommodities, nearWater, neighbors, parseGoods, popCounts, recipeById, stageOf, storeQty, takeStore, xy, type Ctx, tileDistance } from '../world.js';
 import { addCargo } from './diplomacy.js';
 import { tread } from './paths.js';
 import { clearingSite, structureSite } from '../layout.js';
@@ -25,6 +25,7 @@ export function work(ctx: Ctx): void {
     let cleared = 0;
     for (const o of v.orders) {
       const n = Math.min(o.workers, free);
+      if (o.task === 'abandon') { if (abandon(ctx, v, o)) return; continue; }   // the village is gone; nothing else to do this week
       if (n <= 0 && o.task !== 'explore' && o.task !== 'colonize') { keep.push(o); continue; }
       switch (o.task) {
         case 'forage': case 'hunt': case 'fish': gatherFood(ctx, v, o.task, n, season, roll); free -= n; keep.push(o); break;
@@ -308,6 +309,7 @@ function envoy(ctx: Ctx, v: Village, o: Order, free: number): number {
 function raid(ctx: Ctx, v: Village, o: Order, free: number): number {
   const { w } = ctx; const target = w.villages[Number(o.params.target ?? -1)];
   if (!target || !target.alive || target.id === v.id || !v.knowledge.villages.includes(target.id)) return 0;
+  if (v.relations[target.id]?.kin) return 0;   // nobody raids their own kin
   const n = Math.min(o.workers, free); if (n < 2) return 0;
   const members = takeAdults(v, w.tick, n);
   const rations = takeStore(v, 'grain', members.length * 6 * P.foodPerPersonWeek);
@@ -332,6 +334,35 @@ function expedition(ctx: Ctx, v: Village, o: Order, free: number): number {
   if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
   party.gather = { c, weeks };
   return n;
+}
+
+/**
+ * The last resort: everyone walks, with what they can carry, to another village and asks to be taken in. The village
+ * dies here; the people live on as a refugee party until a host admits them or the road kills them. Returns true when
+ * the village was abandoned this week.
+ */
+function abandon(ctx: Ctx, v: Village, o: Order): boolean {
+  const { w } = ctx;
+  let target = w.villages[Number(o.params.target ?? -1)];
+  if (!target || !target.alive || target.id === v.id) {
+    // no named destination: the nearest village we know of
+    let best: Village | undefined; let bestD = Infinity;
+    for (const id of v.knowledge.villages) { const c = w.villages[id]; if (!c || !c.alive || c.id === v.id) continue; const d = tileDistance(w, v.tile, c.tile); if (d < bestD) { bestD = d; best = c; } }
+    target = best as Village;
+  }
+  if (!target || !v.people.length) return false;
+  const members = [...v.people]; v.people = [];
+  // What they can carry: food first, then the most of anything else.
+  const cart = hasCap(v, 'cart'); let room = members.length * P.carryPerPerson * (cart ? 3 : 1);
+  let rations = 0; const cargo: { c: string; qty: number; age: number }[] = [];
+  const stacks = [...v.stores].sort((a, b) => (commodityById(w, b.c)?.food ?? 0) - (commodityById(w, a.c)?.food ?? 0) || b.qty - a.qty);
+  for (const s of stacks) { if (room <= 0) break; const q = Math.min(s.qty, room); if (q <= 0) continue; takeStore(v, s.c, q); room -= q; if ((commodityById(w, s.c)?.food ?? 0) > 0) rations += q; else cargo.push({ c: s.c, qty: q, age: s.age }); }
+  const party = spawnParty(ctx, v, 'refugee', members, rations, target.tile, { boat: hasCap(v, 'paddle'), cart, sail: hasCap(v, 'sail') });
+  if (!party) { v.people.push(...members); addStore(v, 'plants', rations); for (const s of cargo) addStore(v, s.c, s.qty, s.age); return false; }
+  party.cargo = cargo; party.target = target.id; party.targetVillage = target.id; party.returning = true; party.refused = [];
+  v.orders = []; v.alive = false; w.tiles[v.tile].village = -1;
+  ctx.events.push({ t: w.tick, type: 'VillageAbandoned', village: v.id, to: target.id, size: members.length });
+  return true;
 }
 
 function colonize(ctx: Ctx, v: Village, o: Order, free: number): number {

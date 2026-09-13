@@ -2,7 +2,7 @@
  * View models built from a World: the per-tick frame, the static map, and the village detail with its rendered
  * history feed. Shared by the live sim worker and the history worker.
  */
-import { P, TERRAIN, WEEKS_PER_SEASON, commodityById, popCounts, recipeById, seasonIndex, seasonOf, storesWeeks, yearOf, type Event, type Village, type World } from '@wind-spirit/sim';
+import { P, TERRAIN, WEEKS_PER_SEASON, lineageOf, commodityById, popCounts, recipeById, seasonIndex, seasonOf, storesWeeks, yearOf, type Event, type Village, type World } from '@wind-spirit/sim';
 import { CAP_NAMES } from '@wind-spirit/gen';
 import { buildView, renderChronicle, renderEvents, SEASONS } from '@wind-spirit/agents';
 import type { FeedGroup, Frame, SeriesPoint, StaticMap, VillageDetail, WorkGroup } from './protocol.ts';
@@ -32,9 +32,10 @@ export function buildFrame(w: World): Frame {
   for (let i = 0; i < w.tiles.length; i++) { const t = w.tiles[i]; if (t.road) roads.push(i); else if (t.trodden >= P.pathAt && (!TERRAIN[t.terrain].water || t.ford)) paths.push(i); }   // older saves may carry trodden water; never show it as a path
   return {
     tick: w.tick, year: yearOf(w.tick), season: seasonOf(w.tick), week: (w.tick % WEEKS_PER_SEASON) + 1,
-    villages: w.villages.map(v => ({ id: v.id, name: v.name, tile: v.tile, alive: v.alive, pop: popCounts(v, w.tick), happiness: v.happiness, trust: v.trust, foodWeeks: storesWeeks(w, v), hungryWeek: v.hungryWeek, capabilities: v.capabilities.length })),
+    villages: w.villages.map(v => ({ id: v.id, name: v.name, tile: v.tile, alive: v.alive, lineage: lineageOf(w, v), parent: v.parent, pop: popCounts(v, w.tick), happiness: v.happiness, trust: v.trust, foodWeeks: storesWeeks(w, v), hungryWeek: v.hungryWeek, capabilities: v.capabilities.length })),
     parties: w.parties.map(p => ({
       id: p.id, kind: p.kind, home: p.home, at: p.at, boat: p.boat, target: p.target, targetVillage: p.targetVillage, returning: p.returning, size: p.members.length, waiting: p.waiting,
+      lineage: w.villages[p.home] ? lineageOf(w, w.villages[p.home]) : p.home,
       left: p.route.length, cargo: Math.round(p.cargo.reduce((a, s) => a + s.qty, 0) / 1000),
       errand: p.kind === 'envoy' && p.mandate ? (p.mandate.threat ? 'threat' : Object.keys(p.mandate.want).length ? 'trade' : 'gift') : undefined,
       gathering: p.gather ? (commodityById(w, p.gather.c)?.name ?? p.gather.c) : undefined,

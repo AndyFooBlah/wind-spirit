@@ -20,7 +20,7 @@ const units = (q: number) => Math.round(q / K);
 
 export interface StoreLine { name: string; units: number; category: string; food: boolean; keeps: string; }
 export interface RecipeLine { id: string; name: string; inputs: string; requires?: string; makes: string; canMakeNow: boolean; held: boolean; tier?: undefined; }
-export interface VillageLine { id: number; name: string; direction: string; days: number; sizeSeen: number; lastSeenYearsAgo: number; trades: number; raids: number; grudge: string; }
+export interface VillageLine { id: number; name: string; direction: string; days: number; sizeSeen: number; lastSeenYearsAgo: number; trades: number; raids: number; grudge: string; kin: 'parent' | 'colony' | ''; }
 export interface SiteLine { index: number; tile: number; direction: string; days: number; terrain: string; food: string; water: boolean; }
 
 export interface VillageView {
@@ -84,7 +84,7 @@ export function buildView(w: World, v: Village, o: ViewOpts): VillageView {
   const dirCounts: Record<string, Record<string, number>> = {};
   for (const t of neighbors(w, v.tile, 2)) { const d = directionOf(w, v.tile, t); (dirCounts[d] ??= {})[w.tiles[t].terrain] = ((dirCounts[d] ??= {})[w.tiles[t].terrain] ?? 0) + 1; }
   const surroundings = DIRS.map(([d]) => { const c = dirCounts[d]; if (!c) return ''; return `${d}: ${Object.entries(c).sort((a, b) => b[1] - a[1]).map(([t, n]) => `${t}${n > 1 ? ` ×${n}` : ''}`).join(', ')}`; }).filter(Boolean).join('; ');
-  const villages: VillageLine[] = v.knowledge.villages.filter(id => id !== v.id).map(id => { const o2 = w.villages[id]; const r = v.relations[id]; if (!o2) return null; const d = tileDistance(w, v.tile, o2.tile); return { id, name: o2.name, direction: directionOf(w, v.tile, o2.tile), days: Math.max(1, Math.ceil(d * TILE_MILES / 15)), sizeSeen: r?.sizeSeen ?? 0, lastSeenYearsAgo: r && r.lastContact >= 0 ? Math.floor((tick - r.lastContact) / WEEKS_PER_YEAR) : 99, trades: r?.trades ?? 0, raids: r?.raids ?? 0, grudge: !r || r.grudge === 0 ? 'none' : r.grudge < 300 ? 'some' : r.grudge < 700 ? 'deep' : 'bitter' }; }).filter((x): x is VillageLine => !!x);
+  const villages: VillageLine[] = v.knowledge.villages.filter(id => id !== v.id).map(id => { const o2 = w.villages[id]; const r = v.relations[id]; if (!o2) return null; const d = tileDistance(w, v.tile, o2.tile); return { id, name: o2.name, direction: directionOf(w, v.tile, o2.tile), days: Math.max(1, Math.ceil(d * TILE_MILES / 15)), sizeSeen: r?.sizeSeen ?? 0, lastSeenYearsAgo: r && r.lastContact >= 0 ? Math.floor((tick - r.lastContact) / WEEKS_PER_YEAR) : 99, trades: r?.trades ?? 0, raids: r?.raids ?? 0, grudge: !r || r.grudge === 0 ? 'none' : r.grudge < 300 ? 'some' : r.grudge < 700 ? 'deep' : 'bitter', kin: r?.kin ? (o2.parent === v.id ? 'colony' : 'parent') : '' }; }).filter((x): x is VillageLine => !!x);
   // colony sites: known, habitable, empty, 6-15 tiles away, best food first
   const sites: SiteLine[] = v.knowledge.tiles.filter(t => { const tile = w.tiles[t]; const info = TERRAIN[tile.terrain]; if (!info.passable || !info.forage || tile.village !== -1 || tile.terrain === 'mountain') return false; const d = tileDistance(w, v.tile, t); if (d < 6 || d > 15) return false; return !w.villages.some(o2 => o2.alive && tileDistance(w, o2.tile, t) < 5); })
     .map(t => { let food = 0; let water = false; for (const nb of neighbors(w, t, 1, true)) { const c = w.tiles[nb].cap; food += c.plants + c.game + c.fish; if (TERRAIN[w.tiles[nb].terrain].water || w.tiles[nb].terrain === 'river' || w.tiles[nb].terrain === 'coast') water = true; } return { t, food, water }; })
@@ -142,6 +142,9 @@ export function renderEvents(w: World, v: Village, events: Event[], cname: (id: 
       case 'ChiefSucceeded': if (e.village === v.id) out.push(`${y(e.t)}: a new chief was chosen ${e.reason === 'coup' ? 'after the village lost patience' : 'after a death'}`); break;
       case 'PartyReturned': if (e.village === v.id) out.push(`${y(e.t)}: a party came home having seen ${e.tilesSeen} places`); break;
       case 'PartyLost': if (e.village === v.id) out.push(`${y(e.t)}: a party was lost and never returned`); break;
+      case 'VillageAbandoned': if (e.village === v.id) out.push(`${y(e.t)}: we left our village behind and set out for ${w.villages[e.to]?.name ?? 'another village'}`); else if (e.to === v.id) out.push(`${y(e.t)}: the people of ${w.villages[e.village]?.name ?? 'a village'} abandoned it and set out towards us`); break;
+      case 'RefugeesAdmitted': if (e.village === v.id) out.push(`${y(e.t)}: we took in ${e.size} people from ${w.villages[e.from]?.name ?? 'elsewhere'}`); break;
+      case 'RefugeesTurnedAway': if (e.village === v.id) out.push(`${y(e.t)}: we turned away ${e.size} people from ${w.villages[e.from]?.name ?? 'elsewhere'}`); break;
       case 'VillageFounded': if (e.parent === v.id) out.push(`${y(e.t)}: our people founded ${w.villages[e.village]?.name ?? 'a new village'} to the ${directionOf(w, v.tile, e.tile)}`); break;
       case 'Famine': if (e.village === v.id) out.push(`${y(e.t)}: ${e.hungry} people went hungry`); break;
       case 'VisitorArrived': if (e.village === v.id) out.push(`${y(e.t)}: envoys from ${w.villages[e.from]?.name} arrived`); break;

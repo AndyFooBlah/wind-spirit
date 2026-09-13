@@ -104,3 +104,20 @@ The second playtest round asked for a village that reads at a glance. Decisions,
   one recipe's output is another's input or required skill, the open village laid over it (held, hinted, unknown).
   Layout is a plain layered one, ordered to keep edges short; it is readable at 55 recipes and will want a better
   layout if the generator grows.
+
+## Lineages, kin, and leaving (2026-09-13)
+
+- **Colours follow blood.** Every founding village has a colour; a colony carries its parent's (`lineageOf` walks the
+  parent chain). The map disc wears it, a colony gets a dark centre, party glyphs take their home's colour, the village
+  panel shows a pennant. Hunger became a red ring rather than a fill, so it no longer fights the colour.
+- **Kin.** At founding, colony and parent get `relation.kin` both ways with no grudge. Kin cannot be raided (the sim
+  drops the order and the parser refuses it), the scripted host takes kin refugees in and gives kin what it can spare,
+  and the chief's list of other villages says "our colony, our kin".
+- **Abandon is an order, not an event.** `abandon: village` empties the village into one refugee party carrying what
+  it can (food first, up to the carry limit), kills the village, and walks to the named village (or the nearest known).
+  Refugees now ask on arrival, whoever they are (raid survivors included): a `VisitorArrived` with `mandate.refuge` set
+  to their number, decided by the host chief like any envoy. Accepted, they join with their goods; refused, they go on
+  to the nearest village that has not refused them, and when everyone has, they start asking again. Kept waiting past
+  the envoy patience counts as a no. They eat rations on the road and can starve there, like any party.
+- The scripted chief abandons only in extremity (hardship over 0.7, no stores, fifteen people or fewer, somewhere known
+  within thirty tiles). The balance suite is unchanged by any of this.

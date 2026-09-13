@@ -5,7 +5,7 @@ import type { ChiefDecisionJson, HostDecisionJson } from './schema.js';
 
 export interface Parsed { orders: Order[]; dropped: string[]; journal: string; memoryNotes: string[]; replyToSpirit?: string; verdicts: { claim: number; verdict: 'fulfilled' | 'failed' | 'unverifiable' }[]; }
 
-const TASKS: Task[] = ['forage', 'hunt', 'fish', 'gather', 'clear', 'farm', 'build', 'craft', 'research', 'road', 'explore', 'colonize', 'envoy', 'raid', 'expedition', 'rest'];
+const TASKS: Task[] = ['forage', 'hunt', 'fish', 'gather', 'clear', 'farm', 'build', 'craft', 'research', 'road', 'explore', 'colonize', 'envoy', 'raid', 'expedition', 'rest', 'abandon'];
 
 function lookup(map: Record<string, string>, name: string | undefined): string | undefined {
   if (!name) return undefined; const k = String(name).trim().toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); if (!k) return undefined;
@@ -37,7 +37,7 @@ export function parseDecision(view: VillageView, json: ChiefDecisionJson): Parse
     const task = String(o.task ?? (o as unknown as { command?: unknown }).command ?? (o as unknown as { action?: unknown }).action ?? '').toLowerCase() as Task;
     if (!TASKS.includes(task)) { dropped.push(`unknown task ${o.task}`); continue; }
     let workers = Math.max(0, Math.trunc(Number(o.workers) || 0));
-    if (task !== 'colonize' && workers === 0) { dropped.push(`${task}: no workers`); continue; }
+    if (task !== 'colonize' && task !== 'abandon' && workers === 0) { dropped.push(`${task}: no workers`); continue; }
     if (workers > budget) { workers = budget; if (workers === 0) { dropped.push(`${task}: no adults left to assign`); continue; } }
     const params: Record<string, number | string> = {};
     switch (task) {
@@ -48,15 +48,17 @@ export function parseDecision(view: VillageView, json: ChiefDecisionJson): Parse
       case 'explore': { const d = DIRS.find(x => x[0] === String(o.direction ?? '').toLowerCase()); if (!d) { dropped.push(`explore: unknown direction "${o.direction}"`); continue; } params.dx = d[1]; params.dy = d[2]; params.dist = Math.max(1, Math.min(20, Math.trunc((Number(o.days) || 4) * 3))); break; }
       case 'colonize': { const site = view.sites.find(s => s.index === Number(o.site)); if (!site) { dropped.push(`colonize: no site ${o.site}`); continue; } params.tile = site.tile; params.share = Math.trunc(Math.max(0.2, Math.min(0.6, Number(o.share) || 0.4)) * K); break; }
       case 'road': { const site = view.roadSites.find(s => s.index === Number(o.roadSite)); if (!site) { dropped.push(`road: no site ${o.roadSite}`); continue; } params.tile = site.tile; break; }
+      case 'abandon': { const vid = names.villages[String(o.village ?? '').trim().toLowerCase()]; if (vid !== undefined && view.villages.some(x => x.id === vid)) params.target = vid; break; }
       case 'envoy': case 'raid': {
         const vid = names.villages[String(o.village ?? '').trim().toLowerCase()]; if (vid === undefined || !view.villages.some(x => x.id === vid)) { dropped.push(`${task}: unknown village "${o.village}"`); continue; }
+        if (task === 'raid' && view.villages.find(x => x.id === vid)?.kin) { dropped.push('raid: they are our kin'); continue; }
         params.target = vid;
         if (task === 'envoy') { params.offer = goodsToIds(names.commodities, o.offer, dropped); params.want = goodsToIds(names.commodities, o.want, dropped); params.floor = Math.trunc(Math.max(0, Math.min(1, Number(o.floor) || 0.7)) * K); const tr = lookup(names.recipes, o.transfer); if (tr) params.transfer = tr; if (o.threat) params.threat = 1; if (o.message) params.message = String(o.message).slice(0, 300); }
         break;
       }
       default: break;
     }
-    if (task !== 'colonize') budget -= workers;
+    if (task !== 'colonize' && task !== 'abandon') budget -= workers;
     orders.push({ task, workers, params, since: 0 });
   }
   return { orders, dropped, journal: String(json.journal ?? '').slice(0, 1200), memoryNotes: (json.memoryNotes ?? []).map(s => String(s).slice(0, 200)).slice(0, 12), replyToSpirit: json.replyToSpirit ? String(json.replyToSpirit).slice(0, 600) : undefined, verdicts: (json.verdicts ?? []).filter(x => x && Number.isInteger(x.claim) && ['fulfilled', 'failed', 'unverifiable'].includes(x.verdict)).slice(0, 10) };

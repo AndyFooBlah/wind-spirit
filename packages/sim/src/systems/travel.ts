@@ -125,8 +125,8 @@ function arrive(ctx: Ctx, p: Party): void {
   const { w } = ctx; const home = w.villages[p.home];
   if (p.kind === 'refugee') {
     const target = w.villages[p.target];
-    if (target && target.alive) { for (const m of p.members) { m.hungry = 0; target.people.push(m); } for (const s of p.cargo) addStore(target, s.c, s.qty, s.age); }
-    remove(w, p); return;
+    if (!target || !target.alive || target.tile !== p.at) { nextRefuge(ctx, p, target?.id); return; }
+    refugeesArrive(ctx, p, target); return;
   }
   if (p.kind === 'expedition' && !p.returning) {
     // collect for the planned weeks, then turn home
@@ -179,9 +179,26 @@ function arrive(ctx: Ctx, p: Party): void {
 }
 
 function goRefugee(ctx: Ctx, p: Party): void {
-  const { w } = ctx;
-  let best = -1, bestD = Infinity;
-  for (const v of w.villages) if (v.alive) { const d = route(w, p.at, v.tile, p.boat, p.sail).length; if (d && d < bestD) { bestD = d; best = v.id; } }
-  if (best === -1) { remove(w, p); return; }
-  p.kind = 'refugee'; p.target = best; p.route = route(w, p.at, w.villages[best].tile, p.boat, p.sail); p.returning = true;
+  p.kind = 'refugee'; p.refused ??= []; nextRefuge(ctx, p);
 }
+
+/** The nearest living village that has not turned these refugees away; when every one has, they start asking again. */
+export function nextRefuge(ctx: Ctx, p: Party, except?: number): void {
+  const { w } = ctx; p.refused ??= [];
+  const pick = (skip: Set<number>) => { let best = -1, bestD = Infinity; for (const v of w.villages) if (v.alive && !skip.has(v.id) && v.id !== p.home) { const d = route(w, p.at, v.tile, p.boat, p.sail).length; if ((d || v.tile === p.at) && d < bestD) { bestD = d; best = v.id; } } return best; };
+  let best = pick(new Set([...p.refused, ...(except !== undefined ? [except] : [])]));
+  if (best === -1) { p.refused = []; best = pick(new Set(except !== undefined ? [except] : [])); }
+  if (best === -1) { remove(w, p); return; }
+  p.target = best; p.targetVillage = best; p.route = route(w, p.at, w.villages[best].tile, p.boat, p.sail); p.returning = true; p.waiting = 0;
+}
+
+/** Refugees at a village's edge: the host chief is asked whether to take them in. */
+function refugeesArrive(ctx: Ctx, p: Party, host: Village): void {
+  const { w } = ctx;
+  knowledgeUnion(host.knowledge, p.seen);
+  if (!host.knowledge.villages.includes(p.home) && p.home !== host.id) host.knowledge.villages.push(p.home);
+  p.waiting = 1; p.targetVillage = host.id;
+  const offer: Record<string, number> = {}; for (const s of p.cargo) offer[s.c] = (offer[s.c] ?? 0) + s.qty; if (p.rations > 0) offer.plants = (offer.plants ?? 0) + p.rations;
+  ctx.events.push({ t: w.tick, type: 'VisitorArrived', village: host.id, party: p.id, from: p.home, mandate: { offer, want: {}, floor: 0, refuge: p.members.length } });
+}
+export { remove as removeParty };

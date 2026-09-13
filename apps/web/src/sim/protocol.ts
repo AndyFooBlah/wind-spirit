@@ -12,10 +12,10 @@ export const SPEED_MS: Record<Speed, number> = { pause: 0, step: 0, slow: 10_000
 export const SPEED_LABEL: Record<Speed, string> = { pause: 'Paused', step: 'Step', slow: 'Slow', normal: 'Normal', fast: 'Fast', veryfast: 'Very fast' };
 
 /** Events that pause the game when enabled. */
-export const ATTENTION_EVENTS = ['RaidResolved', 'Famine', 'ChiefSucceeded', 'VillageFounded', 'VillageDied', 'Prayer', 'StormStruck', 'Discovered'] as const;
+export const ATTENTION_EVENTS = ['RaidResolved', 'Famine', 'ChiefSucceeded', 'VillageFounded', 'VillageDied', 'VillageAbandoned', 'RefugeesAdmitted', 'Prayer', 'StormStruck', 'Discovered'] as const;
 export type AttentionEvent = (typeof ATTENTION_EVENTS)[number];
 export type AutoPause = Record<AttentionEvent, boolean>;
-export const DEFAULT_AUTOPAUSE: AutoPause = { RaidResolved: true, Famine: true, ChiefSucceeded: true, VillageFounded: true, VillageDied: true, Prayer: true, StormStruck: true, Discovered: false };
+export const DEFAULT_AUTOPAUSE: AutoPause = { RaidResolved: true, Famine: true, ChiefSucceeded: true, VillageFounded: true, VillageDied: true, VillageAbandoned: true, RefugeesAdmitted: false, Prayer: true, StormStruck: true, Discovered: false };
 
 export type ModelVillages = 'none' | 'focused' | 'all';
 export type TierName = 'habit' | 'thrifty' | 'standard' | 'lavish';
@@ -32,11 +32,13 @@ export interface GenOpts { width?: number; height?: number; villages?: number; s
 
 export interface VillageSummary {
   id: number; name: string; tile: number; alive: boolean;
+  /** the founding village this one descends from; colonies carry their parent's colour */ lineage: number; parent: number;
   pop: { children: number; adults: number; elders: number; total: number };
   happiness: number; trust: number; foodWeeks: number; hungryWeek: number; capabilities: number;
 }
 export interface PartySummary {
   id: number; kind: PartyKind; home: number; at: number; boat: boolean; target: number; targetVillage?: number; returning: boolean; size: number; waiting: number;
+  /** the home village's lineage, for the glyph's colour */ lineage: number;
   /** tiles still to walk on the current leg */ left: number;
   /** units of goods carried */ cargo: number;
   /** envoys: what they are there to do */ errand?: 'trade' | 'threat' | 'gift';
