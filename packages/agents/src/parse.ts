@@ -34,7 +34,7 @@ export function parseDecision(view: VillageView, json: ChiefDecisionJson): Parse
   let budget = view.people.workersFree;
   const names = view.names;
   for (const o of json.orders ?? []) {
-    const task = String(o.task) as Task;
+    const task = String(o.task ?? (o as unknown as { command?: unknown }).command ?? (o as unknown as { action?: unknown }).action ?? '').toLowerCase() as Task;
     if (!TASKS.includes(task)) { dropped.push(`unknown task ${o.task}`); continue; }
     let workers = Math.max(0, Math.trunc(Number(o.workers) || 0));
     if (task !== 'colonize' && workers === 0) { dropped.push(`${task}: no workers`); continue; }

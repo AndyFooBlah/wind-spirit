@@ -98,17 +98,17 @@ export const MODELS: Record<string, ModelInfo> = {
   'openai/gpt-oss-120b-maas': {
     id: 'openai/gpt-oss-120b-maas', provider: 'openai-compat',
     pricing: { input: 0.09, output: 0.36, cacheRead: 0.09, cacheWrite: 0.09 },
-    nativeJsonSchema: true, minCacheTokens: 0, note: 'reasoning tokens are billed as output; no cache-hit price published',
+    nativeJsonSchema: false, minCacheTokens: 0, note: 'reasoning tokens are billed as output; no cache-hit price published',
   },
   'openai/gpt-oss-20b-maas': {
     id: 'openai/gpt-oss-20b-maas', provider: 'openai-compat', location: 'us-central1',
     pricing: { input: 0.07, output: 0.25, cacheRead: 0.007, cacheWrite: 0.07 },
-    nativeJsonSchema: true, minCacheTokens: 0, note: 'us-central1 only (not on the global endpoint)',
+    nativeJsonSchema: false, minCacheTokens: 0, note: 'us-central1 only (not on the global endpoint)',
   },
   'deepseek-ai/deepseek-v3.2-maas': {
     id: 'deepseek-ai/deepseek-v3.2-maas', provider: 'openai-compat',
     pricing: { input: 0.56, output: 1.68, cacheRead: 0.056, cacheWrite: 0.56 },
-    nativeJsonSchema: true, minCacheTokens: 0, note: 'deprecated 2026-07-21, retires 2026-10-21',
+    nativeJsonSchema: false, minCacheTokens: 0, note: 'deprecated 2026-07-21, retires 2026-10-21',
   },
   'deepseek-ai/deepseek-r1-0528-maas': {
     id: 'deepseek-ai/deepseek-r1-0528-maas', provider: 'openai-compat', location: 'us-central1',
@@ -118,17 +118,17 @@ export const MODELS: Record<string, ModelInfo> = {
   'qwen/qwen3-235b-a22b-instruct-2507-maas': {
     id: 'qwen/qwen3-235b-a22b-instruct-2507-maas', provider: 'openai-compat',
     pricing: { input: 0.22, output: 0.88, cacheRead: 0.22, cacheWrite: 0.22 },
-    nativeJsonSchema: true, minCacheTokens: 0, note: 'deprecated 2026-07-21, retires 2026-10-21; reports cached_tokens but no cache-hit SKU',
+    nativeJsonSchema: false, minCacheTokens: 0, note: 'deprecated 2026-07-21, retires 2026-10-21; reports cached_tokens but no cache-hit SKU',
   },
   'qwen/qwen3-next-80b-a3b-instruct-maas': {
     id: 'qwen/qwen3-next-80b-a3b-instruct-maas', provider: 'openai-compat',
     pricing: { input: 0.15, output: 1.2, cacheRead: 0.15, cacheWrite: 0.15 },
-    nativeJsonSchema: true, minCacheTokens: 0, note: 'deprecated 2026-07-21, retires 2026-10-21',
+    nativeJsonSchema: false, minCacheTokens: 0, note: 'deprecated 2026-07-21, retires 2026-10-21',
   },
   'google/gemma-4-26b-a4b-it-maas': {
     id: 'google/gemma-4-26b-a4b-it-maas', provider: 'openai-compat',
     pricing: { input: 0.15, output: 0.6, cacheRead: 0.015, cacheWrite: 0.15 },
-    nativeJsonSchema: true, minCacheTokens: 0, note: 'global endpoint only',
+    nativeJsonSchema: false, minCacheTokens: 0, note: 'global endpoint only',
   },
 };
 

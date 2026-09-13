@@ -93,10 +93,11 @@ describe('anthropic request shaping', () => {
 
 describe('openai-compat request shaping', () => {
   const schema = { type: 'object', properties: { decision: { type: 'string' } }, required: ['decision'] };
-  it('uses response_format json_schema for models with native support', () => {
+  it('instructs MaaS models instead of constrained decoding (which strips optional fields) and keeps the system prompt', () => {
     const b = toBody({ model: 'openai/gpt-oss-120b-maas', system: 's', schema, messages: [{ role: 'user', text: 'u' }], maxOutputTokens: 50, temperature: 0.2 }, false);
-    expect(b.response_format).toEqual({ type: 'json_schema', json_schema: { name: 'response', schema, strict: false } });
-    expect(b.messages).toEqual([{ role: 'system', content: 's' }, { role: 'user', content: 'u' }]);
+    expect(b.response_format).toBeUndefined();
+    const msgs = b.messages as Array<{ role: string; content: string }>;
+    expect(msgs[0].role).toBe('system'); expect(msgs[0].content).toContain('s'); expect(msgs[msgs.length - 1]).toEqual({ role: 'user', content: 'u' });
     expect(b.max_tokens).toBe(50);
     expect(b.temperature).toBe(0.2);
     expect(b.stream).toBeUndefined();
