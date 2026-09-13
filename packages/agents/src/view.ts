@@ -40,6 +40,7 @@ export interface VillageView {
   roadSites: { index: number; tile: number; direction: string }[];
   parties: { kind: string; size: number; weeksOut: number; destination: string; status: string }[];
   orders: string[];
+  yields: { forage: number; hunt: number; fish: number; need: number };   // units per worker-week now, and weekly need
   events: string[];
   memory: string[];
   spirit: { attitude: string; trust: number; pending: string[]; chronicle: string[] };
@@ -99,12 +100,21 @@ export function buildView(w: World, v: Village, o: ViewOpts): VillageView {
     stores, foodWeeks: storesWeeks(w, v), storageWords: mult >= 4000 ? 'food keeps well' : mult >= 2000 ? 'food keeps a while' : 'fresh food spoils fast',
     plots: { cleared, planted, free, structures: Object.entries(structs).map(([n, c]) => `${c} ${n}`) },
     capabilities: v.capabilities.map(capName), recipes, rumors, commodities, crops, surroundings, villages, sites, roadSites, parties, orders,
+    yields: expectedYields(w, v, tick),
     events: renderEvents(w, v, o.events, cname, rname, capName),
     memory: [...v.memory],
     spirit: { attitude: trustWords(v.trust, v.chiefTraits[0]), trust: v.trust, pending: o.pendingSpirit ?? [], chronicle: o.chronicle ?? [] },
     names: { commodities: Object.fromEntries(w.commodities.map(c => [c.name.toLowerCase(), c.id])), recipes: Object.fromEntries(w.recipes.map(r => [r.name.toLowerCase(), r.id])), villages: Object.fromEntries(w.villages.map(x => [x.name.toLowerCase(), x.id])), capabilities: Object.fromEntries(Object.entries(o.capNames).map(([k, n]) => [n.toLowerCase(), k])) },
   };
   return view;
+}
+
+/** What one worker brings in per week from each source right now (stock levels and season), in food units. */
+function expectedYields(w: World, v: Village, tick: number): { forage: number; hunt: number; fish: number; need: number } {
+  const season = seasonOf(tick);
+  const best = (res: 'plants' | 'game' | 'fish') => { let b = 0; for (const t of neighbors(w, v.tile, 1, true)) { const tile = w.tiles[t]; if (tile.cap[res] > 0) b = Math.max(b, tile.stock[res] / tile.cap[res]); } return b; };
+  const u = (base: number, f: number, s: number) => Math.round((base * f * s) / 1_000_000 * 10) / 10;
+  return { forage: u(P.yield.forage, best('plants'), P.seasonPlants[season]), hunt: u(P.yield.hunt, best('game'), P.seasonGame[season]), fish: u(P.yield.fish, best('fish'), P.seasonFish[season]), need: v.people.length };
 }
 
 function words(x: number, scale: string[]): string { const i = Math.min(scale.length - 1, Math.floor((x / K) * scale.length)); return scale[Math.max(0, i)]; }

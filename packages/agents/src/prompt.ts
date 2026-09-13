@@ -22,6 +22,7 @@ How the world works, as your people understand it:
 - Other villages can be visited by envoys to trade or share knowledge, or raided. Raids make enemies and cost lives.
 - Sometimes a spirit speaks to you in dreams. Spirits may know things. They may also be wrong.
 - The chief does not labour. Children and elders do not labour. Every adult you do not assign forages on their own, poorly.
+- You decide once a season, thirteen weeks, unless something forces your hand. Orders stand until then. Stores of N weeks with nobody gathering are gone in N weeks; a season of building with no one on food ends in hunger. Cover the season's food first, then spend what is left.
 - Villages that stop trying things fall behind. In good times keep one or two adults researching, crafting a new skill, or exploring; a rumour you have heard is a good place to start.
 
 ${closing}`;
@@ -34,7 +35,8 @@ export function statePrompt(v: VillageView, reason: string, withMenu = true): st
   const sections: string[] = [];
   sections.push(`# Now: year ${v.year}, ${v.season}, week ${v.week} of the season. Reason for deciding: ${reason}.`);
   sections.push(`# People: ${p.total} (${p.children} children, ${p.adults} adults, ${p.elders} elders). Adults free to assign: ${p.workersFree}. Hungry this week: ${p.hungryNow}. Deaths this season: ${p.deathsRecent}. Mood: ${p.happiness}. Shelter: ${p.shelterWords}.`);
-  sections.push(`# Stores (units; one unit feeds one person for a week). Food for about ${v.foodWeeks} weeks; ${v.storageWords}.\n${list(v.stores.map(s => `${s.units} ${s.name} (${s.category}${s.food ? ', food' : ''}; ${s.keeps})`), 'empty')}`);
+  sections.push(`# Stores (units; one unit feeds one person for a week). Food for about ${v.foodWeeks} weeks${v.foodWeeks < 13 ? ', which is less than a season: the rest must be gathered' : ''}; ${v.storageWords}.\n${list(v.stores.map(s => `${s.units} ${s.name} (${s.category}${s.food ? ', food' : ''}; ${s.keeps})`), 'empty')}`);
+  sections.push(`# Food arithmetic this season: the village eats ${v.yields.need} units a week. One worker brings in about ${v.yields.forage} units a week foraging, ${v.yields.hunt} hunting, ${v.yields.fish} fishing, at today's stocks. Farming pays at harvest, not now.`);
   sections.push(`# Land: ${v.plots.cleared} cleared plots (${v.plots.planted} planted, ${v.plots.free} free). Buildings: ${v.plots.structures.join(', ') || 'tents only'}. Around us: ${v.surroundings}.`);
   sections.push(`# Skills we have: ${v.capabilities.join(', ') || 'none beyond bare hands'}.`);
   sections.push(`# Recipes we know:\n${list(v.recipes.map(r => `${r.name}: needs ${r.inputs}${r.requires ? ` and the skill ${r.requires}` : ''}; makes ${r.makes}${r.held ? ' (we have it)' : r.canMakeNow ? ' (we could make it now)' : ''}`))}`);
@@ -49,7 +51,7 @@ export function statePrompt(v: VillageView, reason: string, withMenu = true): st
   sections.push(`# The spirit: ${v.spirit.attitude}.${v.spirit.chronicle.length ? '\nWhat the spirit has said and what came of it:\n' + list(v.spirit.chronicle) : ''}${v.spirit.pending.length ? '\nThe spirit speaks now:\n' + list(v.spirit.pending.map(m => `"${m}"`)) : ''}`);
   sections.push(`# Your notes to yourself:\n${list(v.memory, 'none')}`);
   if (withMenu) sections.push(`# Orders you may give (workers are adults; keep the sum within ${p.workersFree}):
-- forage / hunt / fish: workers. Winter favours hunting and fishing.
+- forage / hunt / fish: workers. Winter favours hunting and fishing. Unless stores cover the whole season, keep enough hands on food to cover the weeks they do not; the village will overrule an order that starves it.
 - gather: workers, commodity (wood, stone, or anything listed as within a day). expedition: workers, commodity, weeks (go to where something far is known to be, collect, and come back).
 - clear: workers (about 4 worker-weeks per plot).
 - farm: workers, plots, crop. Spring plants, autumn harvests. A farmer handles 3 plots a week.
@@ -66,7 +68,7 @@ export function visitorPrompt(v: VillageView, from: string, mandate: Mandate, cn
   return `${statePrompt(v, 'envoys have arrived')}
 
 # The envoys
-Envoys from ${from} stand before you. ${mandate.threat ? 'They demand tribute' : 'They offer'}: ${goods(mandate.offer)}. They ask for: ${goods(mandate.want)}.${mandate.transfer ? ` They offer to teach us ${rname(mandate.transfer)}.` : ''}${mandate.message ? ` Their chief says: "${mandate.message}"` : ''}
-Answer: accept (give what they ask, take what they offer), counter (say what you give and what you take from their offer), or refuse. Keep enough food for your people. Give generously to friends, carefully to strangers, and never to those who have wronged you without cause.
+Envoys from ${from} stand before you. ${mandate.threat ? `They demand tribute: ${goods(mandate.want)}, and say their warriors will come and take it, and more, if you refuse. They offer nothing in return${Object.keys(mandate.offer).length ? ` beyond ${goods(mandate.offer)}` : ''}.` : `They offer: ${goods(mandate.offer)}. They ask for: ${goods(mandate.want)}.`}${mandate.transfer ? ` They offer to teach us ${rname(mandate.transfer)}.` : ''}${mandate.message ? ` Their chief says: "${mandate.message}"` : ''}
+Answer: accept (give what they ask, take what they offer), counter (say what you give and what you take from their offer), or refuse. Keep enough food for your people. Give generously to friends, carefully to strangers, and never to those who have wronged you without cause. A demand backed by threat is a different matter from an offer: weigh how strong they are against how strong you are, and what paying once teaches them.
 Answer with JSON: { "answer": "accept"|"counter"|"refuse", "give": {name: units}, "take": {name: units}, "reason": "...", "journal": "..." }.`;
 }

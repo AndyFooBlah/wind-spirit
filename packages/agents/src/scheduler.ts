@@ -4,6 +4,7 @@
  */
 import { WEEKS_PER_YEAR, cargoOf, commodityById, recipeById, type Event, type Input, type Order, type Village, type World, type Mandate, type HostAnswer } from '@wind-spirit/sim';
 import { buildView, type VillageView } from './view.js';
+
 import { statePrompt, systemPrompt, visitorPrompt } from './prompt.js';
 import { DECISION_SCHEMA, HOST_SCHEMA, type ChiefDecisionJson, type HostDecisionJson } from './schema.js';
 import { parseDecision, parseHostDecision } from './parse.js';
@@ -88,6 +89,8 @@ export class ChiefScheduler {
       const decision = await this.callDecision(view, reason, v, w, classify(reason, { sites: view.sites.length, pop: v.people.length, hungry: v.hungryWeek > 0 }) === 'impactful' ? (tier.impactful === 'habit' ? 'routine' : tier.impactful) : (tier.routine === 'habit' ? 'routine' : tier.routine));
       if (!decision) { this.habit(w, v, reason, requestedAt, 'The chief could not make up their mind and fell back on habit.'); return; }
       const parsed = parseDecision(view, decision);
+      const overruled = foodFloor(parsed.orders, view);
+      if (overruled) parsed.dropped.push(overruled);
       this.queue.push({ type: 'ChiefDecided', village: v.id, orders: parsed.orders, requestedAt, memoryNotes: parsed.memoryNotes, clearInbox: true });
       if (parsed.verdicts.length) this.queue.push({ type: 'ChiefJudged', village: v.id, verdicts: parsed.verdicts });
       if (parsed.replyToSpirit) this.queue.push({ type: 'Prayer', village: v.id, text: parsed.replyToSpirit });
@@ -130,6 +133,27 @@ export class ChiefScheduler {
 
   /** Tokens spent per village-year, for cost reporting. */
   spending(): Record<string, number> { return Object.fromEntries(this.spent); }
+}
+
+/**
+ * The village will not starve on an order: if stores do not cover the season and the decision leaves too few hands on food,
+ * pull workers from non-food tasks onto foraging (or hunting/fishing in winter) until at least a third are on food.
+ * Returns a note for the journal when it intervened.
+ */
+export function foodFloor(orders: Order[], view: VillageView): string | undefined {
+  if (view.foodWeeks >= 13) return undefined;
+  const isFood = (t: Order['task']) => t === 'forage' || t === 'hunt' || t === 'fish';
+  const total = orders.filter(o => o.task !== 'colonize').reduce((a, o) => a + o.workers, 0); if (total === 0) return undefined;
+  const floor = Math.ceil(Math.max(0, view.people.workersFree) * 0.34);
+  let food = orders.filter(o => isFood(o.task)).reduce((a, o) => a + o.workers, 0);
+  if (food >= floor) return undefined;
+  let need = floor - food;
+  for (const o of orders) { if (need <= 0) break; if (isFood(o.task) || o.task === 'farm' || o.task === 'colonize') continue; const take = Math.min(o.workers, need); o.workers -= take; need -= take; }
+  const moved = floor - food - need; if (moved <= 0) return undefined;
+  const best = view.yields.fish >= view.yields.forage && view.yields.fish >= view.yields.hunt ? 'fish' : view.yields.hunt > view.yields.forage ? 'hunt' : 'forage';
+  const existing = orders.find(o => o.task === best); if (existing) existing.workers += moved; else orders.push({ task: best, workers: moved, params: {}, since: 0 });
+  for (let i = orders.length - 1; i >= 0; i--) if (orders[i].workers === 0 && orders[i].task !== 'colonize') orders.splice(i, 1);
+  return `the village overruled the chief: ${moved} hands sent to ${best} so the season is fed`;
 }
 
 function touches(e: Event, village: number): boolean {

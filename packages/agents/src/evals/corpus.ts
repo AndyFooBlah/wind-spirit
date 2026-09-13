@@ -9,7 +9,7 @@ import { POLICIES, hostAnswer } from '@wind-spirit/harness';
 import { buildView, type VillageView } from '../view.js';
 import { renderChronicle, type Turn } from '../conversation.js';
 
-export type Category = 'routine' | 'crisis' | 'visitor' | 'expansion' | 'spirit' | 'dream';
+export type Category = 'routine' | 'crisis' | 'visitor' | 'expansion' | 'spirit' | 'dream' | 'firstspring';
 export interface Facts { pop: number; adults: number; free: number; season: number; year: number; foodWeeks: number; hungry: number; hardship: number; trust: number; sites: number; knownVillages: number; canInvest: boolean; storesGrain: number; }
 export interface EvalCase {
   id: string; category: Category; kind: 'decision' | 'host' | 'dream';
@@ -37,6 +37,8 @@ export function buildCorpus(seeds = ['eval-a', 'eval-b', 'eval-c']): EvalCase[] 
     const recent: Event[] = []; const ticks = new Set(SAMPLE_TICKS); const crisisSeen = new Set<string>();
     for (let t = 0; t < 5201; t++) {
       const ev = sim.tick(); recent.push(...ev); if (recent.length > 3000) recent.splice(0, recent.length - 3000);
+      // the very first spring: fresh village, a few weeks of food, nothing built. Missed by the first corpus, found in play.
+      if (t === 0) for (const v0 of w.villages.slice(0, 2)) { const view0 = mk(w, v0, ev, 'season'); cases.push({ id: `${seed}-firstspring-${v0.id}`, category: 'firstspring', kind: 'decision', seed, tick: t, village: v0.id, reason: 'season', view: view0, facts: facts(w, v0, view0), expect: { foodShare: 0.34 }, habit: POLICIES.sensible({ w, v: v0, reason: 'season', rng, mem: (mem[v0.id] ??= {}) }) }); }
       const q: Input[] = [];
       for (const e of ev) {
         if (e.type === 'DeliberationRequested') { const v = w.villages[e.village]; if (v.alive) q.push({ type: 'ChiefDecided', village: v.id, orders: POLICIES.sensible({ w, v, reason: e.reason, rng, mem: (mem[v.id] ??= {}) }), requestedAt: e.t }); }

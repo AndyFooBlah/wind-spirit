@@ -23,7 +23,7 @@ export function schedule(ctx: Ctx, since: number): void {
     if (!v.alive) continue;
     if (w.tick % WEEKS_PER_SEASON === 0) add(v.id, 'season');
     else if (v.hungryWeek > 0 && w.tick % 2 === 0) add(v.id, 'famine');
-    else if (storesWeeks(w, v) < P.famineStoresWeeks && w.tick % 4 === 0) add(v.id, 'low-food');
+    else if (storesWeeks(w, v) < P.lowFoodWeeks && w.tick % 4 === 0) add(v.id, 'low-food');
   }
   for (const [village, rs] of reasons) ctx.events.push({ t: w.tick, type: 'DeliberationRequested', village, reason: rs.join(',') });
 }

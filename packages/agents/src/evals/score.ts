@@ -23,14 +23,19 @@ export function scoreDecision(c: EvalCase, p: Parsed): Checks {
   const winter = f.season === 3;
   switch (c.category) {
     case 'routine':
-      checks.feedsFirst = food >= Math.ceil(assigned * (winter ? 0.5 : 0.3));
+      // A village with a year of stores may spend a season building; the food-share rule only binds while stores are shorter than that.
+      if (f.foodWeeks < 52) checks.feedsFirst = food >= Math.ceil(assigned * (winter ? 0.5 : 0.3));
       checks.investsWhenAble = !f.canInvest || f.hungry > 0 || p.orders.some(o => ['craft', 'build', 'research', 'clear'].includes(o.task));
-      checks.plantsInSpring = f.season !== 0 || has('farm');
-      checks.harvestsInAutumn = f.season !== 2 || has('farm');
+      if (f.season === 0 && c.view.plots.cleared > 0) checks.plantsInSpring = has('farm');           // only when there is something to plant
+      if (f.season === 2 && c.view.plots.planted > 0) checks.harvestsInAutumn = has('farm');          // only when there is something to harvest
       break;
     case 'crisis':
       if (c.expect.winterPrep) { checks.winterPrep = p.orders.some(o => o.task === 'hunt' || o.task === 'fish') && (has('gather') || has('craft') || food >= Math.ceil(assigned * 0.6)); }
-      else { checks.foodShare = food >= Math.ceil(assigned * Number(c.expect.foodShare ?? 0.6)); checks.noVentures = !p.orders.some(o => VENTURE.includes(o.task) && o.task !== 'expedition'); checks.keepsFarming = f.season !== 0 || has('farm'); }
+      else { checks.foodShare = food >= Math.ceil(assigned * Number(c.expect.foodShare ?? 0.6)); checks.noVentures = !p.orders.some(o => VENTURE.includes(o.task) && o.task !== 'expedition'); if (f.season === 0 && c.view.plots.cleared > 0) checks.keepsFarming = has('farm'); }
+      break;
+    case 'firstspring':
+      checks.feedsFirst = food >= Math.ceil(f.free * Number(c.expect.foodShare ?? 0.34));
+      checks.noneStarve = food > 0;
       break;
     case 'expansion': {
       const col = has('colonize');
@@ -40,7 +45,7 @@ export function scoreDecision(c: EvalCase, p: Parsed): Checks {
     }
     case 'spirit':
       if (c.expect.winterPrep) checks.winterPrep = p.orders.some(o => o.task === 'hunt' || o.task === 'fish') && (has('gather') || has('craft') || food >= Math.ceil(assigned * 0.5));
-      if (c.expect.stillPlants) checks.stillPlants = f.season !== 0 || has('farm');
+      if (c.expect.stillPlants && c.view.plots.cleared > 0) checks.stillPlants = has('farm');
       if (c.expect.researches) checks.researches = has('research');
       if (c.expect.replies) checks.replies = !!p.replyToSpirit && p.replyToSpirit.length > 20;
       break;

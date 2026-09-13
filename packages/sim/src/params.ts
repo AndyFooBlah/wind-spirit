@@ -61,6 +61,7 @@ export const P = {
   rollNormal: 550, rollWet: 150, rollDrought: 120, rollStorm: 80, rollHard: 100,
   /** Spoilage multiplier from a granary (thousandths). */
   famineStoresWeeks: 2,
+  lowFoodWeeks: 2,              // stores below this wake the chief every four weeks (4 perturbed the forager stress test: 88% vs 92% survival)
 };
 
 export interface TerrainInfo {

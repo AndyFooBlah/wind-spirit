@@ -89,13 +89,18 @@ async function main() {
   const corpusPath = arg('corpus', 'out/evals/corpus.json'); if (!existsSync(corpusPath)) throw new Error(`no corpus at ${corpusPath}; run build.ts first`);
   let cases = JSON.parse(readFileSync(corpusPath, 'utf8')) as EvalCase[];
   if (cats.length) cases = cases.filter(c => cats.includes(c.category)); if (limit) cases = cases.slice(0, limit);
+  const ids = arg('ids', '').split(',').filter(Boolean); if (ids.length) cases = cases.filter(c => ids.some(p => c.id.includes(p)));
+  const merge = argv.includes('--merge');
   const token = await anonToken(); const client = new HttpLlmClient(proxy, async () => token); const judge = withJudge ? new HttpLlmClient(proxy, async () => token) : undefined;
   mkdirSync('out/evals', { recursive: true });
   for (const model of models) {
     const results: CaseResult[] = []; let i = 0;
     const workers = Array.from({ length: concurrency }, async () => { for (;;) { const c = cases[i++]; if (!c) return; const r = await runCase(client, model, c, judge); results.push(r); process.stdout.write(`${model} ${r.category} ${r.id} ${r.score.toFixed(2)}${r.error ? ` ERR ${r.error}` : ''} $${r.cost.toFixed(4)} ${r.ms}ms\n`); } });
     await Promise.all(workers);
-    const file = `out/evals/${model.replace(/[^a-z0-9.-]/gi, '_')}.json`; writeFileSync(file, JSON.stringify({ model, when: new Date().toISOString(), results }, null, 1));
+    const file = `out/evals/${model.replace(/[^a-z0-9.-]/gi, '_')}.json`;
+    let out = results;
+    if (merge && existsSync(file)) { const prev = JSON.parse(readFileSync(file, 'utf8')) as { results: CaseResult[] }; const done = new Set(results.map(r => r.id)); out = [...prev.results.filter(r => !done.has(r.id)), ...results]; }
+    writeFileSync(file, JSON.stringify({ model, when: new Date().toISOString(), results: out }, null, 1));
     const byCat: Record<string, number[]> = {}; for (const r of results) (byCat[r.category] ??= []).push(r.score);
     console.log(`== ${model}: ${results.length} cases, mean ${(results.reduce((a, r) => a + r.score, 0) / results.length).toFixed(3)}, cost $${results.reduce((a, r) => a + r.cost, 0).toFixed(3)}, errors ${results.filter(r => r.error).length}; by category ${Object.entries(byCat).map(([k, v]) => `${k}=${(v.reduce((a, b) => a + b, 0) / v.length).toFixed(2)}`).join(' ')}`);
   }
