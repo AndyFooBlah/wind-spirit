@@ -25,6 +25,8 @@ export async function redeemInvite(code: string): Promise<InviteState> {
   const s = { label: body.label ?? '', at: Date.now() }; remember(s); return s;
 }
 
+export function forgetInvite(): void { remember(undefined); }
+
 /** Ask the proxy whether this player still has a seat; forgets the stored invite when not. */
 export async function checkInvite(): Promise<boolean> {
   try {

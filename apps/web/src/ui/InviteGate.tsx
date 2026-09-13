@@ -1,19 +1,25 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { checkInvite, redeemInvite, storedInvite } from '../invite.ts';
+import { useGame, inviteRestored } from '../store/game.ts';
 
 /** Wind Spirit is invitation-only while it is in preview: every chief decision is a paid model call. */
 export function InviteGate({ children }: { children: ReactNode }) {
   const [state, setState] = useState<'checking' | 'open' | 'closed'>(storedInvite() ? 'open' : 'checking');
   const [code, setCode] = useState(''); const [busy, setBusy] = useState(false); const [error, setError] = useState<string>();
+  const lost = useGame(s => s.inviteLost);
   useEffect(() => { void checkInvite().then(ok => setState(ok ? 'open' : 'closed')); }, []);
-  if (state === 'open') return <>{children}</>;
+  useEffect(() => { if (lost) { setState('closed'); setError('The proxy refused a chief\'s call: this browser has no seat. Enter your code to carry on; the world is paused.'); } }, [lost]);
   const submit = async () => {
     setBusy(true); setError(undefined);
-    try { await redeemInvite(code); setState('open'); }
+    try { await redeemInvite(code); setState('open'); inviteRestored(); }
     catch (e) { setError(e instanceof Error ? e.message : String(e)); }
     finally { setBusy(false); }
   };
-  return (
+  if (state === 'open' && !lost) return <>{children}</>;
+  // A seat lost mid-game: keep the game mounted underneath (the sim and its worker live in the store) and ask again on top.
+  if (lost) return <>{children}<div className="gate-overlay">{gate()}</div></>;
+  return gate();
+  function gate() { return (
     <div className="gallery">
       <div className="hero">
         <h1>Wind Spirit</h1>
@@ -30,5 +36,5 @@ export function InviteGate({ children }: { children: ReactNode }) {
         </form>
       </div>
     </div>
-  );
+  ); }
 }

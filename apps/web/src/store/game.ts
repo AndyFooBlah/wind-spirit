@@ -7,6 +7,7 @@ import type { BreathAction, Event, Input } from '@wind-spirit/sim';
 import { P } from '@wind-spirit/sim';
 import { WEEKS_PER_YEAR, seasonOf } from '@wind-spirit/sim';
 import { idToken } from '../auth.ts';
+import { forgetInvite } from '../invite.ts';
 import { audio, dominantTerrain, type AudioSettings } from '../audio/audio.ts';
 import { historyWorthy } from '../sim/views.ts';
 import { DEFAULT_SETTINGS, type Frame, type FromHistory, type FromWorker, type JournalEntry, type Settings, type Speed, type StaticMap, type ToHistory, type ToWorker, type VillageDetail, type SeriesPoint } from '../sim/protocol.ts';
@@ -51,6 +52,8 @@ export interface GameState {
   series: SeriesPoint[];
   overview: boolean;
   techOpen: boolean;
+  /** the proxy refused a model call for want of an invitation: show the gate again */
+  inviteLost: boolean;
   /** the sun spirit: past questions and answers this world, and the one in flight */
   sun: { open: boolean; turns: { question: string; answer: string; tick: number }[]; asking?: { id: number; question: string; streaming: string } };
   /** snapshots still to read for the charts, when an older save predates the series */
@@ -60,7 +63,7 @@ export interface GameState {
 }
 
 export const useGame = create<GameState>(() => ({
-  screen: 'gallery', worlds: [], speed: 'pause', resumeSpeed: 'normal', journals: [], toasts: [], settings: loadSettings(), talkedTo: [], series: [], overview: false, techOpen: false, sun: { open: false, turns: [] },
+  screen: 'gallery', worlds: [], speed: 'pause', resumeSpeed: 'normal', journals: [], toasts: [], settings: loadSettings(), talkedTo: [], series: [], overview: false, techOpen: false, inviteLost: false, sun: { open: false, turns: [] },
   pendingClaims: [], zoom: 'local', center: { x: 32, y: 32 }, targeting: false, loading: '', lastEvents: [], waiting: [], narratives: {}, audioSettings: audio.settings,
 }));
 
@@ -138,9 +141,12 @@ function onWorker(m: FromWorker): void {
       break;
     }
     case 'series': { set(s => ({ series: [...s.series.filter(p => p.tick !== m.point.tick), m.point].sort((a, b) => a.tick - b.tick) })); const w = get().world; if (w) void ensureDb().then(d => saveSeries(d, w.id, m.point)); break; }
-    case 'error': toast(m.message, 'error', m.village); break;
+    case 'error':
+      if (/proxy 403/.test(m.message) && /not_invited/.test(m.message)) { forgetInvite(); if (!get().inviteLost) { set({ inviteLost: true }); if (get().speed !== 'pause') setSpeed('pause'); } break; }
+      toast(m.message, 'error', m.village); break;
   }
 }
+export function inviteRestored(): void { set({ inviteLost: false }); }
 
 function tileXY(tile: number): [number, number] { const w = get().map?.width ?? 64; return [tile % w, Math.floor(tile / w)]; }
 
