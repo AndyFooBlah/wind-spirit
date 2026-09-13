@@ -188,3 +188,10 @@ table.people tr.away td { color: var(--ink-3); }
 
 .pennant { display: inline-block; width: 10px; height: 16px; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%); margin-right: 8px; vertical-align: -2px; }
 .pennant-small { clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 70%, 0 100%); border-radius: 0; }
+
+/* nothing on the bar may change width as its numbers change: tabular figures and pinned widths */
+.topbar { font-variant-numeric: tabular-nums; }
+.yearwheel > div { min-width: 122px; }
+.trust > button { min-width: 132px; text-align: left; }
+.topbar button.sun { min-width: 62px; }
+.breath .meter { min-width: 96px; }

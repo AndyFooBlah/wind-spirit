@@ -65,7 +65,7 @@ function Trust() {
 
 function SunButton() {
   const frame = useGame(s => s.frame); const open = useGame(s => s.sun.open); const left = useGame(sunQuestionsLeft); const asking = useGame(s => !!s.sun.asking);
-  return <button className={open ? 'on' : 'ghost'} disabled={!frame} onClick={() => openSun(!open)} title="Ask the sun spirit, who sees everything: three questions a year">Sun {asking ? '…' : left}</button>;
+  return <button className={`sun ${open ? 'on' : 'ghost'}`} disabled={!frame} onClick={() => openSun(!open)} title="Ask the sun spirit, who sees everything: three questions a year">Sun {asking ? '…' : left}</button>;
 }
 
 function TechButton() {
