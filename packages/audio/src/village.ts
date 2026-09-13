@@ -6,7 +6,7 @@ import { degreeToMidi, type MusicSpec } from './music.js';
 import type { SynthKit } from './synth.js';
 import type { VillageState, Zoom } from './types.js';
 
-export const ZOOM_SCALE: Readonly<Record<Zoom, number>> = { world: 0, local: 0.6, village: 1 };
+export const ZOOM_SCALE: Readonly<Record<Zoom, number>> = { world: 0, region: 0.3, local: 0.6, village: 1 };
 
 /** Hubbub level 0..1 for a population: 5 people ≈ 0.3, 30 ≈ 0.6, 300+ ≈ 1. */
 export function hubbubLevel(population: number): number {
