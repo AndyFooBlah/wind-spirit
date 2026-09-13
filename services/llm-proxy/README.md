@@ -277,3 +277,6 @@ TOKEN=$(curl -s -X POST "https://identitytoolkit.googleapis.com/v1/accounts:sign
   -H 'Content-Type: application/json' -d '{"returnSecureToken":true}' | jq -r .idToken)
 curl -s "$URL/v1/models" -H "Authorization: Bearer $TOKEN" | jq .classes
 ```
+
+
+See MODELS.md §6 for the recommended class configuration and OpenRouter alternates from the evals.

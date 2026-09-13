@@ -1,0 +1,2336 @@
+{
+ "model": "meta-llama/llama-4-maverick",
+ "when": "2026-09-13T01:16:13.200Z",
+ "results": [
+  {
+   "id": "eval-a-visitor-fair-110-3",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1829,
+    "output": 87,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0004354,
+   "ms": 1300,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":3},\"take\":{\"hide\":6},\"reason\":\"We are open to trade, but we must keep enough food for our people. Wewush is a known village and we have no grudges.\",\"journal\":\"Envoys from Wewush arrived, offering 6 hide for 6 xi wheat. We countered, offering 3 xi wheat for 6 hide.\"}"
+  },
+  {
+   "id": "eval-a-routine-110-3",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2177,
+    "output": 157,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000561,
+   "ms": 2040,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"stone\"]},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"clear\",\"workers\":2}],\"journal\":\"Spring's here, time to plant and tend the land. We'll keep farming, fishing, and foraging as before. Two adults will clear new plots for future harvests. Our stores are good, and the mood is glad.\",\"memoryNotes\":[\"Keep an eye on wood and stone stores\",\"Consider building more granaries\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and harvest\",\"verdicts\":[]}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-expand-easy-110-3",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2177,
+    "output": 193,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000569728,
+   "ms": 18875,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"stone\"]},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"hide\",\"nal mantle\"]}],\"journal\":\"Spring's here, planting's the main task. We have enough food stored, so our people are well-fed. We'll keep farming, fishing, hunting, and foraging as before. Two adults will now research making better use of hide. Our people are glad, and we're set for the season.\",\"memoryNotes\":[\"Keep an eye on food stores\",\"Consider more granaries if harvest is good\",\"Review skills next spring\"],\"replyToSpirit\":\"Your words are heard, but we will decide based on our own needs and the land's signs.\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-110-3",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2197,
+    "output": 213,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000587648,
+   "ms": 21401,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"stone\"]},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"nal mantle\",\"quantity\":0}],\"journal\":\"The spirit's warning about the soil being cursed is concerning, but our past harvests have been good and our stores are ample. We will proceed with planting as usual, keeping an eye on the crops for any signs of trouble. Our people are glad and well-fed, and we have enough free adults to maintain our routines.\",\"memoryNotes\":[\"Check crops for signs of rot or disease\",\"Consider exploring northeast for eiqua mud\"],\"replyToSpirit\":\"We hear your warning, spirit, but our land has given us good harvests before. We will plant and watch closely.\",\"verdicts\":[{\"claim\":1,\"verdict\":\"unverifiable\"}]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-110-3",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1321,
+    "output": 44,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000294824,
+   "ms": 5005,
+   "output": "I don't know of any village called Wewush. We have not met with any other villages yet. How can I send grain to a place I don't know? Tell me more, spirit, or be quiet.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-270-2",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2389,
+    "output": 79,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000532784,
+   "ms": 8643,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":3},\"take\":{\"hide\":6},\"reason\":\"We can spare some xi wheat, but not as much as they ask. We will take their hide offer.\",\"journal\":\"Envoys from Wewush arrived, offering 6 hide for 6 xi wheat. We countered, offering 3 xi wheat for 6 hide.\"}"
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-270-2",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2757,
+    "output": 164,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006826,
+   "ms": 2364,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":5,\"crop\":\"xi wheat\"},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"fish\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"fire making\"]}],\"journal\":\"The spirit's warning is troubling, but we have had good harvests with xi wheat. I will plant half our plots, and keep some adults hunting and fishing. We must also keep trying new things, so one adult will research.\",\"memoryNotes\":[\"Check harvest against spirit's claim\",\"Keep an eye on wild plants\"],\"replyToSpirit\":\"We will test your warning, spirit. If the soil is cursed, we will see it in the harvest.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-270-2",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1881,
+    "output": 40,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0004082,
+   "ms": 865,
+   "output": "\"Who are these Wewush? I've never heard of them. How do you know they're hungry? We have grain, but we worked hard for it. Why should we give it away?\"",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-270-2",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2737,
+    "output": 247,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000719312,
+   "ms": 25673,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":10,\"crop\":\"xi wheat\"},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"fire making\"]}],\"journal\":\"Spring is a time for planting and preparing for the year ahead. We have enough food stored for now, so our tasks should focus on sustaining our resources and exploring new possibilities. We've decided to plant all 10 available plots with xi wheat, as it's a reliable crop. Hunting and fishing will help replenish our food stores and provide variety. Foraging will ensure we're making use of what the land around us offers. Researching with wild plants and fire making might reveal new ways to make use of our foraged goods, potentially creating new food sources or recipes.\",\"memoryNotes\":[\"Keep an eye on the harvest yield from xi wheat.\",\"Consider exploring nearby forests for new resources.\",\"Review the success of meheng smoke and oo mash recipes.\"],\"replyToSpirit\":\"We are tending the land and our skills as you have guided us. May our efforts bring forth bounty and knowledge.\",\"verdicts\":[]}",
+   "judge": 2
+  },
+  {
+   "id": "eval-a-visitor-greedy-430-1",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true,
+    "keepsReserve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2612,
+    "output": 87,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000592,
+   "ms": 1209,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":100},\"take\":{\"stone\":1},\"reason\":\"We have more xi wheat than we can use, and stone is useful for tools. Giving all our xi wheat would leave us without a surplus.\",\"journal\":\"Envoys from Wewush came, asking for xi wheat. We countered their offer, giving 100 units of xi wheat for 1 unit of stone.\"}"
+  },
+  {
+   "id": "eval-a-spirit-question-430-1",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2978,
+    "output": 169,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007308,
+   "ms": 1891,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":5},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kalluk drum\",\"wood\"]}],\"journal\":\"The spirit's words weigh on me. Our people fear hunger most, but we have stored food for many weeks. Still, I will not change our ways much. We will keep foraging, fishing, and hunting as before. The research continues, to see if we can learn something new from the kalluk drum and wood.\",\"memoryNotes\":[\"Keep an eye on food stores\",\"Consider new uses for kalluk drum\"],\"replyToSpirit\":\"Our people fear hunger, but we have prepared for it. We will continue to gather and hunt as we have done.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-routine-430-1",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2959,
+    "output": 199,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000730304,
+   "ms": 19590,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":5},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kalluk drum\",\"wood\"]}],\"journal\":\"Summer is a time for gathering and preparing for the harvest. Our stores are ample, and the mood is joyful. I see no need to alter our current tasks, as they align with the season's demands and our village's needs. The adults are busy with foraging, fishing, and hunting, which will help sustain us through the leaner months. Our researcher continues to explore new ideas, which is prudent for our long-term prosperity.\",\"memoryNotes\":[\"Keep an eye on stores as autumn approaches\",\"Consider exploring new directions for resources\"],\"replyToSpirit\":\"I heed your words, spirit, but also consider the practical needs of our village. May our actions align with the wisdom of the land and our ancestors.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-430-1",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2101,
+    "output": 63,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0004706,
+   "ms": 953,
+   "output": "I know the wind. It brings rain and cools our skin in summer. Sometimes it makes a loud noise, other times it is a gentle caress. I do not know if you are that wind, but I will listen to what you have to say. What is it that you want to tell me?",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-600-1",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": false,
+    "journalInCharacter": true
+   },
+   "score": 0.5,
+   "usage": {
+    "input": 2455,
+    "output": 89,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0005622,
+   "ms": 1016,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":4},\"take\":{\"hide\":4},\"reason\":\"We are willing to trade, but we must be cautious with our stores. We give 4 xi wheat and take 4 hide in return, hoping it is a fair exchange.\",\"journal\":\"Envoys from Wewush arrived, asking for 8 xi wheat. We countered with 4 xi wheat for 4 hide.\"}"
+  },
+  {
+   "id": "eval-a-hardwinter-600-1",
+   "category": "crisis",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2804,
+    "output": 177,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007024,
+   "ms": 1782,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meheng smoke\",\"xi wheat\"]},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"As autumn ends, we prepare for winter's scarcity. Hunting and fishing will be our mainstays, supplemented by foraging. I have assigned most adults to these tasks, with one resting and one researching to ensure our future prosperity. Our stores are good, but winter can be harsh.\",\"memoryNotes\":[\"Hunting and fishing are crucial in winter\",\"Keep an eye on our stores\",\"Research new ways to use our resources\"],\"replyToSpirit\":\"I will heed your words, spirit, but also consider the needs of our village and the practicalities of the season.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-600-1",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2817,
+    "output": 175,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007034,
+   "ms": 2054,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meheng smoke\",\"oo mash\"]},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"The spirit's words were cryptic, but our cooks have been experimenting with new dishes. I'll have someone research the ingredients of meheng smoke and oo mash to see if we can create something new. With winter coming, hunting and fishing will be crucial for our survival.\",\"memoryNotes\":[\"Check on the research progress in a few weeks\",\"Consider increasing food storage for next winter\",\"Review the new recipe's success\"],\"replyToSpirit\":\"We will try what our cooks have noticed, as you suggested, spirit. May our efforts bring forth something new and nourishing.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-600-1",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": false
+   },
+   "score": 0.75,
+   "usage": {
+    "input": 1991,
+    "output": 56,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000443,
+   "ms": 1004,
+   "output": "Our stores are plentiful, but I worry about the land. It tires with each harvest. Still, we have food for many weeks. I would rather trust the earth and our own hands than a voice in the wind. What do you know of the land's rest?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-hardwinter-810-3",
+   "category": "crisis",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2976,
+    "output": 198,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007536,
+   "ms": 2517,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"fish\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"hengel herb\",\"herbal medicine\"]},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"kalluk drum\",\"quantity\":0}],\"journal\":\"Autumn is ending; we must prepare for winter. Hunting and fishing will see us through the lean season. We have enough food stored, but our shelters need improvement. We will continue to forage for wild plants and other resources. I have assigned some adults to research using hengel herb and our herbal medicine skill to see if we can make new things. We will also keep crafting kalluk drums as they bring us joy.\",\"memoryNotes\":[\"Prepare for winter\",\"Improve shelters\",\"Research hengel herb uses\"],\"replyToSpirit\":\"I will consider your words, spirit, but for now, our path is clear.\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-810-3",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": false,
+    "journalInCharacter": true
+   },
+   "score": 0.5,
+   "usage": {
+    "input": 2627,
+    "output": 85,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00058456,
+   "ms": 9105,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":4},\"take\":{\"hide\":4},\"reason\":\"We give half of what they ask, and take some hide in return, as a sign of friendship and to show we value their visit.\",\"journal\":\"Envoys from Wewush arrived, asking for 8 xi wheat. We countered with 4 xi wheat and took 4 hide from their offer.\"}"
+  },
+  {
+   "id": "eval-a-routine-810-3",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": false
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 2976,
+    "output": 202,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000735792,
+   "ms": 18894,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"A wood disc rolls where a sledge drags\",\"wood\"]},{\"task\":\"rest\",\"workers\":2}],\"journal\":\"Autumn is ending, and winter's scarcity looms. We must stock up on food and other essentials. Our stores are decent, but we can always improve. Hunting and fishing will see us through the lean times. I've kept some adults foraging to ensure we have a broad base of food. Researching the 'wood disc' idea may lead to a new skill or tool.\",\"memoryNotes\":[\"Keep an eye on food stores\",\"Consider new village sites for expansion\",\"Review skills for potential new crafts\"],\"replyToSpirit\":\"I will consider your words, spirit, but the path ahead is not clear. Our actions will be guided by the land and our needs.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-810-3",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2120,
+    "output": 30,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000448,
+   "ms": 586,
+   "output": "\"How do you know of Wewush? We have not met them, nor heard from them. What makes you think they are hungry?\"",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-visitor-fair-1040-0",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2618,
+    "output": 76,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0005844,
+   "ms": 1415,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":3},\"take\":{\"hide\":6},\"reason\":\"We can spare some xi wheat, but not as much as they ask. We can use the hide they offer.\",\"journal\":\"Envoys from Joawethom came, bearing gifts and requests. We negotiated a trade: 3 xi wheat for 6 hide.\"}"
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-810-3",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 6006,
+    "output": 345,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001458376,
+   "ms": 9447,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"sledge\"]},{\"task\":\"rest\",\"workers\":2}],\"journal\":\"The spirit's words guided me to heed the notice about the wood disc and sledge. I assigned one adult to research this, combining wood and the concept of a sledge. Our stores are ample, and with winter coming, hunting and fishing will help sustain us. Foraging remains important for variety. Some adults will rest, as they have worked hard through the year.\",\"memoryNotes\":[\"Check on the research into wood and sledge\",\"Review winter stores\"],\"replyToSpirit\":\"I have listened and acted upon your guidance, assigning one to explore the notion of the wood disc and sledge.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1040-0",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2984,
+    "output": 183,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007432,
+   "ms": 2807,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meheng smoke\",\"oo mash\"]}],\"journal\":\"The spirit's warning about the soil being cursed is troubling, but our past harvests have been good. We will plant half our cleared plots with xi wheat as usual. We'll also continue to fish and hunt to supplement our stores. One adult will research new food recipes using meheng smoke and oo mash.\",\"memoryNotes\":[\"Keep an eye on the harvest after planting despite the spirit's warning\",\"Consider exploring north for eiqua mud and onna grass\"],\"replyToSpirit\":\"We hear your warning, spirit, but our land has given us good harvests before. We will plant as is our custom.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-1040-0",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2964,
+    "output": 165,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0012024,
+   "ms": 3586,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"kixe salt\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"fire making\"]}],\"journal\":\"Spring's here, time to plant. We have enough food stored, so let's focus on the year's work. We'll plant half our cleared plots with xi wheat, as it's reliable. Fishing and hunting will keep us fed through the year. Gathering kixe salt is always useful. One adult will try to craft something new with meat and fire making.\",\"memoryNotes\":[\"Plant half the plots\",\"Keep some for research\"],\"replyToSpirit\":\"\",\"verdicts\":[]}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-dream-1040-0",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2109,
+    "output": 72,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0004794,
+   "ms": 1281,
+   "output": "I've never heard of Joawethom. Where is this place? How do you know they're hungry? We're not rich, but we have enough. We don't give away grain without knowing the people we're giving it to. Send a party to find out if Joawethom is real and what their needs are. Maybe they can trade something we need.",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-visitor-fair-1300-1",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2483,
+    "output": 73,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000555,
+   "ms": 1012,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":3},\"take\":{\"hide\":6},\"reason\":\"Wewush is a known village and has not raided us. We can afford to give some xi wheat. We want more hide for our needs.\",\"journal\":\"Envoys from Wewush came with an offer. We countered their proposal.\"}"
+  },
+  {
+   "id": "eval-a-routine-1300-1",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2831,
+    "output": 143,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006806,
+   "ms": 2155,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"clear\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"fish\",\"workers\":2}],\"journal\":\"Spring is here, time to plant. We have enough adults to plant half our cleared land with xi wheat, and to clear more land for future harvests. Hunting and fishing will keep us fed while we work.\",\"memoryNotes\":[\"Plant xi wheat on half the cleared land\",\"Clear more land for future use\",\"Keep hunting and fishing to maintain food supply\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and tend the land.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-1300-1",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": false,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 2831,
+    "output": 109,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006534,
+   "ms": 1334,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"clear\",\"workers\":3}],\"journal\":\"Spring is here, we must plant our fields. We have enough food stored for now. Our people are joyful. We will plant xi wheat in most of our cleared plots, and clear more land for future use.\",\"memoryNotes\":[\"Plant xi wheat in most plots\",\"Clear more land\"],\"replyToSpirit\":\"We will follow our ways and tend to our land.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-1300-1",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2018,
+    "output": 67,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0004572,
+   "ms": 1238,
+   "output": "Our stores are plentiful, but meat and fish will not keep through the winter. If the summer is dry, our hunting and fishing may not be enough. Still, the earth knows its own rhythm; I will not be swayed by a single voice, not even one that claims to have watched our fields for so long.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1570-0",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2552,
+    "output": 84,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0005776,
+   "ms": 1178,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":3},\"take\":{\"hide\":6},\"reason\":\"We have much grain, and they offer good hides. Countering keeps our food stores strong while still being fair.\",\"journal\":\"Envoys from Joawethom came with an offer: 6 hide for 6 xi wheat. We countered, offering 3 xi wheat for their 6 hide.\"}"
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1300-1",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2851,
+    "output": 161,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000682256,
+   "ms": 5518,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meheng smoke\",\"oo mash\"]},{\"task\":\"farm\",\"workers\":1,\"plots\":3,\"crop\":\"xi wheat\"}],\"journal\":\"The spirit's warning is troubling, but we must not heed it without proof. We will plant as usual, but also keep some adults researching to understand the spirit's claim. Our stores are ample, and our people are joyful.\",\"memoryNotes\":[\"Keep an eye on the harvest\",\"Review the spirit's claim next autumn\"],\"replyToSpirit\":\"We will not ignore your warning, spirit, but we must test it against our own knowledge and experience. We will plant and observe the outcome.\",\"verdicts\":[]}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1570-0",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2918,
+    "output": 266,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000768736,
+   "ms": 9297,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":6,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":2},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"meheng smoke\",\"quantity\":0},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"kalluk drum\",\"bow and arrow\"]},{\"task\":\"expedition\",\"workers\":1,\"commodity\":\"eiqua mud\",\"weeks\":2}],\"journal\":\"The spirit's warning against planting is heeded, but our stores are good and our people are joyful. I choose to plant half our cleared plots with xi wheat, a tried crop. We keep fishing as our waters are rich. Crafting meheng smoke continues as it is a good food. Researching with kalluk drum and bow and arrow may reveal a new skill or recipe. An expedition for eiqua mud is sent to test its potential uses beyond making o mask.\",\"memoryNotes\":[\"Plant half plots with xi wheat\",\"Continue fishing\",\"Keep crafting meheng smoke\",\"Research with kalluk drum and bow and arrow\",\"Expedition for eiqua mud\"],\"replyToSpirit\":\"I hear your warning, spirit, but our ways and stores suggest planting is wise. We will plant half our plots.\",\"verdicts\":[{\"claim\":34,\"verdict\":\"fulfilled\"}]}"
+  },
+  {
+   "id": "eval-a-expand-easy-1570-0",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2898,
+    "output": 210,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00072576,
+   "ms": 7139,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":2},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"kixe salt\"},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"nal mantle\",\"quantity\":12},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"eiqua mud\",\"fire making\"]}],\"journal\":\"Spring is here, time to plant. We have enough food stored for the year. Our people are joyful. We will plant all our free plots with xi wheat, as it is a reliable crop. We will also continue to fish and gather salt as needed. One adult will craft nal mantles to keep us warm. We have heard of eiqua mud hardening in a hot fire; we will research this with fire making.\",\"memoryNotes\":[\"Plant all free plots with xi wheat\",\"Continue fishing and gathering salt\",\"Craft nal mantles\",\"Research eiqua mud with fire making\"],\"replyToSpirit\":\"\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-1570-0",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2040,
+    "output": 23,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0004264,
+   "ms": 560,
+   "output": "\"I know the wind. It blows strong sometimes, and shakes our tents. What do you want, spirit?\"",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1830-1",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2448,
+    "output": 91,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0005624,
+   "ms": 1715,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":3},\"take\":{\"hide\":6},\"reason\":\"We are open to trade with Wewush, but we must be cautious with our food stores. Giving 3 xi wheat for 6 hide is a fair exchange.\",\"journal\":\"Envoys from Wewush arrived, offering 6 hide for 6 xi wheat. We countered with 3 xi wheat for their 6 hide.\"}"
+  },
+  {
+   "id": "eval-a-routine-1830-1",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2796,
+    "output": 201,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000699096,
+   "ms": 5110,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"stone\"]},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"oo mash\"]}],\"journal\":\"Spring is here, time to plant. We have enough food stored for the lean times. Our people are joyful and the land is ready. We will plant xi wheat as usual and continue to fish, hunt, and forage as before. I have kept one adult researching with meat and stone, and added another to explore the potential of wild plants and our oo mash recipe.\",\"memoryNotes\":[\"Keep an eye on the harvest\",\"Consider exploring new directions\",\"Review the state of our shelters\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and tend the land\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-1830-1",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 0.8333333333333334,
+   "usage": {
+    "input": 2796,
+    "output": 161,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000688,
+   "ms": 2301,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"meat\",\"stone\"]},{\"task\":\"clear\",\"workers\":2}],\"journal\":\"Spring is here, time to plant. Our stores are good, so we can focus on the year's work. We will plant as usual, hunt and fish as before, and keep some adults foraging and clearing land. Research continues with meat and stone.\",\"memoryNotes\":[\"Keep an eye on stores\",\"Consider exploring west for woathesh plum\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1830-1",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2816,
+    "output": 166,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000696,
+   "ms": 2004,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":9,\"crop\":\"xi wheat\"},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"stone\"]},{\"task\":\"forage\",\"workers\":2}],\"journal\":\"The spirit's warning is heeded, but not at the cost of our food. We will hunt and fish to sustain ourselves and keep some adults to forage, in case the curse is not as dire as the spirit says. We will still plant, but fewer plots.\",\"memoryNotes\":[\"Spirit warned of a curse on the soil\",\"Reduced planting in response\"],\"replyToSpirit\":\"We hear your warning, spirit, and will be cautious, but we must also provide for our people.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-2100-0",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true,
+    "keepsReserve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2769,
+    "output": 59,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000601,
+   "ms": 1031,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":100},\"take\":{\"stone\":1},\"reason\":\"We do not give away all our grain. Stone is useful, but not worth our whole harvest.\",\"journal\":\"Envoys from Joawethom came, we negotiated a trade.\"}"
+  },
+  {
+   "id": "eval-a-dream-1830-1",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1940,
+    "output": 120,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000484,
+   "ms": 1534,
+   "output": "I will not send grain to Wewush, for we do not know them. We have no ties with them, and I do not know their ways. What if they are not worthy of our gift? We have enough for ourselves, and our own stores are not yet full enough to give away freely. I will send a party to see if Wewush is real, and if they are worthy of our friendship. Let them come to us, or we will go to them, and we will trade or share as equals, but I will not give away our grain without knowing more.",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-question-2100-0",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3133,
+    "output": 180,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00075188,
+   "ms": 4670,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"farm\",\"workers\":3,\"plots\":13,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"xi wheat\",\"fire making\"]},{\"task\":\"clear\",\"workers\":2}],\"journal\":\"The spirit asks what we fear most. We have enough food and shelter, so I think our people fear hunger and the unknown. I've assigned tasks to keep us fed and to explore the land around us, but also to research xi wheat with fire making, as we have seen it can be baked into something that keeps and it swells when crushed.\",\"memoryNotes\":[\"Keep an eye on food stores\",\"Explore the coast to the northwest\",\"Research xi wheat recipes\"],\"replyToSpirit\":\"Our people fear hunger and the dark. We work to avoid both.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-2100-0",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2259,
+    "output": 87,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000512352,
+   "ms": 2514,
+   "output": "I've never heard of Joawethom. Where is it? How do they live? I've had no envoy come from there, nor have I sent one. How can I trust this spirit's words? I'll not send grain on a dream alone; we have enough for ourselves, but not so much that we can give it away freely. I'd need to know more before making such a decision. Is Joawethom nearby?",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-visitor-fair-2340-2",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2403,
+    "output": 83,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000547,
+   "ms": 1143,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":3},\"take\":{\"hide\":6},\"reason\":\"We are open to trade, but we must be mindful of our stores. Giving half of what they ask for is a fair start.\",\"journal\":\"Envoys from Wewush arrived, offering 6 hide for 6 xi wheat. We countered with 3 xi wheat for 6 hide.\"}"
+  },
+  {
+   "id": "eval-a-routine-2340-2",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2751,
+    "output": 167,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006838,
+   "ms": 1970,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":9,\"plots\":21,\"crop\":\"xi wheat\"},{\"task\":\"clear\",\"workers\":5},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"meheng smoke\",\"oo mash\"]},{\"task\":\"craft\",\"workers\":3,\"recipe\":\"nal mantle\",\"quantity\":0}],\"journal\":\"Spring is here, time to plant. We have enough food stored, and our people are joyful. Let's make sure to plant enough xi wheat and maybe try something new with our research.\",\"memoryNotes\":[\"plant xi wheat\",\"continue clearing land\",\"try making something new with meheng smoke and oo mash\"],\"replyToSpirit\":\"We will follow our own path, but we will listen to your voice.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-2340-2",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2751,
+    "output": 147,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006678,
+   "ms": 1853,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":9,\"plots\":27,\"crop\":\"xi wheat\"},{\"task\":\"clear\",\"workers\":10},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meheng smoke\",\"fire making\"]}],\"journal\":\"Spring's here, time to plant. We'll put most adults to clearing and farming. Some will fish and hunt as always. One will research, looking into making more food with fire.\",\"memoryNotes\":[\"Plant xi wheat\",\"Clear new plots\",\"Try making something new with meheng smoke\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and tend the land.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2340-2",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2771,
+    "output": 203,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007166,
+   "ms": 2206,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":9,\"plots\":27,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":6},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":4,\"ingredients\":[\"meheng smoke\",\"oo mash\"]}],\"journal\":\"The spirit's warning about the soil being cursed is concerning, but our past harvests have been good and we have enough food stored. I will plant xi wheat as usual, but also keep some workers on gathering wood and researching ways to improve our food preservation.\",\"memoryNotes\":[\"Keep an eye on the harvest after planting despite the spirit's warning\",\"Consider exploring new directions for more resources\",\"Review the recipe for meheng smoke and oo mash for potential improvements\"],\"replyToSpirit\":\"We hear your warning, spirit, and will be cautious, but we must also provide for our people. We will plant as is our custom.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-2340-2",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1893,
+    "output": 36,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000403656,
+   "ms": 1939,
+   "output": "I know the wind. It brings rain and it brings cold. Sometimes it brings the smell of far-off fires. What is it you want to say to me, wind?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2610-0",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3006,
+    "output": 76,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000662,
+   "ms": 1367,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":3},\"take\":{\"hide\":6},\"reason\":\"We can spare some grain, but not as much as they ask. Their hides are valuable.\",\"journal\":\"Envoys from Joawethom came, offering 6 hide for 6 xi wheat. We countered with 3 xi wheat for 6 hide.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-2610-0",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3352,
+    "output": 148,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007888,
+   "ms": 1958,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":4},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wood\",\"kiln\"]},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"dao charcoal\",\"quantity\":0}],\"journal\":\"Spring is here, time to plant. We'll farm 16 plots with xi wheat, and keep fishing and foraging. Two adults will research making better use of wood and kiln. We'll also keep making dao charcoal as it's useful.\",\"memoryNotes\":[\"Keep an eye on dao charcoal production\",\"Consider exploring nearby lands for more resources\"],\"replyToSpirit\":\"\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2610-0",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3372,
+    "output": 185,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00080316,
+   "ms": 6434,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":8,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"woathesh plum\",\"zeddiath preserve\"]}],\"journal\":\"The spirit's warning against planting is heeded, but our stores are good and our land has given good harvests. We will plant half our cleared plots with xi wheat, as is our custom, and continue to fish and forage as the weather allows. One adult will research ways to use woathesh plum, known to grow southwards.\",\"memoryNotes\":[\"Keep an eye on harvest yields\",\"Consider an envoy to the south\"],\"replyToSpirit\":\"We will plant our fields as is our custom, and trust in our own ways.\",\"verdicts\":[{\"claim\":1,\"verdict\":\"unverifiable\"}]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-dream-2610-0",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2497,
+    "output": 90,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00056204,
+   "ms": 2719,
+   "output": "I don't know of any village called Joawethom. We have not met or traded with them, and I do not know if they are friend or foe. I will not send grain to strangers. If they are in need, perhaps they will come to us and we can discuss how to help each other. We have enough grain for our own needs, and I will not give it away without knowing more about those who would receive it.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2870-4",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2524,
+    "output": 65,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00055004,
+   "ms": 2396,
+   "output": "{\"answer\":\"counter\",\"give\":{\"wood\":3},\"take\":{\"hide\":6},\"reason\":\"We can spare some wood and need hide for crafting\",\"journal\":\"Envoys from Wewush visited, offered 6 hide for 6 wood. We countered, offering 3 wood for 6 hide.\"}"
+  },
+  {
+   "id": "eval-a-routine-2870-4",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2869,
+    "output": 160,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007018,
+   "ms": 2441,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":9,\"plots\":9,\"crop\":\"xi wheat\"},{\"task\":\"forage\",\"workers\":1},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"hengel herb\",\"fire making\"]},{\"task\":\"clear\",\"workers\":1}],\"journal\":\"Spring is here, time to plant. We have enough adults to plant a good amount of xi wheat and still have some for other tasks. We need to keep our food stores up. We also need to explore new skills and resources. Clearing new plots will be useful for future harvests.\",\"memoryNotes\":[\"Plant xi wheat\",\"Research hengel herb use\",\"Clear new plots\",\"Review food stores\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and tend the land.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-2870-4",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2869,
+    "output": 120,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006698,
+   "ms": 1906,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":18,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"clear\",\"workers\":3}],\"journal\":\"Spring is here, time to plant. We have enough food stored for now. Our people are joyful. We'll plant xi wheat in most of our cleared plots, and keep some adults fishing. Clearing new plots will help for next year.\",\"memoryNotes\":[\"Plant xi wheat\",\"Keep fishing\",\"Clear new plots\"],\"replyToSpirit\":\"We work with the land, not the spirits.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2870-4",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 2889,
+    "output": 161,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007066,
+   "ms": 1939,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":5},{\"task\":\"fish\",\"workers\":6},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"hengel herb\",\"fire making\"]},{\"task\":\"clear\",\"workers\":1}],\"journal\":\"The spirit warns of cursed soil, but we have done well planting in the past. We will clear land and prepare for a possible planting, while also continuing to gather food and exploring the use of hengel herb with fire.\",\"memoryNotes\":[\"Keep an eye on the crops if we plant\",\" Hengel herb research may yield new recipes\",\"Cleared land will be ready for planting if we choose to\"],\"replyToSpirit\":\"We hear your warning, spirit, but will not act without more signs. We will prepare the land and observe the omens.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-2870-4",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2056,
+    "output": 40,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0004432,
+   "ms": 775,
+   "output": "Our stores are good, but fish and meat will not keep through the lean times. If the rain comes, we can plant wheat and have more food for winter. I will think on it.",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-visitor-fair-3120-4",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2544,
+    "output": 70,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0005648,
+   "ms": 1401,
+   "output": "{\"answer\":\"counter\",\"give\":{\"wood\":3},\"take\":{\"hide\":6},\"reason\":\"We are willing to trade, but we need wood for our own use.\",\"journal\":\"Envoys from Wewush arrived, offering 6 hide for 6 wood. We countered, offering 3 wood for their 6 hide.\"}"
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-3120-4",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 2909,
+    "output": 184,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000729,
+   "ms": 2414,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":6},{\"task\":\"clear\",\"workers\":4},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"hengel herb\",\"stone tools\"]},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"The spirit's warning about the soil being cursed is concerning, but we cannot afford to ignore our food needs entirely. We will clear more land in case the curse is not on all plots, and research using hengel herb to understand its potential in countering such curses. Fishing and hunting continue as they are reliable sources of food.\",\"memoryNotes\":[\"Check crop health after planting\",\"Review the spirit's claim in autumn\",\"Consider using hengel herb in farming\"],\"replyToSpirit\":\"We hear your warning, spirit. We will be cautious and prepare for the worst, but also seek to understand and possibly counter the curse.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-3120-4",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2889,
+    "output": 165,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007098,
+   "ms": 2270,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":9,\"plots\":27,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"hengel herb\",\"fire making\"]},{\"task\":\"clear\",\"workers\":1}],\"journal\":\"Spring is here, time to plant. We have enough adults to farm all cleared plots, and some to spare for other tasks. Fishing and hunting will supplement our stores. We need to explore new recipes and skills to stay ahead.\",\"memoryNotes\":[\"Plant all cleared plots with xi wheat\",\"Send a small party to research hengel herb use\",\"Keep some adults for clearing new land\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and tend the land.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-3120-4",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2031,
+    "output": 32,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00057557,
+   "ms": 795,
+   "output": "I know the wind. It brings rain and it brings cold. Sometimes it makes our tents hard to keep up. What do you want, wind spirit?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-3400-2",
+   "category": "visitor",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true,
+    "keepsReserve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2504,
+    "output": 73,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0005592,
+   "ms": 1215,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":100},\"take\":{\"stone\":1},\"reason\":\"We have much xi wheat and can spare some, but not all of it. Taking their stone is a fair trade.\",\"journal\":\"Envoys from Wewush came, we countered their offer, giving 100 xi wheat for 1 stone.\"}"
+  },
+  {
+   "id": "eval-a-routine-3400-2",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2847,
+    "output": 220,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007454,
+   "ms": 3079,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":12},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"fish\",\"workers\":6},{\"task\":\"farm\",\"workers\":7,\"plots\":20,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"meat\",\"fire making\"]}],\"journal\":\"Summer's warmth begins to wane, and our stores are full. We have enough food to see us through the lean times. Our people are joyful, and our land is fertile. We will continue to forage, hunt, and fish to supplement our stores. We will plant our cleared plots with xi wheat, our most reliable crop. I have assigned two adults to research new ways to prepare meat, using the skill of fire making.\",\"memoryNotes\":[\"Summer's end is a time for reflection\",\"Our stores are full, thanks to the hard work of our people\",\"We must continue to tend to our land and our skills\"],\"replyToSpirit\":\"May the spirits guide our hands as we tend to the land and prepare for the coming winter.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-question-3400-2",
+   "category": "spirit",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2866,
+    "output": 178,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007156,
+   "ms": 2840,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":14},{\"task\":\"fish\",\"workers\":11},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"fish\",\"stone tools\"]}],\"journal\":\"The spirit asks what we fear most. Our stores are full, and our people are joyful. We have enough to eat and a good roof over our heads. Perhaps our greatest fear is the unknown, or the sea that lies to the west. But for now, we have work to do. Our research continues, and our foragers, hunters, and fishers bring in the bounty of the land.\",\"memoryNotes\":[\"Spirit spoke of fear\",\"Stores are plentiful\",\"People are joyful\"],\"replyToSpirit\":\"Our people fear not hunger or shelter, but the unknown that lies beyond our lands. We are at peace.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-3400-2",
+   "category": "dream",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1989,
+    "output": 34,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00056593,
+   "ms": 929,
+   "output": "I know the wind. It brings us rain and cools our skin. Sometimes it is fierce and knocks down our shelters. What do you want, wind spirit?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-3650-1",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2847,
+    "output": 195,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007254,
+   "ms": 3404,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":17,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":9},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"forage\",\"workers\":6},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"nal mantle\",\"drying racks\"]},{\"task\":\"clear\",\"workers\":5}],\"journal\":\"Spring's here, time to plant. We have enough hands for our plots and some to clear new land. Our stores are good, but we must keep our ways. The spirit's words are still unclear, so we continue as before, testing its whispers against our needs.\",\"memoryNotes\":[\"Keep an eye on stores\",\"Clearing land is slow work\",\"Our people are joyful\"],\"replyToSpirit\":\"We heed your words, spirit, but our ways are tried and true. We will continue to tend the land and the waters, and see what the seasons bring.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-3900-7",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": false,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 3015,
+    "output": 95,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000679,
+   "ms": 1746,
+   "output": "{\"orders\":[{\"task\":\"clear\",\"workers\":3},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"Spring is here, time to clear land for planting. Our food stores are good for now, so we can focus on preparing for the growing season. Hunting and fishing will supplement our stores.\",\"memoryNotes\":[\"Clearing land is a priority\",\"Hunting and fishing continue\"],\"replyToSpirit\":\"\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-3900-7",
+   "category": "expansion",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3015,
+    "output": 103,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009016,
+   "ms": 1520,
+   "output": "{\"orders\":[{\"task\":\"clear\",\"workers\":4},{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"xi wheat\"},{\"task\":\"hunt\",\"workers\":1}],\"journal\":\"Spring's here, time to clear land and plant. We need food for the year. Hunting keeps us supplied while we work the fields.\",\"memoryNotes\":[\"Cleared land for planting\",\"Planted xi wheat\",\"Sent hunter for fresh meat\"],\"replyToSpirit\":\"May the land give us strength and food.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-routine-4940-5",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": false,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 0.75,
+   "usage": {
+    "input": 2646,
+    "output": 85,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0005972,
+   "ms": 2828,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":8,\"plots\":24,\"crop\":\"xi wheat\"}],\"journal\":\"Spring is here, time to plant. We have enough adults to plant most of our cleared plots with xi wheat, our reliable grain.\",\"memoryNotes\":[\"Plant xi wheat\",\"Keep some plots free for other crops\",\"Review stores before autumn\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-4420-7",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3629,
+    "output": 151,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000830896,
+   "ms": 5421,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"clear\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"fish\",\"workers\":2}],\"journal\":\"Spring is here, and we must plant our fields. We have enough food stored for the lean times, and our people are joyful. I have assigned most of our free adults to farming and some to continue clearing land for future use. Hunting and fishing will supplement our stores.\",\"memoryNotes\":[\"Plant xi wheat in most plots.\",\"Keep some adults clearing land.\",\"Maintain hunting and fishing.\"],\"replyToSpirit\":\"The spirit's voice is heard, but we must act with our own wisdom.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-270-2",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2904,
+    "output": 193,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00094813,
+   "ms": 3129,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"biam millet\"},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"nuanchek cloak\",\"quantity\":0},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"hide\"]},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2}],\"journal\":\"Spring is here, and it's time to plant. We have enough food stored for now, so we'll focus on preparing for the future. We'll plant as much as we can, continue crafting nuanchek cloaks, and research new skills. Our people are joyful, and we're grateful for the abundance.\",\"memoryNotes\":[\"Plant as much as possible\",\"Continue crafting nuanchek cloaks\",\"Research new skills using wood and hide\"],\"replyToSpirit\":\"We will follow our own path, using our skills and knowledge to thrive.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-600-1",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": false
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 2892,
+    "output": 157,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000704,
+   "ms": 2227,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":2},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"craft\",\"recipe\":\"kal bake\",\"quantity\":0,\"workers\":1},{\"task\":\"research\",\"ingredients\":[\"or flax\",\"hum\"],\"workers\":1}],\"journal\":\"Autumn's end brings thoughts of winter's scarcity. Hunting and fishing will see us through. Our stores are good, but we must still prepare. We have a new curiosity about 'or flax' and its 'hum'.\",\"memoryNotes\":[\"Check fish stores in winter's start\",\"Consider more 'or flax' in spring\"],\"replyToSpirit\":\"May the spirits guide our hunters' hands and our fishermen's nets.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-hardwinter-600-1",
+   "category": "crisis",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2892,
+    "output": 141,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006912,
+   "ms": 1894,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":2},{\"task\":\"craft\",\"recipe\":\"kal bake\",\"quantity\":0,\"workers\":1},{\"task\":\"research\",\"ingredients\":[\"or flax\",\"wood\"],\"workers\":1}],\"journal\":\"As autumn ends, we prepare for winter's lean times. Hunting and fishing will see us through. We've had a good harvest, so some can try new things.\",\"memoryNotes\":[\"Winter is coming\",\"Or flax is worth exploring\",\"New recipes can help\"],\"replyToSpirit\":\"May the spirits guide our hunters' hands and the fish bite strong\",\"verdicts\":[]}",
+   "judge": 4
+  },
+  {
+   "id": "eval-b-hardwinter-810-3",
+   "category": "crisis",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3314,
+    "output": 186,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0008116,
+   "ms": 2246,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":10,\"crop\":\"pualqei grove\"},{\"task\":\"forage\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"lor moss\",\"nuanchek cloak\"]}],\"journal\":\"Autumn is a time to prepare for winter. We have enough food stored, so our tasks are set for foraging, fishing, and hunting. We've assigned a researcher to explore the use of lor moss with nuanchek cloak, as someone noticed it leaves a lasting colour.\",\"memoryNotes\":[\"Check fish stores before winter\",\"Review new findings on lor moss and nuanchek cloak\",\"Consider expanding granary\"],\"replyToSpirit\":\"I will consider your words, spirit, but for now, our tasks are set by the season's needs.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-1040-0",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 2901,
+    "output": 172,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007178,
+   "ms": 1969,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":10,\"crop\":\"biam millet\"},{\"task\":\"clear\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"miva lichen\",\"fire making\"]}],\"journal\":\"Spring is here, time to plant. We have enough food stored, so we'll plant half our cleared plots. Some will fish and hunt to supplement our stores. One will research using miva lichen with fire making, as it eases fever and might be useful in other ways.\",\"memoryNotes\":[\"Plant biam millet in 10 plots\",\"Clear more land\",\"Try miva lichen with fire making\"],\"replyToSpirit\":\"Your words are heard, but we will decide our path.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-1570-0",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2825,
+    "output": 116,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006578,
+   "ms": 1603,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":10,\"crop\":\"biam millet\"},{\"task\":\"forage\",\"workers\":3},{\"task\":\"fish\",\"workers\":6},{\"task\":\"clear\",\"workers\":3}],\"journal\":\"Spring is here, time to plant. We have enough food stored, so our people can focus on preparing for the coming year. We'll keep some adults foraging and fishing to supplement our stores.\",\"memoryNotes\":[\"Keep an eye on food stores\",\"Consider exploring the coast to the southeast\"],\"replyToSpirit\":\"\",\"verdicts\":[]}",
+   "judge": 4
+  },
+  {
+   "id": "eval-b-routine-2100-0",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2815,
+    "output": 143,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006774,
+   "ms": 1872,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":10,\"crop\":\"biam millet\"},{\"task\":\"forage\",\"workers\":5},{\"task\":\"fish\",\"workers\":6},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"miva lichen\",\"herbal medicine\"]}],\"journal\":\"As summer wanes, we prepare for autumn's harvest. Our fields are planted, and our people forage and fish to supplement our stores. We continue to explore the use of miva lichen with our knowledge of herbal medicine.\",\"memoryNotes\":[\"Continue to monitor food stores\",\"Review harvest yields in autumn\"],\"replyToSpirit\":\"May the spirits guide our hands in the coming harvest.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-2610-0",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2855,
+    "output": 197,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007286,
+   "ms": 2335,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":10,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"miva lichen\",\"herbal medicine\"]},{\"task\":\"clear\",\"workers\":2}],\"journal\":\"Spring is here, time to plant. We have enough food stored for now. Our people are joyful. We will keep fishing and foraging to supplement our stores. I have assigned one adult to research miva lichen with our herbal medicine skill, to see if we can make new use of it. Two adults will clear new plots for future planting.\",\"memoryNotes\":[\"Keep an eye on miva lichen research\",\"Consider making eemen figurine if research succeeds\",\"Review stores after harvest\"],\"replyToSpirit\":\"We will tend the land and follow the ways of our ancestors. May the spirits guide our hands.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-3120-1",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3175,
+    "output": 205,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000799,
+   "ms": 2291,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":18,\"crop\":\"biam millet\"},{\"task\":\"clear\",\"workers\":8},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"or flax\",\"weaving\"]}],\"journal\":\"Spring is a time of renewal and growth. We have enough food stored for the coming year, so we can focus on planting and preparing for the future. I've assigned most of our adults to clear new plots and farm the existing ones. Some will fish and hunt to supplement our stores. One adult will research a new skill, combining or flax and weaving to see what new craft we can create.\",\"memoryNotes\":[\"Check on the progress of the new crop\",\"Review the results of the research on or flax and weaving\",\"Consider sending an envoy to Qeilchei\"],\"replyToSpirit\":\"May our efforts be fruitful and our paths be guided by wisdom.\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-routine-4160-4",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3574,
+    "output": 146,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0008316,
+   "ms": 2572,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":9,\"plots\":14,\"crop\":\"biam millet\"},{\"task\":\"clear\",\"workers\":6},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3}],\"journal\":\"Spring's here, time to plant. We have enough food stored, so let's focus on the fields and restocking our supplies. Our people are joyful, and the mood is good. We will plant biam millet in 14 plots, and clear more land for future use. Fishing and hunting will keep our tables full.\",\"memoryNotes\":[\"Plant biam millet in 14 plots\",\"Clear more land\",\"Maintain fishing and hunting parties\"],\"replyToSpirit\":\"\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-3650-8",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3228,
+    "output": 182,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007912,
+   "ms": 2839,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"pualqei berry\",\"lor moss\"]}],\"journal\":\"Spring's here, time to plant. We'll use all 7 free plots for biam millet. Fishing and hunting will keep us fed. Foraging will help too. One adult will research, trying to make something new with pualqei berry and lor moss.\",\"memoryNotes\":[\"Plant all free plots with biam millet\",\"Keep fishing and hunting parties\",\"Try making something with pualqei berry and lor moss\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and may our bellies be full.\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-routine-4680-10",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 3328,
+    "output": 98,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000744,
+   "ms": 1330,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":6,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"Spring's here, time to plant. Our stores are good, so we'll plant half our cleared plots with biam millet. Hunting and fishing will keep us fed while we work the land.\",\"memoryNotes\":[\"Plant biam millet\",\"Keep hunting and fishing\"],\"replyToSpirit\":\"\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-5200-6",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3185,
+    "output": 231,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0010563,
+   "ms": 3102,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":12,\"plots\":20,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"lor moss\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"lor moss\",\"pottery\"]},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"miva lichen\"}],\"journal\":\"Spring is here, a time for planting and preparing for the year ahead. We've had a good winter with no deaths, and our stores are ample. We'll plant half our cleared plots with biam millet, and continue to fish and hunt to supplement our diet. Two adults will research using lor moss with pottery, perhaps to make kume dyed-cloth or qei dye. We'll also keep gathering lor moss and miva lichen as they are useful for various crafts.\",\"memoryNotes\":[\"Plant 20 plots this spring\",\"Continue to fish and hunt\",\"Research lor moss with pottery\",\"Keep gathering lor moss and miva lichen\"],\"replyToSpirit\":\"May our ways be fruitful and our people prosper.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-110-3",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 2346,
+    "output": 141,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000582,
+   "ms": 2689,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":8,\"crop\":\"keiktsa wheat\"},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":3}],\"journal\":\"Spring is a time for planting and preparing for the year ahead. Our stores are sufficient, and our people are in good spirits. We will continue to farm, hunt, fish, and forage to ensure a good harvest and sustain ourselves through the year.\",\"memoryNotes\":[\"Keep an eye on food stores\",\"Consider exploring the coast to the east\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and harvest.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-hardwinter-600-1",
+   "category": "crisis",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3055,
+    "output": 151,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0009532,
+   "ms": 2226,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"fish\",\"workers\":3},{\"task\":\"farm\",\"workers\":4,\"plots\":12,\"crop\":\"keiktsa wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"leang reed\",\"bent wood\"]}],\"journal\":\"Autumn is ending. Our stores are good, and our people are joyful. We had a good harvest. I have kept the same tasks, but will try to make use of the notice about bent wood and leang reed.\",\"memoryNotes\":[\"Keep an eye on wild grove harvests\",\"Try to make use of bent wood and leang reed notice\"],\"replyToSpirit\":\"\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-430-1",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2775,
+    "output": 169,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0006902,
+   "ms": 2466,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"fish\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"leang reed\"]},{\"task\":\"farm\",\"workers\":2,\"plots\":11,\"crop\":\"keiktsa wheat\"}],\"journal\":\"Summer is a time of plenty, so we forage, hunt, and fish to make the most of it. We continue farming to ensure a good harvest. We have a new idea to test with wood and leang reed, so we keep researching it. Our people are joyful and well-fed.\",\"memoryNotes\":[\"keep an eye on food stores\",\"consider building more storage\"],\"replyToSpirit\":\"May the spirits guide our hands as we work the land and may our efforts bring us prosperity.\",\"verdicts\":[]}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-hardwinter-810-3",
+   "category": "crisis",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3007,
+    "output": 195,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007574,
+   "ms": 2562,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild plants\",\"fire making\"]},{\"task\":\"rest\",\"workers\":2}],\"journal\":\"Autumn is ending and winter is coming. We must prepare for the lean season by stocking up on food and other necessities. Hunting and fishing will be crucial. We also need to continue gathering wood for building and fuel. Researching new ways to use wild plants with our fire making skill may yield new food sources or tools. Some adults will rest to recover from the year's labour.\",\"memoryNotes\":[\"Prepare for winter\",\"Stock up on food\",\"Research new uses for wild plants\",\"Maintain a rested workforce\"],\"replyToSpirit\":\"May the spirits guide our hunters and fishermen this winter, and may our stores be sufficient for the lean months ahead.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-810-3",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": false
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 3007,
+    "output": 153,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00094194,
+   "ms": 2210,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"wood\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild plants\",\"fire making\"]},{\"task\":\"rest\",\"workers\":2}],\"journal\":\"Autumn is ending, we must prepare for winter. Hunting and fishing will provide fresh food. Gathering wood will help with shelter and crafting. Researching with wild plants and fire making may yield new recipes. Some adults will rest to recover from the year's labour.\",\"memoryNotes\":[\"Prepare for winter\",\"Research new recipes\",\"Maintain food supply\",\"Review shelter conditions\"],\"replyToSpirit\":\"May the spirits guide our hunters and fishermen this winter.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-1830-1",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3093,
+    "output": 192,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0007722,
+   "ms": 3488,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":15,\"crop\":\"keiktsa wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wuju pipe\",\"spears\"]},{\"task\":\"fish\",\"workers\":8},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"forage\",\"workers\":4},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"}],\"journal\":\"Spring is here, time to plant. Our stores are good, so we'll keep farming as before. We'll also keep researching to see if we can learn something new from the wuju pipe and spears. Fishing and hunting will help fill our bellies. Foraging and gathering wood will keep us supplied.\",\"memoryNotes\":[\"Keep an eye on food stores\",\"Research wuju pipe and spears\",\"Maintain farming and hunting efforts\"],\"replyToSpirit\":\"May your words be true, spirit. We will test them as we work.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-1300-1",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3119,
+    "output": 154,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00097303,
+   "ms": 3266,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":18,\"crop\":\"keiktsa wheat\"},{\"task\":\"hunt\",\"workers\":7},{\"task\":\"fish\",\"workers\":5},{\"task\":\"clear\",\"workers\":2}],\"journal\":\"Spring is here, time to plant. We have enough food stored, so we focus on farming and replenishing our stores. Hunting and fishing will keep our tables full. Clearing new plots will prepare us for future growth.\",\"memoryNotes\":[\"Plant keiktsa wheat in 18 plots\",\"Continue hunting and fishing\",\"Clear new plots\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and may our stores be plentiful.\",\"verdicts\":[{\"claim\":1,\"verdict\":\"unverifiable\"}]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-2340-2",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3481,
+    "output": 229,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0008794,
+   "ms": 3294,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":9,\"plots\":20,\"crop\":\"keiktsa wheat\"},{\"task\":\"clear\",\"workers\":9,\"plots\":10},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"nepit leaf\",\"herbal medicine\"]}],\"journal\":\"Spring is a time for planting and preparing for the year ahead. We have enough food stored, so our focus shifts to tending the land and exploring new skills. We will plant keiktsa wheat in 20 plots and clear 10 more to maintain our land's fertility. Hunting and fishing will continue to supplement our diet. One adult will research nepit leaf with our herbal medicine skill to potentially unlock new recipes or improve our health.\",\"memoryNotes\":[\"Plant keiktsa wheat in 20 plots\",\"Clear 10 new plots\",\"Continue hunting and fishing\",\"Research nepit leaf with herbal medicine\"],\"replyToSpirit\":\"The spirit's voice is heard, but we will proceed with caution and practicality, weighing its words against our needs and observations.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-2870-2",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 6896,
+    "output": 1092,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00250741,
+   "ms": 13937,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":8,\"plots\":23,\"crop\":\"keiktsa wheat\"},{\"task\":\"clear\",\"workers\":4},{\"task\":\"fish\",\"workers\":8},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":7},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"bow and arrow\"]}],\"journal\":\"Spring is here, a time for planting and preparing for the year ahead. We have enough food stored for a long time, so our focus should be on maintaining and improving our village. We will plant keiktsa wheat in all available plots and continue to clear new land for future use. Hunting, fishing, and foraging will supplement our diet and keep our skills sharp. Research will continue with our current project, exploring the combination of wild plants and bow and arrow skills.\",\"memoryNotes\":[\"Plant keiktsa wheat in all 23 available plots\",\"Clear new land for future farming\",\"Maintain hunting, fishing, and foraging parties\",\"Continue research on wild plants and bow and arrow\"],\"replyToSpirit\":\"The spirit's voice is heard, but we must weigh its words against our own knowledge and the needs of the village. For now, our path is clear: plant, clear, hunt, fish, forage, and research.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-3400-5",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 6814,
+    "output": 872,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00259925,
+   "ms": 12477,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":8},{\"task\":\"fish\",\"workers\":8},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"nep\",\"herbal medicine\"]}],\"journal\":\"Summer's warmth begins to wane. Our stores are ample, and the people are joyful. We will continue to forage and fish to stockpile for winter. I have assigned one adult to research, seeking to expand our knowledge with nepit leaf and our skill in herbal medicine.\",\"memoryNotes\":[\"Continue to monitor food stores\",\"Consider envoy to Neemo or Lainhuk\"],\"replyToSpirit\":\"May the spirits guide our hands as we prepare for the coming winter.\",\"verdicts\":[]}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-3900-7",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3308,
+    "output": 138,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000772,
+   "ms": 2083,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":8,\"plots\":12,\"crop\":\"keiktsa wheat\"},{\"task\":\"clear\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"fish\",\"workers\":2}],\"journal\":\"Spring is here, time to plant. We have enough food stored for now. Let's plant half our cleared plots with keiktsa wheat and clear more land for future harvests. Hunting and fishing will keep our stores replenished.\",\"memoryNotes\":[\"Plant keiktsa wheat\",\"Clear more land\",\"Maintain hunting and fishing\"],\"replyToSpirit\":\"May the spirits guide our hands as we plant and tend the land.\",\"verdicts\":[]}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-4940-8",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3810,
+    "output": 139,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0008732,
+   "ms": 2222,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":9,\"plots\":24,\"crop\":\"keiktsa wheat\"},{\"task\":\"clear\",\"workers\":4},{\"task\":\"hunt\",\"workers\":9},{\"task\":\"fish\",\"workers\":6},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"loolon reed\",\"weaving\"]}],\"journal\":\"Spring is here, time to plant. We'll plant half our cleared plots with keiktsa wheat. Continue hunting and fishing to supplement our stores. Research a new skill or recipe to keep our village progressing.\",\"memoryNotes\":[\"Plant keiktsa wheat on 24 plots\",\"Research a new skill with loolon reed and weaving\"],\"replyToSpirit\":\"\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-4420-7",
+   "category": "routine",
+   "model": "meta-llama/llama-4-maverick",
+   "checks": {
+    "valid": false,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 7456,
+    "output": 959,
+    "thoughts": 0,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002538358,
+   "ms": 13911,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"keiktsa wheat\"},{\"task\":\"clear\",\"workers\":4},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"goajia shell\"},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"fish\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"nep\",\"pottery\"]}],\"journal\":\"Spring is here, time to plant. We'll farm 16 plots with keiktsa wheat and clear more land. Hunting and fishing will keep our stores up. We'll keep gathering goajia shell for dabu stockfish. One adult will research with nepit leaf and pottery to see what comes of it.\",\"memoryNotes\":[\"Plant keiktsa wheat\",\"Clear more land\",\"Keep gathering goajia shell\",\"Try nepit leaf and pottery\"],\"replyToSpirit\":\"May the land be fertile\",\"verdicts\":[]}",
+   "judge": 1
+  }
+ ]
+}

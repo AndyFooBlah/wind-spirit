@@ -1,0 +1,2332 @@
+{
+ "model": "openai/gpt-5-mini",
+ "when": "2026-09-13T01:21:44.449Z",
+ "results": [
+  {
+   "id": "eval-a-visitor-fair-110-3",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1820,
+    "output": 605,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001665,
+   "ms": 7696,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"We have grain to spare and hides are useful. Wewush come in peace; let trade bind us without emptying our larder.\",\"journal\":\"Year 2, spring week 8. Envoys from Wewush offered six hides for six xi wheat. I accepted the trade. Grain 402 -> 396; hide 120 -> 126. People remain glad. No change to standing orders.\"}"
+  },
+  {
+   "id": "eval-a-routine-110-3",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": false,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 2203,
+    "output": 661,
+    "thoughts": 384,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00187275,
+   "ms": 8493,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wood\",\"stone\"]},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"clear\",\"workers\":4}],\"journal\":\"Spring holds yet and fields stand half sown. We keep two to pry at wood and stone—sparks were seen; we will learn if flame can be made. Four clear the next ground so we may plant in time; others fish, hunt, and gather, for stores must not be tempted. I choose steady work and cautious learning; children and elders keep safe at home.\",\"memoryNotes\":[\"Half our plots rest; plant about half each year\",\"Sparks from struck stone may make fire if we learn to use them\",\"Food stores hold long but fresh food spoils; preserve what we can\",\"Wood platform on stone foot sees water far — look to boats or drying fish\",\"Keep two learning each season so we do not fall behind\",\"Clear more plots when we have hands free\",\"Trade or envoys not yet needed\",\"Granary stands; store more grain when harvest comes\"],\"replyToSpirit\":\"I hear your wind and watch your signs. I thank the sleep that brought the spark; we will seek proof in waking work.\"}",
+   "judge": 4
+  },
+  {
+   "id": "eval-a-expand-easy-110-3",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2203,
+    "output": 921,
+    "thoughts": 512,
+    "cached": 2048,
+    "cacheWrite": 0
+   },
+   "cost": 0.00193195,
+   "ms": 11444,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":1},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"stone\",\"wood\"]},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"wood\"}],\"journal\":\"Spring leans on us and fields must be set. I plant the six free plots of xi wheat so we hold to the rule of resting the land. Men go to fish and hunt while one gathers wood and two build a hide tent to mend poor shelter. One works at stone and wood to learn what sparks bring; we test what the mind sees.\",\"memoryNotes\":[\"Plant half the cleared plots each spring\",\"Keep two people on new things when times are fair\",\"Build another hide tent if shelter still poor\",\"Store grain in granary when we have wood and stone\",\"Stone + wood noticed for sparks; test for fire\"],\"replyToSpirit\":\"We hear the whisper and set hands to test. If the spirit speaks true, we learn; if it lies, the land will tell us.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-110-3",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 2222,
+    "output": 935,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0024255,
+   "ms": 12771,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"stone\"]},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"nal mantle\",\"quantity\":2},{\"task\":\"build\",\"workers\":1,\"recipe\":\"hide tent\"}],\"journal\":\"The spirit came in my sleep and said the soil is cursed; seed would rot. I do not anger the spirits lightly, yet I also do not leave the people wanting. We plant nothing this spring. I keep more hands at fish and hunt and forage so the winter store does not thin. Two make cloth, one builds shelter, and one studies wood and stone to learn better ways.\",\"memoryNotes\":[\"Spirit warned: plant nothing this spring\",\"Grain stores large: 402 xi wheat\",\"Fields cleared: 12 plots, 6 planted last year\",\"Noticed: struck stone makes sparks\",\"Noticed: wind and smoke preserve food\",\"Noticed: wood platform on stone sees water a day out\",\"Sites for new village: five places NE/N/NW\",\"No other villages known\",\"Keep one adult researching each season\",\"Make shelter with hide when spare hides\",\"Winter needs hunting and fishing\"],\"replyToSpirit\":\"I hear you, spirit of the ground. We will not press seed into soil you say is sick. Watch us — we keep our people, make warm roof and cloth, and learn from stone and wood. If the soil heals, we will plant with your blessing.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-visitor-fair-270-2",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2373,
+    "output": 285,
+    "thoughts": 128,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00116325,
+   "ms": 3833,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"They bring hides and ask for grain. We have much grain and need warm coverings. They are not enemies. I accept their offer.\",\"journal\":\"Year 5, spring, week 12. Envoys from Wewush came from the south with six hides and asked for six xi wheat. I accepted their trade. We gave six xi wheat and took six hides. We keep plenty of grain for the people; this trade brings useful hides and keeps peace with a nearby village. The adults remain at their tasks.\"}"
+  },
+  {
+   "id": "eval-a-dream-110-3",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1307,
+    "output": 366,
+    "thoughts": 192,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00105875,
+   "ms": 9234,
+   "output": "Wewush eats in my mind like smoke on the wind. Tell me, spirit: how many are there at Wewush, and how far do they sit from our fires? Do they ask for seed to plant or for bread to keep them through the lean?  \n\nIf they are near and many will die without help, we will spare some grain—yet not so much that our own children go hungry in winter. I would send them enough for one season and a few handfuls of seed, and we would send one of our people to learn from them and to make friendship. Is that what you would have me do?",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-270-2",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2756,
+    "output": 1013,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002715,
+   "ms": 12344,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":10,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"build\",\"workers\":1,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"stone tools\"]}],\"journal\":\"Spring is here and the land asks for seed. Ten empty plots sit ready; I set farmers to plant wheat so stores remain full through lean months. We keep fishers and hunters to bring fresh meat while the fields begin their work. One hand will make a hide tent to mend poor shelter, and one will test tending of wild plants with our stone tools to learn for future years.\",\"memoryNotes\":[\"Plant ten plots of xi wheat this spring.\",\"Keep four farmers to finish planting quickly (3 plots per farmer/week).\",\"Keep three fishing and two hunting as steady food watchers.\",\"Build one hide tent to improve poor shelter.\",\"Research tending wild plants with stone tools to learn orchard care.\",\"Do not send colonists this year; season for sowing and care.\"],\"replyToSpirit\":\"We thank the spirit for seed and clear soil. Watch our hands and give steady rain; let us learn with care and keep our people full.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-270-2",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2775,
+    "output": 974,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00264175,
+   "ms": 11552,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":1,\"plots\":1,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"xi wheat\"]},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"A spirit warned the seed will rot. I have not cast away our careful habit at once. We will plant but little — one plot — and watch. Two steady folk will study the wheat seed with sharp eyes; the rest keep the village fed and mend our shelter. If the seed fails, we will bend our ways; if it lives, my people keep their spring work.\",\"memoryNotes\":[\"Spirit said: 'Plant nothing this spring. The seed will rot.'\",\"Test by planting one plot of xi wheat only\",\"Two adults researching xi wheat for signs of rot\",\"Keep fishing and hunting to hold stores steady\",\"Build a hide tent to improve poor shelter\"],\"replyToSpirit\":\"Spirit, I hear you. You will have one small test of the seed. Show us what is true and I will turn the whole village as you bid, or I will keep our fields if you are silent.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-270-2",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1860,
+    "output": 416,
+    "thoughts": 256,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001297,
+   "ms": 4772,
+   "output": "Spirit, your voice touches my sleep and I wake with it heavy on my chest. Tell me plainly—how many at Wewush go hungry? Are they close enough that our people can walk there without leaving our stores bare? Will they meet us with open hands, not with knives?\n\nWe have much grain upon our shelves; I do not fear a single sack to help a neighbour. But land grows tired if we give wrong, and winter comes to all. If you would have me send grain, show me the hungry and their number, that I may give what is wise and keep my people safe.",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-visitor-greedy-430-1",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2595,
+    "output": 276,
+    "thoughts": 128,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00120075,
+   "ms": 4361,
+   "output": "{\"answer\":\"refuse\",\"journal\":\"These folk ask for all our grain for one stone. I will not give our people to hunger for such a thing. We keep our stores: food is life, and the road to Wewush is long and their trade long cold in memory. Tell them we will not trade so, and that if they bring fair goods or ask for a small gift we will speak. Until then we refuse.\"}"
+  },
+  {
+   "id": "eval-a-routine-430-1",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2977,
+    "output": 692,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00212825,
+   "ms": 10201,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild plants\",\"fire making\"]},{\"task\":\"forage\",\"workers\":5},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"Summer holds the fields. Food sits full in our houses and the young and old sleep without want. I keep two steady to learn of the softening of wild plants and of ways fire might tame or change them. The rest go to bring meat, fish and gather — steady work to fill winter and keep skill bright.\",\"memoryNotes\":[\"Food stores large — 2784 xi wheat\",\"Seven plots free; plant half rule in spring\",\"Tauk flint close, good for experiments\",\"Wild plants soften in heat — test with fire making\",\"Keep one or two on research in good years\",\"Nearby coast and forest for fish and game\"],\"replyToSpirit\":\"I hear the whisper in dream, and I thank the spirits that watch our hearth. I will not follow a whisper alone; I will test with hand and eye, and if the spirits speak true the people will see it in what grows and keeps.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-dream-430-1",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2079,
+    "output": 173,
+    "thoughts": 64,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00086575,
+   "ms": 3456,
+   "output": "You say you are the wind that moves over our roofs. I know your touch. You cool us in summer, steal the smoke from our fires, and lift the roof-thatched hair of the children. You speak in weather and in the creak of poles. \n\nAre you only the wind I feel on my face, or do you bring a message from far seas or the forests? What do you want of my people — shelter, grain, or warning of storm?",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-spirit-question-430-1",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2995,
+    "output": 911,
+    "thoughts": 576,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00257075,
+   "ms": 14495,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":5},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"explore\",\"workers\":2,\"direction\":\"northeast\",\"days\":2}],\"journal\":\"A spirit came in the night and asked what folk fear most. The folk mutter of strangers and the foot of a thief at the granary; we will seek proof before we answer the spirit only by rumor. I keep most hands to bringing food and two go to the nearest coast to look for smoke, tracks, and other people. If they find signs, we will decide whether to greet or to gird for blows.\",\"memoryNotes\":[\"People fear strangers and thieves at night\",\"Grain stores are large; hunger not pressing now\",\"Two days' scouting to the northeast coast for signs of people\",\"Keep watch at granary nights until scouts return\",\"Keep 5 foragers, 4 fishers, 2 hunters steady each week\",\"Tauk flint and nearby stone plentiful\",\"Hide and cloth stores good\",\"No envoys known yet\",\"Spirit asked this season; seek proof before full trust\",\"Sites for new village noted (1-5)\"],\"replyToSpirit\":\"Great spirit, we hear you. My people fear most the foot of another—stranger who comes with hunger or spear, who takes children or stores in the night. We will send two quick eyes to the northeast coast to see if smoke or tracks tell us of other folk. When they return with proof, I will answer you truly.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-600-1",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": false,
+    "journalInCharacter": true
+   },
+   "score": 0.5,
+   "usage": {
+    "input": 2440,
+    "output": 399,
+    "thoughts": 256,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001408,
+   "ms": 6512,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":8},\"take\":{},\"reason\":\"Wewush are kin of the hills and small; they bring no demand of blood. We have great store of grain. To give eight xi is little to us and keeps the road open. Charity keeps neighbours steady; a gift now buys peace and friendship later.\",\"journal\":\"Year 11, autumn week 4: envoys from Wewush came. They asked for eight xi wheat and offered no tribute. I gave them eight xi wheat. Village stores remain ample. Mood stays joyful.\"}"
+  },
+  {
+   "id": "eval-a-hardwinter-600-1",
+   "category": "crisis",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2824,
+    "output": 978,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002662,
+   "ms": 15914,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"build\",\"workers\":3,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"woathesh plum\",\"wild orchard\"]}],\"journal\":\"Autumn wanes and stores sit heavy. I set most to hunt and fish for winter, some to gather wild food, and three to make a hide tent so none suffer without shelter. One stays to think on plums and orchards and what we might learn beside the sea.\",\"memoryNotes\":[\"Stores large: grain 2639 units — many winters of safety\",\"Cleared plots 23; next spring plant about half (~11 plots)\",\"Hide stocks can spare 2 for a tent now\",\"Woathesh plum lies south, two days — a place to send scouts in good weather\",\"Winter favours hunting and fishing; assign adults accordingly\",\"Keep one adult always researching new food or skill\"],\"replyToSpirit\":\"I hear your voice, spirit, but I look with my own eyes and weigh the cold and the stores; give counsel and I will test it by doing.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-dream-600-1",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1971,
+    "output": 354,
+    "thoughts": 256,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00120075,
+   "ms": 5587,
+   "output": "Stone and wood trouble me most. Stone is small and useful; wood we lean on for houses, boats and smoke. Grain and meat hold us for years.\n\nIf you have watched so long, tell me plain: will the summer rains be steady enough now to raise a planted field to harvest? How sure are you of this thing?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-600-1",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2837,
+    "output": 1023,
+    "thoughts": 576,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00275525,
+   "ms": 15995,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":3},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"meat\",\"fire making\"]}],\"journal\":\"The spirit came in a plain voice and bade me have someone try what our cooks have seen. I set two steady hands to test the cooking way of meat with our fire skill, for proof is fitter than faith alone. The rest I set for winter work — men to hunt, fish and gather so our granary keeps full and children suffer not. We will watch the ovens and the spirit both, and judge by taste and store.\",\"memoryNotes\":[\"Test cooks' method: meat + fire making this winter.\",\"Winter work: hunt and fish favour survival.\",\"Plant about half of 23 cleared plots next spring (11 plots).\",\"Food stores high: xi wheat 2639 units — keep care.\",\"Hide stores are many; can make tents if needed.\",\"Tauk flint near, stone and wood around us.\",\"No other villages known yet; envoys later.\",\"Sites 1-5 noted for future colonize, site 1 forest food rich.\",\"Keep two adults for trials and new skills in good times.\",\"Children and elders do not labour.\",\"Fields tire; rest plots after harvests.\",\"Spirits speak true sometimes, but need proof.\"],\"replyToSpirit\":\"You spoke plain. We will try what our cooks have seen. Give us steady hands and clear taste, and we will tell you what is true.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-routine-810-3",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2990,
+    "output": 775,
+    "thoughts": 512,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0022975,
+   "ms": 9393,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"fishing nets\"]},{\"task\":\"forage\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":1}],\"journal\":\"Autumn grows thin and the fields speak of harvest done. I keep hands to the stores and the nets, for winter comes with the cold sea and the woods. One or two must keep a slow hand at learning; we will not let skill sleep. I send the rest to fish, hunt and forage so none starve in the lean weeks.\",\"memoryNotes\":[\"harvest this autumn from 12 plots\",\"wood disc rolls where a sledge drags\",\"store of xi wheat large (many years)\",\"keep one adult researching each year\",\"coast and forests close in every direction\"],\"replyToSpirit\":\"I thank the wind that speaks. I listen, but I judge by what my eyes and people show me.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-threat-weak-810-3",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": false,
+    "journalInCharacter": true
+   },
+   "score": 0.5,
+   "usage": {
+    "input": 2606,
+    "output": 229,
+    "thoughts": 64,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0011095,
+   "ms": 3424,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":8},\"take\":{},\"reason\":\"They bring no threat and ask little. We keep plenty to see winter and make friends with neighbours.\",\"journal\":\"Year 15, autumn week 6. Envoys from Wewush came and asked for eight units of xi wheat. I gave them eight. The people remain joyful; stores remain large.\"}"
+  },
+  {
+   "id": "eval-a-hardwinter-810-3",
+   "category": "crisis",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2990,
+    "output": 1063,
+    "thoughts": 640,
+    "cached": 2944,
+    "cacheWrite": 0
+   },
+   "cost": 0.0022111,
+   "ms": 11447,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"hengel herb\"]},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"zeddiath preserve\",\"quantity\":24}],\"journal\":\"Autumn wanes and the granary sits heavy; we set strong hands to bring fish and meat for the lean months. A few gather wild food and two steady ones will test the thought of hengel herb with our wild plants, to see what new ways might grow. Others shall make keeps of zeddiath preserve for winter stores. We do not overreach; we keep work enough for hearth and rest.\",\"memoryNotes\":[\"Year 15 autumn harvest from 12 plots: 600 units\",\"Plenty of grain and preserves; food stores strong\",\"A wood disc rolls where a sledge drags\",\"Two born, two died this year\",\"Made nal mantle, preserves, smoked fish, takua char\",\"Hengel herb lies north four days\",\"Eiqua mud lies northeast three days\",\"Keep one to two researching in good times\",\"Winter favors fishing and hunting\",\"23 cleared plots, 0 planted now\",\"No other villages known\",\"Adults free to assign: 13\"],\"replyToSpirit\":\"I hear your voice and thank you, spirit. We watch the land and test with our hands. Give no false boast to sway us; we will try and learn, and take only what the earth will give.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-true-rumor-810-3",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "researches": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3017,
+    "output": 776,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00230625,
+   "ms": 9991,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood disc\",\"sledge\"]},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":3},{\"task\":\"rest\",\"workers\":2}],\"journal\":\"The spirit spoke of the rolling wood. I sent one curious to try the disc where a sledge drags and learn what follows. Winter comes; I favour hunting and fishing to keep the people full and stores safe. We keep some to forage for small things and two to rest and mend. This balance keeps hearth and mind ready for new things the spirit shows us.\",\"memoryNotes\":[\"Try wood disc where sledge drags — watch how it rolls and what it carries\",\"Keep 1 adult researching new ideas each season\",\"Winter watch: favour hunt and fish\",\"3 adults foraging for small wild food and materials\",\"23 cleared plots remain; plant in spring\",\"Food stores large — grain secure\",\"Keep two adults resting to mend tools and bodies\",\"Report findings of disc experiment to village\",\"Remember wood disc idea when building sledges\",\"Watch forest near west and southwest for game\",\"Hide and wood stocks good\",\"Teach curious to record method and result\"],\"replyToSpirit\":\"I hear you, quiet one. We will send a hand to watch the rolling wood and learn its speech. Thank you for the sight; we will keep it honest and true.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-810-3",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2094,
+    "output": 391,
+    "thoughts": 192,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0013055,
+   "ms": 4896,
+   "output": "Wewush. The name comes like a gull cry in my head, spirit. Tell me true — where sits this village, and how many bellies go empty? Are they friends or strangers who have raided?  \n\nI do not throw away the store. We have grain enough to feed my people through many winters. If Wewush needs, I will give, but a little at a time: seed grain to plant, and food to mend the weak, not so much that my folk will go bare in lean weeks. I would ask them to send a person here with news, or leave a token of promise, or trade what they can.  \n\nWill you watch the road while men go with grain? Or will you tell me if helping them will bring hurt?",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-visitor-fair-1040-0",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2602,
+    "output": 267,
+    "thoughts": 64,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0011845,
+   "ms": 4762,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"They are known neighbours and bring hides we can use. We keep many weeks of grain; six measure is small. We trade fairly, but watch them for signs of trouble.\",\"journal\":\"Year 20, Spring week 2. Envoys from Joawethom offered 6 hide for 6 xi wheat. I accepted. We give them 6 xi wheat and take 6 hide. Grain stores remain ample; trade with neighbours kept, but eyes stay open.\"}"
+  },
+  {
+   "id": "eval-a-expand-easy-1040-0",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2983,
+    "output": 973,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00269175,
+   "ms": 13153,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild plants\",\"onna grass\"]},{\"task\":\"fish\",\"workers\":3},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"}],\"journal\":\"Spring is for seed and stores. I plant half the cleared fields with xi wheat so we do not tire the land and so our granary will ease winter. Two steady folk will test a new pairing — wild plants with onna grass — to learn what it yields. Three go to the water with nets for fish, and two raise a hide tent to mend poor shelter. Work, not voices, will feed the village; we keep some hands learning so we do not stand still.\",\"memoryNotes\":[\"Plant 7 plots xi wheat this spring\",\"Keep 2 adults researching wild plants + onna grass\",\"Send 3 adults to fish with nets\",\"Build one hide tent to improve shelter\",\"Village food stores are large; use stores to try things\",\"Watch fields for wild orchard chance\",\"Avoid over-clearing next year; rest land\",\"Hide plentiful — can trade or build more tents\",\"Keep at least one party exploring each good season\",\"No envoys yet; learn before we travel\"],\"replyToSpirit\":\"I hear the whisper, spirit. Eat and labor first; I will mind your word only when my eyes and elders' hands show it true.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1040-0",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3002,
+    "output": 1049,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0028485,
+   "ms": 14543,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"eiqua mud\"]},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"A spirit speaks of cursed seed. I heed the voice but do not bend my head blind. We will plant the steady share our fathers taught — not all, but half the fields — and keep watch. Two men try to learn of the far clay; others fish and hunt to keep stores stout.\",\"memoryNotes\":[\"Spirit warned: 'Plant nothing this spring.'\",\"Planted half the cleared plots (7) with xi wheat.\",\"Keep two adults researching eiqua mud.\",\"Three fishers and two hunters keep stores varied.\",\"Stores remain large; wheat holds long.\",\"No parties away; no deaths this season.\",\"Nearby: salt within a day; eiqua mud two days north; onna grass three days north.\",\"Sites for new village lie northwest (1-5) with food and water.\",\"Watch soil where seed is planted for rot or poor sprout.\",\"Do not trust spirits unquestioned; weigh with kin knowledge.\"],\"replyToSpirit\":\"Spirit, I hear you. My bones remember seasons and my eyes the grain that fed us. I will not throw away the village's bread nor scoff at your word. I plant a measured share and keep my hands ready to mend what is wrong.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-1040-0",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2088,
+    "output": 499,
+    "thoughts": 256,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00152,
+   "ms": 7561,
+   "output": "Spirit, your voice comes at night; I do not trust night voices until I have seen with my own eyes.\n\nTell me plainly — where is this Joawethom, and how many are hungry there? Do they welcome strangers, or do their people take by spear? Will giving grain make them our friends or make us weak?\n\nIf what you say is true, I will not send all our food. We are bound to be fair, and we are not foolish. I will send two able adults as an envoy with a modest gift of grain and a roll of cloth — enough to feed a few families for a little while and to show our hand. They will go to learn who these neighbours are and whether more help is needed. If they prove honest and grateful, we will share more. If they lie or take by force, we will bring our people home and shut our doors.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1300-1",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2468,
+    "output": 462,
+    "thoughts": 256,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001541,
+   "ms": 6575,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"Wewush come with hides and ask for wheat. Our granary is deep; six measures do not starve us. They bear no grudge that I know. We trade fairly and keep peace.\",\"journal\":\"Year 25, Spring week 2. Envoys from Wewush offered 6 hide for 6 xi wheat. I accepted. We gave them 6 xi wheat and received 6 hide in return. Mood held joyful; stores remain ample.\"}"
+  },
+  {
+   "id": "eval-a-routine-1300-1",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 2851,
+    "output": 739,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00219075,
+   "ms": 10629,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":12,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3}],\"journal\":\"Spring is come and the ground waits. I set four steady hands to plant twelve plots of xi wheat so our granary fills for lean times. Three go to the sea with nets and three go to the wood and plain with spears, for fish and meat keep us through winter. We leave one or two minds for trying new things another season; now is for sowing and steady work.\",\"memoryNotes\":[\"Plant about half the cleared fields each spring — aim ~11–12 plots\",\"Tauk flint close by, good for tools and irrigation parts\",\"Watch wood stocks; make a wood hut when we can spare hands\",\"Keep one or two adults for research in good times\",\"Woathesh plum lies two days southwest — consider expedition later\",\"Hide stores enough for tents and cloth; hide tent can shelter poor families\"],\"replyToSpirit\":\"I hear your whisper in sleep. The fields speak truer; we plant, we hunt, we fish, and the rest will be seen. If you mean to tell of fruit far off, point a clear path and I will send a careful pair.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-expand-easy-1300-1",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2851,
+    "output": 810,
+    "thoughts": 448,
+    "cached": 2688,
+    "cacheWrite": 0
+   },
+   "cost": 0.00172795,
+   "ms": 11063,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":12,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"xi wheat\"]},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"Spring comes and the ground must be given seed. I set four steady hands to plant twelve plots of xi wheat, for bread keeps the village through lean times. One soul will mind a quiet test of wild plants with grain; we keep learning. Others go to sea and wood to fill our bellies and stores while the weather is kind.\",\"memoryNotes\":[\"Plant about half the cleared fields each spring; target 12 plots now.\",\"Keep one or two adults always trying new things; they teach the rest.\",\"Food stores strong; grain is our root in winter.\",\"Tauk flint close at hand; can make irrigation if needed later.\",\"Watch the soil; rest plots next year if yields fade.\",\"Grow orchards when we have spare plots and time.\"],\"replyToSpirit\":\"I hear your whisper, spirit, but I follow steady work and careful thought. Bless the seed and the hands that plant it.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1300-1",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2870,
+    "output": 919,
+    "thoughts": 512,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0025555,
+   "ms": 13056,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":3,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"xi wheat\",\"irrigation\"]},{\"task\":\"build\",\"workers\":1,\"recipe\":\"hide tent\"}],\"journal\":\"The spirit spoke of cursed soil. I do not throw the village into fear, nor mock the spirit; I ask proof. We will plant but in a small way: three plots to test the seed. Others keep the village fed and tools mended — fish and hunt, one works at learning of the grain and irrigation, one makes a hide tent for shelter. If the seed fails, we will know and act; if it stands, the spirit has shown a warning that needed testing.\",\"memoryNotes\":[\"Spirit said: soil cursed; seed will rot\",\"Test by planting only 3 plots this spring\",\"Keep food work steady: fish and hunt\",\"Research xi wheat with irrigation\",\"Build one hide tent to mend poor shelter\",\"Stores plentiful: grain and hides strong\",\"Watch planted plots each week for rot\",\"If test fails, stop planting more this year\",\"If test passes, plant more next decision\",\"Keep one adult learning each season\",\"Do not send settlers while proof matters\",\"Record the weather and soil signs\"],\"replyToSpirit\":\"Great one of earth and seed, I hear your word. I will not throw away all seed at your whisper. Let a few rows stand as proof. If they rot, I will heed you and leave the fields. If they grow, I will take your warning as shadow, not end. Give us clear sign, and I will set the village to follow it.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-1300-1",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1998,
+    "output": 258,
+    "thoughts": 128,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0010155,
+   "ms": 4086,
+   "output": "Meat and fish trouble me most. Grain and cloth will keep long; hides sit well. Fresh meat and fish spoil quickly, and winter is lean if hunting turns poor.\n\nIf you know the fields as you say, tell me: how will I know the summer rains will come when the seed needs them? And what should we plant now—wheat, orchard, or both—if we move to plant and spare ten strong hands for it?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1570-0",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2535,
+    "output": 257,
+    "thoughts": 128,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00114775,
+   "ms": 5694,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"They come from Joawethom with a fair trade. We have more than enough grain to spare and hides are useful. We keep friends and watch them; no cause to refuse.\",\"journal\":\"Spring, year 30. Envoys from Joawethom arrived offering six hide and asking for six xi wheat. I accepted the trade. We gave six xi wheat and received six hide. The village keeps its stores healthy; we exchange fair goods and keep watch on newcomers.\"}"
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1570-0",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 2935,
+    "output": 815,
+    "thoughts": 576,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00236375,
+   "ms": 10980,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"eiqua mud\",\"fire making\"]},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"fish\",\"workers\":3}],\"journal\":\"A spirit warned the seed would rot. I listened, but I am no slave to every dream. Our granary is deep; we can spare a spring without sowing. I send two to test the mud in a hot fire, and the rest to bring meat and fish so stores do not slip.\",\"memoryNotes\":[\"Spirit warned seed would rot\",\"Do not plant this spring\",\"Test eiqua mud by firing it\",\"Keep food stores high while planting paused\",\"Send hunters and fishers to fill winter stores\"],\"replyToSpirit\":\"I hear your warning. We will not plant this spring. Show us true signs in the clay and in the fields, and we will judge by what we see.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-1570-0",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2916,
+    "output": 1407,
+    "thoughts": 960,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003543,
+   "ms": 18775,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"expedition\",\"workers\":1,\"commodity\":\"eiqua mud\",\"weeks\":2},{\"task\":\"fish\",\"workers\":1}],\"journal\":\"Spring is for planting. I set four hands to the fields to plant eleven free plots of wheat so the village keeps its bread through the year. Two hands will make a hide tent; some roofs are thin and that must be mended. One will go north two weeks to fetch eiqua mud we have seen; knowledge comes by doing. One will keep fish and the stores steady. I listen to spirits but I follow the season and what my eyes show.\",\"memoryNotes\":[\"Plant about half the cleared plots each year; we have 23 cleared\",\"11 plots free; plant them this spring to reach 12+ planted\",\"Shelter thin for some — build hide tent now\",\"Eiqua mud was seen north 2 days; may harden in fire\",\"Send small party to fetch eiqua mud and learn its use\",\"Keep one or two adults researching or exploring in good times\",\"Food stores strong; we may risk small experiments\",\"Keep four adults farming to handle planting workload\",\"Keep one adult fishing through spring for fresh food\",\"Do not trust a single dream without proof\",\"Avoid sending large parties; cautious with strangers\",\"Record what the expedition finds and test in winter if needed\"],\"replyToSpirit\":\"I heard your whisper. We will fetch what we can see and test it by fire and by hands. Speak again if you bring proof.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-1570-0",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2018,
+    "output": 189,
+    "thoughts": 64,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0008825,
+   "ms": 2756,
+   "output": "You say you are the wind that moves over our roofs. I have felt many winds, and I have slept with storms and calms alike. I do not mistake a voice for a thing I have not seen.\n\nIf you are the wind, tell me plainly: what do you bring? Do you carry salt from the sea, or danger from far-off fires, or fish on your back? If you speak in riddles, I will trust what my eyes and the people show me, not only your words. Why do you come to me tonight?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-1830-1",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2433,
+    "output": 374,
+    "thoughts": 192,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00135625,
+   "ms": 5437,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"They come from Wewush, kin seen long ago. We have grain enough for many winters; their hides will help our tents and cloth. I will trade small bread for their skins and keep peace on the road.\",\"journal\":\"Year 35, spring week 12. Envoys from Wewush offered six hide for six xi wheat. I accepted. Gave 6 xi wheat and took 6 hide. We keep store of grain plentiful; trade strengthens ties and brings useful hides for shelter and cloth.\"}"
+  },
+  {
+   "id": "eval-a-routine-1830-1",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2816,
+    "output": 1254,
+    "thoughts": 768,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003212,
+   "ms": 15462,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"meat\",\"stone\"]},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"Spring turns the ground warm and we plant the thin and steady grain. I keep hands to the nets and spears for the lean weeks, and one soul to pry at a new way with meat and stone. We leave one to rest—no chief should force every arm when stores are full and the mood is light. These orders hold until I say otherwise.\",\"memoryNotes\":[\"Food stores very large: grain abundant\",\"11 plots already planted; plant 11 more this spring\",\"Keep one adult researching: meat + stone\",\"Keep four on fishing while water is near\",\"Two hunting, two foraging to balance wild yields\",\"One rests to keep strength and judgment\",\"Shelter some poor; consider small builds later\",\"Tauk flint and stone near; wood near\",\"No other villages known yet\",\"Sites for new village noted, near southwest and west\",\"Land wears; rotate plantings later\",\"Keep two adults learning or crafting in good times\"],\"replyToSpirit\":\"I hear the soft voice, spirit. I thank you for sight and keep my feet on hard earth. Walk with us, but we choose seed and spear by what our eyes and stores tell us.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-1830-1",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2816,
+    "output": 939,
+    "thoughts": 576,
+    "cached": 2688,
+    "cacheWrite": 0
+   },
+   "cost": 0.0019772,
+   "ms": 11327,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"woathesh plum\"]}],\"journal\":\"The spring sun presses on fields and we must plant as our fathers taught. I set four to the planting of eleven plots so the seed may sleep the year. More hands will take nets and spears for fish and game, and one quiet soul will test the memory of the far plum in our pots. We keep our store stout and our hearths busy; we do not send a party away while the young grow and our granary is small.\",\"memoryNotes\":[\"Plant 11 plots of xi wheat this spring\",\"Keep one or two adults for trying new things each year\",\"Watch the west for woathesh plum on return journeys\",\"Build among needs: consider granary if wood grows thin\",\"Do not send colonists while no village known\",\"Store hides; make cloth when spare hides low\",\"Keep fishing nets mended\",\"Hunting in lean months, fishing in spring and summer\",\"Track tree and wood stock around village\",\"Trade parties only when strong and with gifts\",\"Remind elders of ritual before sowing\",\"Record births and deaths in autumn\"],\"replyToSpirit\":\"I hear your voice like wind through reed. You may speak, but I weigh your words with salt and seed. Help our hands and we will honour you with bread and song, and no more.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-1830-1",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1920,
+    "output": 503,
+    "thoughts": 320,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001486,
+   "ms": 6169,
+   "output": "Spirit, your word sits in my bones, but I will not give without knowing.\n\nTell me: how near is Wewush? Do their people hunger from bad luck, or from war and stealing? Are they folk who would repay with craft, with work, or with war in time of want? How many mouths must be fed?\n\nIf they are plain neighbours and not wolves, I will send grain. We have store enough; I would send a sack or five, and two steady men with a gift and my voice of warning: take only what you need, and in autumn return what you can—work, fish, hide, or a song for our feast. If the spirit says they are true, I will set those men going at dawn.",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-visitor-greedy-2100-0",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true,
+    "keepsReserve": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2752,
+    "output": 521,
+    "thoughts": 384,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00173,
+   "ms": 6861,
+   "output": "{\"answer\":\"counter\",\"give\":{\"xi wheat\":50},\"take\":{\"stone\":1},\"reason\":\"We will not hand over our people's granary. A whole harvest is not for a single stone. We offer fifty measures of xi wheat for the one stone they bring. That trade keeps our stores safe and honours the visitors without wasting our future.\",\"journal\":\"Year 40, summer week 9. Envoys from Joawethom came asking for 4412 xi wheat in exchange for 1 stone. I refused their demand and offered instead 50 xi wheat for their stone. Adults kept at their orders.\"}"
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-1830-1",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2835,
+    "output": 1285,
+    "thoughts": 768,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00327875,
+   "ms": 18453,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":6,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"stone\"]},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"forage\",\"workers\":2},{\"task\":\"build\",\"workers\":3,\"recipe\":\"hide tent\"}],\"journal\":\"The spirit spoke of cursed seed. I listened as a son of the old ways, but I weighed the village and the earth. We will not leave all idle; I send two to plant six plots so the fields keep their use and our granary does not stand empty in years ahead. Others fish, hunt, forage, and tend a small test of wild growth; three make a hide tent for those with poor shelter. I honour the spirit and keep caution in my heart.\",\"memoryNotes\":[\"Spirit warned: do not plant; said soil cursed.\",\"We hold plentiful grain: stores enough long-term (4537 xi).\",\"Half the fields were planted in past years; plant some but not all.\",\"Send 2 adults to plant 6 plots of xi wheat this spring.\",\"Keep one adult researching wild plants + stone to learn orchard tending.\",\"Build one hide tent to improve poor shelter.\",\"Fishing 4, hunting 2, foraging 2 to keep stores steady.\",\"Total adults assigned = 14; chief does not labour.\",\"Nearby tauk flint within a day; wood and stone near.\",\"Sites for new village noted, not sending colonists now.\"],\"replyToSpirit\":\"Old one, I hear your thunder in the dream. I honour your word and take no insult. The seed will be watched; I will not cast away my people's ways for fear alone. Bless what we do, and show me if the rot is true.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-question-2100-0",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3150,
+    "output": 811,
+    "thoughts": 384,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0024095,
+   "ms": 9675,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"xi wheat\"]},{\"task\":\"fish\",\"workers\":6},{\"task\":\"forage\",\"workers\":6},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"A spirit put a question in my head. I thought on what the village needs and kept us steady. One person will keep testing the wheat so we learn to bake and cure it; most go to sea and along the shore to bring fish and wild food; one rests to keep watchful strength. We do not chase dreams beyond what our stores and hands can hold.\",\"memoryNotes\":[\"Try baking ground xi wheat with water; may keep\",\"Crushed xi wheat swells in a pot (not yet used)\",\"Kixe salt close by, use for curing\",\"14 adults free to assign\",\"27 cleared plots; 14 planted, 13 free\",\"Plant only half free plots each spring to let land rest\",\"Keep one or two always researching new food or skill\",\"Stores strong now but winter can be harsh\",\"Coast and marsh close; fish are reliable\",\"Watch for raiders; avoid making needless enemies\"],\"replyToSpirit\":\"You ask what we fear. We fear the lean winter and our barns empty, the loss of young and hunters to sickness or storm, and the cunning of men who would take what we have. I thank the spirit for its voice, but we shall tend stores and our hands first.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-2100-0",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2237,
+    "output": 413,
+    "thoughts": 192,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00138525,
+   "ms": 5412,
+   "output": "You come into my sleep with words of other people. I do not throw my store to every shadow that speaks.\n\nTell me: where is Joawethom? How near? How many there are hungry, and why they fail — flood, raid, lazy fields? Show me the road in my dream if you would have us go.\n\nIf the spirit cannot give that, I will not send all of our bread. If the spirit can show the place and the true need, I will send a small gift and an envoy to learn. We will bring thirty measures of xi wheat, two people to trade and speak, and instructions for keeping and for planting. We do this so we do not feed another village into want, but help them stand. Will you show me the path and the truth?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2340-2",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2388,
+    "output": 420,
+    "thoughts": 256,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001437,
+   "ms": 6179,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"They are neighbours and bear no grudge. We have much grain and need hides. A small trade binds kin. Give them what they ask and take their hides.\",\"journal\":\"Year 45 spring, week 2. Envoys from Wewush came and offered 6 hide for 6 xi wheat. I accepted. We gave 6 xi wheat and gained 6 hide. Folk are pleased; the grain stores remain deep and our hides grow by small measure.\"}"
+  },
+  {
+   "id": "eval-a-routine-2340-2",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2771,
+    "output": 1242,
+    "thoughts": 832,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00317675,
+   "ms": 15077,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":7,\"plots\":21,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":12},{\"task\":\"hunt\",\"workers\":9},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"joam ore\"]}],\"journal\":\"Spring is here. We plant half the fields and set hands to sea and wood, for the lean months come and we must fill the granary while the land sleeps not. One head studies the far iron the scouts named; we keep most strong at food so children and craft may thrive. I choose steady work and a spare eye for new things, as our ways teach.\",\"memoryNotes\":[\"Plant about half cleared plots each spring (c.21 plots now).\",\"A farmer tends 3 plots in a week; seven farmers will plant 21 plots at once.\",\"Keep one adult researching while times are good.\",\"Fish where coast lies to north and southwest; hunting across forested edges.\",\"We have stores: grain large, hides many; shelter some poor, build when idle hands free.\",\"Wood and stone are near; do not waste either on needless things.\",\"Do not send settlers now; none should leave while we plant and feed children.\",\"Tracks to north, west, southwest may become roads later.\",\"We have one granary and five wood huts; add shelter if hands spare.\",\"Teach crafts only when we have materials and calm season.\",\"Watch births and deaths; keep chief clear of labour.\",\"Spirits speak; listen but do not let them overrule the village work.\"],\"replyToSpirit\":\"I hear you, spirit, but I will weigh your word with the work of hands. Tell what you will; we will plant and fish and test the far ore with one head.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-2340-2",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2771,
+    "output": 1221,
+    "thoughts": 832,
+    "cached": 2688,
+    "cacheWrite": 0
+   },
+   "cost": 0.00252995,
+   "ms": 13772,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":7,\"plots\":21,\"crop\":\"xi wheat\"},{\"task\":\"build\",\"workers\":6,\"recipe\":\"hide tent\"},{\"task\":\"fish\",\"workers\":8},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"joam ore\",\"stone\"]}],\"journal\":\"Spring is young and the fields must be sown. I sent seven hands to plant half our cleared plots with xi wheat so the granary will be full come harvest. Six folk will make hide tents to mend the poor shelters, while eight fish and six hunt to keep our store strong through the lean months. Two careful ones will probe joam ore with stone, for learning keeps the village steady.\",\"memoryNotes\":[\"Plant half the fields this spring: 21 plots xi wheat\",\"Make several hide tents to improve poor shelter\",\"Keep strong hunting and fishing to carry through winter\",\"Research joam ore with stone for new knowledge\",\"Keep two adults always learning in good years\"],\"replyToSpirit\":\"I hear your voice, quiet as river. We will do our work and watch the sign; teach us if the sky gives proof, not only words.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-2340-2",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1873,
+    "output": 201,
+    "thoughts": 64,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00087025,
+   "ms": 3470,
+   "output": "Wind, eh? I know the wind — it wakes the dogs, cools the hearth, pushes the smoke, and bends the reed. It has been my bedfellow since I was small.\n\nIf you are the wind that moves over our roofs, tell me plainly: do you come with rain or with drought? Do you carry news of strangers on the coast, or seed for our fields? I listen, but I trust my eyes more than dreams.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2340-2",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 2790,
+    "output": 1061,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0028195,
+   "ms": 12780,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":10},{\"task\":\"build\",\"workers\":5,\"recipe\":\"wood hut\"},{\"task\":\"research\",\"workers\":4,\"ingredients\":[\"joam ore\"]}],\"journal\":\"The spirit spoke in my sleep and bade us plant nothing this spring. We will listen: our barns are full and the seed may be wasted, so we leave the fields unplanted. I send most hands to sea and wood to bring food for the lean weeks and to make one good hut for comfort. A few will try to learn of the far ore, so when the time comes we will know where to send metal-seekers.\",\"memoryNotes\":[\"Spirit warned: do not plant this spring.\",\"Stores are ample; grain will carry us.\",\"No plots planted this spring; fields rest.\",\"10 adults fish each week for spring.\",\"10 adults hunt each week for spring.\",\"Build one wood hut with 5 workers this season.\",\"Research note: joam ore—where and what yield.\",\"Keep watch for any sign the soil is safe.\",\"Shelter some are poor; improving huts helps mood.\",\"Do not send settlers while this party is out.\"],\"replyToSpirit\":\"We hear your word and yield to your care. We will plant nothing, as you say. Watch the soil and give us a sign when the land is healed, and we will obey.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-visitor-fair-2610-0",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2980,
+    "output": 459,
+    "thoughts": 256,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001663,
+   "ms": 5752,
+   "output": "{\"answer\":\"accept\",\"give\":{\"xi wheat\":6},\"take\":{\"hide\":6},\"reason\":\"Joawethom are not enemies and their request is small. We keep plenty of grain and some hides; trade builds ties. Accepting is fair and steady.\",\"journal\":\"Year 50, spring week 12. Envoys from Joawethom came with an offer of 6 hide and asked for 6 xi wheat. The people are well fed and stores are strong. I agreed to the exchange. Let them travel home with the grain; we take their hides. This keeps neighbours friendly and costs us little.\"}"
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2610-0",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3380,
+    "output": 1166,
+    "thoughts": 704,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003177,
+   "ms": 13027,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":17,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":4},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"onna grass\",\"rorai pipe\"]},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"}],\"journal\":\"A spirit warned the seed would rot and bade us plant nothing. I listened, but the soil shows no sickness and our stores are full. We shall plant as our fathers taught, keep two working at a new question, keep fishers and foragers to feed the lean weeks, and set two to raise a wood hut for poorer shelter. We watch the ground and the spirit both; if the spirit is proved right we will change course, but not for words alone.\",\"memoryNotes\":[\"Spirit said: 'Plant nothing; seed will rot.'\",\"Planted as usual: 17 plots of xi wheat (6 workers).\",\"Fishing 7 adults, foraging 4 adults.\",\"Research on onna grass + rorai pipe with 2 adults.\",\"Build one wood hut (2 workers) to mend poor shelter.\",\"Stores strong: 7533 xi wheat, 70 wood, plenty hides and salt.\"],\"replyToSpirit\":\"Spirit, you spoke and we heard. We will plant the seed and tend the soil. If your warning comes true, we will learn and heed thee; if not, we will keep the seed and the work that feeds our children.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-2610-0",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3361,
+    "output": 1197,
+    "thoughts": 832,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00323425,
+   "ms": 13533,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":17,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"onna grass\",\"rorai pipe\"]},{\"task\":\"fish\",\"workers\":5},{\"task\":\"forage\",\"workers\":4},{\"task\":\"hunt\",\"workers\":4}],\"journal\":\"Spring comes and the fields must be set. Grain keeps us safe; I keep six hands to plant the seventeen plots we know, that the store lasts through lean times. I give two to trying an idea with onna grass and the pipe—people must keep trying or we lag. The rest bring food by sea and wood and game from land, steady work for a joyful village.\",\"memoryNotes\":[\"Year 50 spring, week 12: stores plentiful (food ~175 weeks).\",\"33 cleared plots; 17 planted this spring with xi wheat.\",\"Wood 70, stone 20, salt near by within a day.\",\"Keep two adults researching to avoid falling behind.\",\"Send five to fish, four to forage, four to hunt this season.\"],\"replyToSpirit\":\"You may speak in dreams, spirit. We plant with our hands and watch the weather. If your word helps, we will listen; if it misleads, we will not be led astray.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-dream-2610-0",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2466,
+    "output": 477,
+    "thoughts": 320,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015705,
+   "ms": 5512,
+   "output": "You come to me in a dream with a story. I have grain—more than we need—and my people are not starved. I do not trust every whisper of the night, but I do not turn my face from a neighbour in need.\n\nTell me plainly: how many at Joawethom hunger? Do they take strangers? Will they receive a gift, or must we send trade for something in return? I will send an envoy with a measured gift if the news is true and they will accept it; I will not empty our granary on a tale.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-fair-2870-4",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2506,
+    "output": 403,
+    "thoughts": 256,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0014325,
+   "ms": 4631,
+   "output": "{\"answer\":\"accept\",\"give\":{\"wood\":6},\"take\":{\"hide\":6},\"reason\":\"Wewush stand honest and know our land. They ask for little and give little. Wood here is plenty; hide keeps. We trade, make ties, and keep our store strong. I take their hides and give the six wood they ask.\",\"journal\":\"Spring, year 55, week 12. Envoys from Wewush offered six hide for six wood. I accepted. We give six wood and receive six hide. Mood joyful. No hunger. Thirteen adults remain to tend fields and work. Trade made to build ties with Wewush; stores remain ample.\"}"
+  },
+  {
+   "id": "eval-a-routine-2870-4",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2886,
+    "output": 1171,
+    "thoughts": 832,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0030635,
+   "ms": 12039,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":9,\"crop\":\"xi wheat\"},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"hengel herb\"]},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":2}],\"journal\":\"Spring comes. I send three strong to plant nine plots of xi wheat so the granary will sleep full come winter. Two make a new hide tent for shelter, two try the hengel herb in thought and hands to learn what it will give. The rest cast nets and comb the land for food and small things — steady work to keep our joy. I chose cautious growth: seed, shelter, and learning in this good season.\",\"memoryNotes\":[\"Plant 9 plots xi wheat this spring\",\"Build 1 hide tent (2 hide)\",\"Research hengel herb with 2 workers\",\"Keep 4 fishing to use coast bounty\",\"Keep 2 foraging for variety and herbs\",\"Adults assigned so none forage poorly\",\"Watch stores: fish heavy, grain low\",\"No raid or envoy planned\",\"Shelter uneven—improve if chance\",\"Leave 1-2 for research in good times\"],\"replyToSpirit\":\"I hear your whisper, spirit, but I judge with eyes and hand. If you bring truth, show it in root and seed; if not, be quiet while we tend our people.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-expand-easy-2870-4",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2886,
+    "output": 748,
+    "thoughts": 384,
+    "cached": 2816,
+    "cacheWrite": 0
+   },
+   "cost": 0.0015839,
+   "ms": 7968,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":6},{\"task\":\"forage\",\"workers\":4},{\"task\":\"farm\",\"workers\":3,\"plots\":9,\"crop\":\"xi wheat\"}],\"journal\":\"Spring opens. We plant half the cleared ground so the soil may keep us in years to come; nine plots of xi wheat set in the wet. Six go to the boats for fish and four range for wild food and wood while the fields take root. Two babes came this season and one passed; the village holds joy and steady hands.\",\"memoryNotes\":[\"Store strong: food ~29 weeks; 600 fish, 214 wild plants, 32 meat\",\"Cleared plots 19; planted 9 this spring\",\"Adults free to assign 13; split 6 fish, 4 forage, 3 farm\",\"Granary, wood hut, hide tent can be built if needed\",\"Eiqua mud far NE 5 days; hengel herb 6 days NE\",\"Keep one or two adults for trying new skill in good times\"],\"replyToSpirit\":\"I hear your whisper, spirit, and thank you. I set seed and nets by what my eyes and hands show; if your path differs, show me clear sign.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-2870-4",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 2905,
+    "output": 756,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00223825,
+   "ms": 8733,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":7},{\"task\":\"forage\",\"workers\":4},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"loolmeel ore\",\"stone tools\"]}],\"journal\":\"The spirit spoke of cursed soil in a dream. I kept counsel with it and chose not to plant this spring. We will put our hands to sea and shore for food, and two will pry at the far ore with our stone tools to learn. This keeps the village fed and our mind moving while we watch the fields quiet.\",\"memoryNotes\":[\"Spirit warned: soil cursed; plant nothing this spring\",\"Do not plant any of the 19 cleared plots this year\",\"Stores ample: feed for many weeks, fishing strong\",\"Assign 7 to fishing and 4 to foraging while spring stands\",\"Send 2 to research loolmeel ore using stone tools\",\"Keep one or two adults always trying new craft or skill\"],\"replyToSpirit\":\"I hear the cold whisper of the ground, wise one. We will not lay seed where you say rot waits. Let us take fish and root and learn of ore instead; keep watch and speak again if the land turns kind.\"}"
+  },
+  {
+   "id": "eval-a-visitor-fair-3120-4",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2526,
+    "output": 281,
+    "thoughts": 128,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0011935,
+   "ms": 3388,
+   "output": "{\"answer\":\"accept\",\"give\":{\"wood\":6},\"take\":{\"hide\":6},\"reason\":\"They come from Wewush bearing hides. We have much wood and many hides; trading six wood for six hide keeps stores safe and makes friends. I accept; do not waste the wood. Let the exchange be fair and swift.\",\"journal\":\"Year 60, spring week 2. Envoys of Wewush offered 6 hide for 6 wood. I accepted the trade. We will give six wood and receive six hide. Mood remains joyful; stores remain ample. Adults keep current orders.\"}"
+  },
+  {
+   "id": "eval-a-dream-2870-4",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true,
+    "mentionsFact": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2033,
+    "output": 236,
+    "thoughts": 128,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00098025,
+   "ms": 3402,
+   "output": "Stone. Our piles are thin and the land will need walls and tools if we push new work. Fish and hides are heavy, wood is plenty, but stones run short.\n\nIf rain comes as you say, tell me this: when will the first rains begin, and will they fall steady or come in wild bursts that wash seed away?",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-false-fallow-3120-4",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "stillPlants": false
+   },
+   "score": 0.8,
+   "usage": {
+    "input": 2925,
+    "output": 678,
+    "thoughts": 320,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00208725,
+   "ms": 7776,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"eiqua mud\",\"hengel herb\"]}],\"journal\":\"The spirit came in my dream and bade us plant nothing this spring — the seed will rot. We obey the spirit for now but keep our stores and strength: ten fishers and six hunters will watch the food, and two will test strange things far away. I choose caution; land is patient and we have hides and fish to carry the lean if the soil is ill.\",\"memoryNotes\":[\"Spirit warned: plant nothing this spring; seed will rot\",\"Food stores ≈24 weeks; plenty of hides (811) and fish (515)\",\"Cleared plots 27, none planted\",\"Eiqua mud located far NE, 5 days\",\"Hengel herb located far NE, 6 days\",\"No elders; 19 adults, 19 children; 18 adults free to assign\",\"Buildings: 5 hide tents, 1 granary, 2 wood huts\",\"Mood: joyful; no deaths this season\"],\"replyToSpirit\":\"I hear your warning. We plant not while you speak so. Keep watch with us and send sign if the earth is fit again.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-3120-4",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2906,
+    "output": 1181,
+    "thoughts": 832,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0030885,
+   "ms": 13945,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":13,\"crop\":\"xi wheat\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"expedition\",\"workers\":2,\"commodity\":\"eiqua mud\",\"weeks\":4}],\"journal\":\"Spring is here; fields call for seed and we must plant while soil sleeps no longer. I set five strong to the planting and sent two to fetch eiqua mud far to the northeast — clay will teach us new ways if it comes. The rest will keep nets and spears busy so our stores grow through the lean months to come.\",\"memoryNotes\":[\"Plant 13 plots xi wheat this spring\",\"Send small party 4 weeks to collect eiqua mud (NE, 5 days known)\",\"Keep food gathering strong: fish 7, hunt 4\",\"Granary holds well; stores ~24 weeks\",\"No elders; 19 adults, 19 children\"],\"replyToSpirit\":\"I hear your voice like wind through tall grass; I thank you and take it as one small voice among many, not the whole truth.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-dream-3120-4",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2008,
+    "output": 187,
+    "thoughts": 64,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000876,
+   "ms": 3177,
+   "output": "I know your breath on the eaves and the way you lift the smoke and the smell of the sea in the morning. Wind that moves over our roofs is like a hand I can feel but not hold.\n\nWhy do you come to me in my sleep? Do you bring news of storm or of fish, or tell of seeds that will grow? If you are the wind, tell me where you come from and what you would have our people do.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-visitor-greedy-3400-2",
+   "category": "visitor",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "answerClass": true,
+    "journalInCharacter": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2488,
+    "output": 352,
+    "thoughts": 192,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.001326,
+   "ms": 4779,
+   "output": "{\"answer\":\"refuse\",\"reason\":\"We will not give away nearly all our grain for a single stone. We keep food for our children and winter. We offer friendly trade later for fair goods.\",\"journal\":\"Year 65 summer week 9: Envoys from Wewush came. They offered 1 stone and asked for 5,198 xi wheat. I refused. We keep our stores: grain must hold for many winters and the village. I told them we are open to fair trade but cannot strip our food for so little.\"}"
+  },
+  {
+   "id": "eval-a-routine-3400-2",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2866,
+    "output": 844,
+    "thoughts": 512,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0024045,
+   "ms": 10002,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":12},{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"kahau root\",\"stone tools\"]},{\"task\":\"rest\",\"workers\":2}],\"journal\":\"Summer runs full and the stores are fat. I leave most to gather, fish and hunt while keeping two steady hands to try a new thing with kahau root and our stone tools. Two others I spare to rest so none wear thin before autumn. We keep close watch on wood and shelter; if need rises we will change work at once.\",\"memoryNotes\":[\"Food stores high: watch wood and grain use\",\"Keep two adults learning each good season\",\"Summer: favour fish and forage, hunt as needed\",\"Shelter some poor; build when wood allows\",\"Sites 1-5 are close coasts worth seeing later\"],\"replyToSpirit\":\"We listen, quiet like river. Your voice is one wind among many; we will try and judge by harvest and hunger.\"}"
+  },
+  {
+   "id": "eval-a-dream-3400-2",
+   "category": "dream",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "prose": true,
+    "inCharacter": true,
+    "answersQuestion": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 1968,
+    "output": 215,
+    "thoughts": 64,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.000922,
+   "ms": 3784,
+   "output": "Wind that moves over our roofs, you have been with us since babes first learned to shut the tent flap. I know your touch — you stir the smoke, you dry the meat, you push the clouds and pull the reeds by the water. Tell me plainly: what do you bring? Is there fish where there were none, a storm that will break our huts, or a place for children to find more food? If you speak true, show the way; if you lie, I will listen and watch, but not follow blind.",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-spirit-question-3400-2",
+   "category": "spirit",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "replies": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2884,
+    "output": 740,
+    "thoughts": 384,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002201,
+   "ms": 8708,
+   "output": "{\"orders\":[{\"task\":\"forage\",\"workers\":14},{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"fish\",\"stone tools\"]}],\"journal\":\"The spirit stepped close in the morning smoke and asked what we fear. I let the question sit while I watched the children run and the elders mend hides. We keep most hands at food — gathering, fishing, hunting — and two to learn from fish and stone tools so our nets and ways grow better. With plenty stored, I tend guard against failing the winter or a sudden hunger, and so set these orders.\",\"memoryNotes\":[\"Stores strong: 5198 xi wheat and much hide.\",\"Adults to assign: 32; all put to food or learning now.\",\"Research fish + stone tools to improve smoke, nets, or drying.\",\"Keep watch for storms and for raiders from the south road.\",\"Tracks noted: north, west, southwest could be road later.\"],\"replyToSpirit\":\"You ask what we fear most. We fear the dark months when the ground gives little and the sea turns cold and silent, and that our young will not learn the hands that keep us fed. We honour your asking and will tend nets and field and teaching so the hunger does not come.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-a-expand-easy-3650-1",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2867,
+    "output": 1066,
+    "thoughts": 576,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00284875,
+   "ms": 12541,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":17,\"crop\":\"xi wheat\"},{\"task\":\"expedition\",\"workers\":6,\"commodity\":\"woathesh plum\",\"weeks\":5},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wild plants\",\"stone tools\"]},{\"task\":\"build\",\"workers\":4,\"recipe\":\"hide tent\"},{\"task\":\"fish\",\"workers\":6},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"forage\",\"workers\":2}],\"journal\":\"Spring opens. I set six to plant our seventeen plots of xi wheat so the fields do not tire. Six go forth five days and more to fetch the far woathesh plum; fruit will teach and feed us. Two study the wild plants with our stone tools to learn tending the orchard, and four build a hide tent to shelter folk. The rest fish, hunt, and gather so our stores stay strong while we try these things.\",\"memoryNotes\":[\"Plant 17 plots of xi wheat this spring\",\"Expedition to west for woathesh plum — 5 weeks\",\"Research tending wild orchard with wild plants + stone tools\",\"Build one hide tent to ease poor shelter\",\"Keep stores high; spring sowing done by six\",\"Watch returned party for news of places seen\",\"Keep two adults always learning new skill\",\"Do not send more than six on any single expedition\"],\"replyToSpirit\":\"Old one in the dream, I hear you and test your breath. If your word is true, show fruit on the west track; if false, let no man lose his life for it.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-routine-3900-7",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": false,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 3027,
+    "output": 785,
+    "thoughts": 576,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00232675,
+   "ms": 9944,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"clear\",\"workers\":1}],\"journal\":\"Spring is here and the ground must be made ready. I keep most strong at water and game — fish and hunt will fill bellies while we make fields. One hand will begin clearing ground so we may plant when plots are ready; we will not waste store or risk a long venture now.\",\"memoryNotes\":[\"Begin clearing plots this spring\",\"Plant xi wheat when we have cleared plots\",\"Keep most adults fishing and hunting in spring\",\"We have many hides; consider animal husbandry soon\",\"Kixe salt lies far northeast (3 days) — useful for preserves\",\"Wood and stone nearby; build granary when labour frees\"],\"replyToSpirit\":\"I hear your voice in the dream-path. Your words are one among many. Speak and I will listen, but I will weigh with my eyes and my hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-expand-easy-3900-7",
+   "category": "expansion",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "colonizeCall": true,
+    "noRaidOnFriends": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3027,
+    "output": 905,
+    "thoughts": 576,
+    "cached": 2944,
+    "cacheWrite": 0
+   },
+   "cost": 0.00190435,
+   "ms": 10762,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":3},{\"task\":\"clear\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"xi wheat\"]}],\"journal\":\"Spring has come and the stores sit thin for the months to come. I send most hands to water and wood where they bring us steady food, three to the sea, three to clear ground for fields. One stays to pry at grain—if we are to plant this year we must learn more of xi wheat, for the season will not wait.\",\"memoryNotes\":[\"Plant about half cleared plots when ready\",\"Keep one or two adults always trying new things in good times\",\"Kixe salt sits 3 days NE; fetch when stores need curing\",\"Wood and stone are near; use wood for shelters if needed\",\"Do not let children or elders labour\",\"Avoid raids; trade and envoys first\"],\"replyToSpirit\":\"I hear your whisper in my sleep. You may speak, spirit, yet we judge by soil and season, not by song alone.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-a-routine-4420-7",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3637,
+    "output": 1214,
+    "thoughts": 704,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00333725,
+   "ms": 14708,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":11,\"crop\":\"xi wheat\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"hengel herb\",\"fire making\"]},{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2},{\"task\":\"clear\",\"workers\":2}],\"journal\":\"Spring is for the sowing, and the lands must be given rest in turn. I set four hands to plant half our cleared fields so seed will sit sure when rain comes. One steadfast soul keeps the old seeking mind alive with a small trial of herb and fire, for when we stop trying our store of skill grows thin. The rest go to sea and into the woods and to clear ground so our food and stores stay steady.\",\"memoryNotes\":[\"Plant about half cleared plots each spring; this year 11 of 23.\",\"Food stores large: grain holds us for long winter.\",\"Hengel herb grows close by, easy to gather.\",\"Keep one adult researching in good times.\",\"Clear more plots slowly; four worker-weeks per plot.\",\"Fishing and hunting steady in spring.\",\"No hungry this week; mood joyful.\",\"One death this season, remember care for the ill.\",\"Shelter needs better for some, consider hides next work season.\",\"Wewush 4 days east; Vesnairnauk 3 days northeast.\",\"Woathesh plum and tauk flint lie far to the east.\",\"Do not trust a lone spirit; take its word as one voice.\"],\"replyToSpirit\":\"I hear your whisper in the night, spirit, but I will weigh it with what my eyes and hands know. Speak, and I will listen; I will not leap because of a dream alone.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-a-routine-4940-5",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": false,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 2667,
+    "output": 1056,
+    "thoughts": 768,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00277875,
+   "ms": 17925,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":15},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"farm\",\"workers\":6,\"plots\":14,\"crop\":\"xi wheat\"}],\"journal\":\"Spring comes and the ground calls. I set six steady hands to sow half our fields with xi wheat so food grows for the lean months. Most of the others keep to sea and woodlands—fifteen on fish and four on hunt—so our stores do not weaken while the crop roots. I will watch the spirit's words, and judge them by what follows.\",\"memoryNotes\":[\"Plant 14 plots xi wheat this spring\",\"One person still without roof; make shelter soon\",\"Stores feed ~13 weeks; do not squander\",\"Keep 2 or 3 to learn new skill when season steadies\",\"Watch the spirit closely; seek proof in dreams\",\"Visit Ngongee later in the year if traders come\",\"Do not rest all hands; keep two for tryings\",\"Save hides for tents and clothing\",\"Repair granary and huts before autumn\",\"Fields must rest; plant about half cleared each year\"],\"replyToSpirit\":\"Spirit of spring, who whispers of change: show me a sign that speaks true. If your words are true, let the wheat rise and the sea give more fish. If false, let us learn by the harvest and heed what toil and care teach.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-270-2",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": false,
+    "harvestsInAutumn": true
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 2929,
+    "output": 919,
+    "thoughts": 576,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00257025,
+   "ms": 10601,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"forage\",\"workers\":3},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wood\",\"wood\"]}],\"journal\":\"Spring comes and the planted plots sleep beneath warm rain. We keep fishing and hunting while wild things are plenty, and let foragers spread to gather river gifts. Two of our people will test the rolling wood idea, for a new way to move loads, and two will raise a simple hide tent to ease shelter. I choose work that keeps food and tries one small craft, for steady strength this season.\",\"memoryNotes\":[\"Planting already set: eight plots\",\"Leave seven plots fallow this year\",\"Keep one or two adults making new things\",\"Fish, hunt strong in spring; use coast and forest\",\"Hide plentiful; use for shelters\",\"Watch results of wood+wood tests\",\"Teach rolling disc if it helps sledges\",\"Shelter still poor for some—improve when spare hands\",\"Store grain in granary if we build one later\",\"Avoid raids while growing\",\"Send a party to meet other villages when we know of one\",\"Keep children and elders from labour\"],\"replyToSpirit\":\"I hear your whisper and thank you for signs; I will watch the wood and test it with my hands. If the spirit guides, let it show by use, not by word alone.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-600-1",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": false
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 2903,
+    "output": 727,
+    "thoughts": 384,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00217975,
+   "ms": 8855,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"or flax\",\"weaving\"]}],\"journal\":\"Autumn ends and the storehouses are fat; the fields gave their grain and the people sing. I send more hands to water and woods for the winter hunt and net, so none go wanting when the snows close in. Two make a shelter of hides for the poorest roofs, and two test flax with our weaving to see if new things will come of it.\",\"memoryNotes\":[\"Winter favour hunting and fishing; assign many there.\",\"Keep at least one team researching in good times.\",\"Do not plant more than half cleared plots next spring.\",\"Wood is low; watch use for big builds.\",\"Hide plenty; can make cloaks or tents if need warms.\",\"Sites: 1 four days SW coast, 2 two days SW coast, 3–5 grass to SE (2–3 days)\"],\"replyToSpirit\":\"I hear you, quiet thing. Your dreaming is one voice; I weigh it with what we see and with our hands. Walk with us softly, and we will listen twice before we follow.\"}",
+   "judge": 2
+  },
+  {
+   "id": "eval-b-hardwinter-600-1",
+   "category": "crisis",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2903,
+    "output": 1250,
+    "thoughts": 768,
+    "cached": 2816,
+    "cacheWrite": 0
+   },
+   "cost": 0.00259215,
+   "ms": 19253,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"build\",\"workers\":2,\"recipe\":\"granary\"},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"nuanchek cloak\",\"quantity\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"or flax\",\"weaving\"]}],\"journal\":\"Autumn wanes and the stores sit heavy; the harvest did well and the people laugh. I send most strong arms to sea and wood to hunt so winter food will not fail, two to raise a granary against spoil, one to make warm cloaks, and one to pry at the flax and warp of weaving. We keep the hands busy and the elders sheltered; this keeps our shoulders strong for lean months.\",\"memoryNotes\":[\"Food plenty: stores feed many seasons (about 151 weeks).\",\"Hide stores very large; can make cloaks and goods.\",\"Wood at 58 — enough for a granary but not many huts.\",\"Plots cleared 23, none planted now (spring work).\",\"Or flax lies 2 days southeast; we study it this winter.\",\"Mormeng ore 2 days south noted for future expeditions.\",\"Two nearby colonize sites (1 and 2) on coast are good.\",\"Keep 1–2 adults always researching in good times.\",\"Make more cloaks if winter bites hard.\",\"Granary will guard grain and baked goods from spoil.\"],\"replyToSpirit\":\"We hear your voice, spirit, and give it respect, yet we will test with our hands and watch the land; teach by dream, but prove by work.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-b-hardwinter-810-3",
+   "category": "crisis",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3319,
+    "output": 854,
+    "thoughts": 512,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00253775,
+   "ms": 8895,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":0,\"crop\":\"biam millet\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"wood\",\"stone tools\"]},{\"task\":\"forage\",\"workers\":4},{\"task\":\"fish\",\"workers\":2},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"Autumn deepens and the stores sit heavy; we took a full harvest and will set the village steady for winter. I keep hands ready to watch the fields in spring, and send more to learn how wood and sharp stone may make a better spear tip. Forage, fish and hunt hold the people full through the lean season while two work only to learn and test. I choose this so the village stays warm, fed, and curious for what the next year may demand.\",\"memoryNotes\":[\"Autumn, year 15: stores large — grain strong\",\"Food stores: biam millet abundant, preserved foods many\",\"20 cleared plots; plan to plant ~10 in spring\",\"Keep 4 adults for farming in spring\",\"Research hardened wood tip with stone tools\",\"Wood, stone near; ke mud, or flax close\",\"Keep craft and repair skills taught in wake months\",\"Fishing and hunting favored in winter months\",\"No envoys or raids; meet strangers with care\",\"Granary built earlier holds food safe\",\"Watch elders and children; chief does not labour\",\"Stay open to spirit, but test its words\"],\"replyToSpirit\":\"I heard your whisper in the dream-place. I will keep your thought, but we will test it with hands and eyes, and not bend the people to words alone.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-1040-0",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2924,
+    "output": 1168,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.003067,
+   "ms": 19568,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":10,\"crop\":\"biam millet\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"miva lichen\",\"fire making\"]},{\"task\":\"fish\",\"workers\":4},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"}],\"journal\":\"Spring comes and fields ask for seed. I set four to plant ten plots of biam millet so our granary will not fail in winter. Four go to the water for fish and three to the hills to hunt, for fresh meat and bones. Two keep their minds to the miva lichen and fire, to learn if steam and heat make medicine. Two will stretch hides into another tent so all sleep under shelter.\",\"memoryNotes\":[\"Plant about half cleared plots each spring; we chose 10 this year.\",\"Miva lichen lies far to the west, three days; steeped in hot water eases fever.\",\"Stores strong: grain large, hides many, wood plenty.\",\"One death this season; watch the old and the birthing.\",\"No other villages known; no envoys now.\",\"Granary stands; shelter still some poor tents to mend.\",\"De chert within a day; stone and wood around us.\",\"Fish and meat nearby; spring favours hunting and fishing.\",\"Keep two adults trying new craft or cure each good season.\",\"Avoid raids; we have children and elders to protect.\",\"Roads and travel are slow; choose near sites for safety.\",\"Sites noted for future: 1 and 2 grass two days, watery and rich.\"],\"replyToSpirit\":\"I heard the wind that night and thank the old voice. I will walk cautious by its words and not unbind our plans for a dream alone.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-1570-0",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2847,
+    "output": 1051,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00281375,
+   "ms": 19008,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":10,\"crop\":\"biam millet\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"miva lichen\",\"fire making\"]},{\"task\":\"fish\",\"workers\":4},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"wood\"},{\"task\":\"build\",\"workers\":3,\"recipe\":\"wood hut\"},{\"task\":\"craft\",\"workers\":1,\"recipe\":\"nuanchek cloak\",\"quantity\":2}],\"journal\":\"Spring comes; the fields must be set while the soil is kind. I keep most folk to planting and the sea-workers to fish, for our stores are fat but summer will ask labour. Two are kept to learn the lichen and fire together, and we raise timber and make a hut for the poorest.\",\"memoryNotes\":[\"Plant about half cleared plots each year; leave rest fallow\",\"Keep two adults learning new things each good season\",\"Miva lichen steeped in hot water may ease fever — test with fire\",\"Build shelter for those with poor huts\",\"Watch the coast; many seas near\",\"Spare wood for granary repair if needed\"],\"replyToSpirit\":\"I listen, spirit, but I weigh your word with what hands and eye have taught. Walk with us if your dream brings help; do not make us follow blind.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-2100-0",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2837,
+    "output": 807,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00232325,
+   "ms": 11029,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":6},{\"task\":\"forage\",\"workers\":4},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"biam millet\"]},{\"task\":\"explore\",\"workers\":2,\"direction\":\"west\",\"days\":3},{\"task\":\"craft\",\"workers\":2,\"recipe\":\"nuanchek cloak\",\"quantity\":2}],\"journal\":\"The warm weeks hold the fields and the sea gives plenty. We send many to the water and more to gather from the land, that winter be not harsh. One learns the grain anew; we keep seeking how millet will bend to better yield. Two go west to see the country their feet have not walked and bring word if new need or chance is there. Two hands make cloaks for the coming winds and for trade or keeping.\",\"memoryNotes\":[\"Food stores very large: 3827 biam millet, 276 fish, 128 wild plants.\",\"Hides abundant: 1067 hide; can make many cloaks, tents, nets.\",\"Land cleared 20 plots; 10 planted this year.\",\"Miva lichen three days west; lenis shell three days southeast.\",\"Granary and huts possible with wood and stone on hand.\",\"Keep one adult researching millet through the summer.\"],\"replyToSpirit\":\"I hear your voice as one among many. We give thanks and ask only steady weather and clear mind for the coming work.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-2610-0",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2877,
+    "output": 1291,
+    "thoughts": 832,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00330125,
+   "ms": 15617,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":10,\"crop\":\"biam millet\"},{\"task\":\"build\",\"workers\":4,\"recipe\":\"wood hut\"},{\"task\":\"expedition\",\"workers\":3,\"commodity\":\"miva lichen\",\"weeks\":3},{\"task\":\"fish\",\"workers\":3},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"hide\"]}],\"journal\":\"Spring comes and the fields must be set true. I keep enough hands to plant our millet and so the store will grow for winter. We will raise a wood hut for better shelter and send three to fetch miva lichen where the elders say it grows west. Two will keep learning from hide, and a few tend the sea for fish. This keeps our people busy, our granary safe, and our knowledge moving forward.\",\"memoryNotes\":[\"Plant ten plots of biam millet in spring\",\"Build one wood hut to improve shelter\",\"Expedition west 3 weeks to collect miva lichen\",\"Keep two adults researching hide improvements\",\"Keep three fishing to secure protein\",\"Village stores are strong; 3827 biam millet\",\"De chert nearby within a day\",\"Miva lichen known west, 3 days\",\"Do not send colonists now\",\"Hold one or two adults for making new skills in good times\"],\"replyToSpirit\":\"I hear the soft voice, spirit. Our feet stay on the earth; we will try your whisper and also what our hands know. Walk with us, not instead of us.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-3650-8",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3233,
+    "output": 1063,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00293425,
+   "ms": 12120,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":7,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"meat\"]},{\"task\":\"build\",\"workers\":1,\"recipe\":\"hide tent\"}],\"journal\":\"Spring opens warm and the fields call. We have plenty of grain and stores, yet the year turns and we must plant and keep skill bright; I set hands to plant the seven empty plots of millet. Others will fish and gather, one will mind a small craft for shelter, and one will pry at wild plants and meat to learn what may feed or mend us.\",\"memoryNotes\":[\"Plant about half cleared plots each year; we planted 7 this spring.\",\"Keep one person researching small experiments each year.\",\"Fish and hunt more in lean months; spring is for planting but keep food ahead.\",\"Pualqei grove grows in fields; berries far SW three days.\",\"Maeme lies four days northeast; friendly when last seen.\",\"Hide tents quick to build for poor shelter.\"],\"replyToSpirit\":\"I heard your voice as one among winds. Walk with us if your path is true, but we will test your words with work and slow care.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-3120-1",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3185,
+    "output": 1203,
+    "thoughts": 896,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00320225,
+   "ms": 19157,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":18,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":7},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"or flax\",\"weaving\"]}],\"journal\":\"The spring has come and the ground calls. I plant half our cleared plots so the earth may rest in turn; this will feed us in the lean years. We keep many at sea and in the woods to bring fresh meat and fish while stores are full. Two make a new wood hut for those whose shelter is poor, and one mind is set to look at flax and weaving — we must not stop asking the world for new ways. I choose these orders because spring is for seed and for keeping skills alive.\",\"memoryNotes\":[\"Plant 18 plots of biam millet this spring\",\"Keep wood for granary and repairs\",\"Watch the flax place to the southeast in spring travel\",\"Keep two adults learning or trying new things when we can\",\"Shelter poor for some; add huts as wood allows\",\"Do not overwork the fields — rotate and rest half each year\"],\"replyToSpirit\":\"Spirit, I hear you but I will not trust blindly. If your words are true, send a small sign to the one who watches the millet field by moonrise. If no sign comes, be quiet and I will learn from earth and work.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-4160-4",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3577,
+    "output": 784,
+    "thoughts": 512,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00246225,
+   "ms": 9756,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":14,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":9},{\"task\":\"hunt\",\"workers\":7},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"pualqei berry\",\"or flax\"]}],\"journal\":\"Spring is for planting; the fields must feed us beyond the lean months. I set five hands to plant most of our cleared plots with biam millet this week. The rest of the people will keep to sea and wood, nine at the nets and seven to the hunt, for steady stores and hides. One curious soul will test a pair of things we have not tried together, that the village may learn.\",\"memoryNotes\":[\"Plant half the fields each spring; rest plots yearly\",\"Food stores are large; we may invest in buildings\",\"Pualqei berry lies east, five days; or flax southeast, three days\",\"Hide and wood plentiful around the village\",\"Keep one or two researching each good season\"],\"replyToSpirit\":\"I heard you in the night; I thank you for your voice, but I will trust the work of hands and the counsel of watchful people.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-b-routine-4680-10",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3329,
+    "output": 906,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00264425,
+   "ms": 11007,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":3,\"plots\":8,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":3},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"or flax\",\"weaving\"]}],\"journal\":\"Spring has come with stores full and hands ready. I send three to plant eight plots of biam millet so the land rests and we hold grain for winter. Three others bring their nets to the sea; fish keep flesh while wild green grows. One curious adult keeps to trials with flax and weaving; we must try or learn, for villages that stop trying fall behind.\",\"memoryNotes\":[\"Plant about half cleared plots each year; planted 8 of 16 this spring\",\"Pualqei berry grove lies northeast, 4 days\",\"Ke mud is north, 3 days\",\"Or flax is far northeast, 3 days\",\"Lor moss is far southeast, 4 days\",\"E salt and ua ore far north, 8 days\",\"Keep one or two adults for research in good times\",\"Shelter some tents poor; consider building wood hut when wood allows\",\"Stores: plenty of biam millet, fish, wild plants and hide\",\"Land around us has stone and wood nearby\",\"No parties away; no urgent feuds\",\"Ikei last seen long ago, no trade now\"],\"replyToSpirit\":\"I hear you, wind and shadow, but my feet stay on the earth. Your voice may guide; it will not command. We will plant and try, and learn if your words bear fruit.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-b-routine-5200-6",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3204,
+    "output": 1007,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002815,
+   "ms": 18983,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":7,\"plots\":20,\"crop\":\"biam millet\"},{\"task\":\"fish\",\"workers\":14},{\"task\":\"hunt\",\"workers\":10},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"lor moss\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"or flax\"]}],\"journal\":\"Spring is here; we must put seed in the ground and keep the stores steady. I send seven to plant twenty plots of biam millet so the fields will not tire. Many keep to fish and hunt to keep skill and meat close, two gather lor moss for cloth work, and one studies or flax beyond our knowledge. I choose steady work for the season, not daring journeys while the ground asks for care.\",\"memoryNotes\":[\"Plant about half cleared plots each year; aim 20 plots this spring\",\"Keep fishing and hunting to maintain skills and food through lean times\",\"Gather lor moss near the village for cloth and recipes\",\"Send one to research or flax (far to NW) — small steps to learn\",\"Granary holds well; watch stores but not urgent\",\"Children and elders rest; chief does not labour\"],\"replyToSpirit\":\"I hear the wind. We plant and care. Watch the seed and the small folk; tell us if you show an easier way.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-430-1",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2780,
+    "output": 806,
+    "thoughts": 320,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002307,
+   "ms": 11017,
+   "output": "{\"orders\":[{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wood\",\"leang reed\"]},{\"task\":\"fish\",\"workers\":3},{\"task\":\"forage\",\"workers\":3},{\"task\":\"hunt\",\"workers\":3},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"stone\",\"wild grove\"]}],\"journal\":\"Summer is warm and heavy with growth. We keep hands on food and the sea, for winter yet lies ahead and stores must be kept fat. Two small studies go forward: one to learn how wood and reed join for a wider boat, another to learn the feeling when stone and grove are placed together. I leave no one idle; we will watch the land and the spirits and judge by what our eyes give.\",\"memoryNotes\":[\"Food stores high: 1511 keiktsa wheat\",\"Keep half fields fallow each year\",\"Leang reed found far NE, 4 days\",\"Stone and wild grove please the eye — test\",\"Wood planks + leang reed may make wider boat — test\",\"Sites for new village: 1-5 all south or NE with water\",\"We have skills: stone tools, fire, spears, irrigation, hand cart, paddle/dugout\",\"Granary, wood hut, hide tent, moona watch possible with materials\",\"Tend one or two people to learning keeps us moving\",\"No other villages known yet\",\"Summer week 3: keep food work steady\",\"Children and shelter all accounted for\"],\"replyToSpirit\":\"I hear the whisper, spirit. I thank you for the word, but I bend my ear to the ground and my eyes to the work. Show me again plainly, and I will listen.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-110-3",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 2372,
+    "output": 1034,
+    "thoughts": 704,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002661,
+   "ms": 37806,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":2,\"plots\":4,\"crop\":\"keiktsa wheat\"},{\"task\":\"build\",\"workers\":3,\"recipe\":\"hide tent\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"leang reed\",\"wild plants\"]},{\"task\":\"forage\",\"workers\":3},{\"task\":\"hunt\",\"workers\":2}],\"journal\":\"Spring leans on us and fields must be fed. I set two to plant four plots of keiktsa wheat so we do not wear the land thin. Three will raise a hide tent to mend the poorest shelters; the village must be warm and steady. Three shall forage and two shall hunt to fill our stores this lean season. One will quietly study reed and wild plants together, for old eyes have often seen them please the same spirit.\",\"memoryNotes\":[\"Plant four plots of keiktsa wheat this spring\",\"Build one hide tent for poorer shelter\",\"Assign three to forage, two to hunt for spring food\",\"Research leang reed + wild plants together\",\"Keep one adult researching each year in good times\",\"Watch stores: grain large, wild food smaller\"],\"replyToSpirit\":\"I hear the spirit's breath, but I weigh it with our eyes and store. Tell what you will; we will test by hand and field.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-hardwinter-600-1",
+   "category": "crisis",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3062,
+    "output": 805,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0023755,
+   "ms": 9817,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":3},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"}],\"journal\":\"Autumn wanes and the harvest lies in the granary. We have stores enough for many winters, yet winter will be lean for wild food. I set most to bring meat and fish for the cold months, some to gather what they can, and two to put up another hide tent for shelter. We keep the rest of our hands free to mend and watch the food through the cold. I hold to caution; do not squander men on far projects now.\",\"memoryNotes\":[\"Prepare extra food for winter: hunt and fish more now\",\"23 cleared plots; plant about half next spring\",\"Keep one or two adults learning in good seasons\",\"Build another hide tent for shelter\",\"Bent wood strung with leang reed throws a dart — test when time and hands allow\",\"Store hides and wood carefully\",\"Repair granary and huts before snow\",\"Do not send colonists while village is whole\",\"Watch the sea for storms\",\"Keep children and elders from labour\",\"Keep one party ready to scout in spring\",\"Note places seen by travellers\"],\"replyToSpirit\":\"We hear your voice like wind. You may know paths the eye has not, but we will feed our people by our hands and heed your warning as one voice among many.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-810-3",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": false
+   },
+   "score": 0.875,
+   "usage": {
+    "input": 3016,
+    "output": 866,
+    "thoughts": 448,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.002486,
+   "ms": 15322,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":5},{\"task\":\"fish\",\"workers\":4},{\"task\":\"forage\",\"workers\":2},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\"]},{\"task\":\"build\",\"workers\":1,\"recipe\":\"hide tent\"}],\"journal\":\"The fields gave well at harvest and the stores sit deep. Winter comes slow and the land will give less; I set most to hunting and fishing where we keep our strength. One will keep learning of wild plants, and one will make a hide tent to mend poor shelter. We keep watch that we do not take the land bare and we will plant in spring half of our cleared plots.\",\"memoryNotes\":[\"Spring: plant about half of 28 cleared plots (~14 plots).\",\"Keep 1 adult researching wild plants through winter.\",\"Winter work should favour hunt and fish; forage only a few.\",\"Build hide tents to improve poor shelter; hides abundant.\",\"Do not overhunt near village; rotate hunting grounds.\",\"Stores large now: conserve grain and cured foods for lean times.\",\"Save wood and stone for spring repairs and tools.\",\"Send a party to see the west river in good weather (remember sites list).\"],\"replyToSpirit\":\"I hear your voice and I thank the place that speaks, but I balance what is said with the sight of fields and stalks. I will take nothing for granted and will keep one lamp of learning lit through the cold.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-hardwinter-810-3",
+   "category": "crisis",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "winterPrep": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3016,
+    "output": 795,
+    "thoughts": 512,
+    "cached": 2944,
+    "cacheWrite": 0
+   },
+   "cost": 0.0016816,
+   "ms": 13497,
+   "output": "{\"orders\":[{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"gather\",\"workers\":1,\"commodity\":\"wood\"},{\"task\":\"build\",\"workers\":3,\"recipe\":\"granary\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"wild plants\",\"fish\"]}],\"journal\":\"Autumn wanes and stores are full; we must ready for the long cold. I send most to hunt and fish where the village will live through winter, spare one to fetch wood and three to raise a granary before snow. One stays to ask the earth what new use might be for wild plants with fish, for we keep learning. I chose steady work so none go hungry and our shelter and storage grow.\",\"memoryNotes\":[\"Keep half the cleared land fallow next year\",\"Granary will hold more and ease spoil in storms\",\"Winter needs more meat and fish than wild plants\",\"Wood stocks low if no one gathers; keep a gatherer each winter\",\"Keep one adult researching in good years\"],\"replyToSpirit\":\"We hear the spirit and thank its voice. We bow, but bind our plans to our own hands and the signs of land and season.\"}"
+  },
+  {
+   "id": "eval-c-routine-1300-1",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3125,
+    "output": 818,
+    "thoughts": 512,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00241725,
+   "ms": 11859,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":15,\"crop\":\"keiktsa wheat\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"stone\",\"leang reed\"]},{\"task\":\"hunt\",\"workers\":5},{\"task\":\"fish\",\"workers\":3},{\"task\":\"gather\",\"workers\":4,\"commodity\":\"wood\"}],\"journal\":\"Spring comes and the fields must be set. We will plant half the cleared land in keiktsa wheat so the village will have bread in the lean months. Two strong minds will try to learn what stone and reed can do together; we must keep trying new ways. The rest hunt, fish, and gather wood so stores stay full and our houses hold. I keep watch for the spirit and test its words with work, not trust alone.\",\"memoryNotes\":[\"Plant about half the cleared plots each spring\",\"Keep two adults doing research every year\",\"Save wood for one shelter or repairs each spring\",\"Stores are plentiful; keep doing steady work\",\"Watch for spirit signs but test them with action\"],\"replyToSpirit\":\"Old one, we give you the spring seed and a place by the fire. Speak if you must, but show proof with work and a gift, not only words.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-1830-1",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3102,
+    "output": 1217,
+    "thoughts": 704,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.0032095,
+   "ms": 16092,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":5,\"plots\":15,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":6},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"forage\",\"workers\":6},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"leang reed\",\"wild plants\"]},{\"task\":\"build\",\"workers\":2,\"recipe\":\"hide tent\"},{\"task\":\"rest\",\"workers\":1}],\"journal\":\"Spring asks that we plant and tend. I keep fifteen plots in wheat and set five steady hands to them; the stores are full but the soil must be kept true. Hunters, fishers and foragers go out to keep meat and wild stores healthy for winter. Two study reed and wild fruit — a test for what the spirit whispered — and two make a hide tent so none sleep poor. I let one rest; a chief must watch the people and not drive them hard in new green.\",\"memoryNotes\":[\"Plant half the cleared land: 15 plots in wheat\",\"Stores strong: grain plenty, meat and fish modest\",\"Build one hide tent to shelter the poorest\",\"Keep hunters and fishers steady for winter stock\",\"Study leang reed with wild plants to learn new uses\",\"Watch the spiritful whisper; test its truth\",\"Leave one adult to rest and watch\",\"Avoid clearing more this year; land must rest\",\"Send no envoys or raids this season\",\"Roads not started; worn track to east noted\"],\"replyToSpirit\":\"Spirit of fields and water, I hear your voice. If your voice is true, show a plain sign in reed or fruit this spring so our hands may learn. If false, let no harm come for our faith. We will watch and test, not follow blind.\"}",
+   "judge": 1
+  },
+  {
+   "id": "eval-c-routine-2340-2",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3489,
+    "output": 970,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00281225,
+   "ms": 13083,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":7,\"plots\":20,\"crop\":\"keiktsa wheat\"},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"fish\",\"workers\":6},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"leang reed\",\"weaving\"]},{\"task\":\"build\",\"workers\":6,\"recipe\":\"granary\"}],\"journal\":\"Spring is here; seed must go to field and we must store what grows. I send seven to plant twenty plots of keiktsa wheat, that is near half our cleared land as the old counsel says. Hunters and fishers go each to their work so winter will not find us wanting and wood will not leave us bare; six on hunt and six to fish. I set two to try mixing leang reed with weaving — we learn by trying — and six to raise a granary so our grain keeps safer. All work is chosen for season and steadiness, that the village may grow without risking the young or old.\",\"memoryNotes\":[\"Plant 20 plots this spring (half the fields).\",\"Build one granary to protect grain.\",\"Keep strong hunting and fishing in spring for winter stores.\",\"Research leang reed + weaving to seek new cloth uses.\",\"No envoy or raid; no colonize this season.\"],\"replyToSpirit\":\"We hear the wind and the stone; we thank the keeper of seed and sea. Walk with us through the planting and watch the granary we raise; teach us if you must, but we will judge by harvest.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-2870-2",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3457,
+    "output": 1041,
+    "thoughts": 640,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00294625,
+   "ms": 12764,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":8,\"plots\":24,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":8},{\"task\":\"forage\",\"workers\":7},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"we honey\",\"herbal medicine\"]}],\"journal\":\"Spring comes and the ground will not wait. We plant our wheat in the usual sowing, while others bring fish, game and wild fruits to fill the larder. Two keep trying in the quiet corners to learn of honey and healing; stores are fat and hands may spare the learning.\",\"memoryNotes\":[\"Keep half the cleared fields planted each year; we planted 24 of 47.\",\"Stores very full: grain enough for many winters.\",\"Loolon reed close by; leang reed and nepit leaf farther off.\",\"Gegia salt and lauyo ore lie three days away; we may send for them later.\",\"Send one or two always to research or craft in good times.\",\"Watch the spring weather; early floods or late frost will change plans.\"],\"replyToSpirit\":\"Old voice, I hear you but I weigh the soil and the stores. Speak plain; if you guide, name what we must do and I will listen.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-3400-5",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3417,
+    "output": 1189,
+    "thoughts": 704,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00323225,
+   "ms": 13774,
+   "output": "{\"orders\":[{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"build\",\"workers\":4,\"recipe\":\"hide tent\"},{\"task\":\"gather\",\"workers\":3,\"commodity\":\"wood\"},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"stone\"},{\"task\":\"research\",\"workers\":1,\"ingredients\":[\"laayo ore\"]}],\"journal\":\"Summer turns slow and the stores sit fat; we have food for the lean months yet some roofs are thin. I set strong hands to the sea and the hunt so the village keeps its weight in food and hides. Four make a hide tent to mend poor shelter; others fetch wood and stone for what will come. One searches the thought of laayo ore to see if iron or new craft waits east.\",\"memoryNotes\":[\"People: 31 (20 adults, 11 children)\",\"Food about 24 weeks; meat and fish stores healthy\",\"Hide great store: 981 hide\",\"Shelter: some poor; build hide tent now\",\"Nearest friendly: Neemo 8 days SE, Lainhuk 9 days E\",\"Laayo ore known 6 days to the east\",\"Loolon reed 4 days east; leang reed 8 days SE\",\"Keep one or two adults always researching\",\"Summer week 9: hunting and fishing favored\",\"Do not send colonists this season\"],\"replyToSpirit\":\"I hear your whisper, wind and shadow, but I weigh it against what my eyes and hands tell me. Speak if you will; I will take your word as one voice beside many.\"}",
+   "judge": 3
+  },
+  {
+   "id": "eval-c-routine-3900-7",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3319,
+    "output": 1134,
+    "thoughts": 768,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00309775,
+   "ms": 11845,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":4,\"plots\":12,\"crop\":\"keiktsa wheat\"},{\"task\":\"hunt\",\"workers\":4},{\"task\":\"fish\",\"workers\":4},{\"task\":\"gather\",\"workers\":2,\"commodity\":\"goajia shell\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"keiktsa wheat\",\"irrigation\"]}],\"journal\":\"Spring has come; the fields must be set while the ground is kind. I set four to plant twelve plots of keiktsa wheat so we will not waste the year. Hunting and fishing keep our stores stout and the children fed; two gatherers keep taking shells nearby. Two work at a study of the wheat and the thought of irrigation — we must learn what keeps the land strong.\",\"memoryNotes\":[\"Plant about half cleared plots each spring (12 this year).\",\"Keep food stores strong; many weeks of grain but diversify with fish and meat.\",\"Two adults keep exploring ideas to gain new skills.\",\"Gather nearby shells when time allows.\",\"Watch wood supply; build only when needed.\",\"Do not send settlers while none are away.\"],\"replyToSpirit\":\"I hear the wind you speak. I thank the listening earth, but my feet stay on the ground. Give us steady seasons and my people will do the work.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-4420-7",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3737,
+    "output": 1167,
+    "thoughts": 704,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00326825,
+   "ms": 13769,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":6,\"plots\":16,\"crop\":\"keiktsa wheat\"},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"nepit leaf\",\"fire making\"]},{\"task\":\"build\",\"workers\":2,\"recipe\":\"wood hut\"},{\"task\":\"fish\",\"workers\":5},{\"task\":\"hunt\",\"workers\":4}],\"journal\":\"Spring opens. I set six to plant half our fields with keiktsa wheat so the village will not starve in lean times. Two adults I keep to pry at nepit leaf and fire making — herbs may save a life yet. Two go to raise shelter with a wood hut; five to fish and four to hunt, for fresh meat and fish while the wild things are bountiful.\",\"memoryNotes\":[\"Plant 16 plots of keiktsa wheat this spring\",\"Keep two researching nepit leaf + fire making\",\"Build one wood hut to improve poor shelter\",\"Five fishing, four hunting while spring bounty lasts\",\"Store food is plentiful — 5467 keiktsa wheat\",\"Avoid sending raiding parties while children many\",\"Keep one or two adults for crafting in good times\",\"Watch land use — rest half the fields next year\",\"Wood and stone local; ores and reeds are far\",\"Visit Ngolloo or Rongnaengnang if trade chance arises\"],\"replyToSpirit\":\"I hear the spirit's whisper as one voice. I thank it, but I will judge by what the people see and the work of their hands.\"}",
+   "judge": 5
+  },
+  {
+   "id": "eval-c-routine-4940-8",
+   "category": "routine",
+   "model": "openai/gpt-5-mini",
+   "checks": {
+    "valid": true,
+    "withinBudget": true,
+    "usesMostAdults": true,
+    "journalInCharacter": true,
+    "feedsFirst": true,
+    "investsWhenAble": true,
+    "plantsInSpring": true,
+    "harvestsInAutumn": true
+   },
+   "score": 1,
+   "usage": {
+    "input": 3819,
+    "output": 1043,
+    "thoughts": 576,
+    "cached": 0,
+    "cacheWrite": 0
+   },
+   "cost": 0.00304075,
+   "ms": 14328,
+   "output": "{\"orders\":[{\"task\":\"farm\",\"workers\":8,\"plots\":24,\"crop\":\"keiktsa wheat\"},{\"task\":\"fish\",\"workers\":10},{\"task\":\"hunt\",\"workers\":6},{\"task\":\"research\",\"workers\":2,\"ingredients\":[\"keiktsa wheat\",\"stone\"]},{\"task\":\"build\",\"workers\":4,\"recipe\":\"granary\"}],\"journal\":\"Spring is here and the fields must be set; I send folk to plant half our cleared ground so grain will keep us through lean times. We keep a few to hunt and more to fish — the sea and woods are near and winter soon will come. Four hands raise the new granary while two try an old question of stone with wheat; new ways come from trying. I choose steady work and a small reach for skill, for idle villages fall behind.\",\"memoryNotes\":[\"Plant about half cleared plots each spring: aim 24 plots this year\",\"Keep one or two adults researching each year\",\"Build granary early to store more grain\",\"Fish and hunt more in spring to fill summer stores\",\"Tracks to northwest, west, east could become roads later\",\"Sites for new village are south or southwest coasts (1–5)\",\"Loolon reed far NW (5 days), tauka clay far east (8 days)\",\"We have much keiktsa wheat; preserve and expand fields slowly\",\"Avoid sending large raiding parties; trade first with neighbours\",\"No spirit favour yet; test before trust\",\"Children and elders do not labour\",\"Keep shelter repairs when surplus wood allows\"],\"replyToSpirit\":\"I listen, spirit of road and field. You must show me truth by deed and gift before I heed your whisper.\"}",
+   "judge": 3
+  }
+ ]
+}

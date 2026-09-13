@@ -168,3 +168,26 @@ including cache discounts.
 free depending on the vendor); the proxy stores `cacheWrite = input` for those. The `google/` ids go
 through OpenRouter's key, not the project's Vertex quota, and are listed so the eval can compare the same
 model on both paths; the Vertex ids (no prefix) remain the class defaults.
+
+
+## 6. Recommended configurations (from the 2026-09-12 evals, see docs/evals-notes.md)
+
+Defaults, all Vertex Gemini through the service account (fastest, no key, quality within noise of the best cheap models):
+
+```
+MODEL_CHEAPEST=gemini-2.5-flash-lite   # thrifty tier's routine seasons, ~$0.0004 a decision
+MODEL_CHEAP=gemini-3.5-flash-lite      # standard tier's routine seasons, ~$0.0016, best Gemini journals
+MODEL_ROUTINE=gemini-3.8-flash         # standard tier's impactful decisions, ~$0.0070
+MODEL_CAPABLE=gemini-3.1-pro-preview   # lavish tier's impactful decisions and dreams
+MODEL_PREMIUM=gemini-3.1-pro-preview
+```
+
+Alternates via OpenRouter (needs the `openrouter-api-key` secret), each one env var and a redeploy:
+
+| want | set | why |
+|---|---|---|
+| the best journals at low cost | `MODEL_CHEAP=openai/gpt-5.6-luna` | judge 4.46 (best in study), rules 0.975, $0.0011, ~6 s |
+| the cheapest on-par chief | `MODEL_CHEAPEST=z-ai/glm-5.3-flash` | rules 0.972, $0.0005, ~6 s |
+| a more cautious temperament | `MODEL_ROUTINE=mistralai/mistral-medium-3.1` | rules 0.984, refuses and stays home more than Gemini (74% agreement with the reference) |
+
+Not recommended from the study: Claude Haiku 4.5 (slower and dearer than the baseline for equal or lower quality), Llama 4 Maverick (48% agreement with the reference), and any model over ~20 s a decision (DeepSeek V4 family, MiMo, GLM 4.7, Kimi K2.5, Qwen 3.8 Flash at our token caps).
