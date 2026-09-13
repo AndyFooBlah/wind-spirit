@@ -35,7 +35,13 @@ export interface VillageSummary {
   pop: { children: number; adults: number; elders: number; total: number };
   happiness: number; trust: number; foodWeeks: number; hungryWeek: number; capabilities: number;
 }
-export interface PartySummary { id: number; kind: PartyKind; home: number; at: number; boat: boolean; target: number; targetVillage?: number; returning: boolean; size: number; waiting: number; }
+export interface PartySummary {
+  id: number; kind: PartyKind; home: number; at: number; boat: boolean; target: number; targetVillage?: number; returning: boolean; size: number; waiting: number;
+  /** tiles still to walk on the current leg */ left: number;
+  /** units of goods carried */ cargo: number;
+  /** envoys: what they are there to do */ errand?: 'trade' | 'threat' | 'gift';
+  /** expeditions: what they are collecting */ gathering?: string;
+}
 export interface Frame {
   tick: number; year: number; season: number; week: number;
   villages: VillageSummary[]; parties: PartySummary[];
@@ -49,17 +55,32 @@ export interface StaticMap {
   terrain: Terrain[]; ford: boolean[]; extra: string[][];
   names: { commodities: Record<string, string>; recipes: Record<string, string>; capabilities: Record<string, string> };
 }
-export interface PlotView { kind: PlotKind; planted: boolean; recipe: string; crop: string; building: boolean; }
+export interface PlotView {
+  kind: PlotKind; planted: boolean; recipe: string; crop: string; building: boolean;
+  /** recipe id (stable across worlds), for the icon */ recipeId: string;
+  /** construction progress 0..1 while building */ progress: number;
+  /** soil strength 0..1 */ fertility: number;
+  /** what a finished structure is for */ structure?: { shelter: number; storage: number; defense?: number; watch?: boolean };
+}
+/** One villager as the village view shows them: derived from orders each week, never stored (see activities.ts). */
+export interface PersonView { id: number; name: string; age: number; stage: 'child' | 'adult' | 'elder'; doing: string; plot?: number; out: boolean; chief: boolean; }
 export interface FeedGroup { when: string; tick: number; lines: string[]; }
 export interface VillageDetail {
   id: number; tick: number; alive: boolean;
   view: Omit<VillageView, 'names'>;
   plots: PlotView[];
+  people: PersonView[];
   chronicle: Claim[];
   feed: FeedGroup[];
   inbox: string[];
   chiefId: number;
 }
+
+/** One yearly reading of the whole world, for the overview charts. Recorded by the sim worker at each new year and backfilled from snapshots. */
+export interface SeriesVillage { id: number; name: string; alive: boolean; pop: number; food: number; caps: number; tier: number; work: Record<WorkGroup, number>; }
+export type WorkGroup = 'food' | 'land' | 'craft' | 'research' | 'ventures' | 'rest';
+export const WORK_GROUPS: readonly WorkGroup[] = ['food', 'land', 'craft', 'research', 'ventures', 'rest'];
+export interface SeriesPoint { tick: number; villages: SeriesVillage[]; }
 
 export interface NarrativeRequest { id: number; village: number; fromTick: number; toTick: number; style: 'chronicle' | 'saga' | 'plain'; events: Event[]; journals: JournalEntry[]; }
 
@@ -94,11 +115,14 @@ export type FromWorker =
   | { type: 'dreamReply'; text: string }
   | { type: 'dreamClosed'; claims: { text: string; due: number }[]; memoryNotes: string[] }
   | { type: 'narrative'; id: number; text?: string; error?: string }
+  | { type: 'series'; point: SeriesPoint }
   | { type: 'error'; message: string; village?: number };
 
 /** History worker: replay to a tick from the nearest earlier snapshot and render views from the replayed world. */
-export type ToHistory = { type: 'seek'; seq: number; snapshot: string; snapshotTick: number; inputs: Record<number, LoggedInput[]>; targetTick: number; village?: number; villageEvents: Event[] };
-export type FromHistory = { type: 'frame'; seq: number; tick: number; frame: Frame; detail?: VillageDetail } | { type: 'error'; seq: number; message: string };
+export type ToHistory =
+  | { type: 'seek'; seq: number; snapshot: string; snapshotTick: number; inputs: Record<number, LoggedInput[]>; targetTick: number; village?: number; villageEvents: Event[] }
+  | { type: 'series'; seq: number; snapshot: string };
+export type FromHistory = { type: 'frame'; seq: number; tick: number; frame: Frame; detail?: VillageDetail } | { type: 'series'; seq: number; point: SeriesPoint } | { type: 'error'; seq: number; message: string };
 
 export const SEASON_NAMES = ['Spring', 'Summer', 'Autumn', 'Winter'];
 export const DIR_NAMES = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];

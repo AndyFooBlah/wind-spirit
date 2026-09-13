@@ -143,3 +143,19 @@ table { border-collapse: collapse; width: 100%; } th, td { text-align: left; pad
 .popover.mix { min-width: 340px; }
 .popover .bus input[type=range] { flex: 1; accent-color: var(--moss); }
 .popover .bus .w { min-width: 60px; flex: 0 0 auto; }
+
+/* overview */
+.modal.overview { width: min(1180px, 96vw); max-height: 92vh; overflow: auto; }
+.overview-grid { display: grid; grid-template-columns: minmax(380px, 1fr) minmax(320px, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 900px) { .overview-grid { grid-template-columns: 1fr; } }
+table.villages { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.villages th, table.villages td { padding: 4px 6px; border-bottom: 1px solid var(--parch-3); text-align: left; vertical-align: middle; }
+table.villages th { font-weight: 600; color: var(--ink-2); }
+table.villages tr { cursor: pointer; } table.villages tbody tr:hover { background: rgba(255,255,255,0.35); }
+table.villages tr.dead { opacity: 0.5; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: middle; margin-right: 2px; }
+.workbar { display: flex; height: 10px; width: 120px; border-radius: 3px; overflow: hidden; background: var(--parch-2); } .workbar span { display: block; height: 100%; }
+.charts { display: flex; flex-direction: column; gap: 12px; }
+.chart svg { display: block; background: rgba(255,255,255,0.4); border-radius: 6px; }
+.toast button.small { align-self: flex-start; margin-top: 4px; font-size: 11px; padding: 1px 6px; }
+.toast { display: flex; flex-direction: column; }

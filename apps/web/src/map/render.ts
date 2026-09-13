@@ -3,7 +3,7 @@
  * crossfades, path and road lines, village marks, moving parties, storm swirls, and the village plot grid.
  */
 import type { Terrain } from '@wind-spirit/sim';
-import type { Frame, StaticMap, VillageDetail } from '../sim/protocol.ts';
+import type { Frame, StaticMap, VillageDetail, PlotView, PersonView } from '../sim/protocol.ts';
 
 export type Zoom = 'world' | 'local' | 'village';
 export const LOCAL_TILE = 64;
@@ -11,7 +11,7 @@ export const LOCAL_TILE = 64;
 export interface RenderState {
   map?: StaticMap; frame?: Frame; detail?: VillageDetail;
   zoom: Zoom; center: { x: number; y: number }; selected?: number;
-  hoverTile?: number; targeting: boolean; speedMs: number; hoverPlot?: number;
+  hoverTile?: number; targeting: boolean; speedMs: number; hoverPlot?: number; hoverPerson?: number;
 }
 
 const TERRAIN_COLOR: Record<Terrain, string> = {
@@ -37,6 +37,8 @@ export class MapRenderer {
   private partyPos = new Map<number, { x: number; y: number; fx: number; fy: number; t: number }>();
   private lastTick = -1;
   private people: Person[] = []; private peopleFor = -1;
+  /** Villager sprites keyed by person id: where they are and where they are heading. */
+  private folk = new Map<number, { x: number; y: number; tx: number; ty: number; next: number }>(); private folkFor = -1;
 
   /** Tile size in CSS px and the top-left tile offset for the current zoom. */
   geometry(s: RenderState, W: number, H: number): { size: number; ox: number; oy: number } {
@@ -146,7 +148,12 @@ export class MapRenderer {
       ctx.lineWidth = 1; ctx.strokeStyle = '#1d1a14';
       if (p.boat) { ctx.fillStyle = '#e9d8a6'; ctx.beginPath(); ctx.moveTo(x - r * 1.6, y - r * 0.3); ctx.lineTo(x + r * 1.6, y - r * 0.3); ctx.lineTo(x + r * 0.9, y + r * 0.8); ctx.lineTo(x - r * 0.9, y + r * 0.8); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y - r * 0.3); ctx.lineTo(x, y - r * 1.6); ctx.stroke(); }
       else if (p.kind === 'raid') { ctx.fillStyle = '#c0392b'; ctx.beginPath(); ctx.moveTo(x, y - r * 1.4); ctx.lineTo(x + r * 1.3, y + r); ctx.lineTo(x - r * 1.3, y + r); ctx.closePath(); ctx.fill(); ctx.stroke(); }
-      else { ctx.fillStyle = p.kind === 'envoy' ? '#7fb3d5' : p.kind === 'colonize' ? '#e0b070' : p.kind === 'refugee' ? '#b0a090' : '#f4f1de'; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+      else if (p.kind === 'envoy') { ctx.fillStyle = p.errand === 'threat' ? '#d98c5f' : '#7fb3d5'; ctx.beginPath(); ctx.moveTo(x, y - r * 1.3); ctx.lineTo(x + r * 1.3, y); ctx.lineTo(x, y + r * 1.3); ctx.lineTo(x - r * 1.3, y); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      else if (p.kind === 'colonize') { ctx.fillStyle = '#e0b070'; ctx.fillRect(x - r, y - r * 0.2, r * 2, r * 1.2); ctx.strokeRect(x - r, y - r * 0.2, r * 2, r * 1.2); ctx.beginPath(); ctx.moveTo(x - r * 1.2, y - r * 0.2); ctx.lineTo(x, y - r * 1.3); ctx.lineTo(x + r * 1.2, y - r * 0.2); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      else if (p.kind === 'refugee') { ctx.strokeStyle = '#b0a090'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.stroke(); }
+      else if (p.kind === 'expedition') { ctx.fillStyle = '#c8b48a'; ctx.fillRect(x - r, y - r, r * 2, r * 2); ctx.strokeRect(x - r, y - r, r * 2, r * 2); ctx.fillStyle = '#5a3d28'; ctx.fillRect(x - r * 0.4, y - r * 0.4, r * 0.8, r * 0.8); }
+      else { ctx.fillStyle = '#f4f1de'; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#1d1a14'; ctx.beginPath(); ctx.arc(x, y, r * 0.35, 0, Math.PI * 2); ctx.fill(); }
+      if (p.returning) { ctx.strokeStyle = '#1d1a14'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - r * 1.6, y + r * 1.6); ctx.lineTo(x + r * 1.6, y + r * 1.6); ctx.stroke(); }
     }
   }
   private lerpX(p: { x: number; fx: number; t: number }, now: number, ms: number): number { const k = ms > 0 ? Math.min(1, (now - p.t) / Math.min(ms, 1000)) : 1; return p.fx + (p.x - p.fx) * k; }
@@ -179,24 +186,108 @@ export class MapRenderer {
         for (let k = 0; k < 4; k++) { const yy = y + g.size * (k + 0.5) / 4; ctx.beginPath(); ctx.moveTo(x + 3, yy); ctx.lineTo(x + g.size - 3, yy); ctx.stroke(); }
       } else {
         ctx.fillStyle = this.color(terrain); ctx.fillRect(x, y, g.size, g.size);
-        const pad = g.size * 0.18; const bw = g.size - pad * 2, bh = g.size * 0.45;
-        ctx.fillStyle = p.recipe === 'tent' || p.recipe.startsWith('tent') ? '#d8c8a8' : '#8c6d4a'; ctx.fillRect(x + pad, y + g.size * 0.42, bw, bh);
-        ctx.fillStyle = '#5a3d28'; ctx.beginPath(); ctx.moveTo(x + pad - 3, y + g.size * 0.42); ctx.lineTo(x + g.size / 2, y + g.size * 0.15); ctx.lineTo(x + g.size - pad + 3, y + g.size * 0.42); ctx.closePath(); ctx.fill();
+        this.drawStructure(ctx, x, y, g.size, p);
       }
-      if (p.building) { ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.5; ctx.strokeRect(x + 3, y + 3, g.size - 6, g.size - 6); ctx.setLineDash([]); }
+      if (p.building) {
+        // Under construction: cleared ground, a dashed outline, and the frame going up as progress grows.
+        if (p.kind === 'wild') { ctx.fillStyle = mix('#b59a6a', this.tint); ctx.fillRect(x, y, g.size, g.size); }
+        ctx.globalAlpha = 0.25 + 0.6 * p.progress; this.drawStructure(ctx, x, y, g.size, p); ctx.globalAlpha = 1;
+        ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.5; ctx.strokeRect(x + 3, y + 3, g.size - 6, g.size - 6); ctx.setLineDash([]);
+      }
       ctx.strokeStyle = 'rgba(0,0,0,0.12)'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, g.size - 1, g.size - 1);
       if (s.hoverPlot === i) { ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 2; ctx.strokeRect(x + 1.5, y + 1.5, g.size - 3, g.size - 3); }
     }
-    // people wander
-    const n = d.view.people.total;
-    if (this.peopleFor !== d.id) { this.people = []; this.peopleFor = d.id; }
-    while (this.people.length < n) this.people.push({ x: Math.random() * 12, y: Math.random() * 12, vx: (Math.random() - 0.5) * 0.6, vy: (Math.random() - 0.5) * 0.6 });
-    if (this.people.length > n) this.people.length = n;
-    ctx.fillStyle = '#2b1d12';
-    for (const p of this.people) {
-      if (Math.random() < 0.02) { p.vx = (Math.random() - 0.5) * 0.6; p.vy = (Math.random() - 0.5) * 0.6; }
-      p.x += p.vx * dt; p.y += p.vy * dt; if (p.x < 0.1 || p.x > 11.9) p.vx *= -1; if (p.y < 0.1 || p.y > 11.9) p.vy *= -1; p.x = Math.max(0.1, Math.min(11.9, p.x)); p.y = Math.max(0.1, Math.min(11.9, p.y));
-      ctx.beginPath(); ctx.arc(g.ox + p.x * g.size, g.oy + p.y * g.size, Math.max(1.5, g.size / 14), 0, Math.PI * 2); ctx.fill();
+    this.drawFolk(ctx, d, g, s, dt);
+  }
+
+  /** A distinct glyph per kind of building, until there is real art: what it is for decides its shape. */
+  private drawStructure(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, p: PlotView): void {
+    const id = p.recipeId; const st = p.structure; const cx = x + size / 2;
+    const pad = size * 0.18; const bw = size - pad * 2;
+    ctx.lineWidth = Math.max(1, size / 40); ctx.strokeStyle = '#3a2718';
+    if (id === 'tent' || id.includes('tent')) {
+      // hide tent: a tall triangle with a dark door
+      ctx.fillStyle = '#d8c8a8'; ctx.beginPath(); ctx.moveTo(x + pad, y + size * 0.85); ctx.lineTo(cx, y + size * 0.15); ctx.lineTo(x + size - pad, y + size * 0.85); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#4a3222'; ctx.beginPath(); ctx.moveTo(cx - size * 0.09, y + size * 0.85); ctx.lineTo(cx, y + size * 0.55); ctx.lineTo(cx + size * 0.09, y + size * 0.85); ctx.closePath(); ctx.fill();
+      return;
     }
+    if (st?.watch) {
+      // lookout: a narrow tower on legs with a platform and a pennant
+      ctx.fillStyle = '#8c6d4a'; ctx.fillRect(cx - size * 0.1, y + size * 0.3, size * 0.2, size * 0.55); ctx.strokeRect(cx - size * 0.1, y + size * 0.3, size * 0.2, size * 0.55);
+      ctx.fillStyle = '#5a3d28'; ctx.fillRect(cx - size * 0.24, y + size * 0.22, size * 0.48, size * 0.12);
+      ctx.strokeStyle = '#c0392b'; ctx.lineWidth = Math.max(1, size / 30); ctx.beginPath(); ctx.moveTo(cx, y + size * 0.22); ctx.lineTo(cx, y + size * 0.05); ctx.lineTo(cx + size * 0.18, y + size * 0.1); ctx.lineTo(cx, y + size * 0.15); ctx.stroke();
+      return;
+    }
+    if (st && (st.defense ?? 0) > 0) {
+      // palisade or wall: a stout square with a crenellated top
+      ctx.fillStyle = '#9a8a72'; ctx.fillRect(x + pad, y + size * 0.35, bw, size * 0.5); ctx.strokeRect(x + pad, y + size * 0.35, bw, size * 0.5);
+      for (let k = 0; k < 4; k++) { const sx = x + pad + (bw / 4) * k; ctx.fillRect(sx + bw * 0.03, y + size * 0.25, bw / 4 * 0.6, size * 0.12); }
+      return;
+    }
+    if (st && st.shelter === 0 && st.storage > 0) {
+      // granary or store: a round-topped bin on short legs
+      ctx.fillStyle = '#5a3d28'; ctx.fillRect(x + pad + bw * 0.15, y + size * 0.75, bw * 0.12, size * 0.12); ctx.fillRect(x + pad + bw * 0.73, y + size * 0.75, bw * 0.12, size * 0.12);
+      ctx.fillStyle = '#c9a66b'; ctx.beginPath(); ctx.moveTo(x + pad, y + size * 0.75); ctx.lineTo(x + pad, y + size * 0.42); ctx.arc(cx, y + size * 0.42, bw / 2, Math.PI, 0); ctx.lineTo(x + size - pad, y + size * 0.75); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = 'rgba(60,40,20,0.5)'; ctx.beginPath(); ctx.moveTo(x + pad + 2, y + size * 0.6); ctx.lineTo(x + size - pad - 2, y + size * 0.6); ctx.stroke();
+      return;
+    }
+    if (st && st.shelter === 0) {
+      // workshop, kiln, smokehouse and the like: a low box with a chimney and a curl of smoke
+      ctx.fillStyle = '#8f7a5a'; ctx.fillRect(x + pad, y + size * 0.5, bw, size * 0.36); ctx.strokeRect(x + pad, y + size * 0.5, bw, size * 0.36);
+      ctx.fillStyle = '#5a3d28'; ctx.fillRect(x + size - pad - size * 0.16, y + size * 0.28, size * 0.1, size * 0.24);
+      ctx.strokeStyle = 'rgba(230,230,230,0.7)'; ctx.beginPath(); ctx.moveTo(x + size - pad - size * 0.11, y + size * 0.26); ctx.quadraticCurveTo(x + size - pad - size * 0.2, y + size * 0.16, x + size - pad - size * 0.08, y + size * 0.08); ctx.stroke();
+      return;
+    }
+    // a dwelling: box with a gable roof; bigger and better ones get a window
+    const big = (st?.shelter ?? 0) >= 10;
+    ctx.fillStyle = big ? '#a58462' : '#8c6d4a'; ctx.fillRect(x + pad, y + size * 0.45, bw, size * 0.42); ctx.strokeRect(x + pad, y + size * 0.45, bw, size * 0.42);
+    ctx.fillStyle = '#5a3d28'; ctx.beginPath(); ctx.moveTo(x + pad - 3, y + size * 0.45); ctx.lineTo(cx, y + size * 0.15); ctx.lineTo(x + size - pad + 3, y + size * 0.45); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#3a2718'; ctx.fillRect(cx - size * 0.07, y + size * 0.62, size * 0.14, size * 0.25);
+    if (big) { ctx.fillStyle = '#f0d890'; ctx.fillRect(x + pad + bw * 0.12, y + size * 0.55, bw * 0.2, bw * 0.18); }
+  }
+
+  /** Villagers stand where their work is: fields, the plot being built, a hut. Nobody walks unless the walk means something. */
+  private drawFolk(ctx: CanvasRenderingContext2D, d: VillageDetail, g: { size: number; ox: number; oy: number }, s: RenderState, dt: number): void {
+    if (this.folkFor !== d.id) { this.folk.clear(); this.folkFor = d.id; }
+    const now = performance.now();
+    const seen = new Set<number>();
+    const h = (id: number, salt: number) => { let x = (id * 2654435761 + salt * 40503) >>> 0; x ^= x >>> 15; x = Math.imul(x, 2246822519) >>> 0; x ^= x >>> 13; return (x >>> 0) / 4294967296; };
+    const fields = d.plots.map((p, i) => (p.kind === 'field' && p.planted ? i : -1)).filter(i => i >= 0);
+    for (const person of d.people) {
+      seen.add(person.id);
+      let f = this.folk.get(person.id);
+      if (!f) { const [x, y] = this.spotFor(person, d, h); f = { x, y, tx: x, ty: y, next: 0 }; this.folk.set(person.id, f); }
+      if (now >= f.next) {
+        // Children roam; field hands move between the fields in the planting and harvest seasons; everyone else keeps their spot.
+        if (person.stage === 'child') { f.tx = 4 + h(person.id, now | 0) * 4; f.ty = 4 + h(person.id, (now | 0) + 1) * 4; f.next = now + 2500 + h(person.id, 7) * 3000; }
+        else if (person.plot !== undefined && fields.length > 1 && d.plots[person.plot]?.kind === 'field' && (s.frame?.season === 0 || s.frame?.season === 2)) {
+          const to = fields[Math.floor(h(person.id, (now / 4000) | 0) * fields.length)]; f.tx = to % 12 + 0.2 + h(person.id, 3) * 0.6; f.ty = Math.floor(to / 12) + 0.2 + h(person.id, 4) * 0.6; f.next = now + 3500 + h(person.id, 8) * 2500;
+        } else { const [x, y] = this.spotFor(person, d, h); f.tx = x; f.ty = y; f.next = now + 4000; }
+      }
+      const dx = f.tx - f.x, dy = f.ty - f.y; const dist = Math.hypot(dx, dy); const step = Math.min(dist, 0.9 * dt);
+      if (dist > 0.001) { f.x += dx / dist * step; f.y += dy / dist * step; }
+      const px = g.ox + f.x * g.size, py = g.oy + f.y * g.size; const r = Math.max(1.5, g.size / (person.stage === 'child' ? 20 : 13));
+      ctx.fillStyle = person.stage === 'child' ? '#6b4a2a' : person.stage === 'elder' ? '#8a8a8a' : '#2b1d12';
+      if (person.out) { ctx.globalAlpha = 0.55; }
+      ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
+      if (person.chief) { ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(px, py, r + 2, 0, Math.PI * 2); ctx.stroke(); }
+      if (s.hoverPerson === person.id) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(px, py, r + 3, 0, Math.PI * 2); ctx.stroke(); }
+      ctx.globalAlpha = 1;
+    }
+    for (const id of [...this.folk.keys()]) if (!seen.has(id)) this.folk.delete(id);
+  }
+
+  /** Where a villager stands: inside their plot with a stable offset, or at the edge of the grid when their work is off the tile. */
+  private spotFor(person: PersonView, d: VillageDetail, h: (id: number, salt: number) => number): [number, number] {
+    if (person.out) { const a = h(person.id, 1) * Math.PI * 2; return [6 + Math.cos(a) * 5.6, 6 + Math.sin(a) * 5.6]; }
+    if (person.plot !== undefined && d.plots[person.plot]) return [person.plot % 12 + 0.2 + h(person.id, 3) * 0.6, Math.floor(person.plot / 12) + 0.2 + h(person.id, 4) * 0.6];
+    return [4 + h(person.id, 5) * 4, 4 + h(person.id, 6) * 4];
+  }
+
+  /** The villager under the pointer at village zoom, if any. */
+  personAt(W: number, H: number, px: number, py: number): number | undefined {
+    const g = this.plotGeometry(W, H); let best: number | undefined; let bd = Math.max(6, g.size / 6);
+    for (const [id, f] of this.folk) { const dd = Math.hypot(g.ox + f.x * g.size - px, g.oy + f.y * g.size - py); if (dd < bd) { bd = dd; best = id; } }
+    return best;
   }
 }

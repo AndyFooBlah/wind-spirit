@@ -124,9 +124,12 @@ export class MelodyGenerator {
             d = Math.max(0, Math.min(top, d));
             this.degree = d;
             const lens = intensity === 'lament' ? [2, 3, 4, 6] : intensity === 'festival' ? [1, 1, 2] : [1, 2, 2, 3];
-            const len = Math.min(rng.pick(lens), slots - slot);
-            const vel = intensity === 'lament' ? 0.45 : intensity === 'festival' ? 0.75 : 0.6;
-            notes.push({ voice: 'lead', midi: degreeToMidi(spec.root, scale, d + register), beat: slot / 2, dur: len / 2, vel: vel * (0.85 + rng.unitK() / 1000 * 0.3) });
+            const midi = degreeToMidi(spec.root, scale, d + register);
+            // High notes are brief: a sustained high pitch drones and grates. Above an octave and a fifth over the root, one slot at most.
+            const high = midi >= spec.root + 19;
+            const len = Math.min(high ? 1 : rng.pick(lens), slots - slot);
+            const vel = (intensity === 'lament' ? 0.45 : intensity === 'festival' ? 0.75 : 0.6) * (high ? 0.8 : 1);
+            notes.push({ voice: 'lead', midi, beat: slot / 2, dur: len / 2, vel: vel * (0.85 + rng.unitK() / 1000 * 0.3) });
             slot += len;
           } else slot++;
         }

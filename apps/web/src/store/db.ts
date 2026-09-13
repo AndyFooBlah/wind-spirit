@@ -9,7 +9,7 @@
  */
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
 import type { Event } from '@wind-spirit/sim';
-import type { JournalEntry, LoggedInput, GenOpts } from '../sim/protocol.ts';
+import type { JournalEntry, LoggedInput, GenOpts, SeriesPoint } from '../sim/protocol.ts';
 import { touches } from '../sim/views.ts';
 
 export interface WorldMeta { id: string; name: string; seed: string; createdAt: number; lastTick: number; options: GenOpts; updatedAt: number; }
@@ -22,6 +22,7 @@ async function snapshotText(row: SnapshotRow): Promise<string> { return row.gz ?
 export interface InputRow { world: string; tick: number; inputs: LoggedInput[]; }
 export interface JournalRow { seq?: number; world: string; village: number; entry: JournalEntry; }
 export interface EventRow { world: string; tick: number; events: Event[]; }
+export interface SeriesRow { world: string; tick: number; point: SeriesPoint; }
 
 interface Schema extends DBSchema {
   worlds: { key: string; value: WorldMeta; indexes: { byUpdated: number } };
@@ -29,10 +30,11 @@ interface Schema extends DBSchema {
   inputs: { key: [string, number]; value: InputRow; indexes: { byWorld: string } };
   journals: { key: number; value: JournalRow; indexes: { byWorld: string; byVillage: [string, number] } };
   events: { key: [string, number]; value: EventRow; indexes: { byWorld: string } };
+  series: { key: [string, number]; value: SeriesRow; indexes: { byWorld: string } };
 }
 
 export const DB_NAME = 'wind-spirit';
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 
 export type Db = IDBPDatabase<Schema>;
 
@@ -53,6 +55,7 @@ export function openStore(name = DB_NAME): Promise<Db> {
         const journals = db.createObjectStore('journals', { keyPath: 'seq', autoIncrement: true }); journals.createIndex('byWorld', 'world'); journals.createIndex('byVillage', ['world', 'village']);
       }
       if (oldVersion < 2) { const events = db.createObjectStore('events', { keyPath: ['world', 'tick'] }); events.createIndex('byWorld', 'world'); }
+      if (oldVersion < 3) { const series = db.createObjectStore('series', { keyPath: ['world', 'tick'] }); series.createIndex('byWorld', 'world'); }
     },
   });
 }
@@ -116,6 +119,10 @@ export async function loadHistoryWindow(db: Db, world: string, tick: number): Pr
   const inputs: Record<number, LoggedInput[]> = {}; for (const r of rows) inputs[r.tick] = r.inputs;
   return { snapshot: await snapshotText(snap), snapshotTick: snap.tick, inputs };
 }
+export async function saveSeries(db: Db, world: string, point: SeriesPoint): Promise<void> { await db.put('series', { world, tick: point.tick, point }); }
+export async function loadSeries(db: Db, world: string): Promise<SeriesPoint[]> { return (await db.getAllFromIndex('series', 'byWorld', world)).map(r => r.point).sort((a, b) => a.tick - b.tick); }
+/** The gunzipped text of one stored snapshot, for the overview backfill. */
+export async function loadSnapshotText(db: Db, world: string, tick: number): Promise<string | undefined> { const row = await db.get('snapshots', [world, tick]); return row ? snapshotText(row) : undefined; }
 export async function snapshotTicks(db: Db, world: string): Promise<number[]> { return (await db.getAllFromIndex('snapshots', 'byWorld', world)).map(s => s.tick).sort((a, b) => a - b); }
 
 export interface ResumeData { snapshot: string; snapshotTick: number; inputsAfter: LoggedInput[][]; lastTick: number; }

@@ -9,11 +9,11 @@ import { WEEKS_PER_YEAR, seasonOf } from '@wind-spirit/sim';
 import { idToken } from '../auth.ts';
 import { audio, dominantTerrain, type AudioSettings } from '../audio/audio.ts';
 import { historyWorthy } from '../sim/views.ts';
-import { DEFAULT_SETTINGS, type Frame, type FromHistory, type FromWorker, type JournalEntry, type Settings, type Speed, type StaticMap, type ToHistory, type ToWorker, type VillageDetail } from '../sim/protocol.ts';
-import { createWorld, deleteWorld, listWorlds, loadEvents, loadHistoryWindow, loadJournals, loadResume, newWorldId, openStore, Persister, setStoreBlockedHandler, type Db, type WorldMeta } from './db.ts';
+import { DEFAULT_SETTINGS, type Frame, type FromHistory, type FromWorker, type JournalEntry, type Settings, type Speed, type StaticMap, type ToHistory, type ToWorker, type VillageDetail, type SeriesPoint } from '../sim/protocol.ts';
+import { createWorld, deleteWorld, listWorlds, loadEvents, loadHistoryWindow, loadJournals, loadResume, newWorldId, openStore, Persister, setStoreBlockedHandler, type Db, type WorldMeta, saveSeries, loadSeries, loadSnapshotText, snapshotTicks } from './db.ts';
 
 export type Zoom = 'world' | 'local' | 'village';
-export interface Toast { id: number; text: string; kind: 'attention' | 'info' | 'error'; village?: number; }
+export interface Toast { id: number; text: string; kind: 'attention' | 'info' | 'error'; village?: number; event?: string; }
 export interface DreamTurn { role: 'spirit' | 'chief'; text: string; }
 export interface DreamState { village: number; turns: DreamTurn[]; streaming: string; busy: boolean; closing: boolean; }
 /** History mode: a replayed past state rendered read-only while the live sim stays paused. */
@@ -47,12 +47,17 @@ export interface GameState {
   whisperFor?: number;
   waiting: number[];
   history?: HistoryState;
+  /** yearly readings for the overview charts, oldest first */
+  series: SeriesPoint[];
+  overview: boolean;
+  /** snapshots still to read for the charts, when an older save predates the series */
+  seriesBackfill?: { done: number; total: number };
   narratives: Record<string, NarrativeState>;
   audioSettings: AudioSettings;
 }
 
 export const useGame = create<GameState>(() => ({
-  screen: 'gallery', worlds: [], speed: 'pause', resumeSpeed: 'normal', journals: [], toasts: [], settings: loadSettings(), talkedTo: [],
+  screen: 'gallery', worlds: [], speed: 'pause', resumeSpeed: 'normal', journals: [], toasts: [], settings: loadSettings(), talkedTo: [], series: [], overview: false,
   pendingClaims: [], zoom: 'local', center: { x: 32, y: 32 }, targeting: false, loading: '', lastEvents: [], waiting: [], narratives: {}, audioSettings: audio.settings,
 }));
 
@@ -105,7 +110,7 @@ function onWorker(m: FromWorker): void {
       break;
     }
     case 'snapshot': void persister?.snapshot(m.tick, m.json, m.reason); break;
-    case 'attention': { const text = eventText(m.event); const village = villageOf(m.event); toast(text, 'attention', village); if (village !== undefined) focusVillage(village); break; }
+    case 'attention': { const text = eventText(m.event); const village = villageOf(m.event); toast(text, 'attention', village, m.event.type); if (village !== undefined) focusVillage(village); break; }
     case 'journal': set(s => ({ journals: [...s.journals, m.entry] })); void persister?.journal(m.entry); break;
     case 'village': if (m.detail.id === get().selected) set({ detail: m.detail }); break;
     case 'speed': set(s => ({ speed: m.speed, toasts: m.speed === 'pause' ? s.toasts : s.toasts.filter(t => t.kind !== 'attention') })); refreshScene(); break;
@@ -120,14 +125,15 @@ function onWorker(m: FromWorker): void {
       if (d) { if (m.claims.length) { set(s => ({ pendingClaims: [...s.pendingClaims, { village: d.village, texts: m.claims.map(c => c.text) }] })); toast(`${m.claims.length} claim${m.claims.length === 1 ? '' : 's'} will enter the chronicle when the week turns.`, 'info', d.village); } else toast('The dream ended; the chief noted nothing to hold you to.', 'info', d.village); }
       break;
     }
+    case 'series': { set(s => ({ series: [...s.series.filter(p => p.tick !== m.point.tick), m.point].sort((a, b) => a.tick - b.tick) })); const w = get().world; if (w) void ensureDb().then(d => saveSeries(d, w.id, m.point)); break; }
     case 'error': toast(m.message, 'error', m.village); break;
   }
 }
 
 function tileXY(tile: number): [number, number] { const w = get().map?.width ?? 64; return [tile % w, Math.floor(tile / w)]; }
 
-export function toast(text: string, kind: Toast['kind'] = 'info', village?: number): void {
-  const id = ++toastSeq; set(s => ({ toasts: [...s.toasts.slice(-5), { id, text, kind, village }] }));
+export function toast(text: string, kind: Toast['kind'] = 'info', village?: number, event?: string): void {
+  const id = ++toastSeq; set(s => ({ toasts: [...s.toasts.slice(-5), { id, text, kind, village, event }] }));
   // attention toasts stay until the game resumes (see the 'speed' message); the rest fade
   if (kind !== 'attention') window.setTimeout(() => set(s => ({ toasts: s.toasts.filter(t => t.id !== id) })), 6000);
 }
@@ -147,7 +153,7 @@ export const WORLD_SIZES: Record<WorldSize, { width: number; height: number; vil
 export async function newWorld(seed: string, name?: string, size: WorldSize = 'large'): Promise<void> {
   const d = await ensureDb(); const s = seed.trim() || Math.random().toString(36).slice(2, 10); const dims = WORLD_SIZES[size];
   const meta = await createWorld(d, { id: newWorldId(), name: name?.trim() || s, seed: s, options: { width: dims.width, height: dims.height, villages: dims.villages, startPop: 20 } });
-  set({ loading: 'Shaping the world…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: [], talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {} });
+  set({ loading: 'Shaping the world…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: [], talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {}, series: [], overview: false });
   await startWorker(); persister = new Persister(d, meta.id); audio.setWorld(s);
   pushSettings();
   send({ type: 'init', seed: s, opts: meta.options });
@@ -158,7 +164,7 @@ export async function newWorld(seed: string, name?: string, size: WorldSize = 'l
 export async function continueWorld(id: string): Promise<void> {
   const d = await ensureDb(); const meta = (await listWorlds(d)).find(w => w.id === id); if (!meta) return;
   const resume = await loadResume(d, id);
-  set({ loading: 'Remembering…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: await loadJournals(d, id), talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {} });
+  set({ loading: 'Remembering…', screen: 'game', world: meta, frame: undefined, map: undefined, selected: undefined, detail: undefined, journals: await loadJournals(d, id), talkedTo: [], pendingClaims: [], speed: 'pause', zoom: 'local', history: undefined, narratives: {}, series: await loadSeries(d, id), overview: false });
   await startWorker(); persister = new Persister(d, meta.id); audio.setWorld(meta.seed);
   pushSettings();
   if (resume) send({ type: 'load', snapshot: resume.snapshot, inputsAfter: resume.inputsAfter });
@@ -268,15 +274,45 @@ export function dreamClose(): void {
 }
 export function openWhisper(village: number | undefined): void { set({ whisperFor: village }); }
 
+// ---------- overview (every village at once, and the charts) ----------
+
+const seriesWaiters = new Map<number, (p: SeriesPoint | undefined) => void>();
+let backfilling = false;
+
+export function openOverview(): void { set({ overview: true }); void backfillSeries(); }
+export function closeOverview(): void { set({ overview: false }); }
+
+/** Older saves have snapshots but no series: read each yearly snapshot once, in the history worker, and keep the readings. */
+async function backfillSeries(): Promise<void> {
+  const w = get().world; if (!w || backfilling) return;
+  backfilling = true;
+  try {
+    const d = await ensureDb(); await persister?.flush();
+    const have = new Set(get().series.map(p => p.tick));
+    const ticks = (await snapshotTicks(d, w.id)).filter(t => t % WEEKS_PER_YEAR === 0 && !have.has(t));
+    if (!ticks.length) return;
+    set({ seriesBackfill: { done: 0, total: ticks.length } });
+    for (let i = 0; i < ticks.length; i++) {
+      if (get().world?.id !== w.id) return;
+      const text = await loadSnapshotText(d, w.id, ticks[i]); if (!text) continue;
+      const seq = -(1_000_000 + ticks[i]);   // negative: never collides with a seek
+      const point = await new Promise<SeriesPoint | undefined>(resolve => { seriesWaiters.set(seq, resolve); ensureHistoryWorker().postMessage({ type: 'series', seq, snapshot: text } satisfies ToHistory); });
+      if (point) { set(s => ({ series: [...s.series.filter(p => p.tick !== point.tick), point].sort((a, b) => a.tick - b.tick) })); await saveSeries(d, w.id, point); }
+      set({ seriesBackfill: { done: i + 1, total: ticks.length } });
+    }
+  } finally { backfilling = false; set({ seriesBackfill: undefined }); }
+}
+
 // ---------- history (the scrubber) ----------
 
 function ensureHistoryWorker(): Worker {
   if (historyWorker) return historyWorker;
   historyWorker = new Worker(new URL('../sim/history.worker.ts', import.meta.url), { type: 'module' });
   historyWorker.onmessage = (ev: MessageEvent<FromHistory>) => {
-    const m = ev.data; if (m.seq !== seekSeq) return;                 // a newer seek superseded this one
+    const m = ev.data; if (m.seq !== seekSeq && !seriesWaiters.has(m.seq)) return;                 // a newer seek superseded this one
+    if (m.type === 'series') { seriesWaiters.get(m.seq)?.(m.point); seriesWaiters.delete(m.seq); return; }
     const h = get().history; if (!h) return;
-    if (m.type === 'error') { toast(`History: ${m.message}`, 'error'); set({ history: { ...h, loading: false } }); return; }
+    if (m.type === 'error') { if (seriesWaiters.has(m.seq)) { seriesWaiters.get(m.seq)?.(undefined); seriesWaiters.delete(m.seq); return; } toast(`History: ${m.message}`, 'error'); set({ history: { ...h, loading: false } }); return; }
     set({ history: { ...h, tick: m.tick, frame: m.frame, detail: m.detail, loading: false } });
   };
   historyWorker.onerror = e => toast(`History worker error: ${e.message}`, 'error');

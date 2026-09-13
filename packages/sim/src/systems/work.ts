@@ -5,6 +5,7 @@ import { CAPABILITIES } from '../types.js';
 import { addStore, commodityById, craftLaborMult, hasCap, idx, inBounds, learnCommodities, nearWater, neighbors, parseGoods, popCounts, recipeById, stageOf, storeQty, takeStore, xy, type Ctx } from '../world.js';
 import { addCargo } from './diplomacy.js';
 import { tread } from './paths.js';
+import { clearingSite, structureSite } from '../layout.js';
 import { spawnParty } from './travel.js';
 import { currentRoll } from './weather.js';
 
@@ -120,7 +121,9 @@ function clearPlots(v: Village, workers: number): number {
   let done = 0; let effort = workers * K;
   const labor = mul(P.clearLabor, hasCap(v, 'metaltools') ? 500 : hasCap(v, 'stonetools') ? 750 : K);
   while (effort > 0) {
-    const plot = v.plots.find(p => p.kind === 'wild' && p.progress > 0) ?? v.plots.find(p => p.kind === 'wild');
+    // Finish a half-cleared plot first (never one a building is going up on), else site the next field.
+    const site = clearingSite(v);
+    const plot = v.plots.find(p => p.kind === 'wild' && p.recipe === '' && p.progress > 0) ?? (site !== undefined ? v.plots[site] : undefined);
     if (!plot) break;
     const need = labor - plot.progress; const put = Math.min(need, effort); plot.progress += put; effort -= put;
     if (plot.progress >= labor) { plot.kind = 'clear'; plot.progress = 0; done++; addStore(v, 'wood', 3000); }
@@ -156,10 +159,11 @@ function farm(ctx: Ctx, v: Village, workers: number, season: number, maxPlots: n
 /** Returns plots cleared as a side effect (when no cleared plot was available). */
 function build(ctx: Ctx, v: Village, recipeId: string, workers: number): number {
   const { w } = ctx; const r = recipeById(w, recipeId); if (!r || !r.output.structure || !v.recipes.includes(recipeId)) return 0;
-  let plot = v.plots.find(p => p.kind === 'clear' && p.recipe === recipeId && p.progress > 0);
+  let plot = v.plots.find(p => (p.kind === 'clear' || p.kind === 'wild') && p.recipe === recipeId && p.progress > 0);
   if (!plot) {
-    const free = v.plots.find(p => p.kind === 'clear' && p.recipe === '' && !p.planted && p.progress === 0);
-    if (!free) return clearPlots(v, workers);
+    // Buildings sit near the centre and never move; wild ground there is cleared as part of the build.
+    const site = structureSite(v); const free = site !== undefined ? v.plots[site] : undefined;
+    if (!free) return 0;
     for (const inp of r.inputs) if (storeQty(v, inp.c) < inp.qty) return 0;
     for (const inp of r.inputs) takeStore(v, inp.c, inp.qty);
     plot = free; plot.recipe = recipeId;

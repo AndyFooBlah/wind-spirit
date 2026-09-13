@@ -131,7 +131,8 @@ export class AmbientMixer {
       case 'windMuffled': { const l = noise('brown', 'lowpass', 180, 0.6); extras.push(kit.lfo(l.gain.gain, 0.07, 0.08)); return mk(l); }
       case 'rain': { const l = noise('white', 'highpass', 1800, 0.5); extras.push(kit.lfo(l.gain.gain, 0.3, 0.03)); return mk(l); }
       case 'water': { const l = noise('brown', 'bandpass', 900, 0.6); extras.push(kit.lfo(l.filter!.frequency, 0.3, 250)); return mk(l); }
-      case 'insects': { const l = kit.oscLayer('sawtooth', 3800, out); const f = kit.ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 4000; f.Q.value = 8; l.osc.disconnect(); l.osc.connect(f); f.connect(l.gain); extras.push(kit.lfo(l.gain.gain, 14, 0.4), kit.lfo(l.osc.frequency, 0.05, 150)); return mk(l); }
+      // Insects used to be a continuous 4 kHz sawtooth: a whine that never stopped. Now short buzzes, a few seconds apart, lower and quieter.
+      case 'insects': { const g = silent(kit, out); return mk(g, every(2.5, 7, (t, level) => { const hz = 1400 + kit.random() * 900; kit.tone({ wave: 'sawtooth', hz, glideTo: hz * 0.9, t, dur: 0.12 + kit.random() * 0.2, gain: 0.02 * level, out: g.gain, env: { attack: 0.02, release: 0.08 }, lowpass: 2600 }); })); }
       case 'leaves': { const l = noise('white', 'bandpass', 2500, 0.8); extras.push(kit.lfo(l.gain.gain, 0.5, 0.05), kit.lfo(l.filter!.frequency, 0.13, 600)); return mk(l); }
       case 'surf': { const l = noise('brown', 'lowpass', 900, 0.5); extras.push(kit.lfo(l.gain.gain, 0.09, 0.12), kit.lfo(l.filter!.frequency, 0.09, 500)); return mk(l); }
       case 'river': { const l = noise('white', 'bandpass', 1400, 0.5); extras.push(kit.lfo(l.filter!.frequency, 0.5, 300)); return mk(l); }

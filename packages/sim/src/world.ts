@@ -1,4 +1,5 @@
 import { K, mul, div, ceilDiv } from './fixed.js';
+import { foundingSites } from './layout.js';
 import { Streams } from './rng.js';
 import { AGE_ADULT, AGE_ELDER, P, PLOT_GRID, TERRAIN, TILE_MILES } from './params.js';
 import type { Capability, Event, Knowledge, Person, Plot, Recipe, Stack, Stage, Tile, Village, World, YearStats } from './types.js';
@@ -158,7 +159,7 @@ export function foundVillage(ctx: Ctx, o: FoundOpts): Village {
   const adults = o.people.filter(p => stageOf(p.born, w.tick) === 'adult');
   const chief = adults.length ? rng.pick(adults).id : o.people.length ? rng.pick(o.people).id : -1;
   const plots = newPlots();
-  for (let i = 0; i < o.tents; i++) { const p = plots[i]; p.kind = 'structure'; p.recipe = 'tent'; }
+  for (const i of foundingSites(id, o.tents)) { const p = plots[i]; p.kind = 'structure'; p.recipe = 'tent'; }
   const v: Village = {
     id, name: nextName(w), tile: o.tile, founded: w.tick, alive: true, parent: o.parent,
     people: o.people, chief, culture: [...o.culture], chiefTraits,

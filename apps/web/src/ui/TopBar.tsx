@@ -3,7 +3,7 @@ import type { BreathAction, SeasonRoll } from '@wind-spirit/sim';
 import { P } from '@wind-spirit/sim';
 import { BUSES, type Bus } from '@wind-spirit/audio';
 import { DIR_NAMES, ROLL_WORDS, SEASON_NAMES, SPEEDS, SPEED_LABEL, type Speed } from '../sim/protocol.ts';
-import { useGame, setSpeed, step, leaveWorld, setZoom, focusVillage, breathe, setTargeting, updateSettings, updateAudio, enterHistory, exitHistory, scrubTo, tickLabel, viewFrame, type Zoom } from '../store/game.ts';
+import { useGame, setSpeed, step, leaveWorld, setZoom, focusVillage, breathe, setTargeting, updateSettings, updateAudio, enterHistory, exitHistory, scrubTo, tickLabel, viewFrame, openOverview, type Zoom } from '../store/game.ts';
 
 const KEY: Record<Speed, string> = { pause: 'space', step: '.', slow: '1', normal: '2', fast: '3', veryfast: '4' };
 
@@ -26,11 +26,17 @@ export function TopBar() {
       </div>
       {frame && <Breath breath={frame.breath} rolls={frame.rolls} seasons={frame.rollSeasons} />}
       <ZoomControl />
+      <OverviewButton />
       <HistoryButton />
       <SoundMenu />
       <SettingsMenu />
     </header>
   );
+}
+
+function OverviewButton() {
+  const frame = useGame(s => s.frame); const open = useGame(s => s.overview);
+  return <button className={open ? 'on' : 'ghost'} disabled={!frame} onClick={openOverview} title="Every village at once, with charts over the years">Overview</button>;
 }
 
 function HistoryButton() {

@@ -5,7 +5,8 @@
 import { P, WEEKS_PER_SEASON, commodityById, popCounts, recipeById, seasonIndex, seasonOf, storesWeeks, yearOf, type Event, type Village, type World } from '@wind-spirit/sim';
 import { CAP_NAMES } from '@wind-spirit/gen';
 import { buildView, renderChronicle, renderEvents, SEASONS } from '@wind-spirit/agents';
-import type { FeedGroup, Frame, StaticMap, VillageDetail } from './protocol.ts';
+import type { FeedGroup, Frame, SeriesPoint, StaticMap, VillageDetail, WorkGroup } from './protocol.ts';
+import { assignActivities } from './activities.ts';
 
 /** Does an event touch this village? (same rule the scheduler uses, minus the weather broadcast) */
 export function touches(e: Event, village: number): boolean {
@@ -32,11 +33,32 @@ export function buildFrame(w: World): Frame {
   return {
     tick: w.tick, year: yearOf(w.tick), season: seasonOf(w.tick), week: (w.tick % WEEKS_PER_SEASON) + 1,
     villages: w.villages.map(v => ({ id: v.id, name: v.name, tile: v.tile, alive: v.alive, pop: popCounts(v, w.tick), happiness: v.happiness, trust: v.trust, foodWeeks: storesWeeks(w, v), hungryWeek: v.hungryWeek, capabilities: v.capabilities.length })),
-    parties: w.parties.map(p => ({ id: p.id, kind: p.kind, home: p.home, at: p.at, boat: p.boat, target: p.target, targetVillage: p.targetVillage, returning: p.returning, size: p.members.length, waiting: p.waiting })),
+    parties: w.parties.map(p => ({
+      id: p.id, kind: p.kind, home: p.home, at: p.at, boat: p.boat, target: p.target, targetVillage: p.targetVillage, returning: p.returning, size: p.members.length, waiting: p.waiting,
+      left: p.route.length, cargo: Math.round(p.cargo.reduce((a, s) => a + s.qty, 0) / 1000),
+      errand: p.kind === 'envoy' && p.mandate ? (p.mandate.threat ? 'threat' : Object.keys(p.mandate.want).length ? 'trade' : 'gift') : undefined,
+      gathering: p.gather ? (commodityById(w, p.gather.c)?.name ?? p.gather.c) : undefined,
+    })),
     paths, roads,
     breath: w.breath / 1000,
     rolls: w.rolls.slice(cur, cur + 5), rollSeasons: [0, 1, 2, 3, 4].map(i => cur + i), wind: w.wind.slice(cur, cur + 5),
     storms: [...w.storms],
+  };
+}
+
+const GROUP_OF: Record<string, WorkGroup> = { forage: 'food', hunt: 'food', fish: 'food', farm: 'food', gather: 'land', clear: 'land', build: 'land', road: 'land', craft: 'craft', research: 'research', explore: 'ventures', colonize: 'ventures', envoy: 'ventures', raid: 'ventures', expedition: 'ventures', rest: 'rest' };
+
+/** The world in one yearly reading: population, stores, skills, the highest recipe tier held, and where the hands went. */
+export function buildSeriesPoint(w: World): SeriesPoint {
+  return {
+    tick: w.tick,
+    villages: w.villages.map(v => {
+      const work: Record<WorkGroup, number> = { food: 0, land: 0, craft: 0, research: 0, ventures: 0, rest: 0 };
+      let assigned = 0; for (const o of v.orders) { work[GROUP_OF[o.task] ?? 'rest'] += o.workers; assigned += o.workers; }
+      const counts = popCounts(v, w.tick); work.rest += Math.max(0, counts.adults - assigned);
+      const tier = v.recipes.reduce((m, r) => Math.max(m, recipeById(w, r)?.tier ?? 0), 0);
+      return { id: v.id, name: v.name, alive: v.alive, pop: counts.total, food: v.alive ? storesWeeks(w, v) : 0, caps: v.capabilities.length, tier, work };
+    }),
   };
 }
 
@@ -56,8 +78,14 @@ export function buildVillageDetail(w: World, id: number, history: Event[]): Vill
   const capName = (c: string) => (CAP_NAMES as Record<string, string>)[c] ?? c;
   const view = buildView(w, v, { events: [], capNames: CAP_NAMES, pendingSpirit: [...v.inbox], chronicle: renderChronicle(w, v) });
   const { names: _names, ...rest } = view; void _names;
-  const plots = v.plots.map(p => ({ kind: p.kind, planted: p.planted, recipe: p.recipe ? rname(p.recipe) : '', crop: p.crop ? cname(p.crop) : '', building: p.kind !== 'structure' && p.recipe !== '' }));
-  return { id, tick: w.tick, alive: v.alive, view: rest, plots, chronicle: [...v.chronicle], feed: buildFeed(w, v, history, cname, rname, capName), inbox: [...v.inbox], chiefId: v.chief };
+  const plots = v.plots.map(p => {
+    const r = p.recipe ? recipeById(w, p.recipe) : undefined; const st = r?.output.structure;
+    return { kind: p.kind, planted: p.planted, recipe: p.recipe ? rname(p.recipe) : '', recipeId: p.recipe, crop: p.crop ? cname(p.crop) : '', building: p.kind !== 'structure' && p.recipe !== '',
+      progress: p.kind !== 'structure' && r ? Math.min(1, p.progress / (r.labor * 1000)) : 0, fertility: p.fertility / 1000,
+      structure: st ? { shelter: st.shelter, storage: st.storage, defense: st.defense, watch: st.watch } : undefined };
+  });
+  const people = assignActivities(w, v, cname, rname);
+  return { id, tick: w.tick, alive: v.alive, view: rest, plots, people, chronicle: [...v.chronicle], feed: buildFeed(w, v, history, cname, rname, capName), inbox: [...v.inbox], chiefId: v.chief };
 }
 
 /** The history feed: a village's events grouped by season and rendered as sentences, newest season first. */

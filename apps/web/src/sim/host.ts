@@ -9,7 +9,7 @@ import { ChiefScheduler, Conversation, narrate, type JournalEntry, type LlmClien
 import {
   DEFAULT_SETTINGS, SPEED_MS, type AttentionEvent, type Frame, type FromWorker, type GenOpts, type LoggedInput, type NarrativeRequest, type Settings, type StaticMap, type VillageDetail,
 } from './protocol.ts';
-import { buildFrame, buildStaticMap, buildVillageDetail, feedVillages, historyWorthy, touches } from './views.ts';
+import { buildFrame, buildStaticMap, buildVillageDetail, feedVillages, historyWorthy, touches, buildSeriesPoint } from './views.ts';
 export { touches };
 
 export interface HostIO {
@@ -166,6 +166,7 @@ export class SimHost {
     this.track(events, started, t);
     const frame = this.frame();
     this.io.post({ type: 'tick', tick: t, events, frame, inputs });
+    if (w.tick % WEEKS_PER_YEAR === 0) this.io.post({ type: 'series', point: buildSeriesPoint(w) });
     const attention = this.attention(events);
     if (attention) { this.setSpeed('pause'); this.io.post({ type: 'attention', tick: t, event: attention }); }
     return events;
