@@ -128,3 +128,26 @@ Errors on the open models are all throttling ("request queue is full", "too many
 ### Limitations, for honesty
 
 The judge is Gemini 3.1 Pro grading Gemini and others; the rule checks encode one opinion of a good chief and top out near 0.97 for strong models; the corpus is sampled from scripted play, so it under-represents the messy states model chiefs get themselves into; one pass per model at temperature 0.7; dreams are scored only for form. A second judge from another family and a repeat run would tighten the small gaps (3.5 Flash-Lite versus 3.8 Flash is within noise on rules and reversed on the judge).
+
+## OpenRouter (2026-09-12, evening)
+
+Andrew has an OpenRouter account, which sidesteps the Model Garden click-through for Claude and Llama and opens the rest of the market. Their public model list (445 models, prices per token) shows, per 1M tokens in / out:
+
+| model | in | out | note |
+|---|---|---|---|
+| openai/gpt-5-nano | 0.05 | 0.40 | |
+| z-ai/glm-5.3-flash | 0.15 | 0.50 | |
+| xiaomi/mimo-v2.5 | 0.14 | 0.28 | |
+| qwen/qwen3.8-flash | 0.15 | 0.47 | |
+| meta-llama/llama-4-maverick | 0.20 | 0.70 | |
+| openai/gpt-5-mini | 0.25 | 2.00 | |
+| deepseek/deepseek-v3.2 | 0.27 | 0.40 | |
+| minimax/minimax-m2.7 | 0.30 | 1.20 | |
+| mistralai/mistral-medium-3.1 | 0.40 | 2.00 | |
+| z-ai/glm-4.7 | 0.40 | 1.75 | |
+| moonshotai/kimi-k2.5 | 0.45 | 2.25 | |
+| google/gemini-3.8-flash | 0.75 | 3.75 | half the Vertex price |
+| anthropic/claude-haiku-4.5 | 1.00 | 5.00 | |
+| anthropic/claude-sonnet-5 | 2.00 | 10.00 | |
+
+The last Gemini row is its own finding: OpenRouter resells Gemini at the Gemini API price, which is half what Vertex charges for 3.8 Flash. The trade is an API key held in Secret Manager instead of a service account, OpenRouter's margin on credits, and one more hop of latency. The proxy gains an `openrouter` provider; the key is `unset` until Andrew pastes it, and the provider reports itself disabled until then. Candidates to run: the fourteen above.
