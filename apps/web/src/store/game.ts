@@ -13,7 +13,7 @@ import { historyWorthy } from '../sim/views.ts';
 import { DEFAULT_SETTINGS, type Frame, type FromHistory, type FromWorker, type JournalEntry, type Settings, type Speed, type StaticMap, type ToHistory, type ToWorker, type VillageDetail, type SeriesPoint } from '../sim/protocol.ts';
 import { createWorld, deleteWorld, listWorlds, loadEvents, loadHistoryWindow, loadJournals, loadResume, newWorldId, openStore, Persister, setStoreBlockedHandler, type Db, type WorldMeta, saveSeries, loadSeries, loadSnapshotText, snapshotTicks, saveSun, loadSun } from './db.ts';
 
-export type Zoom = 'world' | 'local' | 'village';
+export type Zoom = 'world' | 'region' | 'local' | 'village';
 export interface Toast { id: number; text: string; kind: 'attention' | 'info' | 'error'; village?: number; event?: string; }
 export interface DreamTurn { role: 'spirit' | 'chief'; text: string; }
 export interface DreamState { village: number; turns: DreamTurn[]; streaming: string; busy: boolean; closing: boolean; }

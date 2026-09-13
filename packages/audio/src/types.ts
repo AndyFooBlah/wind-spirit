@@ -10,7 +10,7 @@ export type { Season, SeasonRoll, Terrain, SimEvent };
 export type Bus = 'master' | 'ambient' | 'village' | 'markers' | 'events' | 'spirit' | 'music';
 export const BUSES: readonly Bus[] = ['master', 'ambient', 'village', 'markers', 'events', 'spirit', 'music'];
 
-export type Zoom = 'world' | 'local' | 'village';
+export type Zoom = 'world' | 'region' | 'local' | 'village';
 export type Speed = 'pause' | 'step' | 'slow' | 'normal' | 'fast' | 'veryfast';
 
 /** What is on screen. Drives the ambient bed, the coalescer's window and the music's pause behaviour. */

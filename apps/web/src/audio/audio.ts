@@ -92,9 +92,9 @@ class AppAudio {
 export const audio = new AppAudio();
 
 /** The most common terrain among the tiles a viewport shows; the village zoom is its own tile. */
-export function dominantTerrain(terrain: Terrain[], width: number, height: number, zoom: 'world' | 'local' | 'village', center: { x: number; y: number }, villageTile?: number): Terrain {
+export function dominantTerrain(terrain: Terrain[], width: number, height: number, zoom: 'world' | 'region' | 'local' | 'village', center: { x: number; y: number }, villageTile?: number): Terrain {
   if (zoom === 'village' && villageTile !== undefined) return terrain[villageTile] ?? 'grass';
-  const r = zoom === 'world' ? Math.max(width, height) : 7;
+  const r = zoom === 'world' ? Math.max(width, height) : zoom === 'region' ? 18 : 7;
   const counts = new Map<Terrain, number>();
   const cx = Math.floor(center.x), cy = Math.floor(center.y);
   for (let y = Math.max(0, cy - r); y <= Math.min(height - 1, cy + r); y++) for (let x = Math.max(0, cx - r); x <= Math.min(width - 1, cx + r); x++) { const t = terrain[y * width + x]; counts.set(t, (counts.get(t) ?? 0) + 1); }

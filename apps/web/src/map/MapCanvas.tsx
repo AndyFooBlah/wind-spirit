@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import type { PlotView, PersonView, PartySummary, Frame } from '../sim/protocol.ts';
 import { useGame, selectVillage, setCenter, setZoom, stormAt, tickLabel, viewDetail, viewFrame, type Zoom } from '../store/game.ts';
 import { SPEED_MS } from '../sim/protocol.ts';
-import { MapRenderer, LOCAL_TILE, type RenderState } from './render.ts';
+import { MapRenderer, LOCAL_TILE, type RenderState, REGION_TILE } from './render.ts';
 
 function HistoryBanner() {
   const h = useGame(s => s.history); if (!h) return null;
   return <div className="banner history">{h.loading ? 'Remembering…' : `${tickLabel(h.tick)} — history`}</div>;
 }
 
-/** One canvas, three zoom levels. Drag or arrow keys pan the local view; click selects; double-click zooms in. */
+/** One canvas, four zoom levels. Drag or arrow keys pan the region and local views; click selects; double-click zooms in. */
 export function MapCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const renderer = useRef(new MapRenderer());
@@ -29,7 +29,7 @@ export function MapCanvas() {
     raf = requestAnimationFrame(loop);
     const keys = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName; if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-      const s = useGame.getState(); if (s.zoom !== 'local') return;
+      const s = useGame.getState(); if (s.zoom !== 'local' && s.zoom !== 'region') return;
       const d = e.shiftKey ? 4 : 1; let { x, y } = s.center;
       if (e.key === 'ArrowLeft') x -= d; else if (e.key === 'ArrowRight') x += d; else if (e.key === 'ArrowUp') y -= d; else if (e.key === 'ArrowDown') y += d; else return;
       e.preventDefault(); const m = s.map; if (m) setCenter(Math.max(0, Math.min(m.width, x)), Math.max(0, Math.min(m.height, y)));
@@ -43,10 +43,10 @@ export function MapCanvas() {
   const onDown = (e: React.MouseEvent) => { const s = useGame.getState(); drag.current = { x: e.clientX, y: e.clientY, cx: s.center.x, cy: s.center.y, moved: false }; };
   const onMove = (e: React.MouseEvent) => {
     const [W, H, L, T] = size(); const px = e.clientX - L, py = e.clientY - T; const s = useGame.getState();
-    if (drag.current && s.zoom === 'local') {
+    if (drag.current && (s.zoom === 'local' || s.zoom === 'region')) {
       const dx = e.clientX - drag.current.x, dy = e.clientY - drag.current.y;
       if (Math.abs(dx) + Math.abs(dy) > 4) drag.current.moved = true;
-      if (drag.current.moved) setCenter(drag.current.cx - dx / LOCAL_TILE, drag.current.cy - dy / LOCAL_TILE);
+      const px1 = s.zoom === 'region' ? REGION_TILE : LOCAL_TILE; if (drag.current.moved) setCenter(drag.current.cx - dx / px1, drag.current.cy - dy / px1);
       return;
     }
     if (s.zoom === 'village') {
@@ -80,13 +80,13 @@ export function MapCanvas() {
   };
   const onDouble = (e: React.MouseEvent) => {
     const [W, H, L, T] = size(); const s = useGame.getState(); if (s.targeting) return;
-    if (s.zoom === 'world') { const t = renderer.current.tileAt(state.current, W, H, e.clientX - L, e.clientY - T); if (t !== undefined && s.map) { setCenter(t % s.map.width + 0.5, Math.floor(t / s.map.width) + 0.5); setZoom('local'); } }
+    if (s.zoom === 'world' || s.zoom === 'region') { const t = renderer.current.tileAt(state.current, W, H, e.clientX - L, e.clientY - T); if (t !== undefined && s.map) { setCenter(t % s.map.width + 0.5, Math.floor(t / s.map.width) + 0.5); setZoom(s.zoom === 'world' ? 'region' : 'local'); } }
     else if (s.zoom === 'local') { const t = renderer.current.tileAt(state.current, W, H, e.clientX - L, e.clientY - T); const v = viewFrame(s)?.villages.find(x => x.tile === t && x.alive); if (v) { selectVillage(v.id); setZoom('village'); } }
   };
   const onWheel = (e: React.WheelEvent) => {
-    const s = useGame.getState(); const order: Zoom[] = ['world', 'local', 'village']; const i = order.indexOf(s.zoom);
+    const s = useGame.getState(); const order: Zoom[] = ['world', 'region', 'local', 'village']; const i = order.indexOf(s.zoom);
     if (e.deltaY > 0 && i > 0) setZoom(order[i - 1]);
-    else if (e.deltaY < 0 && i < 2) { if (order[i + 1] === 'village' && s.selected === undefined) return; setZoom(order[i + 1]); }
+    else if (e.deltaY < 0 && i < order.length - 1) { if (order[i + 1] === 'village' && s.selected === undefined) return; setZoom(order[i + 1]); }
   };
   const onLeave = () => { drag.current = undefined; state.current.hoverTile = undefined; state.current.hoverPlot = undefined; state.current.hoverPerson = undefined; setTip(undefined); };
 

@@ -6,8 +6,10 @@ import type { Terrain } from '@wind-spirit/sim';
 import type { Frame, StaticMap, VillageDetail, PlotView, PersonView } from '../sim/protocol.ts';
 import { lineageColour } from './lineage.ts';
 
-export type Zoom = 'world' | 'local' | 'village';
+export type Zoom = 'world' | 'region' | 'local' | 'village';
 export const LOCAL_TILE = 64;
+/** The region zoom: wide enough to see a village's neighbours and the parties between them, close enough to read names. */
+export const REGION_TILE = 24;
 
 export interface RenderState {
   map?: StaticMap; frame?: Frame; detail?: VillageDetail;
@@ -45,7 +47,7 @@ export class MapRenderer {
   geometry(s: RenderState, W: number, H: number): { size: number; ox: number; oy: number } {
     const m = s.map; if (!m) return { size: 1, ox: 0, oy: 0 };
     if (s.zoom === 'world') { const size = Math.max(1, Math.floor(Math.min(W / m.width, H / m.height))); return { size, ox: (W - size * m.width) / 2, oy: (H - size * m.height) / 2 }; }
-    const size = LOCAL_TILE; return { size, ox: W / 2 - s.center.x * size, oy: H / 2 - s.center.y * size };
+    const size = s.zoom === 'region' ? REGION_TILE : LOCAL_TILE; return { size, ox: W / 2 - s.center.x * size, oy: H / 2 - s.center.y * size };
   }
   tileAt(s: RenderState, W: number, H: number, px: number, py: number): number | undefined {
     const m = s.map; if (!m || s.zoom === 'village') return undefined;

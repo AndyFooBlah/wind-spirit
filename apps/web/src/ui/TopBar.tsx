@@ -231,7 +231,7 @@ function Breath({ breath, rolls, seasons }: { breath: number; rolls: SeasonRoll[
 
 function ZoomControl() {
   const zoom = useGame(s => s.zoom); const frame = useGame(s => s.frame); const selected = useGame(s => s.selected);
-  const zooms: Zoom[] = ['world', 'local', 'village'];
+  const zooms: Zoom[] = ['world', 'region', 'local', 'village'];
   return (
     <div className="zoomctl">
       <div className="seg">{zooms.map(z => <button key={z} className={zoom === z ? 'on' : ''} disabled={z === 'village' && selected === undefined} onClick={() => setZoom(z)}>{z}</button>)}</div>
