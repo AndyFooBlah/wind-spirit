@@ -1,10 +1,11 @@
 import { mul } from '../fixed.js';
-import { P } from '../params.js';
+import { P, TERRAIN } from '../params.js';
 import type { Ctx } from '../world.js';
 
 export function tread(ctx: Ctx, tile: number, amount: number): void {
   const t = ctx.w.tiles[tile];
-  if (t.road) return;
+  // Boats leave no trail: water never wears into a path, except a ford, which is a crossing on foot.
+  if (t.road || (TERRAIN[t.terrain].water && !t.ford)) return;
   const before = t.trodden; t.trodden += amount;
   if (before < P.pathAt && t.trodden >= P.pathAt) ctx.events.push({ t: ctx.w.tick, type: 'PathFormed', tile });
 }
