@@ -128,5 +128,8 @@ Every map now ends in sea: the outermost two to five tiles are ocean, with a noi
 reads as a coast rather than a cliff of nothing. The balance suite caught the side effect. A village of 50 on wild
 food alone had held at a median of 43.75 people after 60 years; with the rim it held at 47 on twelve seeds, because
 far more villages sit beside ocean tiles and ocean carried the richest fish stock of any tile (800 against the lake's
-500). Ocean fished from the shore is now 550, the median is back to 40.5, and the other thirteen checks are unchanged.
-Existing saves keep their old maps.
+500). Ocean fished from the shore was cut to 550, which passed on six and twelve seeds, and then failed CI, which runs
+the check on three: that sample's median was 46.25. At 450 it passes on three (36.25), six (39) and twelve (39) seeds
+with the village-of-20 survival still at 92%, and the other checks are unchanged. Lesson kept: a median over three
+seeds is a coin toss near the bar, so a change that touches geography gets checked on the CI sample too before it
+ships. Existing saves keep their old maps.
