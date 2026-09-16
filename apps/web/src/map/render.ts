@@ -78,9 +78,9 @@ export class MapRenderer {
     const detailed = g.size >= 24;
     for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
       const id = y * m.width + x; const t = m.terrain[id];
-      ctx.fillStyle = this.color(t);
       const px = g.ox + x * g.size, py = g.oy + y * g.size;
-      ctx.fillRect(px, py, g.size + (detailed ? 0 : 0.5), g.size + (detailed ? 0 : 0.5));
+      // A painted ground texture where the atlas has one and the tiles are big enough to show it; flat colour otherwise.
+      if (!detailed || !this.ground(ctx, t, px, py, g.size, id)) { ctx.fillStyle = this.color(t); ctx.fillRect(px, py, g.size + (detailed ? 0 : 0.5), g.size + (detailed ? 0 : 0.5)); }
       if (detailed) this.decor(ctx, t, px, py, g.size, id, m.ford[id]);
     }
     this.drawPaths(ctx, m, f, g);
@@ -101,6 +101,9 @@ export class MapRenderer {
 
   private decor(ctx: CanvasRenderingContext2D, t: Terrain, px: number, py: number, size: number, id: number, ford: boolean): void {
     const r = (n: number) => ((id * 9301 + n * 49297) % 233280) / 233280;   // stable pseudo-random per tile
+    // Once a terrain has painted ground, the old procedural marks (wave strokes, dune dots, tree triangles) must not
+    // draw over it: the sprite decor is the whole of it, even where that means nothing at all.
+    if (hasSprite(`terrain/${t}-a`)) { this.spriteDecor(ctx, t, px, py, size, r); return; }
     if (this.spriteDecor(ctx, t, px, py, size, r)) return;
     ctx.save(); ctx.beginPath(); ctx.rect(px, py, size, size); ctx.clip();
     if (t === 'forest') { ctx.fillStyle = this.shade(t, 0.75); for (let i = 0; i < 6; i++) { const x = px + 6 + r(i) * (size - 12), y = py + 8 + r(i + 7) * (size - 14); ctx.beginPath(); ctx.moveTo(x, y - 7); ctx.lineTo(x + 5, y + 4); ctx.lineTo(x - 5, y + 4); ctx.closePath(); ctx.fill(); } }
@@ -193,7 +196,7 @@ export class MapRenderer {
     if (!d || d.id !== s.selected) { ctx.fillStyle = '#f7efe0'; ctx.font = '16px "Alegreya Sans"'; ctx.textAlign = 'center'; ctx.fillText('Select a village to see its plots', W / 2, H / 2); return; }
     for (let i = 0; i < 144; i++) {
       const p = d.plots[i]; const x = g.ox + (i % 12) * g.size, y = g.oy + Math.floor(i / 12) * g.size;
-      if (p.kind === 'wild') { ctx.fillStyle = this.color(terrain); ctx.fillRect(x, y, g.size, g.size); this.decor(ctx, terrain, x, y, g.size, i * 7 + d.id, false); }
+      if (p.kind === 'wild') { if (!this.ground(ctx, terrain, x, y, g.size, i * 7 + d.id)) { ctx.fillStyle = this.color(terrain); ctx.fillRect(x, y, g.size, g.size); } this.decor(ctx, terrain, x, y, g.size, i * 7 + d.id, false); }
       else if (p.kind === 'clear' && hasSprite('plots/cleared')) { drawSpriteRect(ctx, 'plots/cleared', x, y, g.size, g.size); }
       else if (p.kind === 'field' && hasSprite('plots/field-bare')) {
         const season = s.frame?.season ?? 0;
@@ -221,12 +224,25 @@ export class MapRenderer {
     this.drawFolk(ctx, d, g, s, dt);
   }
 
+  /**
+   * The tile's ground texture: one of two variants chosen by tile id, drawn under the decor. The season tint is
+   * painted over it at low alpha so autumn and winter still read without a second set of textures.
+   */
+  private ground(ctx: CanvasRenderingContext2D, t: Terrain, px: number, py: number, size: number, id: number): boolean {
+    const v = (id * 2654435761 >>> 0) % 2 === 0 ? 'a' : 'b';
+    const key = hasSprite(`terrain/${t}-${v}`) ? `terrain/${t}-${v}` : `terrain/${t}-a`;
+    if (!drawSpriteRect(ctx, key, px, py, size + 0.5, size + 0.5)) return false;
+    const [tr, tg, tb, ta] = this.tintFor(t);
+    if (ta > 0.02) { ctx.fillStyle = `rgba(${Math.round(tr)},${Math.round(tg)},${Math.round(tb)},${ta})`; ctx.fillRect(px, py, size + 0.5, size + 0.5); }   // tint channels are 0-255, alpha 0-1
+    return true;
+  }
+
   /** Painted decor from the atlas: a few sprites scattered per tile, the same ones every frame. False when the atlas has none for this terrain. */
   private spriteDecor(ctx: CanvasRenderingContext2D, t: Terrain, px: number, py: number, size: number, r: (n: number) => number): boolean {
     const winter = this.tint[2] < 0.9 && this.tint[0] < 0.95;   // the winter tint is the cold, dim one
     const pine = winter && hasSprite('decor/snowpine') ? 'decor/snowpine' : 'decor/pine';
     const sets: Partial<Record<Terrain, { keys: string[]; n: number; h: number }>> = {
-      forest: { keys: ['decor/tree-broad', 'decor/tree-broad-2', pine], n: 5, h: 0.5 },
+      forest: { keys: ['decor/tree-broad', 'decor/tree-broad-2', pine], n: hasSprite('terrain/forest-a') ? 1 : 5, h: 0.5 },
       grass: { keys: ['decor/bush', 'decor/tree-broad'], n: 2, h: 0.32 },
       hills: { keys: ['decor/hill', 'decor/rock'], n: 2, h: 0.42 },
       mountain: { keys: ['decor/peak', 'decor/boulders'], n: 2, h: 0.62 },

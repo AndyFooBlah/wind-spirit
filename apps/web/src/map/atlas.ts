@@ -29,9 +29,13 @@ export function drawSprite(ctx: CanvasRenderingContext2D, key: string, x: number
   return true;
 }
 
-/** Draw a sprite stretched to fill a rectangle (plots, which are square top-down tiles). */
+/**
+ * Draw a sprite stretched to fill a rectangle: ground textures and plots, which tile edge to edge. The source is
+ * inset by half a pixel because bilinear sampling at the very edge pulls in the transparent gutter between atlas
+ * entries, which shows up as pale seams along every tile boundary.
+ */
 export function drawSpriteRect(ctx: CanvasRenderingContext2D, key: string, x: number, y: number, w: number, h: number): boolean {
   const r = rects[key]; if (!ready || !image || !r) return false;
-  ctx.drawImage(image, r.x, r.y, r.w, r.h, x, y, w, h);
+  ctx.drawImage(image, r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1, x, y, w, h);
   return true;
 }

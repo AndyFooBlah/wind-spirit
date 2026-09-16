@@ -62,3 +62,20 @@ Four failure modes, each fixed in `scripts/art/gen.py` or the manifest, all wort
 Two mechanical rules: forbid the painted drop shadow (it darkens the magenta ground into something the chroma key
 misses, and the renderer draws its own), and version the atlas URL by content hash (a repack under the same name is
 served from cache).
+
+## More prompt lessons (terrain pass, 2026-09-16)
+
+- **"A second variant" is read as "show me a comparison."** Asking for a second version of a texture produced a 2×2
+  sheet of four samples with white dividers, which tiled across the map as a grid of seams. Variation has to be
+  written into the subject ("with the detail arranged differently across the square"), never as a meta-instruction,
+  and the prompt must forbid the artefact outright: "a single continuous texture, not a grid, not four panels, not
+  a comparison sheet, no dividing lines."
+- **Painted ground replaces the procedural marks entirely.** Where a terrain has a texture, the old glyph decor must
+  not draw over it, even when that means drawing nothing: the leftover wave strokes on water read as scratches.
+- **A canopy texture is already the trees.** Forest keeps one scattered tree per tile instead of five, or the tile
+  doubles up.
+- **Tiled draws need an inset.** Sampling a sprite to its very edge pulls in the transparent gutter between atlas
+  entries and shows as a pale seam on every tile boundary; half a pixel of inset and a four-pixel gutter fix it.
+
+Icons are drawn by hand rather than generated. They have to take their colour from the surrounding text and stay
+legible at sixteen pixels, and a painted sprite can do neither.

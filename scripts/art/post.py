@@ -72,7 +72,7 @@ def main() -> None:
     sprites.sort(key=lambda s: -s[1].height); W = 2048; x = y = shelf = 0
     for name, im in sprites:
         if x + im.width > W: x = 0; y += shelf; shelf = 0
-        atlas_entries[name] = {'x': x, 'y': y, 'w': im.width, 'h': im.height}; x += im.width + 2; shelf = max(shelf, im.height + 2)
+        atlas_entries[name] = {'x': x, 'y': y, 'w': im.width, 'h': im.height}; x += im.width + 4; shelf = max(shelf, im.height + 4)   # a wider gutter, so a scaled draw cannot reach a neighbour
     H = y + shelf; atlas = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     for name, im in sprites: e = atlas_entries[name]; atlas.paste(im, (e['x'], e['y']))
     pub = os.path.join(ROOT, 'apps', 'web', 'public', 'art'); os.makedirs(pub, exist_ok=True)
