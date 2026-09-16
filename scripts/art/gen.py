@@ -21,6 +21,8 @@ MOTIF = {
     'people': " No carved ornament except a single small spiral on a staff, if the subject carries one.",
     'decor': " This is wild nature, untouched by people: absolutely no carved ornament, no spirals, no wave bands, no borders, no human markings of any kind.",
     'plots': " Worked ground, but no ornament: no carved spirals, no wave bands, no decorative border of any kind.",
+    'terrain': " Wild ground untouched by people: no ornament, no spirals, no borders, no buildings, no paths, no figures.",
+    'portraits': " A carved spiral may appear on a staff or a clasp, nowhere else.",
 }
 
 

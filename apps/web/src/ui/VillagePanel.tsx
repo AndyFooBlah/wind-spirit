@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { WEEKS_PER_YEAR } from '@wind-spirit/sim';
 import { SEASON_NAMES, type PersonView } from '../sim/protocol.ts';
 import { lineageColour } from '../map/lineage.ts';
+import { Icon } from './icons.tsx';
 import { useGame, selectVillage, openWhisper, dreamStart, setZoom, viewDetail, tellStory, narrativeKey, tickLabel, type NarrativeSpan, type NarrativeStyle } from '../store/game.ts';
 
 type Tab = 'overview' | 'people' | 'stores' | 'history' | 'journal' | 'chronicle';
@@ -45,7 +46,7 @@ export function VillagePanel() {
         {tab === 'overview' && (
           <>
             <Section title="Standing orders">{v.orders.length ? <ul>{v.orders.map((o, i) => <li key={i}>{o}</li>)}</ul> : <div className="muted">none; adults forage as they please</div>}</Section>
-            <Section title="Skills">{v.capabilities.length ? v.capabilities.join(', ') : <span className="muted">bare hands</span>}</Section>
+            <Section title="Skills"><Skills ids={detail.tech.capabilities} names={v.capabilities} /></Section>
             <Section title="Buildings">{v.plots.structures.join(', ') || 'tents only'} · {v.plots.cleared} plots cleared, {v.plots.planted} planted</Section>
             <Section title="Parties out">{v.parties.length ? <ul>{v.parties.map((x, i) => <li key={i}>{x.size} on a {x.kind} to {x.destination}, {x.status}</li>)}</ul> : <span className="muted">none</span>}</Section>
             <Section title="Other villages">{v.villages.length ? <ul>{v.villages.map(x => <li key={x.id}>{x.name}: {x.days} days {x.direction}; seen {x.sizeSeen} people {x.lastSeenYearsAgo < 99 ? `${x.lastSeenYearsAgo} years ago` : 'never'}; trades {x.trades}, raids {x.raids}; grudge {x.grudge}</li>)}</ul> : <span className="muted">knows of none</span>}</Section>
@@ -59,7 +60,7 @@ export function VillagePanel() {
           <>
             <Section title="Stores">
               <table><thead><tr><th>Good</th><th>Units</th><th>Kind</th><th>Keeps</th></tr></thead>
-                <tbody>{v.stores.map(s => <tr key={s.name}><td>{s.name}</td><td className="num">{s.units}</td><td>{s.category}{s.food ? ', food' : ''}</td><td>{s.keeps}</td></tr>)}</tbody></table>
+                <tbody>{v.stores.map(s => <tr key={s.name}><td><span className="goods"><Icon kind="goods" name={s.category} title={s.category} /> {s.name}</span></td><td className="num">{s.units}</td><td>{s.category}{s.food ? ', food' : ''}</td><td>{s.keeps}</td></tr>)}</tbody></table>
               {!v.stores.length && <div className="muted">empty</div>}
             </Section>
             <Section title="Known recipes">
@@ -151,5 +152,15 @@ function People({ people }: { people: PersonView[] }) {
         </tbody>
       </table>
     </>
+  );
+}
+
+/** The village's skills, each with its glyph. Ids come from the sim; the names are the ones the chief would use. */
+function Skills({ ids, names }: { ids: string[]; names: string[] }) {
+  if (!names.length) return <span className="muted">bare hands</span>;
+  return (
+    <div className="skills">
+      {names.map((name, i) => <span key={name} className="skill"><Icon kind="cap" name={ids[i] ?? ''} title={name} /> {name}</span>)}
+    </div>
   );
 }
