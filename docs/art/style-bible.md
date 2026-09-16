@@ -40,3 +40,25 @@ totem poles, pagodas). No rim light. No outlines. No gradients. No photorealism.
 "[subject], in the style of the attached reference: stylised flat painting, clean shapes, a little painted texture,
 one soft shadow tone, no outlines, no gradients, lit from the upper left, three-quarter overhead view. Single object
 centred on a plain flat magenta background (#FF00FF), nothing else in frame, no text."
+
+## Prompt lessons (first pass, 2026-09-15)
+
+Four failure modes, each fixed in `scripts/art/gen.py` or the manifest, all worth remembering:
+
+- **The anchor dominates.** Asking for "a single small villager … keep it simple enough to read at twelve pixels"
+  made the model redraw the anchor village with a speck in it, nine times out of twelve. The subject must be told to
+  stand alone and fill the frame, and the reference must be named as style-only: "Do not draw a village, huts, fields
+  or any scenery; the reference is for palette, line and shading only." Say "reads when shrunk to a thumbnail",
+  never "small" or "tiny".
+- **The motif spreads.** One line permitting spirals "where the subject calls for it" carved them into boulders,
+  bushes, dunes and tree trunks. The rule is now per group: buildings get one band on an eave, boats a prow spiral,
+  wild nature gets an explicit prohibition ("untouched by people: no carved ornament, no spirals, no borders").
+- **Overhead means overhead.** Ground textures asked for "seen from above" came back as isometric tiles with
+  decorative frames. They need "straight down from directly overhead, orthographic, fills the square frame edge to
+  edge, no border, no tile edge, no thickness".
+- **Materials drift.** "Ploughed earth in furrows" produced convincing wood grain. Naming the material against its
+  near-miss fixes it: "it is soil, not timber: crumbly and granular, never wood grain."
+
+Two mechanical rules: forbid the painted drop shadow (it darkens the magenta ground into something the chroma key
+misses, and the renderer draws its own), and version the atlas URL by content hash (a repack under the same name is
+served from cache).

@@ -211,7 +211,7 @@ export class MapRenderer {
       }
       if (p.building) {
         // Under construction: cleared ground, a dashed outline, and the frame going up as progress grows.
-        if (p.kind === 'wild') { ctx.fillStyle = mix('#b59a6a', this.tint); ctx.fillRect(x, y, g.size, g.size); }
+        if (p.kind === 'wild' && !drawSpriteRect(ctx, 'plots/cleared', x, y, g.size, g.size)) { ctx.fillStyle = mix('#b59a6a', this.tint); ctx.fillRect(x, y, g.size, g.size); }
         ctx.globalAlpha = 0.25 + 0.6 * p.progress; this.drawStructure(ctx, x, y, g.size, p); ctx.globalAlpha = 1;
         ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.5; ctx.strokeRect(x + 3, y + 3, g.size - 6, g.size - 6); ctx.setLineDash([]);
       }
@@ -240,8 +240,14 @@ export class MapRenderer {
     ctx.save(); ctx.beginPath(); ctx.rect(px, py, size, size); ctx.clip();
     if (t === 'oasis') { ctx.fillStyle = mix('#3f79ad', this.tint); ctx.beginPath(); ctx.ellipse(px + size / 2, py + size * 0.6, size * 0.22, size * 0.14, 0, 0, Math.PI * 2); ctx.fill(); }
     // back to front so nearer sprites overlap farther ones
-    const items = Array.from({ length: set.n }, (_, i) => ({ x: px + size * (0.15 + r(i) * 0.7), y: py + size * (0.3 + r(i + 7) * 0.65), key: set.keys[Math.floor(r(i + 13) * set.keys.length)] })).sort((a, b) => a.y - b.y);
-    for (const it of items) if (hasSprite(it.key)) drawSprite(ctx, it.key, it.x, it.y, size * set.h);
+    // Scale, mirror and count all vary per tile, so a forest of two tree sprites does not read as wallpaper.
+    const n = Math.max(1, set.n - Math.floor(r(31) * 2));
+    const items = Array.from({ length: n }, (_, i) => ({
+      x: px + size * (0.15 + r(i) * 0.7), y: py + size * (0.3 + r(i + 7) * 0.65),
+      key: set.keys[Math.floor(r(i + 13) * set.keys.length)],
+      scale: 0.78 + r(i + 19) * 0.44, flip: r(i + 23) > 0.5,
+    })).sort((a, b) => a.y - b.y);
+    for (const it of items) if (hasSprite(it.key)) drawSprite(ctx, it.key, it.x, it.y, size * set.h * it.scale, 1, true, it.flip);
     ctx.restore();
     return true;
   }

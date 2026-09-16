@@ -76,7 +76,11 @@ def main() -> None:
     H = y + shelf; atlas = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     for name, im in sprites: e = atlas_entries[name]; atlas.paste(im, (e['x'], e['y']))
     pub = os.path.join(ROOT, 'apps', 'web', 'public', 'art'); os.makedirs(pub, exist_ok=True)
-    atlas.save(os.path.join(pub, 'atlas.png'), optimize=True); json.dump({'size': [W, H], 'sprites': atlas_entries}, open(os.path.join(pub, 'atlas.json'), 'w'), indent=1)
+    atlas.save(os.path.join(pub, 'atlas.png'), optimize=True)
+    # The page asks for atlas.png?v=<hash>, so a repack is never served from a stale cache.
+    import hashlib
+    version = hashlib.sha256(open(os.path.join(pub, 'atlas.png'), 'rb').read()).hexdigest()[:12]
+    json.dump({'size': [W, H], 'version': version, 'sprites': atlas_entries}, open(os.path.join(pub, 'atlas.json'), 'w'), indent=1)
     print(f'atlas {W}x{H}, {len(sprites)} sprites')
 
 
