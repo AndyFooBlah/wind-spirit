@@ -12,8 +12,16 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 PROJECT = os.environ.get('GOOGLE_CLOUD_PROJECT', 'wind-spirit-prod')
 BIBLE = ("in the style of the attached reference image: stylised flat painting, clean shapes, a little painted texture inside shapes, "
          "one soft shadow tone, no outlines, no gradients, no rim light, lit from the upper left, three-quarter overhead view at the same angle as the reference. "
-         "Single subject centred on a plain flat magenta background (pure #FF00FF), nothing else in frame, no ground plane, no text, no lettering, "
-         "no faces, no real-world cultural markers. Ornament only as a carved band of spirals and wave-lines where the subject calls for it.")
+         "Exactly one subject, centred, filling most of the frame, on a plain flat magenta background (pure #FF00FF): no village, no landscape, no other objects, "
+         "no ground plane, no cast shadow on the background, no drop shadow, no text, no lettering, no faces, no real-world cultural markers.")
+# The wind-and-water motif is human ornament. It belongs on what people build and carry, and never on wild nature.
+MOTIF = {
+    'buildings': " A carved band of spirals and wave-lines runs along one eave or rim, and nowhere else.",
+    'parties': " A carved spiral appears only on a boat prow or a pennant, if the subject has one.",
+    'people': " No carved ornament except a single small spiral on a staff, if the subject carries one.",
+    'decor': " This is wild nature, untouched by people: absolutely no carved ornament, no spirals, no wave bands, no borders, no human markings of any kind.",
+    'plots': " Worked ground, but no ornament: no carved spirals, no wave bands, no decorative border of any kind.",
+}
 
 
 def token() -> str:
@@ -61,7 +69,7 @@ def main() -> None:
     outdir = os.path.join(ROOT, 'out', 'art', a.group); os.makedirs(outdir, exist_ok=True)
     tok = token(); spent_in = spent_out = 0
     for asset in assets:
-        prompt = f"{asset['subject']}, {BIBLE} {asset.get('extra', '')}".strip()
+        prompt = f"{asset['subject']}, {BIBLE}{MOTIF.get(a.group, '')} {asset.get('extra', '')}".strip()
         if picked: prompt += ' The other attached images are finished sprites from the same set: match their scale, palette and rendering exactly.'
         for i in range(a.start, a.start + a.n):
             out = os.path.join(outdir, f"{asset['key']}-{i}.png")

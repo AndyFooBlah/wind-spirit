@@ -13,20 +13,21 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 
 
 def key_out(img: Image.Image) -> Image.Image:
-    """Alpha from distance to the magenta key, with a soft edge so anti-aliased pixels do not fringe."""
+    """Alpha from magenta contamination. The key is `min(r, b) - g`: strongly positive only where the magenta ground
+    shows through, including where a painted shadow has darkened or desaturated it, and negative for every ochre,
+    green, grey and brown in the palette. Contaminated pixels also get their red and blue pulled back to green."""
     img = img.convert('RGBA'); px = img.load(); w, h = img.size
     for y in range(h):
         for x in range(w):
-            r, g, b, a = px[x, y]
-            # magenta-ness: high red and blue, low green
-            d = max(0, min(255, (min(r, b) - g) - 40))          # 0 for ordinary colours, large for magenta
-            alpha = 255 - min(255, d * 3)
-            if alpha < 255:
-                # pull the magenta spill out of edge pixels
-                k = alpha / 255.0
-                r2 = int(min(255, (r - (255 - alpha) * 0.6) / max(0.2, k))) if k < 1 else r
-                b2 = int(min(255, (b - (255 - alpha) * 0.6) / max(0.2, k))) if k < 1 else b
-                px[x, y] = (max(0, r2), g, max(0, b2), alpha)
+            r, g, b, _ = px[x, y]
+            d = min(r, b) - g
+            if d <= 6:
+                px[x, y] = (r, g, b, 255); continue
+            alpha = max(0, min(255, round(255 * (1 - (d - 6) / 34))))
+            if alpha == 0:
+                px[x, y] = (0, 0, 0, 0)
+            else:
+                px[x, y] = (min(r, g + 6), g, min(b, g + 6), alpha)   # despill: no magenta fringe on the edge
     return img
 
 

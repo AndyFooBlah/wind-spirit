@@ -1,50 +1,271 @@
 {
   "note": "Every sprite the renderer can draw. Keys are what the code asks for: structure roles, plot states, decor per terrain, people by stage and doing, parties by kind. Subjects are written to the style bible; the generator adds the bible's rules.",
   "assets": [
-    { "group": "buildings", "key": "tent", "height": 128, "subject": "A single taut hide tent, a low cone of stitched hides over a few timber poles with a dark doorway, a narrow carved spiral band at the hem" },
-    { "group": "buildings", "key": "hut", "height": 128, "subject": "A single round hut of timber staves with a thatched cone roof and a dark doorway, a carved spiral-and-wave band along the eave" },
-    { "group": "buildings", "key": "house", "height": 144, "subject": "A single long timber house with a ridged thatched roof, a small window, a dark doorway, a carved spiral-and-wave band along the eave, bigger and better made than a hut" },
-    { "group": "buildings", "key": "granary", "height": 144, "subject": "A single small granary: a timber store on four stilts with a raised floor, a steep thatched roof, a ladder, no door at ground level" },
-    { "group": "buildings", "key": "workshop", "height": 128, "subject": "A single low open-sided timber workshop with a stone hearth and a short clay chimney with a curl of smoke, tools and pots under the roof" },
-    { "group": "buildings", "key": "lookout", "height": 176, "subject": "A single tall timber lookout tower on four legs with a ladder, a small platform with a railing at the top, and a little pennant" },
-    { "group": "buildings", "key": "palisade", "height": 112, "subject": "A single short section of palisade: a curved run of sharpened timber stakes lashed together, seen from above at an angle" },
-    { "group": "buildings", "key": "frame", "height": 128, "subject": "A single building under construction: a timber frame of posts and rafters with no walls or roof yet, a few stacked logs beside it" },
-
-    { "group": "plots", "key": "cleared", "height": 128, "subject": "A square plot of freshly cleared ground seen from above: bare brown earth with a few stumps and stones, nothing planted, square edges", "extra": "Fill the square, viewed straight down at the same overhead angle as the reference's fields." },
-    { "group": "plots", "key": "field-bare", "height": 128, "subject": "A square field plot of ploughed brown earth with straight furrows, seen from above, nothing growing yet, square edges", "extra": "Fill the square." },
-    { "group": "plots", "key": "field-planted", "height": 128, "subject": "A square field plot with young green shoots in straight rows on brown earth, seen from above, square edges", "extra": "Fill the square." },
-    { "group": "plots", "key": "field-ripe", "height": 128, "subject": "A square field plot of tall ripe golden grain in straight rows, seen from above, square edges", "extra": "Fill the square." },
-    { "group": "plots", "key": "field-fallow", "height": 128, "subject": "A square field plot resting fallow: pale dry earth with a scatter of weeds and old stubble, seen from above, square edges", "extra": "Fill the square." },
-
-    { "group": "decor", "key": "tree-broad", "height": 96, "subject": "A single broad-leaved tree with a round green canopy and a short trunk, seen from above at an angle" },
-    { "group": "decor", "key": "tree-broad-2", "height": 96, "subject": "A single broad-leaved tree, slightly taller and darker green than the first, seen from above at an angle" },
-    { "group": "decor", "key": "pine", "height": 104, "subject": "A single dark green conifer, a narrow cone, seen from above at an angle" },
-    { "group": "decor", "key": "bush", "height": 56, "subject": "A single low round green bush" },
-    { "group": "decor", "key": "rock", "height": 48, "subject": "A single grey fieldstone boulder with a little moss" },
-    { "group": "decor", "key": "boulders", "height": 72, "subject": "A small cluster of three grey boulders" },
-    { "group": "decor", "key": "reeds", "height": 64, "subject": "A single clump of tall green reeds with brown seed heads" },
-    { "group": "decor", "key": "dune", "height": 56, "subject": "A single low sand dune with wind ripples, pale ochre" },
-    { "group": "decor", "key": "hill", "height": 80, "subject": "A single rounded grassy hill with a rocky brow, seen from above at an angle" },
-    { "group": "decor", "key": "peak", "height": 112, "subject": "A single bare grey mountain peak with a little snow on top, seen from above at an angle" },
-    { "group": "decor", "key": "tuft", "height": 48, "subject": "A single tuft of marsh grass in shallow dark water" },
-    { "group": "decor", "key": "palm", "height": 96, "subject": "A single date palm with a fan of fronds, seen from above at an angle" },
-    { "group": "decor", "key": "snowpine", "height": 104, "subject": "A single dark conifer with snow on its branches, seen from above at an angle" },
-
-    { "group": "people", "key": "adult-stand", "height": 64, "subject": "A single small adult villager in a plain wool tunic and hide leggings standing at ease, seen from above at an angle, no face detail, dark hair", "extra": "A tiny figure; keep it simple enough to read at twelve pixels tall." },
-    { "group": "people", "key": "adult-walk", "height": 64, "subject": "A single small adult villager in a plain wool tunic walking to the right carrying a bundle, seen from above at an angle, no face detail", "extra": "A tiny figure; keep it simple enough to read at twelve pixels tall." },
-    { "group": "people", "key": "adult-work", "height": 64, "subject": "A single small adult villager bent over working the ground with a wooden digging stick, seen from above at an angle, no face detail", "extra": "A tiny figure; keep it simple enough to read at twelve pixels tall." },
-    { "group": "people", "key": "adult-sit", "height": 56, "subject": "A single small adult villager sitting cross-legged, seen from above at an angle, no face detail", "extra": "A tiny figure; keep it simple enough to read at twelve pixels tall." },
-    { "group": "people", "key": "child", "height": 48, "subject": "A single small child in a short tunic running, seen from above at an angle, no face detail", "extra": "A tiny figure; keep it simple enough to read at ten pixels tall." },
-    { "group": "people", "key": "elder", "height": 56, "subject": "A single small grey-haired elder sitting wrapped in a wool blanket, seen from above at an angle, no face detail", "extra": "A tiny figure; keep it simple enough to read at twelve pixels tall." },
-    { "group": "people", "key": "chief", "height": 64, "subject": "A single small adult villager standing with a carved staff topped with a spiral, a longer cloak, seen from above at an angle, no face detail", "extra": "A tiny figure; keep it simple enough to read at twelve pixels tall." },
-
-    { "group": "parties", "key": "explorers", "height": 64, "subject": "Three small villagers walking in a line with packs and a walking staff, seen from above at an angle, no face detail", "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall." },
-    { "group": "parties", "key": "settlers", "height": 64, "subject": "A small group of villagers walking with bundles, a child, and a rolled hide tent carried between two of them, seen from above at an angle, no face detail", "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall." },
-    { "group": "parties", "key": "envoys", "height": 64, "subject": "Two small villagers walking with a wrapped gift bundle and a tall pennant on a pole bearing a spiral, seen from above at an angle, no face detail", "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall." },
-    { "group": "parties", "key": "raiders", "height": 64, "subject": "Three small villagers running with spears and a hide shield, seen from above at an angle, no face detail", "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall." },
-    { "group": "parties", "key": "refugees", "height": 64, "subject": "A small weary group of villagers walking with bundles and a child on a back, heads down, seen from above at an angle, no face detail", "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall." },
-    { "group": "parties", "key": "expedition", "height": 64, "subject": "Two small villagers pulling a loaded wooden sled of stones and timber, seen from above at an angle, no face detail", "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall." },
-    { "group": "parties", "key": "boat", "height": 56, "subject": "A single dugout canoe with two small paddlers and a carved spiral on the prow, seen from above at an angle", "extra": "Keep it simple enough to read at sixteen pixels." },
-    { "group": "parties", "key": "cart", "height": 56, "subject": "A single small two-wheeled wooden hand cart loaded with bundles, one villager pulling it, seen from above at an angle, no face detail", "extra": "Keep it simple enough to read at sixteen pixels." }
+    {
+      "group": "buildings",
+      "key": "tent",
+      "height": 128,
+      "subject": "A single taut hide tent, a low cone of stitched hides over a few timber poles with a dark doorway, a narrow carved spiral band at the hem"
+    },
+    {
+      "group": "buildings",
+      "key": "hut",
+      "height": 128,
+      "subject": "A single round hut of timber staves with a thatched cone roof and a dark doorway, a carved spiral-and-wave band along the eave"
+    },
+    {
+      "group": "buildings",
+      "key": "house",
+      "height": 144,
+      "subject": "A single long timber house with a ridged thatched roof, a small window, a dark doorway, a carved spiral-and-wave band along the eave, bigger and better made than a hut"
+    },
+    {
+      "group": "buildings",
+      "key": "granary",
+      "height": 144,
+      "subject": "A single small granary: a timber store on four stilts with a raised floor, a steep thatched roof, a ladder, no door at ground level"
+    },
+    {
+      "group": "buildings",
+      "key": "workshop",
+      "height": 128,
+      "subject": "A single low open-sided timber workshop with a stone hearth and a short clay chimney with a curl of smoke, tools and pots under the roof"
+    },
+    {
+      "group": "buildings",
+      "key": "lookout",
+      "height": 176,
+      "subject": "A single tall timber lookout tower on four legs with a ladder, a small platform with a railing at the top, and a little pennant"
+    },
+    {
+      "group": "buildings",
+      "key": "palisade",
+      "height": 112,
+      "subject": "A single short section of palisade: a curved run of sharpened timber stakes lashed together, seen from above at an angle"
+    },
+    {
+      "group": "buildings",
+      "key": "frame",
+      "height": 128,
+      "subject": "A single building under construction: a timber frame of posts and rafters with no walls or roof yet, a few stacked logs beside it"
+    },
+    {
+      "group": "plots",
+      "key": "cleared",
+      "height": 128,
+      "subject": "Freshly cleared bare brown earth with a few small stones and cut stumps, a seamless ground texture",
+      "extra": "Viewed straight down from directly overhead, orthographic, flat to the picture plane. The texture fills the entire square frame edge to edge with no margin. No border, no frame, no ornament, no decorative band, no spiral motif, not isometric, no tile edge, no thickness, no drop shadow, no magenta anywhere."
+    },
+    {
+      "group": "plots",
+      "key": "field-bare",
+      "height": 128,
+      "subject": "Ploughed dark brown soil in straight parallel furrows running left to right, crumbly clods of earth between the ridges, freshly turned, nothing growing",
+      "extra": "Viewed straight down from directly overhead, orthographic, flat to the picture plane. The texture fills the entire square frame edge to edge with no margin. No border, no frame, no ornament, no decorative band, no spiral motif, not isometric, no tile edge, no thickness, no drop shadow, no magenta anywhere. It is soil, not timber: crumbly and granular, never wood grain."
+    },
+    {
+      "group": "plots",
+      "key": "field-planted",
+      "height": 128,
+      "subject": "Young green shoots in straight parallel rows on brown earth, a seamless ground texture",
+      "extra": "Viewed straight down from directly overhead, orthographic, flat to the picture plane. The texture fills the entire square frame edge to edge with no margin. No border, no frame, no ornament, no decorative band, no spiral motif, not isometric, no tile edge, no thickness, no drop shadow, no magenta anywhere."
+    },
+    {
+      "group": "plots",
+      "key": "field-ripe",
+      "height": 128,
+      "subject": "Tall ripe golden grain in straight parallel rows, a seamless ground texture",
+      "extra": "Viewed straight down from directly overhead, orthographic, flat to the picture plane. The texture fills the entire square frame edge to edge with no margin. No border, no frame, no ornament, no decorative band, no spiral motif, not isometric, no tile edge, no thickness, no drop shadow, no magenta anywhere."
+    },
+    {
+      "group": "plots",
+      "key": "field-fallow",
+      "height": 128,
+      "subject": "Dull grey-brown earth resting fallow, dry and compacted, with a thin scatter of olive weeds and broken stubble, the same brown family as ploughed soil but duller and greyer, not pale, not sandy, not white",
+      "extra": "Viewed straight down from directly overhead, orthographic, flat to the picture plane. The texture fills the entire square frame edge to edge with no margin. No border, no frame, no ornament, no decorative band, no spiral motif, not isometric, no tile edge, no thickness, no drop shadow, no magenta anywhere."
+    },
+    {
+      "group": "decor",
+      "key": "tree-broad",
+      "height": 96,
+      "subject": "A single broad-leaved tree with a round green canopy and a short trunk, seen from above at an angle"
+    },
+    {
+      "group": "decor",
+      "key": "tree-broad-2",
+      "height": 96,
+      "subject": "A single broad-leaved tree, slightly taller and darker green than the first, seen from above at an angle"
+    },
+    {
+      "group": "decor",
+      "key": "pine",
+      "height": 104,
+      "subject": "A single dark green conifer, a narrow cone, seen from above at an angle"
+    },
+    {
+      "group": "decor",
+      "key": "bush",
+      "height": 56,
+      "subject": "A single low round green bush"
+    },
+    {
+      "group": "decor",
+      "key": "rock",
+      "height": 48,
+      "subject": "A single grey fieldstone boulder with a little moss"
+    },
+    {
+      "group": "decor",
+      "key": "boulders",
+      "height": 72,
+      "subject": "A small cluster of three grey boulders"
+    },
+    {
+      "group": "decor",
+      "key": "reeds",
+      "height": 64,
+      "subject": "A single clump of tall green reeds with brown seed heads"
+    },
+    {
+      "group": "decor",
+      "key": "dune",
+      "height": 56,
+      "subject": "A single low sand dune with wind ripples, pale ochre"
+    },
+    {
+      "group": "decor",
+      "key": "hill",
+      "height": 80,
+      "subject": "A single rounded grassy hill with a rocky brow, seen from above at an angle"
+    },
+    {
+      "group": "decor",
+      "key": "peak",
+      "height": 112,
+      "subject": "A single bare grey mountain peak with a little snow on top, seen from above at an angle"
+    },
+    {
+      "group": "decor",
+      "key": "tuft",
+      "height": 48,
+      "subject": "A single tuft of marsh grass in shallow dark water"
+    },
+    {
+      "group": "decor",
+      "key": "palm",
+      "height": 96,
+      "subject": "A single date palm with a fan of fronds, seen from above at an angle"
+    },
+    {
+      "group": "decor",
+      "key": "snowpine",
+      "height": 104,
+      "subject": "A single dark conifer with snow on its branches, seen from above at an angle"
+    },
+    {
+      "group": "people",
+      "key": "adult-stand",
+      "height": 64,
+      "subject": "An adult villager in a plain wool tunic and hide leggings, standing at ease with arms at their sides, seen three-quarters from slightly above",
+      "extra": "One character alone, standing upright in the centre and filling the frame from top to bottom. Do not draw a village, huts, fields, a river, grass or any scenery whatsoever: the reference image is for palette, line and shading only. Bold simple shapes with very little fine detail, so the figure still reads when shrunk to the size of a thumbnail. Blank face with no features."
+    },
+    {
+      "group": "people",
+      "key": "adult-walk",
+      "height": 64,
+      "subject": "An adult villager in a plain wool tunic walking to the right with a bundle under one arm, mid-stride, seen three-quarters from slightly above",
+      "extra": "One character alone, standing upright in the centre and filling the frame from top to bottom. Do not draw a village, huts, fields, a river, grass or any scenery whatsoever: the reference image is for palette, line and shading only. Bold simple shapes with very little fine detail, so the figure still reads when shrunk to the size of a thumbnail. Blank face with no features."
+    },
+    {
+      "group": "people",
+      "key": "adult-work",
+      "height": 64,
+      "subject": "An adult villager in a plain wool tunic bent forward working the ground with a wooden digging stick, seen three-quarters from slightly above",
+      "extra": "One character alone, standing upright in the centre and filling the frame from top to bottom. Do not draw a village, huts, fields, a river, grass or any scenery whatsoever: the reference image is for palette, line and shading only. Bold simple shapes with very little fine detail, so the figure still reads when shrunk to the size of a thumbnail. Blank face with no features."
+    },
+    {
+      "group": "people",
+      "key": "adult-sit",
+      "height": 56,
+      "subject": "An adult villager in a plain wool tunic sitting cross-legged on the ground, seen three-quarters from slightly above",
+      "extra": "One character alone, standing upright in the centre and filling the frame from top to bottom. Do not draw a village, huts, fields, a river, grass or any scenery whatsoever: the reference image is for palette, line and shading only. Bold simple shapes with very little fine detail, so the figure still reads when shrunk to the size of a thumbnail. Blank face with no features."
+    },
+    {
+      "group": "people",
+      "key": "child",
+      "height": 48,
+      "subject": "A child of about seven in a short tunic, running, mid-stride, seen three-quarters from slightly above",
+      "extra": "One character alone, standing upright in the centre and filling the frame from top to bottom. Do not draw a village, huts, fields, a river, grass or any scenery whatsoever: the reference image is for palette, line and shading only. Bold simple shapes with very little fine detail, so the figure still reads when shrunk to the size of a thumbnail. Blank face with no features."
+    },
+    {
+      "group": "people",
+      "key": "elder",
+      "height": 56,
+      "subject": "A grey-haired elder sitting wrapped in a plain wool blanket, seen three-quarters from slightly above",
+      "extra": "One character alone, standing upright in the centre and filling the frame from top to bottom. Do not draw a village, huts, fields, a river, grass or any scenery whatsoever: the reference image is for palette, line and shading only. Bold simple shapes with very little fine detail, so the figure still reads when shrunk to the size of a thumbnail. Blank face with no features."
+    },
+    {
+      "group": "people",
+      "key": "chief",
+      "height": 64,
+      "subject": "An adult villager in a long plain cloak holding a tall carved staff, standing, seen three-quarters from slightly above",
+      "extra": "One character alone, standing upright in the centre and filling the frame from top to bottom. Do not draw a village, huts, fields, a river, grass or any scenery whatsoever: the reference image is for palette, line and shading only. Bold simple shapes with very little fine detail, so the figure still reads when shrunk to the size of a thumbnail. Blank face with no features."
+    },
+    {
+      "group": "parties",
+      "key": "explorers",
+      "height": 64,
+      "subject": "Three small villagers walking in a line with packs and a walking staff, seen from above at an angle, no face detail",
+      "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall."
+    },
+    {
+      "group": "parties",
+      "key": "settlers",
+      "height": 64,
+      "subject": "A small group of villagers walking with bundles, a child, and a rolled hide tent carried between two of them, seen from above at an angle, no face detail",
+      "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall."
+    },
+    {
+      "group": "parties",
+      "key": "envoys",
+      "height": 64,
+      "subject": "Two small villagers walking with a wrapped gift bundle and a tall pennant on a pole bearing a spiral, seen from above at an angle, no face detail",
+      "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall."
+    },
+    {
+      "group": "parties",
+      "key": "raiders",
+      "height": 64,
+      "subject": "Three small villagers running with spears and a hide shield, seen from above at an angle, no face detail",
+      "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall."
+    },
+    {
+      "group": "parties",
+      "key": "refugees",
+      "height": 64,
+      "subject": "A small weary group of villagers walking with bundles and a child on a back, heads down, seen from above at an angle, no face detail",
+      "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall."
+    },
+    {
+      "group": "parties",
+      "key": "expedition",
+      "height": 64,
+      "subject": "Two small villagers pulling a loaded wooden sled of stones and timber, seen from above at an angle, no face detail",
+      "extra": "Tiny figures; keep them simple enough to read at sixteen pixels tall."
+    },
+    {
+      "group": "parties",
+      "key": "boat",
+      "height": 56,
+      "subject": "A single dugout canoe with two small paddlers and a carved spiral on the prow, seen from above at an angle",
+      "extra": "Keep it simple enough to read at sixteen pixels."
+    },
+    {
+      "group": "parties",
+      "key": "cart",
+      "height": 56,
+      "subject": "A single small two-wheeled wooden hand cart loaded with bundles, one villager pulling it, seen from above at an angle, no face detail",
+      "extra": "Keep it simple enough to read at sixteen pixels."
+    }
   ]
 }
