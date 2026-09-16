@@ -5,6 +5,7 @@
 import type { Terrain } from '@wind-spirit/sim';
 import type { Frame, StaticMap, VillageDetail, PlotView, PersonView } from '../sim/protocol.ts';
 import { lineageColour } from './lineage.ts';
+import { drawSprite, drawSpriteRect, hasSprite, loadAtlas } from './atlas.ts';
 
 export type Zoom = 'world' | 'region' | 'local' | 'village';
 export const LOCAL_TILE = 64;
@@ -32,6 +33,7 @@ function mix(base: string, tint: [number, number, number, number]): string {
 interface Person { x: number; y: number; vx: number; vy: number; }
 
 export class MapRenderer {
+  constructor() { loadAtlas(); }
   private tint: [number, number, number, number] = [...SEASON_TINT[0]] as [number, number, number, number];
   private tintTarget = this.tint;
   private lastTime = 0;
@@ -99,6 +101,7 @@ export class MapRenderer {
 
   private decor(ctx: CanvasRenderingContext2D, t: Terrain, px: number, py: number, size: number, id: number, ford: boolean): void {
     const r = (n: number) => ((id * 9301 + n * 49297) % 233280) / 233280;   // stable pseudo-random per tile
+    if (this.spriteDecor(ctx, t, px, py, size, r)) return;
     ctx.save(); ctx.beginPath(); ctx.rect(px, py, size, size); ctx.clip();
     if (t === 'forest') { ctx.fillStyle = this.shade(t, 0.75); for (let i = 0; i < 6; i++) { const x = px + 6 + r(i) * (size - 12), y = py + 8 + r(i + 7) * (size - 14); ctx.beginPath(); ctx.moveTo(x, y - 7); ctx.lineTo(x + 5, y + 4); ctx.lineTo(x - 5, y + 4); ctx.closePath(); ctx.fill(); } }
     else if (t === 'grass') { ctx.strokeStyle = this.shade(t, 0.85); ctx.lineWidth = 1; for (let i = 0; i < 5; i++) { const x = px + 4 + r(i) * (size - 8), y = py + 6 + r(i + 3) * (size - 10); ctx.beginPath(); ctx.moveTo(x, y + 4); ctx.lineTo(x + 1, y - 2); ctx.stroke(); } }
@@ -150,6 +153,13 @@ export class MapRenderer {
       const pos = this.partyPos.get(p.id); if (!pos) continue;
       const x = g.ox + this.lerpX(pos, now, s.speedMs) * g.size, y = g.oy + this.lerpY(pos, now, s.speedMs) * g.size;
       const r = Math.max(2.5, g.size / 10);
+      const pk = p.boat ? 'parties/boat' : `parties/${p.kind === 'explore' ? 'explorers' : p.kind === 'colonize' ? 'settlers' : p.kind === 'envoy' ? 'envoys' : p.kind === 'raid' ? 'raiders' : p.kind === 'refugee' ? 'refugees' : 'expedition'}`;
+      if (g.size >= 20 && hasSprite(pk)) {
+        const h = Math.max(14, g.size * 0.6);
+        ctx.fillStyle = lineageColour(p.lineage); ctx.beginPath(); ctx.ellipse(x, y + h * 0.05, h * 0.42, h * 0.16, 0, 0, Math.PI * 2); ctx.fill();   // a lineage-coloured ground mark
+        drawSprite(ctx, pk, x, y + h * 0.1, h);
+        continue;
+      }
       ctx.lineWidth = Math.max(1, r / 3); ctx.strokeStyle = lineageColour(p.lineage);
       if (p.boat) { ctx.fillStyle = '#e9d8a6'; ctx.beginPath(); ctx.moveTo(x - r * 1.6, y - r * 0.3); ctx.lineTo(x + r * 1.6, y - r * 0.3); ctx.lineTo(x + r * 0.9, y + r * 0.8); ctx.lineTo(x - r * 0.9, y + r * 0.8); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y - r * 0.3); ctx.lineTo(x, y - r * 1.6); ctx.stroke(); }
       else if (p.kind === 'raid') { ctx.fillStyle = '#c0392b'; ctx.beginPath(); ctx.moveTo(x, y - r * 1.4); ctx.lineTo(x + r * 1.3, y + r); ctx.lineTo(x - r * 1.3, y + r); ctx.closePath(); ctx.fill(); ctx.stroke(); }
@@ -184,6 +194,12 @@ export class MapRenderer {
     for (let i = 0; i < 144; i++) {
       const p = d.plots[i]; const x = g.ox + (i % 12) * g.size, y = g.oy + Math.floor(i / 12) * g.size;
       if (p.kind === 'wild') { ctx.fillStyle = this.color(terrain); ctx.fillRect(x, y, g.size, g.size); this.decor(ctx, terrain, x, y, g.size, i * 7 + d.id, false); }
+      else if (p.kind === 'clear' && hasSprite('plots/cleared')) { drawSpriteRect(ctx, 'plots/cleared', x, y, g.size, g.size); }
+      else if (p.kind === 'field' && hasSprite('plots/field-bare')) {
+        const season = s.frame?.season ?? 0;
+        const key = !p.planted ? (season === 3 ? 'plots/field-fallow' : 'plots/field-fallow') : season === 2 ? 'plots/field-ripe' : season === 0 ? 'plots/field-bare' : 'plots/field-planted';
+        drawSpriteRect(ctx, hasSprite(key) ? key : 'plots/field-bare', x, y, g.size, g.size);
+      }
       else if (p.kind === 'clear') { ctx.fillStyle = mix('#b59a6a', this.tint); ctx.fillRect(x, y, g.size, g.size); }
       else if (p.kind === 'field') {
         ctx.fillStyle = mix('#a8804d', this.tint); ctx.fillRect(x, y, g.size, g.size);
@@ -205,9 +221,36 @@ export class MapRenderer {
     this.drawFolk(ctx, d, g, s, dt);
   }
 
+  /** Painted decor from the atlas: a few sprites scattered per tile, the same ones every frame. False when the atlas has none for this terrain. */
+  private spriteDecor(ctx: CanvasRenderingContext2D, t: Terrain, px: number, py: number, size: number, r: (n: number) => number): boolean {
+    const winter = this.tint[2] < 0.9 && this.tint[0] < 0.95;   // the winter tint is the cold, dim one
+    const pine = winter && hasSprite('decor/snowpine') ? 'decor/snowpine' : 'decor/pine';
+    const sets: Partial<Record<Terrain, { keys: string[]; n: number; h: number }>> = {
+      forest: { keys: ['decor/tree-broad', 'decor/tree-broad-2', pine], n: 5, h: 0.5 },
+      grass: { keys: ['decor/bush', 'decor/tree-broad'], n: 2, h: 0.32 },
+      hills: { keys: ['decor/hill', 'decor/rock'], n: 2, h: 0.42 },
+      mountain: { keys: ['decor/peak', 'decor/boulders'], n: 2, h: 0.62 },
+      desert: { keys: ['decor/dune'], n: 3, h: 0.28 },
+      oasis: { keys: ['decor/palm', 'decor/reeds'], n: 2, h: 0.45 },
+      marsh: { keys: ['decor/tuft', 'decor/reeds'], n: 4, h: 0.3 },
+      river: { keys: ['decor/reeds'], n: 1, h: 0.3 },
+      coast: { keys: ['decor/rock', 'decor/reeds'], n: 1, h: 0.28 },
+    };
+    const set = sets[t]; if (!set || !set.keys.some(k => hasSprite(k))) return false;
+    ctx.save(); ctx.beginPath(); ctx.rect(px, py, size, size); ctx.clip();
+    if (t === 'oasis') { ctx.fillStyle = mix('#3f79ad', this.tint); ctx.beginPath(); ctx.ellipse(px + size / 2, py + size * 0.6, size * 0.22, size * 0.14, 0, 0, Math.PI * 2); ctx.fill(); }
+    // back to front so nearer sprites overlap farther ones
+    const items = Array.from({ length: set.n }, (_, i) => ({ x: px + size * (0.15 + r(i) * 0.7), y: py + size * (0.3 + r(i + 7) * 0.65), key: set.keys[Math.floor(r(i + 13) * set.keys.length)] })).sort((a, b) => a.y - b.y);
+    for (const it of items) if (hasSprite(it.key)) drawSprite(ctx, it.key, it.x, it.y, size * set.h);
+    ctx.restore();
+    return true;
+  }
+
   /** A distinct glyph per kind of building, until there is real art: what it is for decides its shape. */
   private drawStructure(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, p: PlotView): void {
     const id = p.recipeId; const st = p.structure; const cx = x + size / 2;
+    const role = p.building ? 'frame' : id === 'tent' || id.includes('tent') ? 'tent' : st?.watch ? 'lookout' : st && (st.defense ?? 0) > 0 ? 'palisade' : st && st.shelter === 0 && st.storage > 0 ? 'granary' : st && st.shelter === 0 ? 'workshop' : (st?.shelter ?? 0) >= 10 ? 'house' : 'hut';
+    if (hasSprite(`buildings/${role}`)) { drawSprite(ctx, `buildings/${role}`, cx, y + size * 0.96, size * (role === 'lookout' ? 1.25 : role === 'palisade' ? 0.7 : 0.95)); return; }
     const pad = size * 0.18; const bw = size - pad * 2;
     ctx.lineWidth = Math.max(1, size / 40); ctx.strokeStyle = '#3a2718';
     if (id === 'tent' || id.includes('tent')) {
@@ -273,6 +316,13 @@ export class MapRenderer {
       const dx = f.tx - f.x, dy = f.ty - f.y; const dist = Math.hypot(dx, dy); const step = Math.min(dist, 0.9 * dt);
       if (dist > 0.001) { f.x += dx / dist * step; f.y += dy / dist * step; }
       const px = g.ox + f.x * g.size, py = g.oy + f.y * g.size; const r = Math.max(1.5, g.size / (person.stage === 'child' ? 20 : 13));
+      const moving = Math.hypot(f.tx - f.x, f.ty - f.y) > 0.05;
+      const pkey = person.stage === 'child' ? 'people/child' : person.stage === 'elder' ? 'people/elder' : person.chief ? 'people/chief' : moving ? 'people/adult-walk' : /field|plant|harvest|weed|clearing|building|laying/.test(person.doing) ? 'people/adult-work' : /resting|counsel|hearth/.test(person.doing) ? 'people/adult-sit' : 'people/adult-stand';
+      if (hasSprite(pkey)) {
+        drawSprite(ctx, pkey, px, py + r, g.size * (person.stage === 'child' ? 0.42 : 0.55));
+        if (person.chief || s.hoverPerson === person.id) { ctx.strokeStyle = person.chief ? '#ffd166' : '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(px, py + r, r * 1.6, r * 0.7, 0, 0, Math.PI * 2); ctx.stroke(); }
+        continue;
+      }
       ctx.fillStyle = person.stage === 'child' ? '#6b4a2a' : person.stage === 'elder' ? '#8a8a8a' : '#2b1d12';
       ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
       if (person.chief) { ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(px, py, r + 2, 0, Math.PI * 2); ctx.stroke(); }
