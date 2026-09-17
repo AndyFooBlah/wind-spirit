@@ -6,7 +6,12 @@
  * Code, not the model, owns consistency: it normalises the score vector onto the adult budget, so the sum is
  * right by construction and no order can exceed it. Arguments are not generated here; that is a second step.
  *
- * Usage: TYPESAFE_API_KEY=... tsx src/evals/probe-allocation.ts [--limit 8] [--corpus path]
+ * Independent Scores cannot see one another, so normalising them straight lands near-uniform: a village with ten
+ * candidate tasks puts one hand on each. Two code-side correctives are measured here, neither needing another call:
+ * `--gamma` sharpens the score vector before normalising, and `--purpose-weight` boosts the tasks the season's
+ * purpose Choice favours. The model supplies magnitudes; concentration is a policy knob.
+ *
+ * Usage: TYPESAFE_API_KEY=... tsx src/evals/probe-allocation.ts [--limit 8] [--gamma 1] [--purpose-weight 1]
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import type { Order, Task } from '@wind-spirit/sim';
@@ -39,9 +44,24 @@ const LEVELS = [
   'Most of the village. This is what the season is for.',
 ] as const;
 
-/** Turn a score per task into whole workers that sum to the budget: proportional, then largest remainder. */
-export function allocate(scores: Record<string, number>, budget: number): Order[] {
-  const live = Object.entries(scores).filter(([, s]) => s > 0.5);
+/** Which tasks a season's stated purpose favours. */
+export const PURPOSE_FAVOURS: Record<string, Task[]> = {
+  feeding: ['forage', 'hunt', 'fish'],
+  growing: ['farm', 'clear'],
+  building: ['build', 'gather'],
+  learning: ['research', 'craft'],
+  resting: ['rest'],
+};
+
+/**
+ * Turn a score per task into whole workers that sum to the budget: sharpen, weight by purpose, then proportional
+ * with largest remainder. `gamma` above 1 concentrates; `purposeWeight` above 1 favours the season's purpose.
+ */
+export function allocate(scores: Record<string, number>, budget: number, o: { gamma?: number; purposeWeight?: number; purpose?: string } = {}): Order[] {
+  const gamma = o.gamma ?? 1; const pw = o.purposeWeight ?? 1;
+  const favoured = new Set<string>(PURPOSE_FAVOURS[o.purpose ?? ''] ?? []);
+  const weighted = Object.fromEntries(Object.entries(scores).map(([t, s]) => [t, Math.pow(Math.max(0, s), gamma) * (favoured.has(t as Task) ? pw : 1)]));
+  const live = Object.entries(weighted).filter(([t, s]) => s > 0 && scores[t] > 0.5);
   const total = live.reduce((a, [, s]) => a + s, 0);
   if (!live.length || total <= 0 || budget <= 0) return [];
   const raw = live.map(([task, s]) => ({ task: task as Task, exact: (s / total) * budget }));
@@ -88,7 +108,8 @@ async function main() {
     const answers = res.answers as Record<string, ScoreResponse | ChoiceResponse>;
     const scores: Record<string, number> = {};
     for (const t of CANDIDATES) scores[t.task] = (answers[t.task] as ScoreResponse).score;
-    const orders = allocate(scores, budget);
+    const purpose = (answers.purpose as ChoiceResponse).choice;
+    const orders = allocate(scores, budget, { gamma: Number(arg('gamma', '1')), purposeWeight: Number(arg('purpose-weight', '1')), purpose });
 
     const assigned = orders.reduce((a, o) => a + o.workers, 0);
     const food = orders.filter(o => ['forage', 'hunt', 'fish', 'farm'].includes(o.task)).reduce((a, o) => a + o.workers, 0);
@@ -101,12 +122,14 @@ async function main() {
       harvestsInAutumn: c.facts.season !== 2 || v.plots.planted === 0 || orders.some(o => o.task === 'farm'),
     };
     const ok = Object.values(checks).filter(Boolean).length / Object.values(checks).length;
-    rows.push({ id: c.id, season: ['spring', 'summer', 'autumn', 'winter'][c.facts.season], budget, purpose: (answers.purpose as ChoiceResponse).choice, scores, orders: orders.map(o => `${o.task}:${o.workers}`), checks, score: ok, ms });
+    rows.push({ id: c.id, season: ['spring', 'summer', 'autumn', 'winter'][c.facts.season], budget, purpose, scores, orders: orders.map(o => `${o.task}:${o.workers}`), checks, score: ok, ms });
     console.log(`${c.id.padEnd(28)} ${String(rows[rows.length - 1].season).padEnd(7)} budget=${String(budget).padStart(2)} purpose=${String(rows[rows.length - 1].purpose).padEnd(9)} ${(orders.map(o => `${o.task}:${o.workers}`).join(' ')).padEnd(52)} ${ok.toFixed(2)} ${Object.entries(checks).filter(([, b]) => !b).map(([k]) => '✗' + k).join(' ')} ${ms}ms`);
   }
 
   const mean = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
-  console.log(`\nallocation probe: ${cases.length} routine states, mean ${mean(rows.map(r => Number(r.score))).toFixed(3)}, ${Math.round(mean(rows.map(r => Number(r.ms))))}ms, ${inTokens.toLocaleString()} input tokens, $${(inTokens * 42 / 1e9).toFixed(5)}`);
+  // How concentrated the allocation is: the largest task's share of the assigned hands. The scripted policy sits near 0.3.
+  const conc = rows.map(r => { const ws = (r.orders as string[]).map(s => Number(s.split(':')[1])); const t = ws.reduce((a, b) => a + b, 0); return t ? Math.max(...ws) / t : 0; });
+  console.log(`\nallocation probe (gamma=${arg('gamma', '1')} purpose-weight=${arg('purpose-weight', '1')}): ${cases.length} routine states, checks ${mean(rows.map(r => Number(r.score))).toFixed(3)}, tasks used ${mean(rows.map(r => (r.orders as string[]).length)).toFixed(1)}, largest share ${mean(conc).toFixed(2)}, ${Math.round(mean(rows.map(r => Number(r.ms))))}ms, $${(inTokens * 42 / 1e9).toFixed(5)}`);
   mkdirSync('out/evals', { recursive: true });
   writeFileSync('out/evals/probe-allocation.json', JSON.stringify({ when: new Date().toISOString(), rows }, null, 1));
 }

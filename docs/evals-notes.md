@@ -314,3 +314,151 @@ What changed against the second pass, and why it matters:
   and out at 10.8 s. The tiers stay as shipped: 3.5 Flash-Lite routine, 3.8 Flash impactful, 3.1 Pro for
   conversation.
 - **Cost of this pass**: about $13 across 25 models plus judging.
+
+## Fourth pass (2026-09-17): the judgments that are not prose — Jev against the LLMs
+
+The credulity finding from the earlier passes suggested a decision model might be worth a look, so the three chief
+judgments that are already a label or a binary — act on a spirit's whisper, verdict on a claim now due, answer to
+envoys — went behind a `Judge` adapter with two implementations: TypeSafe System One (Jev) and a normal model
+through the proxy. Both get the *same* compact state (a few hundred tokens of named JSON, not the ~2,900-token
+decision prompt) and the same questions, so the comparison measures the judgment and not the prompt.
+
+Credibility is deliberately two Nouls rather than one: does the whisper agree with what the village has seen
+(`consistent`), and would the village be worse off for obeying (`harmful`). Code composes them as
+`p = consistent × (1 − harmful)`. That keeps the believe/ignore threshold a game parameter instead of a model's
+opinion, which is the whole point: a pious chief can act at p = 0.3, a skeptic hold out for 0.8.
+
+### Correction to the earlier notes
+
+The credulity numbers quoted in the second-pass section ("3.1 Flash-Lite obeyed 9 of 10, GPT-5 nano 10") are from
+*before* the prompt and corpus corrections. Under the 2026-09-13 corpus the shipped tiers look far better:
+3.8 Flash obeys the false-fallow lie 1 of 10, 2.5 Flash-Lite 1 of 10, 3.5 Flash-Lite 4 of 10. The spread across all
+25 models is still 0/10 to 10/10, so credulity does vary wildly by model — but the tiers as shipped are not the
+credulous end of it, and any claim built on the old numbers needs restating.
+
+One oddity worth keeping: the same model routed two ways disagrees sharply. Vertex `gemini-3.8-flash` obeys 1 of 10;
+OpenRouter `google/gemini-3.8-flash` obeys 7 of 10. Same corpus, same checks. At n = 10 and temperature 0.7 that may
+be nothing but sampling, which is itself the point — a single pass of ten cases cannot settle how credulous a model is.
+
+### The result that reframes it
+
+**Asked the narrow question on its own, every model gets credulity right.** Not just the good ones:
+
+Three passes over the 2026-09-13 corpus, 216 judgments each:
+
+| judge | credibility | verdict | host | overall | ms / judgment | $ / 216 |
+|---|---|---|---|---|---|---|
+| jev-1.13.0 | 35/36 | **131/135** | **45/45** | **97.7%** | **152** | **0.0074** |
+| gemini-2.5-flash-lite | **36/36** | 107/135 | **45/45** | 87.0% | 592 | 0.0130 |
+| gemini-3.5-flash-lite | 33/36 | 113/135 | 42/45 | 87.0% | 658 | 0.0512 |
+| gemini-3.8-flash | 33/36 | 111/135 | 40/45 | 85.2% | 2,248 | 0.4014 |
+
+Note the ordering: the most expensive model is the worst overall, at 54x Jev's cost and 15x its latency. Nothing
+about this job rewards a bigger model.
+
+So the credulity defect was never a failure of judgment. It is a failure of the *combined* prompt: a model asked
+for twenty orders, a journal, memory notes and a reply to the spirit in one shot sometimes obeys the lie; the same
+model asked only "should the chief act on this?" does not. **The fix is decomposition, and it works whoever answers.**
+
+That is worth saying plainly because it changes what Jev is for here. It is not better at these judgments. It is
+*equal* on credibility, *much* better on verdicts (97% against 79%, and it never once called a well-stocked village
+hungry), equal on host answers, about 4x faster and about 1.8x cheaper than the cheapest Gemini.
+
+### Host answers, and a live problem in the standard tier
+
+Visitor decisions have sat at 0.93 for all 25 models across three passes, with the same greedy-ask cases tripping
+everyone. Pulled out as a standalone judgment the greedy cases stop being hard: every judge here goes 9/9 on greedy
+and 30/30 on fair. That ceiling was the prompt, not the models.
+
+What the decomposition exposes instead is the **threat-weak** case — tribute demanded by a village a third our size,
+where the right answer is to refuse:
+
+| judge | threat-weak (want refuse) | what it actually answered |
+|---|---|---|
+| jev-1.13.0 | **6/6** | refuse 6 |
+| gemini-2.5-flash-lite | **6/6** | refuse 6 |
+| gemini-3.5-flash-lite | 3/6 | accept 3, refuse 3 |
+| gemini-3.8-flash | 1/6 | **accept 5**, refuse 1 |
+
+3.8 Flash pays the bully five times in six. That is the model the standard tier uses for visitors today, so this is
+not a hypothetical: a standard-tier village hands tribute to anyone who asks, however weak. The end-to-end corpus
+never caught it because visitor scores average over fair cases (10 of 15) that everything gets right.
+
+### Verdicts
+
+There are no verdict cases in the corpus, so the runner builds a probe: three claims paired with village states
+whose own facts settle them. `hunger` ("your stores will not carry you to the next harvest") and `faraway` (a claim
+about country the village has never seen) have clean ground truth; Jev gets 45/45 on both. The `deaths` claim is
+weaker ground truth — `deathsRecent = 0` mid-season reads as "failed" to the checker and arguably "not yet settled"
+to a judge — and it is where both judges lose most of their points. Read the 97% with that caveat.
+
+### Cost, honestly
+
+Jev's advantage is smaller than its per-token price suggests: $42/Btok against 2.5 Flash-Lite's $0.30/Mtok in and
+$0.40 out looks like a rout, but Jev bills the questions and criteria as input too, so 216 judgments cost 176k input
+tokens against the LLM's 111k. Net, 1.8x cheaper than the cheapest usable Gemini and 47x cheaper than 3.8 Flash.
+Either way these are cents per chief-century — nobody should choose a judge on this.
+
+### Stability, measured rather than assumed
+
+Jev is not more deterministic than the LLMs, which is worth recording because it is the opposite of what I expected.
+Counting cases whose answer changed across the three passes: Jev 7 of 72, 2.5 Flash-Lite 1, 3.5 Flash-Lite 8,
+3.8 Flash 4. Five of Jev's seven are `fair` visitor cases flipping between `accept` and `counter`, and the corpus
+accepts either, so they cost nothing — that is the model being genuinely indifferent between two good answers, which
+is the documented behaviour of a spread distribution, not noise. Only two flips cross a correctness boundary, and
+one of those is the true-rumor case sitting on the threshold at p = 0.485.
+
+On correctness the per-pass spread is small for everyone: Jev 97.2 / 97.2 / 98.6, the Flash-Lites 87.5 / 87.5 / 86.1,
+3.8 Flash 83.3 / 86.1 / 86.1. Pick a judge on accuracy and cost, not on stability.
+
+### Decision
+
+Ship the adapter with **Jev as the default** for all three: it wins verdicts outright (97% against 79–84%), ties the
+best LLM on credibility and host answers, and is 4x faster and 1.8x cheaper than the cheapest Gemini that keeps up.
+2.5 Flash-Lite is the fallback and is genuinely close — which is the real headline. **Most of the gain here comes
+from asking the question on its own, not from who answers it.**
+
+Two things to fix regardless of judge: the standard tier's visitor model caves to weak threats, and the believe /
+ignore threshold wants to sit near 0.4 rather than 0.5 on the evidence so far.
+
+## Side experiment: can a System One model allocate labour? (2026-09-17)
+
+The open question is whether a model that returns typed judgments can produce what a chief actually needs — a
+variable list of actions, each with its own arguments. The naive framing ("should I do action x?" per action) has no
+budget and no ranking, so the probe (`src/evals/probe-allocation.ts`) tries the next thing up: one comparable
+**Score** per candidate task — *of this village's N free hands, what share belongs on hunting this season* — plus one
+**Choice** for the season's purpose, all in a single request over the same state. Code, not the model, normalises the
+score vector onto the adult budget, so the sum is right by construction and no order can exceed it.
+
+It passes every mechanical check, and the allocation is useless:
+
+| | tasks used | largest task's share |
+|---|---|---|
+| scripted policy (habit) | 4–6 | 0.27–0.43 |
+| Jev scores, straight normalisation | 9.9 | 0.17 |
+
+One hand on each of ten tasks. Independent Scores cannot see one another, so ten tasks all rated "a good share"
+normalise to near-uniform. Note the checks do not catch this at all — `withinBudget`, `usesMostAdults` and
+`feedsFirst` are all satisfied by an even spread. That is a hole in the checkers as much as a finding about Jev.
+
+The useful part: the ranking information is in the score vector, and concentration is recoverable in code with no
+further calls.
+
+| gamma | purpose weight | tasks used | largest share |
+|---|---|---|---|
+| 1 | 1 | 9.9 | 0.17 |
+| 1 | 3 | 9.1 | 0.29 |
+| 3 | 1 | 7.6 | 0.35 |
+| 3 | 3 | 6.5 | 0.42 |
+| 6 | 1 | 5.0 | 0.59 |
+| 6 | 3 | 4.2 | 0.65 |
+
+`gamma` sharpens the vector before normalising; `purpose weight` boosts the tasks the season's purpose favours.
+Around gamma 3 the shape sits where the scripted policy sits. So the flatness was an artifact of naive
+normalisation, not of the model's judgment — and because it is pure post-processing, the knob can be turned without
+re-running inference, which is the property that makes score vectors worth storing.
+
+What this does **not** show: that a gamma-3 allocation *plays* better. The checkers cannot tell flat from
+concentrated, so the only real test is running it in the sim against the scripted policy over a century. Arguments
+(which commodity, which recipe, how many plots) are untouched here and are the harder half — though a Choice over
+the view's own candidate list would make the misspelled-name failures in `parse.ts` structurally impossible.
