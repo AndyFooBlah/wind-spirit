@@ -4,9 +4,10 @@ The model proxy from `docs/technical-design.md` §9. A small Node 24 HTTP servic
 verifies Firebase ID tokens, enforces a per-user daily token quota (Firestore), maps a model *class*
 (or, for evals, an allowlisted explicit model id) to a provider adapter, calls Vertex AI with
 Application Default Credentials, and logs one JSON line per request with tokens, cached tokens and an
-estimated cost. Gemini, Claude-on-Vertex and the open MaaS models are all reached with the runtime
-service account's access token; the only API key is OpenRouter's, which lives in Secret Manager and is
-injected as an env var (see [Secrets](#secrets)).
+estimated cost. It also fronts TypeSafe System One on `/v1/systemone` for the chief's label-shaped
+judgements. Gemini, Claude-on-Vertex and the open MaaS models are all reached with the runtime service
+account's access token; the two API keys are OpenRouter's and TypeSafe's, which live in Secret Manager
+and are injected as env vars (see [Secrets](#secrets)).
 
 - Service URL (prod): `https://llm-proxy-406179055859.us-central1.run.app`
 - GCP project: `wind-spirit-prod`, region `us-central1`, runtime SA `llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com`
@@ -43,6 +44,24 @@ The catalog in `src/models.ts` maps each model id to its provider, endpoint loca
 All `/v1/*` routes require `Authorization: Bearer <Firebase ID token>` (anonymous auth is fine)
 unless the service runs with `REQUIRE_AUTH=false`, in which case quotas are keyed by client IP.
 CORS allows any origin with the `Authorization` and `Content-Type` headers.
+
+### `POST /v1/systemone`
+
+TypeSafe System One (Jev): typed judgements rather than text. Same auth, invitation and daily quota as
+`/v1/generate`; billed on input tokens only, because System One output is free.
+
+```jsonc
+{
+  "state": { "whisper": "Plant nothing this spring.", "land": { "cleared_plots": 9 } },  // text, object or array
+  "questions": { "consistent": { "type": "noul", "instructions": "..." } },              // at least one
+  "model": "jev-latest"                                                                  // optional
+}
+```
+
+The proxy does not interpret the questions; it holds the key and forwards the body. Question
+definitions live in `packages/agents/src/judge/`, where they are tested, and the browser reaches this
+route through `ProxySystemOne` so no key ever ships to a client. Answers come back as
+`{model, answers, usage: {input_tokens, output_tokens}, cost, costSource, ms}`.
 
 ### `POST /v1/generate`
 
@@ -186,7 +205,21 @@ When Google ships new models, change the env var on the service (`gcloud run ser
 
 ## Secrets
 
-The only secret is the OpenRouter API key. It is stored in Secret Manager as `openrouter-api-key`
+There are two: the OpenRouter API key and the TypeSafe API key. Both follow the same rules — Secret
+Manager, `--set-secrets` on deploy, read from the environment at call time only, never logged, never
+returned to a client, and a placeholder literal `unset` that disables the feature rather than failing.
+
+TypeSafe's is `typesafe-api-key` (`src/typesafe.ts`; `/health` shows `typesafe: enabled|disabled`, and
+`POST /v1/systemone` answers `503 provider_disabled` without it):
+
+```sh
+printf '%s' "$KEY" | gcloud secrets versions add typesafe-api-key --data-file=- --project wind-spirit-prod
+gcloud run services update llm-proxy --project wind-spirit-prod --region us-central1 \
+  --update-secrets TYPESAFE_API_KEY=typesafe-api-key:latest
+curl -s "$URL/health" | jq .typesafe      # "enabled"
+```
+
+OpenRouter's is stored in Secret Manager as `openrouter-api-key`
 (project `wind-spirit-prod`; `llm-proxy-sa` has `roles/secretmanager.secretAccessor` on it) and reaches
 the container only as the env var `OPENROUTER_API_KEY` via `--set-secrets` on deploy. Version 1 is the
 placeholder literal `unset`, which the service treats as "no key" (provider disabled). Rules:
@@ -262,7 +295,7 @@ gcloud run deploy llm-proxy \
   --service-account llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com \
   --allow-unauthenticated \
   --set-env-vars GOOGLE_CLOUD_PROJECT=wind-spirit-prod,VERTEX_LOCATION=global,ANTHROPIC_LOCATION=global,MAAS_LOCATION=global,MODEL_CHEAP=gemini-3.5-flash-lite,MODEL_ROUTINE=gemini-3.8-flash,MODEL_CAPABLE=gemini-3.1-pro-preview,MODEL_PREMIUM=gemini-3.1-pro-preview,REQUIRE_AUTH=true,REQUIRE_INVITE=true,DAILY_TOKEN_QUOTA=2000000 \
-  --set-secrets OPENROUTER_API_KEY=openrouter-api-key:latest \
+  --set-secrets OPENROUTER_API_KEY=openrouter-api-key:latest,TYPESAFE_API_KEY=typesafe-api-key:latest \
   --timeout 300 --concurrency 40 --memory 512Mi --cpu 1 \
   --min-instances 0 --max-instances 5
 ```
