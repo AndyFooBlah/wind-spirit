@@ -10,7 +10,7 @@ import { DECISION_SCHEMA, HOST_SCHEMA, type ChiefDecisionJson, type HostDecision
 import { parseDecision, parseHostDecision } from './parse.js';
 import { renderChronicle } from './conversation.js';
 import { TIERS, classify, type Tier, type TierName } from './tiers.js';
-import type { LlmClient } from './client.js';
+import type { LlmClient, ModelClass } from './client.js';
 
 export type Speed = 'pause' | 'step' | 'slow' | 'normal' | 'fast' | 'veryfast';
 export interface JournalEntry { tick: number; requestedAt: number; village: number; reason: string; text: string; source: 'model' | 'habit'; dropped?: string[]; }
@@ -121,7 +121,11 @@ export class ChiefScheduler {
       const view = buildView(w, host, { events: this.eventsSince.get(host.id) ?? [], capNames: this.o.capNames, chronicle: renderChronicle(w, host) });
       const p = w.parties.find(x => x.id === party); const m: Mandate = p ? { ...mandate, offer: cargoOf(p) } : mandate;
       const user = visitorPrompt(view, guest?.name ?? 'strangers', m, id => commodityById(w, id)?.name ?? id, id => recipeById(w, id)?.name ?? id);
-      const tier = this.tier(); const hostClass = tier.impactful === 'habit' ? 'capable' : tier.impactful;
+      // Host answers are pinned to `cheapest`, not the tier's impactful class: on the threat-weak cases
+      // (tribute demanded by a village a third our size, where the answer is refuse) 2.5 Flash-Lite answers
+      // 6/6 where 3.8 Flash accepts 5 of 6 and 3.5 Flash-Lite 3 of 6. See #28 and docs/evals-notes.md.
+      // It costs a little journal quality until the judgment moves behind the Judge adapter (#27).
+      const hostClass: ModelClass = 'cheapest';
       const res = await this.o.client.generate({ class: hostClass, system: systemPrompt(view), messages: [{ role: 'user', text: user }], schema: HOST_SCHEMA, maxOutputTokens: 4000, temperature: 0.7, thinkingLevel: 'low' });
       this.spent.set(this.key(host, w), (this.spent.get(this.key(host, w)) ?? 0) + res.usage.input + res.usage.output);
       const json = (res.json ?? safeJson(res.text)) as HostDecisionJson | undefined;
