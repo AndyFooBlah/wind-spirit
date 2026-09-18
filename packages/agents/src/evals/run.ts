@@ -87,6 +87,9 @@ async function main() {
   if (cats.length) cases = cases.filter(c => cats.includes(c.category)); if (limit) cases = cases.slice(0, limit);
   const ids = arg('ids', '').split(',').filter(Boolean); if (ids.length) cases = cases.filter(c => ids.some(p => c.id.includes(p)));
   const merge = argv.includes('--merge');
+  // Repeats, because one observation of a sampled model tells you almost nothing: `--ids threat-weak --repeat 5`.
+  const repeat = Math.max(1, Number(arg('repeat', '1')));
+  if (repeat > 1) cases = cases.flatMap(c => Array.from({ length: repeat }, (_, k) => ({ ...c, id: `${c.id}#${k}` })));
   const token = await anonToken(proxy); const client = new HttpLlmClient(proxy, async () => token); const judge = withJudge ? new HttpLlmClient(proxy, async () => token) : undefined;
   mkdirSync('out/evals', { recursive: true });
   for (const model of models) {

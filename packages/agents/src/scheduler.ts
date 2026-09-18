@@ -139,12 +139,13 @@ export class ChiefScheduler {
       const partySize = p?.members.length;
       const decided = await this.judgeHost(view, guest?.name ?? 'strangers', m, cname, rname, host.id, partySize);
       const user = visitorPrompt(view, guest?.name ?? 'strangers', m, cname, rname, decided, partySize);
-      // Without a judge the model both decides and writes, and it is pinned to `cheapest`: on the threat-weak
-      // cases (tribute demanded by a village a third our size) 2.5 Flash-Lite refuses 6/6 where 3.8 Flash
-      // accepts 5 of 6 and 3.5 Flash-Lite 3 of 6. See #28. With a judge the decision is not the model's, so
-      // the tier's own class writes the prose.
+      // The tier's own class answers, judge or no judge. Host answers were pinned to `cheapest` while the
+      // threat-weak cases looked like a model failure; they were a mis-sized case (a war band measured against the
+      // whole village, not the adults who fight it) plus a prompt that never said how many were at the gate. With
+      // the party size and the village's reckoning of the odds stated, 3.8 Flash, 3.5 Flash-Lite and 2.5 Flash-Lite
+      // all refuse 10 of 10 on that case, so the pin only cost prose. See #28.
       const tier = this.tier();
-      const hostClass: ModelClass = decided ? (tier.impactful === 'habit' ? 'capable' : tier.impactful) : 'cheapest';
+      const hostClass: ModelClass = tier.impactful === 'habit' ? 'capable' : tier.impactful;
       const res = await this.o.client.generate({ class: hostClass, system: systemPrompt(view), messages: [{ role: 'user', text: user }], schema: HOST_SCHEMA, maxOutputTokens: 4000, temperature: 0.7, thinkingLevel: 'low' });
       this.spent.set(this.key(host, w), (this.spent.get(this.key(host, w)) ?? 0) + res.usage.input + res.usage.output);
       const json = (res.json ?? safeJson(res.text)) as HostDecisionJson | undefined;

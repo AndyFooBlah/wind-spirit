@@ -491,7 +491,7 @@ strong they are against how strong you are" but was never told how many were at 
 judgment state now both carry the party size. And rather than making a stone-age chief do arithmetic, both now carry
 the village's own reckoning of the odds (`strengthReckoning`), banded from the table above.
 
-Measured with `run-judge.ts --tasks host --repeat 3`, 45 observations per model:
+Measured with `run-judge.ts --tasks host --repeat 3`:
 
 | | threat-weak before | after the case fix | after the reckoning |
 |---|---|---|---|
@@ -500,7 +500,16 @@ Measured with `run-judge.ts --tasks host --repeat 3`, 45 observations per model:
 
 So the tier actually at fault was thrifty, not standard, and neither is now. On the original ambiguous case 3.8 Flash
 with the reckoning refuses two times in six, which is the right shape of answer for a fight that really could go
-either way.
+either way. On the chief's own path rather than the judge's, with the same information, 3.8 Flash, 3.5 Flash-Lite and
+2.5 Flash-Lite all refuse ten times out of ten, so host answers no longer need pinning to the cheapest model and the
+tier's own class writes the visitor prose again.
+
+**How stable is that?** The threat-weak figure is: six of six in every one of seven runs, thirty-six observations,
+every one a refusal at the same confidence. The *overall* host score is not. The same forty-five observations, same
+code, same corpus, run seven times, scored 45, 37, 41, 44, 45, 45 and 40 — between 82% and 100%. All of the movement
+is in `fair` and `greedy`, neither of which this change touches. Which is the same lesson again, one rung up: forty-
+five observations look like plenty until you run them twice, and a single run of a sampled model is a measurement
+with an error bar nobody printed.
 
 **The lesson for the eval, which is the more valuable half.** Fifteen visitor cases, ten of them easy, average to
 0.93 for everyone, and a model that pays every bully sits inside that number. The report now breaks out every case
