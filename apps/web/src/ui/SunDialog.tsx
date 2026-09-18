@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useGame, openSun, askSunSpirit, sunQuestionsLeft, tickLabel, SUN_QUESTIONS_A_YEAR } from '../store/game.ts';
+import { Portrait } from './Portrait.tsx';
 
 /** The sun spirit: three questions a year to a voice that sees everything. The game does not pause; the answer is about the moment you asked. */
 export function SunDialog() {
@@ -12,7 +13,7 @@ export function SunDialog() {
   return (
     <div className="modal-back" onClick={() => openSun(false)}>
       <div className="modal dream sun" onClick={e => e.stopPropagation()}>
-        <div className="panel-head"><div><h3>The sun spirit</h3><div className="small muted">It sees every village, every store and every recipe, and the past. Ask why. {left} of {SUN_QUESTIONS_A_YEAR} questions left this year; the world keeps moving while it answers.</div></div>
+        <div className="panel-head"><Portrait face="spirit-sun" size={52} title="the sun spirit" /><div><h3>The sun spirit</h3><div className="small muted">It sees every village, every store and every recipe, and the past. Ask why. {left} of {SUN_QUESTIONS_A_YEAR} questions left this year; the world keeps moving while it answers.</div></div>
           <button className="ghost" onClick={() => openSun(false)}>Close</button></div>
         <div className="turns">
           {!sun.turns.length && !sun.asking && <div className="muted">Nothing asked yet. Try: why is one village so much smaller than another, or why a chief does not trust you.</div>}

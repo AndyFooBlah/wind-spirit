@@ -79,3 +79,17 @@ served from cache).
 
 Icons are drawn by hand rather than generated. They have to take their colour from the surrounding text and stay
 legible at sixteen pixels, and a painted sprite can do neither.
+
+## Portraits (2026-09-18)
+
+The one place faces belong. Eight chiefs across age, sex and bearing, plus the sun and the wind. A chief keeps a
+face for as long as they hold the position: it is hashed from the village and the chief's own id, so it survives a
+reload and a replay and changes only when a new chief is chosen.
+
+Portraits ship as their own files under `public/art/portraits/`, not as atlas cells, because they are shown in the
+DOM rather than drawn on the canvas.
+
+One bug worth remembering, since the same hash is used in three places: the last step of the xoshiro-style mixer
+(`h ^= h >>> 13`) yields a *signed* 32-bit integer in JavaScript, so `h % n` can be negative and the array lookup
+gives `undefined`. Every such hash needs a final `>>> 0`. It showed as a chief with no face and a request for
+`portraits/undefined.png`.

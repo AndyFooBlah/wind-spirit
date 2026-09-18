@@ -66,7 +66,13 @@ def main() -> None:
             im = trim(key_out(Image.open(src)))
             target_h = heights.get(key, 128); scale = target_h / im.height
             im = im.resize((max(1, round(im.width * scale)), target_h), Image.LANCZOS)
-            im.save(os.path.join(outdir, f'{key}.png')); sprites.append((f'{g}/{key}', im))
+            im.save(os.path.join(outdir, f'{key}.png'))
+            if g == 'portraits':
+                # faces are shown in the DOM, not on the canvas, so they ship as their own files rather than atlas cells
+                pdir = os.path.join(ROOT, 'apps', 'web', 'public', 'art', 'portraits'); os.makedirs(pdir, exist_ok=True)
+                im.save(os.path.join(pdir, f'{key}.png'), optimize=True)
+                continue
+            sprites.append((f'{g}/{key}', im))
     if not sprites: print('no picks yet'); return
     # simple shelf packing into one atlas
     sprites.sort(key=lambda s: -s[1].height); W = 2048; x = y = shelf = 0
