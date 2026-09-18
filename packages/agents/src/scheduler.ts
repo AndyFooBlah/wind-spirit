@@ -121,9 +121,9 @@ export class ChiefScheduler {
   }
 
   /** Ask the judge how to answer envoys. A judge that errors is not a reason to drop the visit: the model decides instead. */
-  private async judgeHost(view: VillageView, from: string, mandate: Mandate, cname: (id: string) => string, rname: (id: string) => string, village: number): Promise<HostValue | undefined> {
+  private async judgeHost(view: VillageView, from: string, mandate: Mandate, cname: (id: string) => string, rname: (id: string) => string, village: number, partySize?: number): Promise<HostValue | undefined> {
     const judge = this.o.judge?.(); if (!judge) return undefined;
-    try { return (await judge.hostAnswer({ view, from, mandate, cname, rname })).value; }
+    try { return (await judge.hostAnswer({ view, from, mandate, cname, rname, partySize })).value; }
     catch (err) { this.o.onError?.(err, village); return undefined; }
   }
 
@@ -136,8 +136,9 @@ export class ChiefScheduler {
       const cname = (id: string) => commodityById(w, id)?.name ?? id;
       const rname = (id: string) => recipeById(w, id)?.name ?? id;
       // The judge answers if there is one; the model then writes the terms and the journal for that answer.
-      const decided = await this.judgeHost(view, guest?.name ?? 'strangers', m, cname, rname, host.id);
-      const user = visitorPrompt(view, guest?.name ?? 'strangers', m, cname, rname, decided);
+      const partySize = p?.members.length;
+      const decided = await this.judgeHost(view, guest?.name ?? 'strangers', m, cname, rname, host.id, partySize);
+      const user = visitorPrompt(view, guest?.name ?? 'strangers', m, cname, rname, decided, partySize);
       // Without a judge the model both decides and writes, and it is pinned to `cheapest`: on the threat-weak
       // cases (tribute demanded by a village a third our size) 2.5 Flash-Lite refuses 6/6 where 3.8 Flash
       // accepts 5 of 6 and 3.5 Flash-Lite 3 of 6. See #28. With a judge the decision is not the model's, so

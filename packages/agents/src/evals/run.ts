@@ -43,7 +43,7 @@ async function runCaseOnce(client: HttpLlmClient, model: string, c: EvalCase, ju
     if (c.kind === 'host') {
       const cname = (id: string) => c.view.names.commodities && Object.entries(c.view.names.commodities).find(([, v]) => v === id)?.[0] || id;
       const rname = (id: string) => Object.entries(c.view.names.recipes).find(([, v]) => v === id)?.[0] || id;
-      const user = visitorPrompt(c.view, c.guestName ?? 'strangers', c.mandate!, cname, rname);
+      const user = visitorPrompt(c.view, c.guestName ?? 'strangers', c.mandate!, cname, rname, undefined, c.guestSize);
       const res = await client.generate({ ...base, class: 'capable', system: systemPrompt(c.view), messages: [{ role: 'user', text: user }], schema: HOST_SCHEMA, maxOutputTokens: 4000 } as GenerateRequest);
       const json = (res.json ?? safeJson(res.text)) as HostDecisionJson | undefined;
       if (!json || !json.answer) return fail(c, model, res, 'no host json', t0);

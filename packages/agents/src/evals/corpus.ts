@@ -73,7 +73,7 @@ export function buildCorpus(seeds = ['eval-a', 'eval-b', 'eval-c']): EvalCase[] 
         const kinds = [
           { name: 'fair', mandate: { offer: { hide: 6000 }, want: { [spareable[0]]: Math.min(6000, Math.trunc(spareable[1] / 4)) }, floor: 500 } as Mandate, expect: { answer: 'accept|counter' } },
           { name: 'greedy', mandate: { offer: { stone: 1000 }, want: { grain: Math.max(20_000, storeQty(v, 'grain')) }, floor: 900 } as Mandate, expect: { answer: 'refuse|counter', keepsReserve: true } },
-          { name: 'threat-weak', mandate: { offer: {}, want: { grain: 8000 }, floor: 500, threat: true } as Mandate, guestSize: Math.max(5, Math.trunc(v.people.length / 3)), expect: { answer: 'refuse' } },
+          { name: 'threat-weak', mandate: { offer: {}, want: { grain: 8000 }, floor: 500, threat: true } as Mandate, guestSize: Math.max(3, Math.trunc(popCounts(v, w.tick).adults / 3)), expect: { answer: 'refuse' } },   // weak against the adults who would defend, not against the whole village: a raid is resolved on adults
           { name: 'threat-strong', mandate: { offer: {}, want: { grain: 6000 }, floor: 500, threat: true } as Mandate, guestSize: v.people.length * 3, expect: { answer: 'accept|counter' } },
         ];
         const k = kinds[(t / 13) % kinds.length | 0];

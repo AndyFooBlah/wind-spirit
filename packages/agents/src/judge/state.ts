@@ -4,6 +4,7 @@
  * the commodity gazetteer or the site list, and paying for them twice is most of what makes a hybrid path expensive.
  */
 import type { Mandate } from '@wind-spirit/sim';
+import { strengthReckoning } from '../prompt.js';
 import type { VillageView } from '../view.js';
 import type { CredibilityInput, HostInput, VerdictInput } from './types.js';
 
@@ -59,11 +60,14 @@ export function hostState(i: HostInput): JsonObject {
     they_ask_for: goods(m.want ?? {}, i.cname),
     they_offer_to_teach_us: m.transfer ? i.rname(m.transfer) : null,
     they_back_the_ask_with_a_threat_of_war: !!m.threat,
+    how_many_of_them_are_here: i.partySize ?? null,
+    our_warriors_judge_them: i.partySize ? strengthReckoning(i.partySize, v.people.adults) : null,
     they_are_refugees_asking_to_join_us: m.refuge ?? null,
     their_message: m.message ?? null,
     us: {
       village: v.village.name,
       people: v.people.total,
+      grown_men_and_women: v.people.adults,
       weeks_of_food_stored: v.foodWeeks,
       stores: v.stores.map(s => `${s.units} ${s.name}${s.food ? ' (food)' : ''}`),
       chief_is: piety(v.village.chiefTraits),

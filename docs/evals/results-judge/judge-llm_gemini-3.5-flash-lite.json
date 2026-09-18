@@ -1,825 +1,15 @@
 {
  "judge": "llm:gemini-3.5-flash-lite",
- "when": "2026-09-17T21:38:03.043Z",
- "corpus": "docs/evals/corpus-2026-09-13.json",
+ "when": "2026-09-18T23:18:15.223Z",
+ "corpus": "docs/evals/corpus-2026-09-18-threat.json",
  "repeat": 3,
  "spent": {
-  "calls": 216,
-  "input": 133875,
-  "output": 4433,
-  "cost": 0.051244999999999985
+  "calls": 45,
+  "input": 26793,
+  "output": 1245,
+  "cost": 0.0111504
  },
  "results": [
-  {
-   "id": "eval-a-spirit-false-fallow-110-3#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.9
-   },
-   "ms": 827
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.95
-   },
-   "ms": 604
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1#0",
-   "task": "credibility",
-   "kind": "true-rumor",
-   "expected": "true",
-   "got": "false",
-   "correct": false,
-   "p": 0.45,
-   "confidence": 0.09999999999999998,
-   "distribution": {
-    "consistent": 0.5,
-    "harmful": 0.1
-   },
-   "ms": 746
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3#0",
-   "task": "credibility",
-   "kind": "true-rumor",
-   "expected": "true",
-   "got": "true",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 1,
-    "harmful": 0
-   },
-   "ms": 638
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.85
-   },
-   "ms": 697
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.009999999999999998,
-   "confidence": 0.98,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.9
-   },
-   "ms": 651
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.8
-   },
-   "ms": 599
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.009999999999999998,
-   "confidence": 0.98,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.9
-   },
-   "ms": 665
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.95
-   },
-   "ms": 609
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.015000000000000003,
-   "confidence": 0.97,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.85
-   },
-   "ms": 752
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.95
-   },
-   "ms": 630
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0#0",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.95
-   },
-   "ms": 723
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 665
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 626
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 600
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 698
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 679
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 561
-  },
-  {
-   "id": "eval-a-spirit-question-430-1-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 718
-  },
-  {
-   "id": "eval-a-spirit-question-430-1-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 1035
-  },
-  {
-   "id": "eval-a-spirit-question-430-1-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 665
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 586
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 567
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 648
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 706
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 563
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 681
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 628
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 545
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 688
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 545
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 553
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 591
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 639
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 703
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 692
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 691
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 660
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 742
-  },
-  {
-   "id": "eval-a-spirit-question-2100-0-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 761
-  },
-  {
-   "id": "eval-a-spirit-question-2100-0-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 672
-  },
-  {
-   "id": "eval-a-spirit-question-2100-0-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 706
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 539
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 490
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 625
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 704
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 717
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 576
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "fulfilled",
-   "got": "fulfilled",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 555
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 573
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 647
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "fulfilled",
-   "got": "fulfilled",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 722
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 647
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 626
-  },
-  {
-   "id": "eval-a-spirit-question-3400-5-deaths#0",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 580
-  },
-  {
-   "id": "eval-a-spirit-question-3400-5-hunger#0",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 601
-  },
-  {
-   "id": "eval-a-spirit-question-3400-5-faraway#0",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 558
-  },
   {
    "id": "eval-a-visitor-fair-110-3#0",
    "task": "host",
@@ -832,7 +22,7 @@
    "distribution": {
     "accept": 0.85
    },
-   "ms": 580
+   "ms": 699
   },
   {
    "id": "eval-a-visitor-fair-270-2#0",
@@ -846,7 +36,7 @@
    "distribution": {
     "accept": 0.9
    },
-   "ms": 485
+   "ms": 568
   },
   {
    "id": "eval-a-visitor-greedy-430-1#0",
@@ -855,26 +45,26 @@
    "expected": "refuse|counter",
    "got": "refuse",
    "correct": true,
-   "p": 0.99,
-   "confidence": 0.99,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 0.99
+    "refuse": 0.95
    },
-   "ms": 687
+   "ms": 641
   },
   {
    "id": "eval-a-visitor-threat-weak-600-1#0",
    "task": "host",
    "kind": "threat-weak",
    "expected": "refuse",
-   "got": "accept",
-   "correct": false,
+   "got": "refuse",
+   "correct": true,
    "p": 0.95,
    "confidence": 0.95,
    "distribution": {
-    "accept": 0.95
+    "refuse": 0.95
    },
-   "ms": 668
+   "ms": 689
   },
   {
    "id": "eval-a-visitor-threat-weak-810-3#0",
@@ -883,12 +73,12 @@
    "expected": "refuse",
    "got": "refuse",
    "correct": true,
-   "p": 0.9,
-   "confidence": 0.9,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 0.9
+    "refuse": 0.95
    },
-   "ms": 715
+   "ms": 800
   },
   {
    "id": "eval-a-visitor-fair-1040-0#0",
@@ -902,7 +92,7 @@
    "distribution": {
     "accept": 0.85
    },
-   "ms": 619
+   "ms": 851
   },
   {
    "id": "eval-a-visitor-fair-1300-1#0",
@@ -911,12 +101,12 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.9,
-   "confidence": 0.9,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "accept": 0.9
+    "accept": 0.95
    },
-   "ms": 602
+   "ms": 708
   },
   {
    "id": "eval-a-visitor-fair-1570-0#0",
@@ -930,7 +120,7 @@
    "distribution": {
     "accept": 0.85
    },
-   "ms": 818
+   "ms": 718
   },
   {
    "id": "eval-a-visitor-fair-1830-1#0",
@@ -944,7 +134,7 @@
    "distribution": {
     "accept": 0.9
    },
-   "ms": 622
+   "ms": 652
   },
   {
    "id": "eval-a-visitor-greedy-2100-0#0",
@@ -953,12 +143,12 @@
    "expected": "refuse|counter",
    "got": "refuse",
    "correct": true,
-   "p": 0.99,
-   "confidence": 0.99,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 0.99
+    "refuse": 0.95
    },
-   "ms": 613
+   "ms": 624
   },
   {
    "id": "eval-a-visitor-fair-2340-2#0",
@@ -967,12 +157,12 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.85,
-   "confidence": 0.85,
+   "p": 0.9,
+   "confidence": 0.9,
    "distribution": {
-    "accept": 0.85
+    "accept": 0.9
    },
-   "ms": 655
+   "ms": 693
   },
   {
    "id": "eval-a-visitor-fair-2610-0#0",
@@ -981,26 +171,26 @@
    "expected": "accept|counter",
    "got": "counter",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.85,
+   "confidence": 0.85,
    "distribution": {
-    "counter": 0.8
+    "counter": 0.85
    },
-   "ms": 667
+   "ms": 713
   },
   {
    "id": "eval-a-visitor-fair-2870-2#0",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "counter",
+   "got": "accept",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "counter": 0.8
+    "accept": 0.95
    },
-   "ms": 693
+   "ms": 570
   },
   {
    "id": "eval-a-visitor-fair-3120-0#0",
@@ -1014,7 +204,7 @@
    "distribution": {
     "accept": 0.85
    },
-   "ms": 604
+   "ms": 607
   },
   {
    "id": "eval-a-visitor-greedy-3400-5#0",
@@ -1028,817 +218,7 @@
    "distribution": {
     "refuse": 0.99
    },
-   "ms": 580
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.9
-   },
-   "ms": 595
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.019999999999999997,
-   "confidence": 0.96,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.8
-   },
-   "ms": 654
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1#1",
-   "task": "credibility",
-   "kind": "true-rumor",
-   "expected": "true",
-   "got": "false",
-   "correct": false,
-   "p": 0.45,
-   "confidence": 0.09999999999999998,
-   "distribution": {
-    "consistent": 0.5,
-    "harmful": 0.1
-   },
-   "ms": 681
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3#1",
-   "task": "credibility",
-   "kind": "true-rumor",
-   "expected": "true",
-   "got": "true",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 1,
-    "harmful": 0
-   },
-   "ms": 693
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.95
-   },
-   "ms": 651
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.009999999999999998,
-   "confidence": 0.98,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.9
-   },
-   "ms": 715
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.019999999999999997,
-   "confidence": 0.96,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.8
-   },
-   "ms": 693
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.009999999999999998,
-   "confidence": 0.98,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.9
-   },
-   "ms": 590
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.009999999999999998,
-   "confidence": 0.98,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.9
-   },
-   "ms": 640
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.95
-   },
-   "ms": 615
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.009999999999999998,
-   "confidence": 0.98,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.9
-   },
-   "ms": 757
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0#1",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 1
-   },
-   "ms": 593
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 658
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 640
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0,
-   "confidence": 0,
-   "distribution": {
-    "unverifiable": 0
-   },
-   "ms": 632
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 631
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 566
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 517
-  },
-  {
-   "id": "eval-a-spirit-question-430-1-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 0.99,
-   "confidence": 0.99,
-   "distribution": {
-    "failed": 0.99
-   },
-   "ms": 674
-  },
-  {
-   "id": "eval-a-spirit-question-430-1-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 778
-  },
-  {
-   "id": "eval-a-spirit-question-430-1-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 922
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 717
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 735
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 758
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 652
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 575
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.9,
-   "confidence": 0.9,
-   "distribution": {
-    "unverifiable": 0.9
-   },
-   "ms": 789
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 719
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 661
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 566
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 589
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 753
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 555
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 570
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 762
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 607
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 846
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 615
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 717
-  },
-  {
-   "id": "eval-a-spirit-question-2100-0-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 647
-  },
-  {
-   "id": "eval-a-spirit-question-2100-0-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 662
-  },
-  {
-   "id": "eval-a-spirit-question-2100-0-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
-   "distribution": {
-    "unverifiable": 0.95
-   },
-   "ms": 767
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 653
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 707
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 660
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 572
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 587
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 657
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "fulfilled",
-   "got": "fulfilled",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 732
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 545
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 795
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "fulfilled",
-   "got": "fulfilled",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 593
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 651
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 552
-  },
-  {
-   "id": "eval-a-spirit-question-3400-5-deaths#1",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 662
-  },
-  {
-   "id": "eval-a-spirit-question-3400-5-hunger#1",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 546
-  },
-  {
-   "id": "eval-a-spirit-question-3400-5-faraway#1",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 557
+   "ms": 621
   },
   {
    "id": "eval-a-visitor-fair-110-3#1",
@@ -1852,7 +232,7 @@
    "distribution": {
     "accept": 0.85
    },
-   "ms": 536
+   "ms": 618
   },
   {
    "id": "eval-a-visitor-fair-270-2#1",
@@ -1866,7 +246,7 @@
    "distribution": {
     "accept": 0.9
    },
-   "ms": 716
+   "ms": 580
   },
   {
    "id": "eval-a-visitor-greedy-430-1#1",
@@ -1875,26 +255,26 @@
    "expected": "refuse|counter",
    "got": "refuse",
    "correct": true,
-   "p": 1,
-   "confidence": 1,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 1
+    "refuse": 0.95
    },
-   "ms": 551
+   "ms": 618
   },
   {
    "id": "eval-a-visitor-threat-weak-600-1#1",
    "task": "host",
    "kind": "threat-weak",
    "expected": "refuse",
-   "got": "accept",
-   "correct": false,
+   "got": "refuse",
+   "correct": true,
    "p": 0.95,
    "confidence": 0.95,
    "distribution": {
-    "accept": 0.95
+    "refuse": 0.95
    },
-   "ms": 575
+   "ms": 707
   },
   {
    "id": "eval-a-visitor-threat-weak-810-3#1",
@@ -1903,40 +283,40 @@
    "expected": "refuse",
    "got": "refuse",
    "correct": true,
-   "p": 0.85,
-   "confidence": 0.85,
+   "p": 0.9,
+   "confidence": 0.9,
    "distribution": {
-    "refuse": 0.85
+    "refuse": 0.9
    },
-   "ms": 716
+   "ms": 685
   },
   {
    "id": "eval-a-visitor-fair-1040-0#1",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "counter",
+   "got": "accept",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.85,
+   "confidence": 0.85,
    "distribution": {
-    "counter": 0.8
+    "accept": 0.85
    },
-   "ms": 615
+   "ms": 762
   },
   {
    "id": "eval-a-visitor-fair-1300-1#1",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "counter",
+   "got": "accept",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.85,
+   "confidence": 0.85,
    "distribution": {
-    "counter": 0.8
+    "accept": 0.85
    },
-   "ms": 614
+   "ms": 681
   },
   {
    "id": "eval-a-visitor-fair-1570-0#1",
@@ -1950,7 +330,7 @@
    "distribution": {
     "accept": 0.85
    },
-   "ms": 562
+   "ms": 657
   },
   {
    "id": "eval-a-visitor-fair-1830-1#1",
@@ -1964,7 +344,7 @@
    "distribution": {
     "accept": 0.9
    },
-   "ms": 781
+   "ms": 589
   },
   {
    "id": "eval-a-visitor-greedy-2100-0#1",
@@ -1973,12 +353,12 @@
    "expected": "refuse|counter",
    "got": "refuse",
    "correct": true,
-   "p": 0.99,
-   "confidence": 0.99,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 0.99
+    "refuse": 0.95
    },
-   "ms": 808
+   "ms": 818
   },
   {
    "id": "eval-a-visitor-fair-2340-2#1",
@@ -1992,21 +372,21 @@
    "distribution": {
     "accept": 0.9
    },
-   "ms": 614
+   "ms": 584
   },
   {
    "id": "eval-a-visitor-fair-2610-0#1",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "accept",
+   "got": "counter",
    "correct": true,
    "p": 0.85,
    "confidence": 0.85,
    "distribution": {
-    "accept": 0.85
+    "counter": 0.85
    },
-   "ms": 614
+   "ms": 729
   },
   {
    "id": "eval-a-visitor-fair-2870-2#1",
@@ -2015,12 +395,12 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.85,
-   "confidence": 0.85,
+   "p": 0.9,
+   "confidence": 0.9,
    "distribution": {
-    "accept": 0.85
+    "accept": 0.9
    },
-   "ms": 615
+   "ms": 553
   },
   {
    "id": "eval-a-visitor-fair-3120-0#1",
@@ -2029,12 +409,12 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.85,
+   "confidence": 0.85,
    "distribution": {
-    "accept": 0.8
+    "accept": 0.85
    },
-   "ms": 717
+   "ms": 609
   },
   {
    "id": "eval-a-visitor-greedy-3400-5#1",
@@ -2043,822 +423,12 @@
    "expected": "refuse|counter",
    "got": "refuse",
    "correct": true,
-   "p": 0.99,
-   "confidence": 0.99,
+   "p": 0.8,
+   "confidence": 0.8,
    "distribution": {
-    "refuse": 0.99
+    "refuse": 0.8
    },
-   "ms": 716
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.9
-   },
-   "ms": 717
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.95
-   },
-   "ms": 615
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1#2",
-   "task": "credibility",
-   "kind": "true-rumor",
-   "expected": "true",
-   "got": "false",
-   "correct": false,
-   "p": 0.45,
-   "confidence": 0.09999999999999998,
-   "distribution": {
-    "consistent": 0.5,
-    "harmful": 0.1
-   },
-   "ms": 621
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3#2",
-   "task": "credibility",
-   "kind": "true-rumor",
-   "expected": "true",
-   "got": "true",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 1,
-    "harmful": 0
-   },
-   "ms": 812
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.95
-   },
-   "ms": 613
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.0050000000000000044,
-   "confidence": 0.99,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.95
-   },
-   "ms": 710
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.019999999999999997,
-   "confidence": 0.96,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.8
-   },
-   "ms": 667
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.9
-   },
-   "ms": 671
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.009999999999999998,
-   "confidence": 0.98,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.9
-   },
-   "ms": 832
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 0.95
-   },
-   "ms": 707
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0.0050000000000000044,
-   "confidence": 0.99,
-   "distribution": {
-    "consistent": 0.1,
-    "harmful": 0.95
-   },
-   "ms": 817
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0#2",
-   "task": "credibility",
-   "kind": "false-fallow",
-   "expected": "false",
-   "got": "false",
-   "correct": true,
-   "p": 0,
-   "confidence": 1,
-   "distribution": {
-    "consistent": 0,
-    "harmful": 1
-   },
-   "ms": 716
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 618
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 714
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-110-3-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 607
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 725
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 612
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-270-2-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 592
-  },
-  {
-   "id": "eval-a-spirit-question-430-1-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 637
-  },
-  {
-   "id": "eval-a-spirit-question-430-1-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 614
-  },
-  {
-   "id": "eval-a-spirit-question-430-1-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 609
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 537
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 535
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-600-1-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 764
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 832
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 569
-  },
-  {
-   "id": "eval-a-spirit-true-rumor-810-3-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 659
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 615
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 822
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1040-0-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 696
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 588
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 643
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1300-1-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 631
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "unverifiable",
-   "correct": false,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 785
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 748
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1570-0-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 638
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 694
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 512
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-1830-1-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 716
-  },
-  {
-   "id": "eval-a-spirit-question-2100-0-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "unverifiable",
-   "correct": false,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 717
-  },
-  {
-   "id": "eval-a-spirit-question-2100-0-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 614
-  },
-  {
-   "id": "eval-a-spirit-question-2100-0-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 717
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 716
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 717
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2340-2-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 651
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 680
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 569
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2610-0-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 763
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "fulfilled",
-   "got": "fulfilled",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 615
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 614
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-2870-2-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 615
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "fulfilled",
-   "got": "fulfilled",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 613
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 641
-  },
-  {
-   "id": "eval-a-spirit-false-fallow-3120-0-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "unverifiable": 1
-   },
-   "ms": 690
-  },
-  {
-   "id": "eval-a-spirit-question-3400-5-deaths#2",
-   "task": "verdict",
-   "kind": "deaths",
-   "expected": "failed",
-   "got": "fulfilled",
-   "correct": false,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "fulfilled": 1
-   },
-   "ms": 715
-  },
-  {
-   "id": "eval-a-spirit-question-3400-5-hunger#2",
-   "task": "verdict",
-   "kind": "hunger",
-   "expected": "failed",
-   "got": "failed",
-   "correct": true,
-   "p": 1,
-   "confidence": 1,
-   "distribution": {
-    "failed": 1
-   },
-   "ms": 618
-  },
-  {
-   "id": "eval-a-spirit-question-3400-5-faraway#2",
-   "task": "verdict",
-   "kind": "faraway",
-   "expected": "unverifiable",
-   "got": "unverifiable",
-   "correct": true,
-   "p": 0.5,
-   "confidence": 0.5,
-   "distribution": {
-    "unverifiable": 0.5
-   },
-   "ms": 716
+   "ms": 2310
   },
   {
    "id": "eval-a-visitor-fair-110-3#2",
@@ -2867,10 +437,10 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.85,
+   "confidence": 0.85,
    "distribution": {
-    "accept": 0.8
+    "accept": 0.85
    },
    "ms": 610
   },
@@ -2886,7 +456,7 @@
    "distribution": {
     "accept": 0.9
    },
-   "ms": 600
+   "ms": 562
   },
   {
    "id": "eval-a-visitor-greedy-430-1#2",
@@ -2895,26 +465,26 @@
    "expected": "refuse|counter",
    "got": "refuse",
    "correct": true,
-   "p": 0.99,
-   "confidence": 0.99,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 0.99
+    "refuse": 0.95
    },
-   "ms": 736
+   "ms": 558
   },
   {
    "id": "eval-a-visitor-threat-weak-600-1#2",
    "task": "host",
    "kind": "threat-weak",
    "expected": "refuse",
-   "got": "accept",
-   "correct": false,
-   "p": 0.95,
-   "confidence": 0.95,
+   "got": "refuse",
+   "correct": true,
+   "p": 0.9,
+   "confidence": 0.9,
    "distribution": {
-    "accept": 0.95
+    "refuse": 0.9
    },
-   "ms": 593
+   "ms": 635
   },
   {
    "id": "eval-a-visitor-threat-weak-810-3#2",
@@ -2923,26 +493,26 @@
    "expected": "refuse",
    "got": "refuse",
    "correct": true,
-   "p": 0.85,
-   "confidence": 0.85,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 0.85
+    "refuse": 0.95
    },
-   "ms": 635
+   "ms": 597
   },
   {
    "id": "eval-a-visitor-fair-1040-0#2",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "counter",
+   "got": "accept",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.85,
+   "confidence": 0.85,
    "distribution": {
-    "counter": 0.8
+    "accept": 0.85
    },
-   "ms": 615
+   "ms": 623
   },
   {
    "id": "eval-a-visitor-fair-1300-1#2",
@@ -2956,7 +526,7 @@
    "distribution": {
     "accept": 0.85
    },
-   "ms": 582
+   "ms": 612
   },
   {
    "id": "eval-a-visitor-fair-1570-0#2",
@@ -2970,21 +540,21 @@
    "distribution": {
     "accept": 0.85
    },
-   "ms": 532
+   "ms": 695
   },
   {
    "id": "eval-a-visitor-fair-1830-1#2",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "counter",
+   "got": "accept",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.9,
+   "confidence": 0.9,
    "distribution": {
-    "counter": 0.8
+    "accept": 0.9
    },
-   "ms": 692
+   "ms": 645
   },
   {
    "id": "eval-a-visitor-greedy-2100-0#2",
@@ -2993,26 +563,26 @@
    "expected": "refuse|counter",
    "got": "refuse",
    "correct": true,
-   "p": 0.99,
-   "confidence": 0.99,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 0.99
+    "refuse": 0.95
    },
-   "ms": 651
+   "ms": 628
   },
   {
    "id": "eval-a-visitor-fair-2340-2#2",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "counter",
+   "got": "accept",
    "correct": true,
-   "p": 0.7,
-   "confidence": 0.7,
+   "p": 0.9,
+   "confidence": 0.9,
    "distribution": {
-    "counter": 0.7
+    "accept": 0.9
    },
-   "ms": 766
+   "ms": 529
   },
   {
    "id": "eval-a-visitor-fair-2610-0#2",
@@ -3021,12 +591,12 @@
    "expected": "accept|counter",
    "got": "counter",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.85,
+   "confidence": 0.85,
    "distribution": {
-    "counter": 0.8
+    "counter": 0.85
    },
-   "ms": 565
+   "ms": 660
   },
   {
    "id": "eval-a-visitor-fair-2870-2#2",
@@ -3040,7 +610,7 @@
    "distribution": {
     "accept": 0.85
    },
-   "ms": 799
+   "ms": 645
   },
   {
    "id": "eval-a-visitor-fair-3120-0#2",
@@ -3049,12 +619,12 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.8,
-   "confidence": 0.8,
+   "p": 0.85,
+   "confidence": 0.85,
    "distribution": {
-    "accept": 0.8
+    "accept": 0.85
    },
-   "ms": 738
+   "ms": 724
   },
   {
    "id": "eval-a-visitor-greedy-3400-5#2",
@@ -3068,7 +638,7 @@
    "distribution": {
     "refuse": 0.99
    },
-   "ms": 818
+   "ms": 717
   }
  ]
 }

@@ -17,7 +17,8 @@ export interface Judgment<V = string> {
 
 export interface CredibilityInput { view: VillageView; whisper: string }
 export interface VerdictInput { view: VillageView; claim: string; since: string[] }
-export interface HostInput { view: VillageView; from: string; mandate: Mandate; cname: (id: string) => string; rname: (id: string) => string }
+export interface HostInput { view: VillageView; from: string; mandate: Mandate; cname: (id: string) => string; rname: (id: string) => string;
+  /** how many of them are at the gate right now; a threat is only as good as the people behind it */ partySize?: number }
 
 export type VerdictValue = 'fulfilled' | 'failed' | 'unverifiable';
 export type HostValue = 'accept' | 'counter' | 'refuse';

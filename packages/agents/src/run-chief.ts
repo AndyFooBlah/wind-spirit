@@ -1,7 +1,8 @@
 /**
  * Proof run: one village is run by the real model through the deployed proxy; the rest use the scripted policy.
  * Usage: PROXY_URL=https://... tsx src/run-chief.ts <seed> <years> [villageId]
- * Anonymous Firebase auth is minted with the public web API key in services/llm-proxy/firebase-web-config.json.
+ * Credentials come from evals/token.ts: an anonymous Firebase user invited with WS_INVITE_CODE, plus an App Check
+ * token from the registered debug token (FIREBASE_HARNESS_API_KEY and FIREBASE_APPCHECK_DEBUG_TOKEN in .env.harness).
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { anonToken } from './evals/token.js';

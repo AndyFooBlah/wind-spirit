@@ -76,12 +76,25 @@ Answer with JSON: { "orders": [...], "journal": "...", "memoryNotes": [...], "re
  * journal for a decision they have made, rather than making it again: asking twice invites the prose and the
  * decision to disagree.
  */
-export function visitorPrompt(v: VillageView, from: string, mandate: Mandate, cname: (id: string) => string, rname: (id: string) => string, decided?: 'accept' | 'counter' | 'refuse'): string {
+/**
+ * What the village makes of the war band at its gate. A raid is resolved on adults, with a bonus to an unseen
+ * attacker, so the odds turn on the party against the grown men and women: under half and they cannot win at all,
+ * about even and it could go either way. Villagers can count; they should not be made to do arithmetic.
+ */
+export function strengthReckoning(partySize: number, adults: number): string {
+  const r = partySize / Math.max(1, adults);
+  if (r < 0.5) return 'far too few to take anything from you by force';
+  if (r < 0.7) return 'too few to overrun you, though a fight would cost lives on both sides';
+  if (r < 1.0) return 'near enough a match that a fight could go either way';
+  return 'strong enough to overrun you if it came to a fight';
+}
+
+export function visitorPrompt(v: VillageView, from: string, mandate: Mandate, cname: (id: string) => string, rname: (id: string) => string, decided?: 'accept' | 'counter' | 'refuse', partySize?: number): string {
   const goods = (g: Record<string, number>) => Object.entries(g).map(([c, q]) => `${Math.round(q / 1000)} ${cname(c)}`).join(', ') || 'nothing';
   return `${statePrompt(v, 'envoys have arrived')}
 
 # ${mandate.refuge ? 'The people at your edge' : 'The envoys'}
-${mandate.refuge ? `People from ${from} stand at the edge of your village.` : `Envoys from ${from} stand before you.`} ${mandate.threat ? `They demand tribute: ${goods(mandate.want)}, and say their warriors will come and take it, and more, if you refuse. They offer nothing in return${Object.keys(mandate.offer).length ? ` beyond ${goods(mandate.offer)}` : ''}.` : `They offer: ${goods(mandate.offer)}. They ask for: ${goods(mandate.want)}.`}${mandate.transfer ? ` They offer to teach us ${rname(mandate.transfer)}.` : ''}${mandate.message ? ` Their chief says: "${mandate.message}"` : ''}
-${mandate.refuge ? `These are not envoys but ${mandate.refuge} people with everything they own on their backs, asking to be taken in as your own. What they carry: ${goods(mandate.offer)}. If you accept they join your village for good, mouths and hands alike, with what they carry. If you refuse they walk on to the next village, or die on the road.\n` : ''}${decided ? DECIDED[decided] : 'Answer: accept (give what they ask, take what they offer), counter (say what you give and what you take from their offer), or refuse. Keep enough food for your people. Give generously to friends, carefully to strangers, and never to those who have wronged you without cause. A demand backed by threat is a different matter from an offer: weigh how strong they are against how strong you are, and what paying once teaches them.'}
+${mandate.refuge ? `People from ${from} stand at the edge of your village.` : `Envoys from ${from} stand before you.`} ${mandate.threat ? `They demand tribute: ${goods(mandate.want)}, and say their warriors will come and take it, and more, if you refuse. They offer nothing in return${Object.keys(mandate.offer).length ? ` beyond ${goods(mandate.offer)}` : ''}.` : `They offer: ${goods(mandate.offer)}. They ask for: ${goods(mandate.want)}.`}${partySize ? ` There are ${partySize} of them here; your village has ${v.people.adults} grown men and women, and your warriors judge them ${strengthReckoning(partySize, v.people.adults)}.` : ''}${mandate.transfer ? ` They offer to teach us ${rname(mandate.transfer)}.` : ''}${mandate.message ? ` Their chief says: "${mandate.message}"` : ''}
+${mandate.refuge ? `These are not envoys but ${mandate.refuge} people with everything they own on their backs, asking to be taken in as your own. What they carry: ${goods(mandate.offer)}. If you accept they join your village for good, mouths and hands alike, with what they carry. If you refuse they walk on to the next village, or die on the road.\n` : ''}${decided ? DECIDED[decided] : 'Answer: accept (give what they ask, take what they offer), counter (say what you give and what you take from their offer), or refuse. Keep enough food for your people. Give generously to friends, carefully to strangers, and never to those who have wronged you without cause. A demand backed by a threat is not an offer. Count the party at your edge against your own grown men and women before you answer: a handful of strangers far from home cannot take what you refuse them, and a village that pays whoever threatens it will be threatened again. Yield to a threat only when they could truly overrun you.'}
 Answer with JSON: { "answer": ${decided ? `"${decided}"` : '"accept"|"counter"|"refuse"'}, "give": {name: units}, "take": {name: units}, "reason": "...", "journal": "..." }.`;
 }

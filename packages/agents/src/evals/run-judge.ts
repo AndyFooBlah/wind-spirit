@@ -82,7 +82,7 @@ async function main() {
         const rname = (id: string) => Object.entries(c.view.names.recipes).find(([, v]) => v === id)?.[0] ?? id;
         const t0 = Date.now();
         try {
-          const j = await judge.hostAnswer({ view: c.view, from: c.guestName ?? 'strangers', mandate: c.mandate!, cname, rname });
+          const j = await judge.hostAnswer({ view: c.view, from: c.guestName ?? 'strangers', mandate: c.mandate!, cname, rname, partySize: c.guestSize });
           const got = String(j.value);
           results.push({ id: `${c.id}#${pass}`, task: 'host', kind, expected: allowed.join('|'), got, correct: allowed.includes(got), p: j.p, confidence: j.confidence, distribution: j.distribution, ms: Date.now() - t0 });
         } catch (e) { results.push({ id: `${c.id}#${pass}`, task: 'host', kind, expected: allowed.join('|'), got: 'ERROR', correct: false, p: 0, confidence: 0, ms: Date.now() - t0, error: (e as Error).message.slice(0, 200) }); }

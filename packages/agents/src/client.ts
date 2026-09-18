@@ -7,10 +7,27 @@ export interface LlmClient {
   stream?(req: GenerateRequest, onText: (t: string) => void): Promise<GenerateResponse>;
 }
 
-/** HTTP client for services/llm-proxy. `token` returns a Firebase ID token (or undefined when auth is off). */
+/**
+ * What a call to services/llm-proxy carries: a Firebase ID token alone (the historical shape), or the ID token
+ * plus a Firebase App Check token, which the proxy requires once APP_CHECK=enforce.
+ */
+export type ProxyCredential = string | { idToken?: string; appCheckToken?: string };
+
+/** Request headers for a credential: `Authorization: Bearer` and `X-Firebase-AppCheck`, each only when present. */
+export function proxyHeaders(cred: ProxyCredential | undefined): Record<string, string> {
+  const h: Record<string, string> = { 'content-type': 'application/json' };
+  if (!cred) return h;
+  const idToken = typeof cred === 'string' ? cred : cred.idToken;
+  const appCheck = typeof cred === 'string' ? undefined : cred.appCheckToken;
+  if (idToken) h.authorization = `Bearer ${idToken}`;
+  if (appCheck) h['x-firebase-appcheck'] = appCheck;
+  return h;
+}
+
+/** HTTP client for services/llm-proxy. `token` returns the credential (or undefined when auth is off). */
 export class HttpLlmClient implements LlmClient {
-  constructor(private baseUrl: string, private token: () => Promise<string | undefined> = async () => undefined, private fetchImpl: typeof fetch = (i, o) => fetch(i, o)) {}
-  private async headers(): Promise<Record<string, string>> { const h: Record<string, string> = { 'content-type': 'application/json' }; const t = await this.token(); if (t) h.authorization = `Bearer ${t}`; return h; }
+  constructor(private baseUrl: string, private token: () => Promise<ProxyCredential | undefined> = async () => undefined, private fetchImpl: typeof fetch = (i, o) => fetch(i, o)) {}
+  private async headers(): Promise<Record<string, string>> { return proxyHeaders(await this.token()); }
   async generate(req: GenerateRequest): Promise<GenerateResponse> {
     const res = await this.fetchImpl(`${this.baseUrl}/v1/generate`, { method: 'POST', headers: await this.headers(), body: JSON.stringify(req) });
     if (!res.ok) throw new Error(`proxy ${res.status}: ${(await res.text()).slice(0, 300)}`);

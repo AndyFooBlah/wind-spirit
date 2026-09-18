@@ -462,3 +462,49 @@ What this does **not** show: that a gamma-3 allocation *plays* better. The check
 concentrated, so the only real test is running it in the sim against the scripted policy over a century. Arguments
 (which commodity, which recipe, how many plots) are untouched here and are the harder half — though a Choice over
 the view's own candidate list would make the misspelled-name failures in `parse.ts` structurally impossible.
+
+## The tribute case was mis-specified, not the model (2026-09-18)
+
+Issue #28 reported that the standard tier pays tribute to weak bullies: `gemini-3.8-flash` accepted five of six
+`threat-weak` mandates, where Jev and 2.5 Flash-Lite refused all six. The conclusion was that 3.8 Flash is too soft
+on the tier the game ships. Checking the case against the sim's own raid model says otherwise.
+
+`threat-weak` built its war band as `max(5, pop / 3)`, a third of the *whole village*. A raid is resolved on adults.
+For the corpus's two cases that is eight attackers against eleven adults, and nine against fifteen. Running the sim's
+own combat formula twenty thousand times:
+
+| attackers | adult defenders | raid succeeds |
+|---|---|---|
+| 3 | 11 | 0.00 |
+| 6 | 11 | 0.10 |
+| 8 | 11 | 0.41 |
+| 9 | 11 | 0.60 |
+| 12 | 11 | 0.91 |
+
+A two-in-five chance of being overrun is not a bluff, and eight units of grain against a store of three thousand is
+cheap insurance. The model was reasoning correctly about a case that had been labelled "weak" on the wrong measure.
+The generator now sizes the party against the adults who would defend (`max(3, adults / 3)`), which is three and five
+for these two states, where the raid never succeeds.
+
+Two further things were missing, and both are information a village plainly has. The chief was told to "weigh how
+strong they are against how strong you are" but was never told how many were at the gate: `visitorPrompt` and the
+judgment state now both carry the party size. And rather than making a stone-age chief do arithmetic, both now carry
+the village's own reckoning of the odds (`strengthReckoning`), banded from the table above.
+
+Measured with `run-judge.ts --tasks host --repeat 3`, 45 observations per model:
+
+| | threat-weak before | after the case fix | after the reckoning |
+|---|---|---|---|
+| gemini-3.8-flash (standard's impactful) | 1/6 | 5/6 | 6/6 |
+| gemini-3.5-flash-lite (thrifty's impactful) | 3/6 | 0/6 | 6/6 |
+
+So the tier actually at fault was thrifty, not standard, and neither is now. On the original ambiguous case 3.8 Flash
+with the reckoning refuses two times in six, which is the right shape of answer for a fight that really could go
+either way.
+
+**The lesson for the eval, which is the more valuable half.** Fifteen visitor cases, ten of them easy, average to
+0.93 for everyone, and a model that pays every bully sits inside that number. The report now breaks out every case
+kind that some models pass and others fail, and prints the number of cases behind each figure, because the claim
+that started this — "3.8 Flash refuses both" in the third pass and in the published post — rested on two
+observations. Two observations cannot tell always from sometimes. Anything that matters gets `run-judge.ts` and
+repeats.

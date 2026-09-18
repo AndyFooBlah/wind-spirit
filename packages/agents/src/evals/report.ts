@@ -18,6 +18,25 @@ for (const r of runs.sort((a, b) => mean(b.results.map(x => x.score)) - mean(a.r
   md += `| ${r.model} | ${mean(r.results.map(x => x.score)).toFixed(3)} | ${by.join(' | ')} | ${judged.length ? mean(judged).toFixed(2) : '–'} | ${agree} | ${mean(r.results.map(x => x.cost)).toFixed(4)} | ${Math.round(msAvg)}${msAvg > 10_000 ? ' ✗' : ''} | ${r.results.filter(x => x.error).length} |\n`;
 }
 
+/**
+ * Cases that separate models. A category average hides a one-in-six failure: the visitor category is ten easy
+ * `fair` cases and two `threat-weak`, so a model that pays every bully still scores 0.93 there. Group by the case
+ * kind instead (the name between the seed and the tick in the id) and show every kind that some models pass and
+ * others fail, so a regression on a discriminating case is visible on its own line.
+ */
+const kindOf = (id: string) => id.replace(/^eval-[a-z]-/, '').replace(/-\d+-\d+$/, '');
+const kinds = [...new Set(runs.flatMap(r => r.results.map(x => kindOf(x.id))))].sort();
+const passRate = (r: { results: CaseResult[] }, k: string) => { const xs = r.results.filter(x => kindOf(x.id) === k); return xs.length ? mean(xs.map(x => x.score)) : NaN; };
+const splitting = kinds.filter(k => { const rates = runs.map(r => passRate(r, k)).filter(x => !Number.isNaN(x)); if (rates.length < 3) return false; return Math.min(...rates) < 0.9 && Math.max(...rates) > 0.98; });
+if (splitting.length) {
+  md += `\n\n### Cases that separate models (a category average hides these)\n\n| model | ${splitting.join(' | ')} |\n|---|${splitting.map(() => '---').join('|')}|\n`;
+  for (const r of runs.sort((a, b) => mean(b.results.map(x => x.score)) - mean(a.results.map(x => x.score)))) {
+    const cells = splitting.map(k => { const v = passRate(r, k); if (Number.isNaN(v)) return '–'; const n = r.results.filter(x => kindOf(x.id) === k).length; return `${v.toFixed(2)}${n < 4 ? ` (${n})` : ''}`; });
+    md += `| ${r.model} | ${cells.join(' | ')} |\n`;
+  }
+  md += `\nA kind is listed when some model scores below 0.90 on it and another scores above 0.98. Counts in brackets are the number of cases behind a figure: fewer than four is a weak signal, and the judgment runner (\`run-judge.ts\`) is the way to get a properly powered answer on one question.\n`;
+}
+
 // Cost per chief-century: 13 routine and 4 impactful decisions a year at normal cadence (5 and 2 at fast), measured per-case costs.
 const costOf = (r: { results: CaseResult[] }, cats: string[]) => mean(r.results.filter(x => cats.includes(x.category) && !x.error).map(x => x.cost));
 md += `\n\n### Projected cost per chief per century (normal cadence: 13 routine + 4 impactful decisions a year; fast: 5 + 2)\n\n| model for everything | normal | fast |\n|---|---|---|\n`;
