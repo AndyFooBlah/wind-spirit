@@ -116,11 +116,11 @@ importers:
   services/llm-proxy:
     dependencies:
       '@anthropic-ai/sdk':
-        specifier: 0.125.0
-        version: 0.125.0
+        specifier: 0.126.0
+        version: 0.126.0
       '@anthropic-ai/vertex-sdk':
-        specifier: ^0.19.8
-        version: 0.19.8
+        specifier: ^0.19.9
+        version: 0.19.9
       '@google/genai':
         specifier: ^2.22.0
         version: 2.22.0
@@ -149,8 +149,8 @@ importers:
 
 packages:
 
-  '@anthropic-ai/sdk@0.125.0':
-    resolution: {integrity: sha512-Hq5wYlXupzJ9M1Fzqjqa3hObcuigEXVZJqSYDgeZGM3wF4qrNERM5Z1OOAeoT9rlod8awJ3uYyJjbQXp1ckIGg==}
+  '@anthropic-ai/sdk@0.126.0':
+    resolution: {integrity: sha512-VhiZl6rA/8uC+MgDaOhEcAWaIZ2tPnIY885jlZqxrGrutUW2nqCtophBtlsX0tk5kChBUjV/1NVjL3y0M4OwUg==}
     hasBin: true
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
@@ -158,8 +158,8 @@ packages:
       zod:
         optional: true
 
-  '@anthropic-ai/vertex-sdk@0.19.8':
-    resolution: {integrity: sha512-V8GpZcNEfeduKdASbqen9E6xUhUShOCEj6PqZqplVju6NxcrFqMfFquY9UCLnvp20ZpfIScYh8Sq0Ygd+PLRGA==}
+  '@anthropic-ai/vertex-sdk@0.19.9':
+    resolution: {integrity: sha512-TYP2PJKcCxmU0lVQx4RFBtMS5i53fNcxs4YYvrOk3JrDN+q/68swH69STOgyT2ZHB0MBwl48Tmg3nJZZNXcG1g==}
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -1885,14 +1885,14 @@ packages:
 
 snapshots:
 
-  '@anthropic-ai/sdk@0.125.0':
+  '@anthropic-ai/sdk@0.126.0':
     dependencies:
       json-schema-to-ts: 3.1.1
       standardwebhooks: 1.1.1
 
-  '@anthropic-ai/vertex-sdk@0.19.8':
+  '@anthropic-ai/vertex-sdk@0.19.9':
     dependencies:
-      '@anthropic-ai/sdk': 0.125.0
+      '@anthropic-ai/sdk': 0.126.0
       google-auth-library: 10.9.1
     transitivePeerDependencies:
       - supports-color
