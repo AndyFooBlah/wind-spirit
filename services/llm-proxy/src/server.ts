@@ -2,7 +2,9 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { config, MODEL_CLASSES, type ModelClass } from './config.js';
 import { HttpError } from './errors.js';
 import { errorFields, log } from './log.js';
-import { authenticate, initFirebase, principalLabel, type Principal } from './auth.js';
+import { authenticate, clientIp, initFirebase, principalLabel, type Principal } from './auth.js';
+import { requireAppCheck } from './appcheck.js';
+import { FirestoreAttemptStore, InviteThrottle } from './throttle.js';
 import { checkQuota, recordUsage } from './quota.js';
 import { isInvited, redeemInvite, requireInvite } from './invites.js';
 import { addUsage, estimateCost, MODELS, modelInfo, ZERO_USAGE, type Usage } from './models.js';
@@ -18,7 +20,7 @@ import { parseSystemOneBody, systemOne, typesafeEnabled, TYPESAFE_USD_PER_INPUT_
 function cors(res: ServerResponse): void {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type, X-Firebase-AppCheck');
   res.setHeader('Access-Control-Max-Age', '86400');
 }
 
@@ -66,6 +68,7 @@ interface RequestLog {
   model?: string;
   provider?: string;
   principal?: string;
+  appCheck?: string;
   cacheKey?: string;
   promptSha256?: string;
   inputTokens?: number;
@@ -171,14 +174,26 @@ function locationFor(provider: string): string {
   }
 }
 
+let lastDeepProbeAt = 0;
+
 async function health(url: URL, res: ServerResponse): Promise<void> {
   const models = { ...config.models };
   const openrouter = openrouterEnabled() ? 'enabled' : 'disabled';
   const typesafe = typesafeEnabled() ? 'enabled' : 'disabled';
+  const appCheck = config.appCheck;
   if (url.searchParams.get('deep') !== '1') {
-    sendJson(res, 200, { ok: true, models, requireAuth: config.requireAuth, location: config.location, openrouter, typesafe });
+    sendJson(res, 200, { ok: true, models, requireAuth: config.requireAuth, location: config.location, openrouter, typesafe, appCheck });
     return;
   }
+  // The deep probe is five paid model calls behind no auth: one per interval per instance, or 429.
+  const sinceLast = Date.now() - lastDeepProbeAt;
+  if (sinceLast < config.deepHealthMinIntervalMs) {
+    const retryAfterSeconds = Math.ceil((config.deepHealthMinIntervalMs - sinceLast) / 1000);
+    res.setHeader('Retry-After', String(retryAfterSeconds));
+    sendJson(res, 429, { error: 'slow_down', message: 'deep health probe ran recently', retryAfterSeconds });
+    return;
+  }
+  lastDeepProbeAt = Date.now();
   const ac = new AbortController();
   const timer = setTimeout(() => ac.abort(), 60_000);
   const probe = async (cls: ModelClass) => {
@@ -199,7 +214,7 @@ async function health(url: URL, res: ServerResponse): Promise<void> {
     const deep = Object.fromEntries(MODEL_CLASSES.map((c, i) => [c, results[i]]));
     const ok = results.every((r) => r.ok);
     if (!ok) log('ERROR', 'deep health check failed', deep);
-    sendJson(res, ok ? 200 : 503, { ok, models, requireAuth: config.requireAuth, location: config.location, openrouter, deep });
+    sendJson(res, ok ? 200 : 503, { ok, models, requireAuth: config.requireAuth, location: config.location, openrouter, typesafe, appCheck, deep });
   } finally {
     clearTimeout(timer);
   }
@@ -417,8 +432,13 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
       await health(url, res);
       return;
     }
+    // Everything under /v1 is app-attested (when APP_CHECK is on) and authenticated; only /v1/invite/* is open to
+    // principals who have not redeemed a code yet, and redemption itself is throttled per uid and per IP.
+    if (url.pathname.startsWith('/v1/')) await requireAppCheck(req, entry);
     if (req.method === 'GET' && url.pathname === '/v1/models') {
-      await authenticate(req);
+      const principal = await authenticate(req);
+      entry.principal = principalLabel(principal);
+      await requireInvite(principal);
       sendJson(res, 200, modelsBody());
       return;
     }
@@ -426,7 +446,16 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
       const principal = await authenticate(req);
       entry.principal = principalLabel(principal);
       const body = (await readJson(req)) as { code?: unknown } | null;
-      const r = await redeemInvite(principal, body?.code);
+      const settle = config.requireInvite ? await inviteThrottle.admit(`${principal.kind}_${principal.id}`, clientIp(req)) : undefined;
+      let r;
+      try {
+        r = await redeemInvite(principal, body?.code);
+      } catch (err) {
+        // A 4xx is a wrong code and counts toward the lockout; a 5xx is our problem and does not.
+        if (settle && err instanceof HttpError && err.status < 500) await settle(false);
+        throw err;
+      }
+      if (settle) await settle(true);
       finishLog(entry, 200, startedAt, { invite: r.alreadyPlayer ? 'already' : 'redeemed' });
       sendJson(res, 200, { ok: true, label: r.label, alreadyPlayer: r.alreadyPlayer });
       return;
@@ -457,12 +486,17 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
     const httpErr = err instanceof HttpError ? err : new HttpError(500, 'internal', 'internal error');
     if (!(err instanceof HttpError)) log('ERROR', 'unhandled error', { ...entry, ...errorFields(err) });
     finishLog(entry, httpErr.status, startedAt, { code: httpErr.code, ...(httpErr.status >= 500 ? { detail: httpErr.message } : {}) });
+    if (!res.headersSent) for (const [k, v] of Object.entries(httpErr.headers)) res.setHeader(k, v);
     sendJson(res, httpErr.status, httpErr.body());
     if (!res.writableEnded) res.end();
   }
 }
 
 initFirebase();
+const inviteThrottle = new InviteThrottle(new FirestoreAttemptStore(config.invite.attemptsCollection), {
+  uid: { windowMs: config.invite.windowMs, maxAttempts: config.invite.uidAttempts, lockoutFailures: config.invite.lockoutFailures, lockoutMs: config.invite.lockoutMs },
+  ip: { windowMs: config.invite.windowMs, maxAttempts: config.invite.ipAttempts, lockoutFailures: config.invite.ipLockoutFailures, lockoutMs: config.invite.lockoutMs },
+});
 // Public endpoint, no key needed: live OpenRouter prices overwrite the static table at startup and hourly.
 startOpenRouterPricingRefresh();
 const server = createServer((req, res) => {
@@ -488,6 +522,9 @@ server.listen(config.port, () => {
     evalModels: config.evalModels,
     requireAuth: config.requireAuth,
     requireInvite: config.requireInvite,
+    invite: config.invite,
+    appCheck: config.appCheck,
+    appCheckAppIds: config.appCheckAppIds,
     dailyTokenQuota: config.dailyTokenQuota,
     requestTimeoutMs: config.requestTimeoutMs,
     openrouter: openrouterEnabled() ? 'enabled' : 'disabled', // never the key itself

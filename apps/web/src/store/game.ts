@@ -6,7 +6,7 @@ import { create } from 'zustand';
 import type { BreathAction, Event, Input } from '@wind-spirit/sim';
 import { P } from '@wind-spirit/sim';
 import { WEEKS_PER_YEAR, seasonOf } from '@wind-spirit/sim';
-import { idToken } from '../auth.ts';
+import { proxyCredential } from '../auth.ts';
 import { forgetInvite } from '../invite.ts';
 import { audio, dominantTerrain, type AudioSettings } from '../audio/audio.ts';
 import { historyWorthy } from '../sim/views.ts';
@@ -122,7 +122,7 @@ function onWorker(m: FromWorker): void {
     case 'village': if (m.detail.id === get().selected) set({ detail: m.detail }); break;
     case 'speed': set(s => ({ speed: m.speed, toasts: m.speed === 'pause' ? s.toasts : s.toasts.filter(t => t.kind !== 'attention') })); refreshScene(); break;
     case 'waiting': set({ waiting: m.villages }); break;
-    case 'needToken': void idToken().then(token => { send({ type: 'token', id: m.id, token }); set({ proxyOk: !!token }); }); break;
+    case 'needToken': void proxyCredential().then(token => { send({ type: 'token', id: m.id, token }); set({ proxyOk: !!token }); }); break;
     case 'dreamChunk': set(s => s.dream ? { dream: { ...s.dream, streaming: s.dream.streaming + m.text } } : {}); break;
     case 'dreamReply': set(s => s.dream ? { dream: { ...s.dream, streaming: '', busy: false, turns: m.text ? [...s.dream.turns, { role: 'chief', text: m.text }] : s.dream.turns } } : {}); break;
     case 'narrative': { const key = narrativeWaiters.get(m.id); narrativeWaiters.delete(m.id); if (key) set(s => ({ narratives: { ...s.narratives, [key]: { ...s.narratives[key], loading: false, text: m.text, error: m.error } } })); break; }

@@ -28,7 +28,7 @@ export function InviteGate({ children }: { children: ReactNode }) {
       <div className="cards">
         <form className="card invite" onSubmit={e => { e.preventDefault(); void submit(); }}>
           <h2>Your invitation</h2>
-          <label>Code <input value={code} onChange={e => setCode(e.target.value)} placeholder="amber-heron-42" autoFocus autoComplete="off" spellCheck={false} /></label>
+          <label>Code <input value={code} onChange={e => setCode(e.target.value)} placeholder="7m3kq-x9d2t" autoFocus autoComplete="off" spellCheck={false} /></label>
           {error && <div className="warn">{error}</div>}
           {state === 'checking' && !error && <div className="small muted">Checking this browser for a seat…</div>}
           <button type="submit" className="primary" disabled={busy || !code.trim()}>{busy ? 'Asking…' : 'Enter'}</button>

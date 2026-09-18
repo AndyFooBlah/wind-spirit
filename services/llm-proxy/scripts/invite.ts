@@ -2,19 +2,23 @@
  * Mint, list and withdraw invitation codes. Runs on a laptop with Application Default Credentials
  * (`gcloud auth application-default login`); never from the browser.
  *
- *   pnpm invite create --label friends --uses 10 [--days 90] [--code amber-heron-42]
+ * Code format (since 2026-09-18): ten base32 characters in two groups, e.g. `7m3kq-x9d2t`, minted by
+ * `mintCode` in src/invites.ts from 50 random bits (2^50 possibilities). Until then codes were
+ * `word-word-NN` from a 30-word list here (81,000 possibilities), which was too few once the repo went
+ * public; those codes are plain Firestore document ids and remain valid until disabled. `--code` still
+ * lets you choose a code by hand.
+ *
+ *   pnpm invite create --label friends --uses 10 [--days 90] [--code 7m3kq-x9d2t]
  *   pnpm invite list
- *   pnpm invite disable amber-heron-42
+ *   pnpm invite disable 7m3kq-x9d2t
  *   pnpm invite players            # who has redeemed what
  *   pnpm invite revoke <uid>       # take a seat back
  */
-import { randomInt } from 'node:crypto';
 import { applicationDefault, getApps, initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import { config } from '../src/config.js';
-import { normalizeCode } from '../src/invites.js';
+import { mintCode, normalizeCode } from '../src/invites.js';
 
-const WORDS = ['amber', 'heron', 'reed', 'cedar', 'ember', 'fjord', 'gale', 'harbor', 'ivory', 'juniper', 'kestrel', 'lantern', 'marsh', 'nettle', 'osprey', 'pebble', 'quill', 'rowan', 'saffron', 'thistle', 'umber', 'vale', 'willow', 'yarrow', 'zephyr', 'birch', 'copper', 'dusk', 'fern', 'gorse'];
 const argv = process.argv.slice(2).filter(a => a !== '--');
 const arg = (n: string, d: string) => { const i = argv.indexOf(`--${n}`); return i >= 0 && argv[i + 1] ? argv[i + 1]! : d; };
 const cmd = argv[0];
@@ -24,16 +28,11 @@ const db = getFirestore();
 const invites = db.collection(config.invitesCollection);
 const players = db.collection(config.playersCollection);
 
-function mint(): string {
-  const w = () => WORDS[randomInt(WORDS.length)]!;
-  return `${w()}-${w()}-${randomInt(10, 100)}`;
-}
-
 async function main(): Promise<void> {
   switch (cmd) {
     case 'create': {
       const label = arg('label', 'friends'); const maxUses = Number(arg('uses', '5')); const days = Number(arg('days', '0'));
-      const code = normalizeCode(arg('code', mint()));
+      const code = normalizeCode(arg('code', mintCode()));
       if (!code) throw new Error('bad --code');
       if ((await invites.doc(code).get()).exists) throw new Error(`code ${code} already exists`);
       const doc: Record<string, unknown> = { label, maxUses, uses: 0, disabled: false, createdAt: FieldValue.serverTimestamp() };

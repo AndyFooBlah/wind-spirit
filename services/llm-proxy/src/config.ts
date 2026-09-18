@@ -12,6 +12,13 @@ function num(name: string, fallback: number): number {
   return n;
 }
 
+function oneOf<T extends string>(name: string, allowed: readonly T[], fallback: T): T {
+  const v = (process.env[name] ?? '').trim().toLowerCase();
+  if (v === '') return fallback;
+  if (!(allowed as readonly string[]).includes(v)) throw new Error(`env ${name} must be one of ${allowed.join('|')}, got ${JSON.stringify(v)}`);
+  return v as T;
+}
+
 function list(name: string, fallback: string[]): string[] {
   const v = process.env[name];
   if (v === undefined || v.trim() === '') return fallback;
@@ -46,6 +53,33 @@ export const config = {
   requireInvite: (process.env.REQUIRE_INVITE ?? 'true').toLowerCase() !== 'false',
   invitesCollection: process.env.INVITES_COLLECTION ?? 'invites',
   playersCollection: process.env.PLAYERS_COLLECTION ?? 'players',
+  /**
+   * Brakes on the invitation gate (see throttle.ts). Redemption attempts are counted per uid and per client IP
+   * in Firestore so they survive restarts; a run of consecutive bad codes locks the key out for a day.
+   */
+  invite: {
+    attemptsCollection: process.env.INVITE_ATTEMPTS_COLLECTION ?? 'inviteAttempts',
+    windowMs: num('INVITE_WINDOW_MS', 15 * 60_000),
+    /** Redemption attempts per uid per window. A real player needs one or two. */
+    uidAttempts: num('INVITE_UID_ATTEMPTS', 5),
+    /** Per client IP per window; higher so a household behind one NAT can all redeem at once. */
+    ipAttempts: num('INVITE_IP_ATTEMPTS', 20),
+    /** Consecutive wrong codes from one uid before it is locked out. */
+    lockoutFailures: num('INVITE_LOCKOUT_FAILURES', 10),
+    /** Same for one IP; higher because an IP is shared, so it only bites on a sustained run from one address. */
+    ipLockoutFailures: num('INVITE_IP_LOCKOUT_FAILURES', 40),
+    lockoutMs: num('INVITE_LOCKOUT_MS', 24 * 3_600_000),
+    /** Requests an uninvited uid may make to gated routes per window before it is answered 429 without a lookup (per instance). */
+    uninvitedRequests: num('UNINVITED_REQUESTS', 30),
+  },
+  /**
+   * Firebase App Check (see appcheck.ts): `off` ignores the header, `log` verifies and records the outcome without
+   * blocking, `enforce` answers 401 unless the request carries a valid token from one of the allowed app ids.
+   */
+  appCheck: oneOf('APP_CHECK', ['off', 'log', 'enforce'] as const, 'off'),
+  appCheckAppIds: list('APP_CHECK_APP_IDS', ['1:406179055859:web:c8e690b638cdd7e7944f86']),
+  /** `/health?deep=1` makes five paid model calls with no auth; at most one deep probe per interval per instance. */
+  deepHealthMinIntervalMs: num('DEEP_HEALTH_MIN_INTERVAL_MS', 60_000),
   dailyTokenQuota: num('DAILY_TOKEN_QUOTA', 2_000_000),
   requestTimeoutMs: num('REQUEST_TIMEOUT_MS', 120_000),
   quotaCollection: process.env.QUOTA_COLLECTION ?? 'quotas',

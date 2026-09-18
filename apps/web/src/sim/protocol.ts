@@ -103,7 +103,7 @@ export type ToWorker =
   | { type: 'snapshot'; reason?: string }
   | { type: 'requestVillage'; id: number }
   | { type: 'settings'; settings: Settings }
-  | { type: 'token'; id: number; token?: string }
+  | { type: 'token'; id: number; token?: string | { idToken?: string; appCheckToken?: string } }
   | { type: 'dreamStart'; village: number }
   | { type: 'dreamSend'; text: string }
   | { type: 'dreamClose' }

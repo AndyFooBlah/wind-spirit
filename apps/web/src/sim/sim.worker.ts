@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 /** The sim worker: owns SimHost, runs the timer, calls the model proxy with a token minted on the main thread. */
-import { HttpLlmClient, JevJudge, ProxySystemOne } from '@wind-spirit/agents';
+import { HttpLlmClient, JevJudge, ProxySystemOne, type ProxyCredential } from '@wind-spirit/agents';
 import { PROXY_URL } from '../firebase-config.ts';
 import { SimHost } from './host.ts';
 import type { FromWorker, ToWorker } from './protocol.ts';
@@ -8,8 +8,8 @@ import type { FromWorker, ToWorker } from './protocol.ts';
 const post = (m: FromWorker) => (self as unknown as Worker).postMessage(m);
 
 let tokenSeq = 0;
-const tokenWaiters = new Map<number, (t: string | undefined) => void>();
-const tokenFn = (): Promise<string | undefined> => new Promise(resolve => {
+const tokenWaiters = new Map<number, (t: ProxyCredential | undefined) => void>();
+const tokenFn = (): Promise<ProxyCredential | undefined> => new Promise(resolve => {
   const id = ++tokenSeq; tokenWaiters.set(id, resolve); post({ type: 'needToken', id });
   setTimeout(() => { if (tokenWaiters.delete(id)) resolve(undefined); }, 15_000);
 });

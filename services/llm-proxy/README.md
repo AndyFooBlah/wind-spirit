@@ -42,8 +42,11 @@ The catalog in `src/models.ts` maps each model id to its provider, endpoint loca
 ## API
 
 All `/v1/*` routes require `Authorization: Bearer <Firebase ID token>` (anonymous auth is fine)
-unless the service runs with `REQUIRE_AUTH=false`, in which case quotas are keyed by client IP.
-CORS allows any origin with the `Authorization` and `Content-Type` headers.
+unless the service runs with `REQUIRE_AUTH=false`, in which case quotas are keyed by client IP. With
+`APP_CHECK=enforce` they also require `X-Firebase-AppCheck: <Firebase App Check token>` (see
+[App Check](#app-check)). Every route except `/health` and `/v1/invite/*` further requires a redeemed
+invitation (see [Invitations](#invitations)). CORS allows any origin with the `Authorization`,
+`Content-Type` and `X-Firebase-AppCheck` headers.
 
 ### `POST /v1/systemone`
 
@@ -135,9 +138,10 @@ pricing: { "<id>": { provider, location, available, input, output, cacheRead, ca
 
 ### `GET /health`
 
-`{ ok: true, models: {cheap, routine, capable, premium}, requireAuth, location, openrouter: "enabled"|"disabled" }`. Add `?deep=1` to run a tiny
+`{ ok: true, models: {cheap, routine, capable, premium}, requireAuth, location, openrouter: "enabled"|"disabled", typesafe, appCheck: "off"|"log"|"enforce" }`. Add `?deep=1` to run a tiny
 generation on each class and get `{ deep: { cheap: {ok, ms, model, usage, cost, ...}, routine: ..., capable: ..., premium: ... } }`
-(503 if any fails). No auth required. `/healthz` is accepted as an alias, but on Cloud Run the Google
+(503 if any fails). No auth required, so the deep probe (five paid calls) runs at most once per
+`DEEP_HEALTH_MIN_INTERVAL_MS` (default 60 s) per instance and answers `429 slow_down` in between. `/healthz` is accepted as an alias, but on Cloud Run the Google
 Frontend intercepts exactly `/healthz` on `*.run.app` and returns its own HTML 404, so use `/health` there.
 
 ### Errors
@@ -146,6 +150,11 @@ Frontend intercepts exactly `/healthz` on `*.run.app` and returns its own HTML 4
 |---|---|---|
 | 400 | `bad_request` | body failed validation (`message` says why), including a `model` outside `EVAL_MODELS` |
 | 401 | `unauthorized` | missing/invalid Firebase ID token (only when `REQUIRE_AUTH=true`) |
+| 401 | `app_check` | missing/invalid `X-Firebase-AppCheck` token, or one minted for another app (only when `APP_CHECK=enforce`); `outcome` says which |
+| 403 | `not_invited` | the caller has not redeemed an invitation code |
+| 429 | `not_invited` | an uninvited caller kept hitting gated routes; `Retry-After` set, no store lookup made |
+| 429 | `too_many_attempts` | `/v1/invite/redeem` throttled for this uid or IP, or locked out after repeated wrong codes; `Retry-After` and `retryAfterSeconds` set |
+| 429 | `slow_down` | `/health?deep=1` ran within the last `DEEP_HEALTH_MIN_INTERVAL_MS` on this instance |
 | 413 | `too_large` | body over `MAX_BODY_BYTES` |
 | 429 | `quota` | daily token quota used; `resetAt` is the next UTC midnight |
 | 502 | `upstream` / `bad_model_output` | the provider rejected the call, or JSON output never validated |
@@ -187,6 +196,17 @@ Frontend intercepts exactly `/healthz` on `*.run.app` and returns its own HTML 4
 | `ANTHROPIC_LOCATION` | `global` | Claude on Vertex; Haiku 4.5 and Sonnet 5 both support `global` |
 | `MAAS_LOCATION` | `global` | OpenAI-compatible MaaS endpoint; per-model overrides (e.g. `us-central1`-only models) live in the catalog |
 | `REQUIRE_AUTH` | `true` | `false` keys quotas by client IP instead of requiring a token |
+| `REQUIRE_INVITE` | `true` | model routes need a redeemed invitation code (see Invitations); `false` for local development only |
+| `INVITES_COLLECTION` / `PLAYERS_COLLECTION` | `invites` / `players` | Firestore collections for codes and seats |
+| `APP_CHECK` | `off` | `off` / `log` / `enforce` (see App Check); production runs `enforce` |
+| `APP_CHECK_APP_IDS` | the wind-spirit-web app id | comma-separated Firebase app ids whose App Check tokens are accepted |
+| `INVITE_ATTEMPTS_COLLECTION` | `inviteAttempts` | Firestore collection for redeem-attempt counters |
+| `INVITE_WINDOW_MS` | `900000` | attempt window for redeem throttling and the uninvited-request cap (15 min) |
+| `INVITE_UID_ATTEMPTS` / `INVITE_IP_ATTEMPTS` | `5` / `20` | redeem attempts per uid / per client IP per window |
+| `INVITE_LOCKOUT_FAILURES` / `INVITE_IP_LOCKOUT_FAILURES` | `10` / `40` | consecutive wrong codes from one uid / one IP before a lockout |
+| `INVITE_LOCKOUT_MS` | `86400000` | lockout length (24 h) |
+| `UNINVITED_REQUESTS` | `30` | gated requests an uninvited uid may make per window before it is answered 429 from memory |
+| `DEEP_HEALTH_MIN_INTERVAL_MS` | `60000` | minimum gap between `/health?deep=1` probes per instance |
 | `DAILY_TOKEN_QUOTA` | `2000000` | input+output tokens per principal per UTC day |
 | `REQUEST_TIMEOUT_MS` | `120000` | per-request model timeout |
 | `QUOTA_COLLECTION` | `quotas` | Firestore collection; doc id `YYYY-MM-DD_<kind>_<id>` |
@@ -254,6 +274,18 @@ invitation code (`403 not_invited`). The gate is enforced here, never only in th
   A player is checked once per five minutes per instance, so a season of chief calls is one read.
 - `POST /v1/invite/redeem { code }` with a Bearer token: `200 { ok, label, alreadyPlayer }`, or `404 invalid_code`,
   `410 code_disabled | code_expired | code_exhausted`. A user who already holds a seat consumes nothing.
+- Redemption is throttled (`src/throttle.ts`), because any anonymous Firebase user can reach it: at most
+  `INVITE_UID_ATTEMPTS` (5) attempts per uid and `INVITE_IP_ATTEMPTS` (20) per client IP in each
+  `INVITE_WINDOW_MS` (15 min) window, and a lockout of `INVITE_LOCKOUT_MS` (24 h) after
+  `INVITE_LOCKOUT_FAILURES` (10) consecutive wrong codes from one uid or `INVITE_IP_LOCKOUT_FAILURES` (40)
+  from one IP. Over the limit is `429 too_many_attempts` with `Retry-After`. Counters live in Firestore
+  `inviteAttempts/{uid_… | ip_<hash>}` so they survive restarts and are shared across instances; an
+  unreachable store fails closed (503). Lockouts are logged at WARNING (`invite lockout`).
+- Uninvited callers get nothing else: `/v1/generate`, `/v1/stream`, `/v1/systemone` and `/v1/models` all
+  answer `403 not_invited`, and a uid that keeps trying is answered `429` from memory after
+  `UNINVITED_REQUESTS` (30) per window without touching Firestore.
+- Codes are ten base32 characters in two groups (`7m3kq-x9d2t`; 32^10 = 2^50 possibilities, minted by
+  `mintCode`). Codes minted before 2026-09-18 were `word-word-NN` from a 30-word list; they remain valid.
 - `GET /v1/invite/status`: `{ invited, required }`.
 - `REQUIRE_INVITE=false` turns the gate off (local development only).
 
@@ -269,9 +301,40 @@ pnpm invite revoke <uid>                                  # takes a seat back (e
 ```
 
 Scripts that call the proxy (the eval runner, `run-chief`, `first-turn`) redeem `WS_INVITE_CODE` from the
-environment for their throwaway anonymous user. Seats belong to a Firebase user, which for the web app is
+environment (or `.env.harness` at the repo root, gitignored) for their throwaway anonymous user; see
+[App Check](#app-check) for the rest of what they need. Seats belong to a Firebase user, which for the web app is
 the anonymous user of one browser: clearing site data means entering the code again, which is why codes
 carry a handful of uses rather than one.
+
+## App Check
+
+Firebase App Check attests that a request comes from the real web app (reCAPTCHA Enterprise, invisible;
+site key in `firebase-web-config.json`, registered for app `1:406179055859:web:c8e690b638cdd7e7944f86`).
+The browser SDK sends the token as `X-Firebase-AppCheck` on every proxy call (`apps/web/src/auth.ts`);
+the proxy verifies it with the Admin SDK (`src/appcheck.ts`) and checks the app id is in
+`APP_CHECK_APP_IDS`. `APP_CHECK` selects the mode:
+
+| `APP_CHECK` | Behaviour |
+|---|---|
+| `off` | header ignored (default for local development) |
+| `log` | verified; the outcome (`ok`, `missing`, `invalid`, `foreign_app`) goes into the request log as `appCheck` and a WARNING `app check would reject` is written, but nothing is blocked. Use this to watch a rollout |
+| `enforce` | `401 app_check` unless the token is valid and from an allowed app. **Production runs here.** |
+
+Scripts have no browser to attest with, so `packages/agents/src/evals/token.ts` exchanges a **debug token**
+(registered under the web app in the Firebase console: App Check > Apps > wind-spirit-web > Manage debug
+tokens) for an App Check token, using a **server-side API key** restricted to `identitytoolkit`,
+`securetoken` and `firebaseappcheck` — the browser key is HTTP-referrer restricted and no longer works from
+Node. Both come from the environment or `.env.harness` at the repo root (gitignored):
+
+```sh
+FIREBASE_HARNESS_API_KEY=...        # "Harness key (server-side, never shipped)" in wind-spirit-prod
+FIREBASE_APPCHECK_DEBUG_TOKEN=...   # the registered debug token (UUID)
+WS_INVITE_CODE=...                  # a code with spare seats; each script run redeems one
+```
+
+There is no bypass in the proxy: a script without a debug token is refused exactly like any other caller.
+To revoke the harness's access, delete the debug token in the console (or `DELETE` it through the App
+Check management API) and the key with `gcloud services api-keys delete`.
 
 ## Logging
 
@@ -294,7 +357,7 @@ gcloud run deploy llm-proxy \
   --project wind-spirit-prod --region us-central1 \
   --service-account llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com \
   --allow-unauthenticated \
-  --set-env-vars GOOGLE_CLOUD_PROJECT=wind-spirit-prod,VERTEX_LOCATION=global,ANTHROPIC_LOCATION=global,MAAS_LOCATION=global,MODEL_CHEAP=gemini-3.5-flash-lite,MODEL_ROUTINE=gemini-3.8-flash,MODEL_CAPABLE=gemini-3.1-pro-preview,MODEL_PREMIUM=gemini-3.1-pro-preview,REQUIRE_AUTH=true,REQUIRE_INVITE=true,DAILY_TOKEN_QUOTA=2000000 \
+  --set-env-vars GOOGLE_CLOUD_PROJECT=wind-spirit-prod,VERTEX_LOCATION=global,ANTHROPIC_LOCATION=global,MAAS_LOCATION=global,MODEL_CHEAP=gemini-3.5-flash-lite,MODEL_ROUTINE=gemini-3.8-flash,MODEL_CAPABLE=gemini-3.1-pro-preview,MODEL_PREMIUM=gemini-3.1-pro-preview,REQUIRE_AUTH=true,REQUIRE_INVITE=true,APP_CHECK=enforce,DAILY_TOKEN_QUOTA=2000000 \
   --set-secrets OPENROUTER_API_KEY=openrouter-api-key:latest,TYPESAFE_API_KEY=typesafe-api-key:latest \
   --timeout 300 --concurrency 40 --memory 512Mi --cpu 1 \
   --min-instances 0 --max-instances 5
@@ -311,8 +374,12 @@ Verify after every deploy:
 
 ```sh
 URL=$(gcloud run services describe llm-proxy --project wind-spirit-prod --region us-central1 --format 'value(status.url)')
-curl -s "$URL/health?deep=1" | jq          # .openrouter is "disabled" until a real key version exists
+curl -s "$URL/health?deep=1" | jq          # .openrouter is "disabled" until a real key version exists; .appCheck should be "enforce"
+curl -s -X POST "$URL/v1/invite/redeem" -H 'content-type: application/json' -d '{"code":"x"}'   # 401 app_check: nothing gets past the front door without attestation
 ```
+
+Spend backstops outside this service (set up 2026-09-18): a Cloud Billing budget "wind-spirit monthly"
+(25 USD, alerts at 50/90/100 %) on the billing account, and HTTP-referrer restrictions on the browser key.
 
 ## Local development
 
@@ -327,15 +394,19 @@ curl -s "localhost:8080/health?deep=1" | jq
 
 Unit tests: `pnpm --filter @wind-spirit/llm-proxy test` (request validation, quota keys, pricing/cost,
 provider selection, usage normalisation, Anthropic/OpenAI/OpenRouter request shaping, SSE parsing, JSON
-extraction/validation, the OpenRouter disabled path and pricing-refresh parser with a mocked fetch).
+extraction/validation, the OpenRouter disabled path and pricing-refresh parser with a mocked fetch, the
+invite throttle and lockout against an in-memory store, the App Check modes with a fake verifier, code
+minting and the uninvited-request cap).
 Locally, export a real `OPENROUTER_API_KEY` (from your own OpenRouter account; never the prod secret
 value) to exercise the OpenRouter models. The live model calls are exercised by `/health?deep=1` and the post-deploy curls.
 
 Getting an ID token for manual testing: with the web config in `firebase-web-config.json`, call
-`signInAnonymously` from the Firebase JS SDK and use `getIdToken()`. From a shell:
+`signInAnonymously` from the Firebase JS SDK and use `getIdToken()`. From a shell (the browser key is
+referrer-restricted, so use the harness key from `.env.harness`; against production you also need the
+App Check token, which `packages/agents/src/evals/token.ts` produces):
 
 ```sh
-KEY=$(jq -r .apiKey services/llm-proxy/firebase-web-config.json)
+KEY=$FIREBASE_HARNESS_API_KEY
 TOKEN=$(curl -s -X POST "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$KEY" \
   -H 'Content-Type: application/json' -d '{"returnSecureToken":true}' | jq -r .idToken)
 curl -s "$URL/v1/models" -H "Authorization: Bearer $TOKEN" | jq .classes
