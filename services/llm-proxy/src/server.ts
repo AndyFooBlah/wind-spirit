@@ -11,6 +11,7 @@ import { extractJson } from './providers/types.js';
 import { validateAgainst } from './schema.js';
 import { parseGenerateRequest, promptHash, resolveModel, type GenerateRequest } from './request.js';
 import { DISABLED_NOTE, openrouterEnabled, openrouterPricingStatus, startOpenRouterPricingRefresh } from './providers/openrouter.js';
+import { parseSystemOneBody, systemOne, typesafeEnabled, TYPESAFE_USD_PER_INPUT_TOKEN } from './typesafe.js';
 
 // ---------- helpers ----------
 
@@ -173,8 +174,9 @@ function locationFor(provider: string): string {
 async function health(url: URL, res: ServerResponse): Promise<void> {
   const models = { ...config.models };
   const openrouter = openrouterEnabled() ? 'enabled' : 'disabled';
+  const typesafe = typesafeEnabled() ? 'enabled' : 'disabled';
   if (url.searchParams.get('deep') !== '1') {
-    sendJson(res, 200, { ok: true, models, requireAuth: config.requireAuth, location: config.location, openrouter });
+    sendJson(res, 200, { ok: true, models, requireAuth: config.requireAuth, location: config.location, openrouter, typesafe });
     return;
   }
   const ac = new AbortController();
@@ -249,6 +251,39 @@ function noteUsage(entry: RequestLog, usage: Usage, model: string, cacheNote?: s
   entry.costSource = info.costSource;
   if (cacheNote) entry.cacheNote = cacheNote;
   return info;
+}
+
+/**
+ * System One judgments. Typed answers, not text, so there is no schema retry and no Ajv: the shape is the
+ * upstream's contract. Billed on input tokens only — output is free — and counted against the same daily quota
+ * as `/v1/generate`, since a judgment and a generation spend from the same player allowance.
+ */
+async function v1SystemOne(ctx: Ctx): Promise<void> {
+  const principal = await authenticate(ctx.req);
+  ctx.entry.principal = principalLabel(principal);
+  await requireInvite(principal);
+  const body = parseSystemOneBody(await readJson(ctx.req));
+  ctx.entry.provider = 'typesafe';
+  ctx.entry.model = body.model ?? 'jev-latest';
+  if (!typesafeEnabled()) throw new HttpError(503, 'provider_disabled', 'TYPESAFE_API_KEY not set on this deployment');
+  await checkQuota(principal);
+  const { signal, done, timedOut } = requestSignal(ctx.res);
+  let used = 0;
+  try {
+    let r;
+    try { r = await systemOne(body, signal); } catch (err) { throw upstreamError(err, timedOut()); }
+    const cost = r.usage.input_tokens * TYPESAFE_USD_PER_INPUT_TOKEN;
+    ctx.entry.model = r.model;
+    ctx.entry.inputTokens = r.usage.input_tokens;
+    ctx.entry.outputTokens = r.usage.output_tokens;
+    ctx.entry.costUsd = cost;
+    ctx.entry.costSource = 'table';
+    used = r.usage.input_tokens + r.usage.output_tokens;
+    sendJson(ctx.res, 200, { model: r.model, answers: r.answers, usage: r.usage, cost, costSource: 'table', ms: Date.now() - ctx.startedAt });
+  } finally {
+    done();
+    if (used > 0) void recordUsage(principal, used);
+  }
 }
 
 async function v1Generate(ctx: Ctx): Promise<void> {
@@ -404,6 +439,11 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
     }
     if (req.method === 'POST' && url.pathname === '/v1/generate') {
       await v1Generate({ req, res, entry, startedAt });
+      finishLog(entry, res.statusCode, startedAt);
+      return;
+    }
+    if (req.method === 'POST' && url.pathname === '/v1/systemone') {
+      await v1SystemOne({ req, res, entry, startedAt });
       finishLog(entry, res.statusCode, startedAt);
       return;
     }

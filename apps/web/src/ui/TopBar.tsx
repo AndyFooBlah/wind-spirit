@@ -259,6 +259,9 @@ function SettingsMenu() {
           {([['habit', 'habit: scripted chiefs, the model only for dreams (free)'], ['thrifty', 'thrifty: the cheapest model for routine seasons, a better one for hard choices (~$1 a century per chief)'], ['standard', 'standard: a light model for routine seasons, the full one for hard choices (~$5 a century)'], ['lavish', 'lavish: the full model everywhere, the most capable one for hard choices and dreams (~$16 a century)']] as const).map(([k, label]) => (
             <label key={k}><input type="radio" checked={(settings.tier ?? 'standard') === k} onChange={() => updateSettings({ tier: k })} /> {label}</label>
           ))}
+          <div className="strong" style={{ marginTop: 10 }}>Who weighs a chief's harder judgements</div>
+          <label><input type="radio" checked={(settings.judge ?? 'jev') === 'jev'} onChange={() => updateSettings({ judge: 'jev' })} /> a decision model: faster and steadier on whether to trust a spirit and how to answer envoys</label>
+          <label><input type="radio" checked={settings.judge === 'model'} onChange={() => updateSettings({ judge: 'model' })} /> the same model that writes their words</label>
           <div className="strong" style={{ marginTop: 10 }}>Pause when</div>
           {(Object.keys(settings.autoPause) as (keyof typeof settings.autoPause)[]).map(k => (
             <label key={k}><input type="checkbox" checked={settings.autoPause[k]} onChange={e => updateSettings({ autoPause: { ...settings.autoPause, [k]: e.target.checked } })} /> {PAUSE_LABEL[k]}</label>

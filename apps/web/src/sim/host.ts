@@ -6,7 +6,7 @@ import { Rng, Sim, WEEKS_PER_YEAR, seasonIndex, type Event, type Input, type Wor
 import { askSun } from './sun.ts';
 import { generateWorld, CAP_NAMES } from '@wind-spirit/gen';
 import { POLICIES, hostAnswer } from '@wind-spirit/harness';
-import { ChiefScheduler, Conversation, narrate, type JournalEntry, type LlmClient, type Speed } from '@wind-spirit/agents';
+import { ChiefScheduler, Conversation, narrate, type Judge, type JournalEntry, type LlmClient, type Speed } from '@wind-spirit/agents';
 import {
   DEFAULT_SETTINGS, SPEED_MS, type AttentionEvent, type Frame, type FromWorker, type GenOpts, type LoggedInput, type NarrativeRequest, type Settings, type StaticMap, type VillageDetail,
 } from './protocol.ts';
@@ -18,6 +18,8 @@ export interface HostIO {
   setTimer(fn: () => void, ms: number): unknown;
   clearTimer(handle: unknown): void;
   client: LlmClient;
+  /** Answers the label-shaped decisions when Settings.judge is 'jev'; absent in tests and when unconfigured. */
+  judge?: Judge;
 }
 
 const HISTORY_MAX = 200;
@@ -79,6 +81,7 @@ export class SimHost {
       modelVillages: id => this.usesModel(id),
       speed: () => this.speed,
       tier: () => this.settings.tier ?? 'standard',
+      judge: () => (this.settings.judge === 'model' ? undefined : this.io.judge),
       fallback: {
         decide: (w, v, reason) => POLICIES.sensible({ w, v, reason, rng, mem: (this.mem[v.id] ??= {}) }),
         host: (w, v, m, g) => hostAnswer({ w, v, reason: 'visitor', rng, mem: (this.mem[v.id] ??= {}) }, m, g),

@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 /** The sim worker: owns SimHost, runs the timer, calls the model proxy with a token minted on the main thread. */
-import { HttpLlmClient } from '@wind-spirit/agents';
+import { HttpLlmClient, JevJudge, ProxySystemOne } from '@wind-spirit/agents';
 import { PROXY_URL } from '../firebase-config.ts';
 import { SimHost } from './host.ts';
 import type { FromWorker, ToWorker } from './protocol.ts';
@@ -17,7 +17,9 @@ const tokenFn = (): Promise<string | undefined> => new Promise(resolve => {
 // HttpLlmClient defaults its fetchImpl to the bare `fetch` and calls it as a method, which throws "Illegal invocation"
 // in a WorkerGlobalScope; pass a wrapper that calls the global fetch with the right receiver.
 const client = new HttpLlmClient(PROXY_URL, tokenFn, (input, init) => fetch(input, init));
-const host = new SimHost({ post, setTimer: (fn, ms) => setTimeout(fn, ms), clearTimer: h => clearTimeout(h as number), client });
+// The judge goes through the same proxy, which holds the TypeSafe key; nothing here carries one.
+const judge = new JevJudge({ transport: new ProxySystemOne(PROXY_URL, tokenFn, (input, init) => fetch(input, init)) });
+const host = new SimHost({ post, setTimer: (fn, ms) => setTimeout(fn, ms), clearTimer: h => clearTimeout(h as number), client, judge });
 
 self.onmessage = (ev: MessageEvent<ToWorker>) => {
   const m = ev.data;

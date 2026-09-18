@@ -19,8 +19,10 @@ export const DEFAULT_AUTOPAUSE: AutoPause = { RaidResolved: true, Famine: true, 
 
 export type ModelVillages = 'none' | 'focused' | 'all';
 export type TierName = 'habit' | 'thrifty' | 'standard' | 'lavish';
-export interface Settings { modelVillages: ModelVillages; focused: number[]; autoPause: AutoPause; tier: TierName; }
-export const DEFAULT_SETTINGS: Settings = { modelVillages: 'focused', focused: [], autoPause: DEFAULT_AUTOPAUSE, tier: 'standard' };
+/** `judge`: who answers the decisions that are a label rather than prose (see packages/agents/src/judge). */
+export type JudgeChoice = 'jev' | 'model';
+export interface Settings { modelVillages: ModelVillages; focused: number[]; autoPause: AutoPause; tier: TierName; judge: JudgeChoice; }
+export const DEFAULT_SETTINGS: Settings = { modelVillages: 'focused', focused: [], autoPause: DEFAULT_AUTOPAUSE, tier: 'standard', judge: 'jev' };
 
 /**
  * What gets persisted per tick. Sim inputs replay verbatim. `ChiefMemory` is a side effect the scheduler and the

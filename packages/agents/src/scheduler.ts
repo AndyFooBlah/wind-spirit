@@ -11,6 +11,7 @@ import { parseDecision, parseHostDecision } from './parse.js';
 import { renderChronicle } from './conversation.js';
 import { TIERS, classify, type Tier, type TierName } from './tiers.js';
 import type { LlmClient, ModelClass } from './client.js';
+import type { Judge, HostValue } from './judge/types.js';
 
 export type Speed = 'pause' | 'step' | 'slow' | 'normal' | 'fast' | 'veryfast';
 export interface JournalEntry { tick: number; requestedAt: number; village: number; reason: string; text: string; source: 'model' | 'habit'; dropped?: string[]; }
@@ -25,6 +26,11 @@ export interface SchedulerOptions {
   speed?: () => Speed;
   /** how much model to spend; see tiers.ts */
   tier?: () => TierName;
+  /**
+   * Optional judge for the decisions that are a label rather than prose. When present it answers, and the
+   * model is left to write the terms and the journal. Absent (or failing), the model decides as before.
+   */
+  judge?: () => Judge | undefined;
 }
 
 const URGENT = new Set(['raided', 'famine', 'succession', 'spirit', 'founded', 'visitor']);
@@ -114,21 +120,35 @@ export class ChiefScheduler {
     return undefined;
   }
 
+  /** Ask the judge how to answer envoys. A judge that errors is not a reason to drop the visit: the model decides instead. */
+  private async judgeHost(view: VillageView, from: string, mandate: Mandate, cname: (id: string) => string, rname: (id: string) => string, village: number): Promise<HostValue | undefined> {
+    const judge = this.o.judge?.(); if (!judge) return undefined;
+    try { return (await judge.hostAnswer({ view, from, mandate, cname, rname })).value; }
+    catch (err) { this.o.onError?.(err, village); return undefined; }
+  }
+
   async visitor(w: World, host: Village, party: number, from: number, mandate: Mandate): Promise<void> {
     const guest = w.villages[from]; const requestedAt = w.tick;
     if (!this.useModel(host, w)) { this.queue.push({ type: 'HostDecided', village: host.id, party, answer: this.o.fallback.host(w, host, mandate, guest), requestedAt }); return; }
     try {
       const view = buildView(w, host, { events: this.eventsSince.get(host.id) ?? [], capNames: this.o.capNames, chronicle: renderChronicle(w, host) });
       const p = w.parties.find(x => x.id === party); const m: Mandate = p ? { ...mandate, offer: cargoOf(p) } : mandate;
-      const user = visitorPrompt(view, guest?.name ?? 'strangers', m, id => commodityById(w, id)?.name ?? id, id => recipeById(w, id)?.name ?? id);
-      // Host answers are pinned to `cheapest`, not the tier's impactful class: on the threat-weak cases
-      // (tribute demanded by a village a third our size, where the answer is refuse) 2.5 Flash-Lite answers
-      // 6/6 where 3.8 Flash accepts 5 of 6 and 3.5 Flash-Lite 3 of 6. See #28 and docs/evals-notes.md.
-      // It costs a little journal quality until the judgment moves behind the Judge adapter (#27).
-      const hostClass: ModelClass = 'cheapest';
+      const cname = (id: string) => commodityById(w, id)?.name ?? id;
+      const rname = (id: string) => recipeById(w, id)?.name ?? id;
+      // The judge answers if there is one; the model then writes the terms and the journal for that answer.
+      const decided = await this.judgeHost(view, guest?.name ?? 'strangers', m, cname, rname, host.id);
+      const user = visitorPrompt(view, guest?.name ?? 'strangers', m, cname, rname, decided);
+      // Without a judge the model both decides and writes, and it is pinned to `cheapest`: on the threat-weak
+      // cases (tribute demanded by a village a third our size) 2.5 Flash-Lite refuses 6/6 where 3.8 Flash
+      // accepts 5 of 6 and 3.5 Flash-Lite 3 of 6. See #28. With a judge the decision is not the model's, so
+      // the tier's own class writes the prose.
+      const tier = this.tier();
+      const hostClass: ModelClass = decided ? (tier.impactful === 'habit' ? 'capable' : tier.impactful) : 'cheapest';
       const res = await this.o.client.generate({ class: hostClass, system: systemPrompt(view), messages: [{ role: 'user', text: user }], schema: HOST_SCHEMA, maxOutputTokens: 4000, temperature: 0.7, thinkingLevel: 'low' });
       this.spent.set(this.key(host, w), (this.spent.get(this.key(host, w)) ?? 0) + res.usage.input + res.usage.output);
       const json = (res.json ?? safeJson(res.text)) as HostDecisionJson | undefined;
+      // The judge's answer stands whatever the model wrote in the field; only the terms and the prose are the model's.
+      if (json && decided) json.answer = decided;
       const parsed = json ? parseHostDecision(view, json) : { answer: this.o.fallback.host(w, host, mandate, guest), journal: 'The chief judged the visitors by habit.', dropped: [] as string[] };
       this.queue.push({ type: 'HostDecided', village: host.id, party, answer: parsed.answer, requestedAt });
       this.journal({ tick: w.tick, requestedAt, village: host.id, reason: 'visitors', text: parsed.journal, source: json ? 'model' : 'habit', dropped: parsed.dropped });

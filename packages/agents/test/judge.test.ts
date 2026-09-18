@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { generateWorld, CAP_NAMES } from '@wind-spirit/gen';
-import { buildView, MockLlmClient } from '../src/index.js';
+import { ChiefScheduler, buildView, MockLlmClient } from '../src/index.js';
 import { LlmJudge, binaryConfidence, credibilityState, hostState, verdictState } from '../src/judge/index.js';
-import type { Mandate } from '@wind-spirit/sim';
+import type { Judge, HostValue } from '../src/judge/types.js';
+import type { HostAnswer, Mandate } from '@wind-spirit/sim';
 
 const view = () => { const w = generateWorld({ seed: 'judge' }); return buildView(w, w.villages[0], { events: [], capNames: CAP_NAMES }); };
 const mandate = (o: Partial<Mandate> = {}): Mandate => ({ offer: {}, want: {}, ...o } as Mandate);
@@ -59,5 +60,53 @@ describe('LlmJudge', () => {
 describe('binaryConfidence', () => {
   it('is nothing at a coin flip and everything at certainty', () => {
     expect(binaryConfidence(0.5)).toBe(0); expect(binaryConfidence(1)).toBe(1); expect(binaryConfidence(0)).toBe(1);
+  });
+});
+
+describe('the scheduler with a judge', () => {
+  const setup = (judgeAnswer: HostValue | Error, modelAnswer: 'accept' | 'counter' | 'refuse') => {
+    const w = generateWorld({ seed: 'judge-sched' });
+    const host = w.villages[0]; const guest = w.villages[1] ?? w.villages[0];
+    const prompts: string[] = [];
+    const client = new MockLlmClient(req => { prompts.push(req.messages[req.messages.length - 1].text); return { answer: modelAnswer, give: {}, take: {}, journal: 'They came and we spoke.' }; });
+    const judge: Judge = {
+      name: 'stub',
+      spent: { calls: 0, input: 0, output: 0, cost: 0 },
+      credible: async () => ({ value: true, p: 1, confidence: 1 }),
+      verdict: async () => ({ value: 'unverifiable' as const, p: 1, confidence: 1 }),
+      hostAnswer: async () => { if (judgeAnswer instanceof Error) throw judgeAnswer; return { value: judgeAnswer, p: 0.9, confidence: 0.9 }; },
+    };
+    const answers: HostAnswer[] = [];
+    const sched = new ChiefScheduler({
+      client, capNames: CAP_NAMES, judge: () => judge,
+      fallback: { decide: () => [], host: () => ({ kind: 'refuse', reason: 'habit' }) },
+    });
+    return { w, host, guest, sched, prompts, answers };
+  };
+
+  it('uses the judge answer, not the model field, and tells the model what was decided', async () => {
+    const { w, host, guest, sched, prompts } = setup('refuse', 'accept');
+    await sched.visitor(w, host, 0, guest.id, { offer: {}, want: {}, threat: true } as Mandate);
+    const queued = sched.drain().find(i => i.type === 'HostDecided') as { answer: HostAnswer } | undefined;
+    expect(queued?.answer.kind).toBe('refuse');                    // the judge's answer, not the model's 'accept'
+    expect(prompts[0]).toContain('You have decided to refuse');    // and the prose was written for it
+  });
+
+  it('falls back to the model deciding when the judge throws', async () => {
+    const { w, host, guest, sched, prompts } = setup(new Error('judge down'), 'accept');
+    await sched.visitor(w, host, 0, guest.id, { offer: {}, want: {} } as Mandate);
+    const queued = sched.drain().find(i => i.type === 'HostDecided') as { answer: HostAnswer } | undefined;
+    expect(queued?.answer.kind).toBe('accept');                    // the model's own answer stands
+    expect(prompts[0]).not.toContain('You have decided');
+    expect(prompts[0]).toContain('Answer: accept');
+  });
+
+  it('decides with the model when no judge is configured', async () => {
+    const w = generateWorld({ seed: 'judge-sched-2' });
+    const client = new MockLlmClient(() => ({ answer: 'counter', give: {}, take: {}, journal: 'We bargained.' }));
+    const sched = new ChiefScheduler({ client, capNames: CAP_NAMES, fallback: { decide: () => [], host: () => ({ kind: 'refuse', reason: 'habit' }) } });
+    await sched.visitor(w, w.villages[0], 0, (w.villages[1] ?? w.villages[0]).id, { offer: {}, want: {} } as Mandate);
+    const queued = sched.drain().find(i => i.type === 'HostDecided') as { answer: HostAnswer } | undefined;
+    expect(queued?.answer.kind).toBe('counter');
   });
 });

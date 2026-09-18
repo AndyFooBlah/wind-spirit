@@ -1,30 +1,36 @@
 /**
  * Jev judge: TypeSafe System One. Every question is a typed judgment, so nothing here parses prose.
  *
- * Not for the browser. The SDK refuses to run there without `dangerouslyAllowBrowser`, and the key must stay
- * server-side regardless; the web app reaches a judge through services/llm-proxy, never this class directly.
+ * The API key is never this class's business: it takes a transport, which is either the proxy (browser, key
+ * stays on the server) or the SDK (evals and server code). See transport.ts and transport-sdk.ts.
  */
-import { TypeSafeClient, type ChoiceResponse, type NoulResponse } from '@typesafe-ai/sdk';
 import { credibilityState, hostState, verdictState } from './state.js';
+import type { SystemOneTransport } from './transport.js';
 import { binaryConfidence, type CredibilityInput, type HostInput, type HostValue, type Judge, type Judgment, type Spend, type VerdictInput, type VerdictValue } from './types.js';
 
 /** $42 per billion input tokens; output is free. Verified against docs.typesafe.ai/models 2026-09-17. */
-const USD_PER_INPUT_TOKEN = 42 / 1e9;
+export const USD_PER_INPUT_TOKEN = 42 / 1e9;
 
-export interface JevJudgeOptions { apiKey?: string; model?: string; timeout?: number }
+/** The shape of a Noul answer; a probability of yes and nothing else. */
+interface NoulResponse { noul: number }
+/** The shape of a Choice answer: the label, its confidence, and the whole distribution. */
+interface ChoiceResponse { choice: string; confidence: number; probabilities: Record<string, number> }
+
+export interface JevJudgeOptions { transport: SystemOneTransport; model?: string }
 
 export class JevJudge implements Judge {
   readonly name: string;
   readonly spent: Spend = { calls: 0, input: 0, output: 0, cost: 0 };
-  private client: TypeSafeClient;
-  constructor(o: JevJudgeOptions = {}) {
-    this.client = new TypeSafeClient({ apiKey: o.apiKey, defaultModel: o.model ?? 'jev-latest', timeout: o.timeout ?? 15000 });
+  private client: SystemOneTransport;
+  private model?: string;
+  constructor(o: JevJudgeOptions) {
+    this.client = o.transport; this.model = o.model;
     this.name = `jev:${o.model ?? 'latest'}`;
   }
 
-  private bill(usage: { input_tokens: number; output_tokens: number }): void {
+  private bill(usage: { input_tokens: number; output_tokens: number }, cost?: number): void {
     this.spent.calls++; this.spent.input += usage.input_tokens; this.spent.output += usage.output_tokens;
-    this.spent.cost += usage.input_tokens * USD_PER_INPUT_TOKEN;
+    this.spent.cost += cost ?? usage.input_tokens * USD_PER_INPUT_TOKEN;
   }
 
   /**
@@ -34,6 +40,7 @@ export class JevJudge implements Judge {
    */
   async credible(i: CredibilityInput): Promise<Judgment<boolean>> {
     const res = await this.client.systemOne({
+      model: this.model,
       state: credibilityState(i),
       questions: {
         consistent: {
@@ -48,15 +55,16 @@ export class JevJudge implements Judge {
         },
       },
     });
-    this.bill(res.usage);
-    const consistent = (res.answers.consistent as NoulResponse).noul;
-    const harmful = (res.answers.harmful as NoulResponse).noul;
+    this.bill(res.usage, res.cost);
+    const consistent = (res.answers.consistent as unknown as NoulResponse).noul;
+    const harmful = (res.answers.harmful as unknown as NoulResponse).noul;
     const p = consistent * (1 - harmful);
     return { value: p >= 0.5, p, confidence: binaryConfidence(p), distribution: { consistent, harmful } };
   }
 
   async verdict(i: VerdictInput): Promise<Judgment<VerdictValue>> {
     const res = await this.client.systemOne({
+      model: this.model,
       state: verdictState(i),
       questions: {
         verdict: {
@@ -70,13 +78,14 @@ export class JevJudge implements Judge {
         },
       },
     });
-    this.bill(res.usage);
-    const a = res.answers.verdict as ChoiceResponse;
-    return { value: a.choice as VerdictValue, p: a.probabilities[a.choice] as number, confidence: a.confidence, distribution: { ...a.probabilities } as Record<string, number> };
+    this.bill(res.usage, res.cost);
+    const a = res.answers.verdict as unknown as ChoiceResponse;
+    return { value: a.choice as VerdictValue, p: a.probabilities[a.choice] ?? 0, confidence: a.confidence, distribution: { ...a.probabilities } };
   }
 
   async hostAnswer(i: HostInput): Promise<Judgment<HostValue>> {
     const res = await this.client.systemOne({
+      model: this.model,
       state: hostState(i),
       questions: {
         answer: {
@@ -90,8 +99,8 @@ export class JevJudge implements Judge {
         },
       },
     });
-    this.bill(res.usage);
-    const a = res.answers.answer as ChoiceResponse;
-    return { value: a.choice as HostValue, p: a.probabilities[a.choice] as number, confidence: a.confidence, distribution: { ...a.probabilities } as Record<string, number> };
+    this.bill(res.usage, res.cost);
+    const a = res.answers.answer as unknown as ChoiceResponse;
+    return { value: a.choice as HostValue, p: a.probabilities[a.choice] ?? 0, confidence: a.confidence, distribution: { ...a.probabilities } };
   }
 }

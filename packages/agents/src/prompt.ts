@@ -30,6 +30,13 @@ ${closing}`;
 
 const list = (xs: string[], empty = 'none') => (xs.length ? xs.map(x => `- ${x}`).join('\n') : `- ${empty}`);
 
+/** What to say when the chief has already made up their mind and only the terms and the telling are left. */
+const DECIDED: Record<'accept' | 'counter' | 'refuse', string> = {
+  accept: 'You have decided to accept: give what they ask and take what they offer. Write what you give and take, and your journal.',
+  counter: 'You have decided to counter rather than accept or refuse. Say what you will give and what you will take from their offer, keeping enough food for your own people, and write your journal.',
+  refuse: 'You have decided to refuse and send them away with nothing. Say plainly why, and write your journal.',
+};
+
 export function statePrompt(v: VillageView, reason: string, withMenu = true): string {
   const p = v.people;
   const sections: string[] = [];
@@ -64,12 +71,17 @@ Answer with JSON: { "orders": [...], "journal": "...", "memoryNotes": [...], "re
   return sections.join('\n\n');
 }
 
-export function visitorPrompt(v: VillageView, from: string, mandate: Mandate, cname: (id: string) => string, rname: (id: string) => string): string {
+/**
+ * `decided` is set when a judge has already answered (see judge/). The chief then writes the terms and the
+ * journal for a decision they have made, rather than making it again: asking twice invites the prose and the
+ * decision to disagree.
+ */
+export function visitorPrompt(v: VillageView, from: string, mandate: Mandate, cname: (id: string) => string, rname: (id: string) => string, decided?: 'accept' | 'counter' | 'refuse'): string {
   const goods = (g: Record<string, number>) => Object.entries(g).map(([c, q]) => `${Math.round(q / 1000)} ${cname(c)}`).join(', ') || 'nothing';
   return `${statePrompt(v, 'envoys have arrived')}
 
 # ${mandate.refuge ? 'The people at your edge' : 'The envoys'}
 ${mandate.refuge ? `People from ${from} stand at the edge of your village.` : `Envoys from ${from} stand before you.`} ${mandate.threat ? `They demand tribute: ${goods(mandate.want)}, and say their warriors will come and take it, and more, if you refuse. They offer nothing in return${Object.keys(mandate.offer).length ? ` beyond ${goods(mandate.offer)}` : ''}.` : `They offer: ${goods(mandate.offer)}. They ask for: ${goods(mandate.want)}.`}${mandate.transfer ? ` They offer to teach us ${rname(mandate.transfer)}.` : ''}${mandate.message ? ` Their chief says: "${mandate.message}"` : ''}
-${mandate.refuge ? `These are not envoys but ${mandate.refuge} people with everything they own on their backs, asking to be taken in as your own. What they carry: ${goods(mandate.offer)}. If you accept they join your village for good, mouths and hands alike, with what they carry. If you refuse they walk on to the next village, or die on the road.\n` : ''}Answer: accept (give what they ask, take what they offer), counter (say what you give and what you take from their offer), or refuse. Keep enough food for your people. Give generously to friends, carefully to strangers, and never to those who have wronged you without cause. A demand backed by threat is a different matter from an offer: weigh how strong they are against how strong you are, and what paying once teaches them.
-Answer with JSON: { "answer": "accept"|"counter"|"refuse", "give": {name: units}, "take": {name: units}, "reason": "...", "journal": "..." }.`;
+${mandate.refuge ? `These are not envoys but ${mandate.refuge} people with everything they own on their backs, asking to be taken in as your own. What they carry: ${goods(mandate.offer)}. If you accept they join your village for good, mouths and hands alike, with what they carry. If you refuse they walk on to the next village, or die on the road.\n` : ''}${decided ? DECIDED[decided] : 'Answer: accept (give what they ask, take what they offer), counter (say what you give and what you take from their offer), or refuse. Keep enough food for your people. Give generously to friends, carefully to strangers, and never to those who have wronged you without cause. A demand backed by threat is a different matter from an offer: weigh how strong they are against how strong you are, and what paying once teaches them.'}
+Answer with JSON: { "answer": ${decided ? `"${decided}"` : '"accept"|"counter"|"refuse"'}, "give": {name: units}, "take": {name: units}, "reason": "...", "journal": "..." }.`;
 }

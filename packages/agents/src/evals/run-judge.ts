@@ -9,6 +9,8 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { HttpLlmClient } from '../client.js';
 import { LlmJudge } from '../judge/llm.js';
 import { JevJudge } from '../judge/jev.js';
+import { SdkSystemOne } from '../judge/transport-sdk.js';
+import { ProxySystemOne } from '../judge/transport.js';
 import type { Judge, VerdictValue } from '../judge/types.js';
 import type { EvalCase } from './corpus.js';
 import { anonToken } from './token.js';
@@ -44,8 +46,10 @@ async function main() {
   if (!existsSync(corpusPath)) throw new Error(`no corpus at ${corpusPath}`);
   const cases = JSON.parse(readFileSync(corpusPath, 'utf8')) as EvalCase[];
 
+  // --judge jev goes straight to the SDK; --judge jev-proxy exercises the path the browser uses.
   let judge: Judge;
-  if (which === 'jev') judge = new JevJudge({ model: arg('model', 'jev-latest') });
+  if (which === 'jev') judge = new JevJudge({ transport: new SdkSystemOne(), model: arg('model', 'jev-latest') });
+  else if (which === 'jev-proxy') { const token = await anonToken(proxy); judge = new JevJudge({ transport: new ProxySystemOne(proxy, async () => token), model: arg('model', 'jev-latest') }); }
   else { const token = await anonToken(proxy); judge = new LlmJudge({ client: new HttpLlmClient(proxy, async () => token), model: arg('model', 'gemini-3.8-flash'), modelClass: 'routine' }); }
 
   const results: JudgeResult[] = [];
