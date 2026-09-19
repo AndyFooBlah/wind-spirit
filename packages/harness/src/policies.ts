@@ -1,6 +1,6 @@
 /** Scripted chief policies: deterministic stand-ins for LLM chiefs. Also the runtime fallback. */
 import {
-  K, P, Rng, TERRAIN, div, mul, neighbors, popCounts, seasonOf, shelter, storeQty, storesWeeks, structures, tileDistance, yearOf, hasCap, nearWater, recipeById, commodityById, storeByCategory,
+  K, P, Rng, route, workforce, TERRAIN, div, mul, neighbors, popCounts, seasonOf, shelter, storeQty, storesWeeks, structures, tileDistance, yearOf, hasCap, nearWater, recipeById, commodityById, storeByCategory,
   type Order, type Village, type World, type WildResource, type Recipe, type Capability, type Mandate, type HostAnswer,
 } from '@wind-spirit/sim';
 
@@ -202,7 +202,7 @@ function techOrders(view: PolicyView, free: number, hungry: boolean): { orders: 
 function decide(view: PolicyView, f: Features): Order[] {
   const { w, v, rng, mem } = view; const tick = w.tick; const season = seasonOf(tick); const year = yearOf(tick);
   const counts = popCounts(v, tick); const pop = counts.total;
-  let free = Math.max(0, counts.adults - 1);
+  let free = workforce(w, v).length;   // the chief works when the village is tiny or starving; the sim clamps to the same count
   const out: Order[] = [];
   const pc = plotCounts(v); const sh = shelter(w, v);
   const weeks = storesWeeks(w, v);
@@ -296,9 +296,18 @@ export { structures };
 export function abandonIfHopeless(view: PolicyView): Order[] | undefined {
   const { w, v } = view;
   if (v.hardship < 700 || storesWeeks(w, v) > 0 || v.people.length > 15 || v.people.length === 0) return undefined;
+  // Nearest by the road they would actually walk, not by straight line: a village across water with no boat is no
+  // refuge at all. Without this the order fails in the sim, is dropped, and the village sits and starves instead of
+  // falling back to foraging, because this policy short-circuits the ordinary one every time it is asked.
+  const boat = hasCap(v, 'paddle'), sail = hasCap(v, 'sail');
   let best = -1, bestD = Infinity;
-  for (const id of v.knowledge.villages) { const c = w.villages[id]; if (!c || !c.alive || c.id === v.id) continue; const d = tileDistance(w, v.tile, c.tile); if (d < bestD && d <= 30) { bestD = d; best = id; } }
-  if (best === -1) return undefined;
+  for (const id of v.knowledge.villages) {
+    const c = w.villages[id]; if (!c || !c.alive || c.id === v.id) continue;
+    if (tileDistance(w, v.tile, c.tile) > 30) continue;
+    const r = route(w, v.tile, c.tile, boat, sail); if (!r.length) continue;
+    if (r.length < bestD) { bestD = r.length; best = id; }
+  }
+  if (best === -1) return undefined;   // nowhere they can reach: forage and hope, which the ordinary policy will do
   return [order('abandon', 0, { target: best })];
 }
 const plainSensible = POLICIES.sensible;

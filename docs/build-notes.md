@@ -133,3 +133,31 @@ the check on three: that sample's median was 46.25. At 450 it passes on three (3
 with the village-of-20 survival still at 92%, and the other checks are unchanged. Lesson kept: a median over three
 seeds is a coin toss near the bar, so a change that touches geography gets checked on the CI sample too before it
 ships. Existing saves keep their old maps.
+
+## A long watch, and the chief who would not fish (2026-09-18)
+
+The sim gained abandonment, kinship and refuge without anyone watching a world run with them. `pnpm harness --
+playtest --seeds 4 --years 300` does that: scripted chiefs, so it is free, and it looks for what an assertion
+cannot — mechanics that fire but never resolve, parties that never arrive, kin that raid kin, villages that stall.
+
+The mechanics themselves came through clean. Across four worlds and twelve centuries every abandoned village's
+people were taken in somewhere, none were lost on the road, the longest walk was ten weeks, and kin never raided
+kin. Raids are zero, which is the scripted policy being reluctant rather than a bug, but it does mean the whole
+tribute-and-threat apparatus is barely exercised in play.
+
+What the watch found was a village that sat with no orders and no food for **fifty-five weeks** while its people
+starved from seven down to one. The cause: the work loop excludes the chief from the workforce, so a village down to
+a single adult has nobody who may be given an order. The policy correctly returns nothing, the sim correctly does
+nothing, and the village dies with a chief standing in it. `workforce()` now lets the chief work when there are two
+adults or fewer, or when stores are under two weeks: a chief who will not fish while the children die is not a chief.
+
+The longest idle-and-starving run went from fifty-five weeks to one, and the watch reports nothing. Village deaths
+across the four worlds fell from 31/28/28/28 to 22/13/19/14, and abandonments with them, because fewer villages
+reach the point of hopelessness. The whole balance suite still passes; median final population drifts from about
+3,400 to 2,757, which is the same worlds losing fewer villages to a silly death and more to ordinary crowding.
+
+One wrong guess worth recording: the first hypothesis was that abandonment was failing to find a route and dropping
+the order, leaving the village orderless. That was real — `abandonIfHopeless` picked the nearest village by straight
+line, not by a road anyone could walk — and it is fixed, but it was not this. The trace was: print the village week
+by week with its adults, its free workers and what the policy would say. `free=0` with `adults=1` gave it away in
+one line.
