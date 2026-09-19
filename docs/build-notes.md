@@ -161,3 +161,25 @@ the order, leaving the village orderless. That was real — `abandonIfHopeless` 
 line, not by a road anyone could walk — and it is fixed, but it was not this. The trace was: print the village week
 by week with its adults, its free workers and what the policy would say. `free=0` with `adults=1` gave it away in
 one line.
+
+## Forty years with a real chief, and the quota nobody would have seen (2026-09-18)
+
+`run-chief playtest-live 40` puts one village under the real model for forty years. The village came through well:
+twenty-two people, twenty weeks of food, nine skills, twenty-three recipes, content. Six hundred and twenty-one
+decisions came from the model and the journals read as a person's.
+
+Then from year 38 every entry says "the chief acted on habit; the spirit world was silent", and stays that way. Not
+a flaky call: fourteen failures in a row. The proxy's own logs give the reason in one word, `quota`. The run had
+used 2,001,158 tokens against a daily cap of 2,000,000.
+
+Two things follow. The first is arithmetic worth knowing before inviting anyone: **one village with a real chief
+costs about 52,000 tokens a game-year**, so the daily cap is about forty village-years. With the default setting of
+three model villages that is thirteen game-years a day, which a player will reach in an afternoon.
+
+The second is the real defect. When the budget runs out the chiefs do not stop; they quietly fall back to habit, and
+the journal's own words for that are indistinguishable from a chief who had nothing to say. A player would conclude
+the game had got boring. There is now a banner that says the day's thinking is spent, that the world keeps running
+on habit, and when it comes back.
+
+Whether 2,000,000 a day is the right number is a spending decision rather than a bug: it is roughly three to eight
+dollars a day per invited player at Vertex prices, and it is the backstop that makes an open invitation safe.

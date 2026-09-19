@@ -54,6 +54,8 @@ export interface GameState {
   techOpen: boolean;
   /** the proxy refused a model call for want of an invitation: show the gate again */
   inviteLost: boolean;
+  /** the proxy's daily token budget is spent; chiefs act on habit until it resets */
+  quotaSpent?: { resetAt?: string };
   /** the sun spirit: past questions and answers this world, and the one in flight */
   sun: { open: boolean; turns: { question: string; answer: string; tick: number }[]; asking?: { id: number; question: string; streaming: string } };
   /** snapshots still to read for the charts, when an older save predates the series */
@@ -144,10 +146,17 @@ function onWorker(m: FromWorker): void {
     case 'series': { set(s => ({ series: [...s.series.filter(p => p.tick !== m.point.tick), m.point].sort((a, b) => a.tick - b.tick) })); const w = get().world; if (w) void ensureDb().then(d => saveSeries(d, w.id, m.point)); break; }
     case 'error':
       if (/proxy 403/.test(m.message) && /not_invited/.test(m.message)) { forgetInvite(); if (!get().inviteLost) { set({ inviteLost: true }); if (get().speed !== 'pause') setSpeed('pause'); } break; }
+      // The day's thinking is spent: every chief quietly drops to habit, which otherwise reads as the model having
+      // nothing to say. Say it once, plainly, and say when it comes back.
+      if (/proxy 429/.test(m.message) && /quota/.test(m.message)) {
+        if (!get().quotaSpent) { const at = /"resetAt":"([^"]+)"/.exec(m.message)?.[1]; set({ quotaSpent: { resetAt: at } }); }
+        break;
+      }
       toast(m.message, 'error', m.village); break;
   }
 }
 export function inviteRestored(): void { set({ inviteLost: false }); }
+export function dismissQuotaNotice(): void { set({ quotaSpent: undefined }); }
 
 function tileXY(tile: number): [number, number] { const w = get().map?.width ?? 64; return [tile % w, Math.floor(tile / w)]; }
 
