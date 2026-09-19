@@ -517,3 +517,42 @@ kind that some models pass and others fail, and prints the number of cases behin
 that started this — "3.8 Flash refuses both" in the third pass and in the published post — rested on two
 observations. Two observations cannot tell always from sometimes. Anything that matters gets `run-judge.ts` and
 repeats.
+
+## Fifth pass (2026-09-18): the decomposition put back into the game
+
+The fourth pass found that every model resists the false-fallow whisper when asked about it on its own, and that
+the credulity failure belonged to the combined prompt. This pass does the obvious thing with that: ask the judge
+first, hand the chief the answer as something they already believe, and let them decide.
+
+The line the chief gets states the two judgements separately — whether the whisper squares with what the village
+has seen, and what obeying would cost — and closes with which way they lean. Where that line falls is the chief's
+piety: `credulityThreshold` swings between 0.6 for a skeptic and 0.2 for the devout, with 0.4 in the middle, which
+is where the fourth pass put the useful threshold. Credulity is now a trait, not an accident of the tier.
+
+Spirit category, 15 cases, corpus 2026-09-13, Jev judging credibility first:
+
+| model | spirit, alone | spirit, judged first | obeyed the lie | missed the true nudge |
+|---|---|---|---|---|
+| gemini-3.5-flash-lite | 0.933 | **0.973** | 5/10 → **2/10** | 0/2 → 0/2 |
+| gemini-2.5-flash | 0.840 | **1.000** | 9/10 → **0/10** | 0/2 → 0/2 |
+
+2.5 Flash went from obeying false prophecy nine times in ten to never — and **still acts on the true nudge both
+times**. That is the part that matters: the hint does not make chiefs uniformly suspicious, it makes them
+discriminating. A blanket "do not trust spirits" would have scored the same on false-fallow and lost the rumour
+cases.
+
+Note 3.5 Flash-Lite's baseline is 5/10 here against the 4/10 archived in the third pass. Same corpus, same checks,
+one pass at temperature 0.7 — the run-to-run spread on ten cases is about what the OpenRouter-versus-Vertex
+oddity in the fourth pass suggested. Treat single-digit differences in this column as noise; 9/10 → 0/10 is not.
+
+Nothing else in the corpus moves: the line is only rendered when a case carries a spirit message, and
+`statePrompt` with no judgement is byte-identical to the old one (there is a test for exactly that, so old runs
+stay comparable).
+
+Verdicts moved across at the same time. The scheduler now rules on every claim that has come due and cannot be
+settled by the sim, and tells the chief not to rule again; the model's own `verdicts` array is ignored when a
+judge is present and used when it is not. There are no verdict cases in the corpus, so the evidence for this is
+the probe (43/45 through the deployed proxy, with the `deaths` claim's shaky ground truth accounting for most of
+the loss) and unit tests on the wiring.
+
+Both fall back silently: a judge that throws leaves the chief deciding exactly as before.

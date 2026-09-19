@@ -1,12 +1,18 @@
 /**
  * Eval runner: replay the corpus against one or more models through the proxy, score, and save results.
  * Usage: tsx src/evals/run.ts --models gemini-3.8-flash,gemini-3.5-flash-lite [--categories routine,crisis] [--limit 20] [--judge]
+ *        --credibility jev|<model> puts the whisper's credibility to a judge first and hands the chief the answer,
+ *        which is the decomposition the fourth pass found fixes credulity. Off by default so old runs stay comparable.
  * Cases come from out/evals/corpus.json (build with `tsx src/evals/build.ts`).
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import type { HostAnswer } from '@wind-spirit/sim';
 import { HttpLlmClient, type GenerateRequest } from '../client.js';
-import { statePrompt, systemPrompt, visitorPrompt } from '../prompt.js';
+import { credibilityLine, statePrompt, systemPrompt, visitorPrompt, type StateOpts } from '../prompt.js';
+import type { Judge } from '../judge/types.js';
+import { JevJudge } from '../judge/jev.js';
+import { SdkSystemOne } from '../judge/transport-sdk.js';
+import { LlmJudge } from '../judge/llm.js';
 import { DECISION_SCHEMA, HOST_SCHEMA, type ChiefDecisionJson, type HostDecisionJson } from '../schema.js';
 import { parseDecision, parseHostDecision } from '../parse.js';
 import { scoreDecision, scoreDream, scoreHost, checksScore, type Checks } from './score.js';
@@ -20,19 +26,24 @@ const proxy = process.env.PROXY_URL ?? 'https://llm-proxy-406179055859.us-centra
 export interface CaseResult { id: string; category: string; model: string; checks: Checks; score: number; usage: { input: number; output: number; thoughts?: number; cached?: number }; cost: number; ms: number; output: string; error?: string; judge?: number; }
 
 
-export async function runCase(client: HttpLlmClient, model: string, c: EvalCase, judge?: HttpLlmClient): Promise<CaseResult> {
+export async function runCase(client: HttpLlmClient, model: string, c: EvalCase, judge?: HttpLlmClient, credibility?: Judge): Promise<CaseResult> {
   // one retry on upstream rate limits or transient proxy errors
-  const r = await runCaseOnce(client, model, c, judge);
-  if (r.error && /429|Resource exhausted|502|503/.test(r.error)) { await new Promise(res => setTimeout(res, 8000)); return runCaseOnce(client, model, c, judge); }
+  const r = await runCaseOnce(client, model, c, judge, credibility);
+  if (r.error && /429|Resource exhausted|502|503/.test(r.error)) { await new Promise(res => setTimeout(res, 8000)); return runCaseOnce(client, model, c, judge, credibility); }
   return r;
 }
 
-async function runCaseOnce(client: HttpLlmClient, model: string, c: EvalCase, judge?: HttpLlmClient): Promise<CaseResult> {
+async function runCaseOnce(client: HttpLlmClient, model: string, c: EvalCase, judge?: HttpLlmClient, credibility?: Judge): Promise<CaseResult> {
   const t0 = Date.now();
   const base: Partial<GenerateRequest> = { model, temperature: 0.7, thinkingLevel: 'low' };
   try {
     if (c.kind === 'decision') {
-      const res = await client.generate({ ...base, class: 'routine', system: systemPrompt(c.view), messages: [{ role: 'user', text: statePrompt(c.view, c.reason) }], schema: DECISION_SCHEMA, maxOutputTokens: 6000 } as GenerateRequest);
+      const opts: StateOpts = {};
+      if (credibility && c.spiritMessage) {
+        const j = await credibility.credible({ view: c.view, whisper: c.spiritMessage });
+        opts.credibility = credibilityLine(j, c.view.village.chiefTraits);
+      }
+      const res = await client.generate({ ...base, class: 'routine', system: systemPrompt(c.view), messages: [{ role: 'user', text: statePrompt(c.view, c.reason, true, opts) }], schema: DECISION_SCHEMA, maxOutputTokens: 6000 } as GenerateRequest);
       const json = (res.json ?? safeJson(res.text)) as ChiefDecisionJson | undefined;
       if (!json || !Array.isArray(json.orders)) return fail(c, model, res, 'no decision json', t0);
       const parsed = parseDecision(c.view, json); const checks = scoreDecision(c, parsed);
@@ -91,12 +102,17 @@ async function main() {
   const repeat = Math.max(1, Number(arg('repeat', '1')));
   if (repeat > 1) cases = cases.flatMap(c => Array.from({ length: repeat }, (_, k) => ({ ...c, id: `${c.id}#${k}` })));
   const token = await anonToken(proxy); const client = new HttpLlmClient(proxy, async () => token); const judge = withJudge ? new HttpLlmClient(proxy, async () => token) : undefined;
+  const credArg = arg('credibility', '');
+  const credibility: Judge | undefined = !credArg ? undefined
+    : credArg === 'jev' ? new JevJudge({ transport: new SdkSystemOne() })
+    : new LlmJudge({ client: new HttpLlmClient(proxy, async () => token), model: credArg, modelClass: 'routine' });
+  if (credibility) console.log(`credibility judged first by ${credibility.name}`);
   mkdirSync('out/evals', { recursive: true });
   for (const model of models) {
     const results: CaseResult[] = []; let i = 0;
-    const workers = Array.from({ length: concurrency }, async () => { for (;;) { const c = cases[i++]; if (!c) return; const r = await runCase(client, model, c, judge); results.push(r); process.stdout.write(`${model} ${r.category} ${r.id} ${r.score.toFixed(2)}${r.error ? ` ERR ${r.error}` : ''} $${r.cost.toFixed(4)} ${r.ms}ms\n`); } });
+    const workers = Array.from({ length: concurrency }, async () => { for (;;) { const c = cases[i++]; if (!c) return; const r = await runCase(client, model, c, judge, credibility); results.push(r); process.stdout.write(`${model} ${r.category} ${r.id} ${r.score.toFixed(2)}${r.error ? ` ERR ${r.error}` : ''} $${r.cost.toFixed(4)} ${r.ms}ms\n`); } });
     await Promise.all(workers);
-    const file = `out/evals/${model.replace(/[^a-z0-9.-]/gi, '_')}.json`;
+    const file = `out/evals/${model.replace(/[^a-z0-9.-]/gi, '_')}${credArg ? `+cred-${credArg.replace(/[^a-z0-9.-]/gi, '_')}` : ''}.json`;
     let out = results;
     if (merge && existsSync(file)) { const prev = JSON.parse(readFileSync(file, 'utf8')) as { results: CaseResult[] }; const done = new Set(results.map(r => r.id)); out = [...prev.results.filter(r => !done.has(r.id)), ...results]; }
     writeFileSync(file, JSON.stringify({ model, when: new Date().toISOString(), results: out }, null, 1));
