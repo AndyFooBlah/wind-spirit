@@ -292,3 +292,19 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
   words) but not drafted. Its spine is the finding above: most of the win was the question, not the model. The
   outline deliberately leads with what was got wrong — the undersampled #28 claim and the superseded credulity
   numbers — rather than appendixing it.
+
+- 2026-10-17T05:05Z [incident] My backfill timestamps were wrong: I used `git log --date=format:` under `TZ=UTC`,
+  which formats in each *commit's own* timezone, so every stamp from the 2026-10-16T17:30Z backfill entry and
+  above is local Pacific wearing a Z. The true UTC times are seven hours later (ce2eed4 is 2026-09-12T06:43Z, not
+  2026-09-11T23:43Z). `--date=format-local:` is the flag that actually converts. Found by the other session, not
+  by me. The entries stay as written, per append-only; read them as Pacific.
+- 2026-10-17T05:05Z [learning] A token-denominated quota cannot express the owner's goal. The same 2M/day cap
+  costs $0.44, $2.03 and $6.76 per player-day on thrifty, standard and lavish — a fifteenfold spread, because the
+  tier picks the model. Seat trimming bounds how many people can play, not what each costs: ten seats on lavish is
+  about $68 a day. Counting `costUsd` in `quota.ts` is the instrument that would do it.
+- 2026-10-17T05:05Z [learning] Nobody had costed the spirit's own calls. The sun spirit sends a whole-world digest
+  of roughly 20k tokens to the capable model, about $0.058 a question and $0.17 a game-year at three questions —
+  comparable to all three chiefs put together at standard. Dreams are about $0.013 a turn on the same class.
+- 2026-10-17T05:05Z [decision] Per the other session, the seat trim and the budget sizing are still unlanded: it
+  declined to act on my relay of the owner's instruction, on the grounds that a peer relay is not the owner's
+  approval for something it had put to him directly. That is the right call and the record should show no outcome.
