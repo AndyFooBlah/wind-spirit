@@ -308,3 +308,17 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
 - 2026-10-17T05:05Z [decision] Per the other session, the seat trim and the budget sizing are still unlanded: it
   declined to act on my relay of the owner's instruction, on the grounds that a peer relay is not the owner's
   approval for something it had put to him directly. That is the right call and the record should show no outcome.
+
+- 2026-10-17T04:52Z [incident] **Backfilled timestamps in this journal are seven hours early and are not UTC.**
+  Spot-checked against the commits they cite: entries generated with
+  `git log --date=format:'%Y-%m-%dT%H:%MZ'` render each commit in its own local zone (here PDT,
+  UTC-7) and then have a literal `Z` appended by the format string, so the `Z` is wrong. Add seven
+  hours to any entry that was derived from commit times. Entries written from session chronology
+  rather than from that command are unaffected, so this journal may mix both.
+- 2026-10-17T04:52Z [learning] Correct incantation for a UTC backfill:
+  `TZ=UTC git log --date=format-local:'%Y-%m-%dT%H:%MZ'` — `format-local`, not `format`. Appending a
+  literal `Z` to a local-time format produces timestamps that look authoritative and are silently
+  wrong, which is worse than an obviously missing timezone. This hit several repos in the
+  2026-10-16 journal rollout, independently, because the same command was used in each.
+- 2026-10-17T04:52Z [decision] Corrected by appending rather than editing the entries above, per the append-only
+  rule.
