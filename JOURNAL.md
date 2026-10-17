@@ -249,3 +249,46 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
   same family as the chief-workforce bug); #27 (the judgment adapter, owned by the other session); a
   dollar-denominated spend cap; and the question nobody has an issue for, which is what a player is trying to
   achieve beyond watching trust accumulate.
+
+- 2026-10-17T04:41Z [incident] Timestamp correction for the backfilled entries above (everything before the
+  `## Current` section): they carry local Pacific times with a `Z` suffix, so each is seven hours earlier than
+  the UTC it claims. `d184c31` is stamped 2026-09-17T14:35Z but committed at 21:35Z; `e70e71a` is stamped
+  2026-09-18T16:29Z but committed at 23:29Z. The ordering is right and the commit hashes are authoritative; only
+  the clock labels are off. Not edited, per append-only.
+- 2026-10-17T04:41Z [friction] This file was written twice within the hour. A second session checked for a journal, found none,
+  wrote a 55-line backfill, and had it replaced by this longer and better one moments later. No loss worth
+  recovering — this version covers more — but the file sat untracked in a shared working tree the whole time,
+  which is the most clobberable state there is. Committing it now so it stops being a race.
+- 2026-10-17T04:41Z [learning] The central finding of the Jev work is not in the entries above and belongs on the record:
+  **asked the narrow question on its own, every model answers credulity correctly** — 2.5 Flash-Lite scored 36/36
+  over three passes. The credulity defect was the combined prompt, not the judgement. Most of the available gain
+  is decomposition, which is free and works whoever answers; Jev's own edge is verdicts (97% against 79–84%),
+  speed and price.
+- 2026-10-17T04:41Z [learning] Putting that decomposition back into the game: with the judge asked first and the chief handed
+  the answer, 2.5 Flash went from obeying "plant nothing this spring" nine times in ten to zero in ten, and still
+  acted on the true nudge both times. It makes chiefs discriminating, not suspicious — a blanket distrust would
+  have scored the same on the lie and lost the rumour cases. 3.5 Flash-Lite 5/10 → 2/10, which the variance work
+  at 2026-09-18T16:43Z suggests is noise; 9/10 → 0/10 is not.
+- 2026-10-17T04:41Z [decision] Credulity became `credulityThreshold(chiefTraits)` — 0.6 for a skeptic, 0.2 for the devout,
+  0.4 in the middle. It is a character trait now rather than a side effect of which model the billing tier bought.
+  This is the part of the Jev work expected to outlast the vendor choice.
+- 2026-10-17T04:41Z [milestone] `b817f19` also added `POST /v1/systemone` to the proxy with the key in Secret Manager as
+  `typesafe-api-key`, on the same rules as the OpenRouter key. `JevJudge` takes a transport — `ProxySystemOne`
+  in the browser, `SdkSystemOne` in evals and server code — so the SDK import sits in a file the web barrel does
+  not re-export. Bundle verified free of key, SDK and `api.typesafe.ai`.
+- 2026-10-17T04:41Z [decision] When a judge answers, the model is told what was decided and writes only the terms and the
+  journal. Asking twice invites the prose and the decision to disagree.
+- 2026-10-17T04:41Z [incident] I built and deployed to production carrying eight commits from the other session without reading
+  them, and only noticed when the bundle size jumped. They were on `main` and the merged state checked out
+  (205 tests green), but the log should have been read before the deploy, not after.
+- 2026-10-17T04:41Z [idea] Owner's design thread, not yet an issue: idle villagers should either fall back to a default action
+  or rest, with a share of the village at leisure improving morale on a saturating curve. Proposed asymmetry —
+  unassigned means drifting (poor food, no morale), `rest` means granted leisure (no food, morale) — so leisure
+  is something a chief spends hands on rather than gets for free. Scale the weariness penalty by `(1 − hardship)`
+  so prosperity raises expectations. Grounding finding: `v.happiness` is read by nothing in the sim except the
+  coup check, so it is close to decorative; the strongest candidate consequence is **trust**, which is the game's
+  actual scoreboard. Blocked on #40 and #41.
+- 2026-10-17T04:41Z [idea] A blog post on the TypeSafe exploration is outlined (sixteen sections, two charts, ~2,500–3,500
+  words) but not drafted. Its spine is the finding above: most of the win was the question, not the model. The
+  outline deliberately leads with what was got wrong — the undersampled #28 claim and the superseded credulity
+  numbers — rather than appendixing it.

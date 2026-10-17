@@ -7,6 +7,8 @@ the work happens, in the same commit as the change: steps, decisions (with who d
 when the owner decided), friction, lessons, surprises, incidents and ideas for future work.
 
 - Every entry starts with a UTC timestamp and a tag: `- 2026-10-16T17:52Z [decision] …`
+  The `Z` means UTC, not local time with a Z stuck on it — the first backfill made exactly that mistake and
+  needed a correction entry. `TZ=UTC git log --date=format-local:'%Y-%m-%dT%H:%MZ'` gets it right.
 - Tags: `[step]`, `[decision]`, `[friction]`, `[learning]`, `[surprise]`, `[incident]`, `[idea]`, `[milestone]`.
 - One line to a short paragraph. Not every turn, but everything significant, including failures and dead ends.
   Link commits, PRs, issues, run directories and docs.
