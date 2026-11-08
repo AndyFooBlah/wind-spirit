@@ -1,9 +1,10 @@
 # Deploy to production on every push to main, and when deps-merge (ci.yml)
 # dispatches it after merging a dependency update (AndyFooBlah/andy-private-docs#57).
 #   - Firebase Hosting (apps/web) on every run.
-#   - Cloud Run llm-proxy only when services/llm-proxy/ changed since the commit
-#     the live service was deployed from (its `deployed-commit` label), or when
-#     dispatched with proxy=true.
+#   - Cloud Run llm-proxy only when services/llm-proxy/, pnpm-lock.yaml or the root
+#     package.json changed since the commit the live service was deployed from (its
+#     `deployed-commit` label), or when dispatched with proxy=true. The image installs
+#     from a lockfile pruned from pnpm-lock.yaml, so a lockfile bump can change it.
 # Then a smoke test of the live UI and the proxy's /health; on failure, both are
 # rolled back to what was live before this run.
 name: deploy
@@ -46,6 +47,8 @@ jobs:
       - run: pnpm test
       - run: pnpm harness -- assert --seeds 3 --only determinism,forager,farmer --out out/ci
       - run: pnpm build
+      - run: pnpm --filter @wind-spirit/web exec playwright install --with-deps chromium
+      - run: pnpm --filter @wind-spirit/web render-check
 
   deploy:
     needs: test
@@ -85,16 +88,19 @@ jobs:
             --format 'value(metadata.labels.deployed-commit)')
           proxy=no
           if [ "$FORCE_PROXY" = true ] || [ -z "$deployed" ] || ! git cat-file -e "$deployed^{commit}" 2>/dev/null \
-             || ! git diff --quiet "$deployed" HEAD -- services/llm-proxy; then proxy=yes; fi
+             || ! git diff --quiet "$deployed" HEAD -- services/llm-proxy pnpm-lock.yaml package.json; then proxy=yes; fi
           echo "live hosting version: $prev_version; live revision: $prev_revision; proxy deployed from: ${deployed:-unknown}; deploy proxy: $proxy"
           { echo "prev_version=$prev_version"; echo "prev_revision=$prev_revision"; echo "proxy=$proxy"; } >> "$GITHUB_OUTPUT"
       # Same command as services/llm-proxy/README.md. --set-env-vars and --set-secrets each
       # REPLACE the whole set, so both must list everything the live service has.
+      # The source is a staged context whose lockfile is pruned from the workspace one, so the
+      # image ships what pnpm-lock.yaml (and Dependabot) pins.
       - name: Deploy llm-proxy (Cloud Run)
         if: steps.before.outputs.proxy == 'yes'
         run: |
+          services/llm-proxy/scripts/build-context.sh "$RUNNER_TEMP/llm-proxy"
           gcloud run deploy "$SERVICE" \
-            --source services/llm-proxy \
+            --source "$RUNNER_TEMP/llm-proxy" \
             --project "$PROJECT" --region "$REGION" \
             --service-account llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com \
             --allow-unauthenticated \

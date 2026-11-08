@@ -16,6 +16,15 @@ updates:
       default-days: 5
       semver-major-days: 14
     groups:
+      # react and react-dom must move together: react-dom 19 merged alone next to
+      # react 18 broke the live UI on 2026-11-08 (smoke caught it, rolled back).
+      # A dependency goes to the first group it matches, so this comes before
+      # `routine`, and it takes every update type, majors included. (A security
+      # update covers only the advisory's package; CI's render check is the
+      # backstop for a lone react-dom security bump.)
+      react:
+        applies-to: version-updates
+        patterns: [react, react-dom, "@types/react", "@types/react-dom"]
       routine:
         applies-to: version-updates
         update-types: [minor, patch]

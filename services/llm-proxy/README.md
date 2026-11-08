@@ -352,8 +352,9 @@ secret `openrouter-api-key` with `roles/secretmanager.secretAccessor` for `llm-p
 
 ```sh
 cd /path/to/wind-spirit
+ctx=$(mktemp -d) && services/llm-proxy/scripts/build-context.sh "$ctx"
 gcloud run deploy llm-proxy \
-  --source services/llm-proxy \
+  --source "$ctx" \
   --project wind-spirit-prod --region us-central1 \
   --service-account llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com \
   --allow-unauthenticated \
@@ -363,8 +364,11 @@ gcloud run deploy llm-proxy \
   --min-instances 0 --max-instances 5
 ```
 
-`--source` uses the `Dockerfile` here (build context is this directory only, so the image installs
-with npm from this `package.json`; `tsconfig.docker.json` is a self-contained copy of the base config).
+`--source` uses the `Dockerfile` here, but not this directory as the build context:
+`scripts/build-context.sh` stages a copy of this package with a `pnpm-lock.yaml` pruned from the
+workspace lockfile (`pnpm deploy`), and the image installs from it with `pnpm install --frozen-lockfile`,
+so it ships exactly what the lockfile Dependabot maintains pins. `--source services/llm-proxy` no longer
+builds (there is no lockfile in it). `tsconfig.docker.json` is a self-contained copy of the base config.
 `--allow-unauthenticated` is at the Cloud Run layer; the app itself enforces Firebase tokens.
 
 Cold starts: `--min-instances 1` keeps one instance warm so a first prayer doesn't wait; it is 0 for
