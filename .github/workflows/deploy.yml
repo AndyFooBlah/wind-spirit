@@ -1,0 +1,173 @@
+# Deploy to production on every push to main, and when deps-merge (ci.yml)
+# dispatches it after merging a dependency update (AndyFooBlah/andy-private-docs#57).
+#   - Firebase Hosting (apps/web) on every run.
+#   - Cloud Run llm-proxy only when services/llm-proxy/ changed since the commit
+#     the live service was deployed from (its `deployed-commit` label), or when
+#     dispatched with proxy=true.
+# Then a smoke test of the live UI and the proxy's /health; on failure, both are
+# rolled back to what was live before this run.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      proxy:
+        description: Deploy llm-proxy even if services/llm-proxy/ did not change
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  PROJECT: wind-spirit-prod
+  REGION: us-central1
+  SITE: wind-spirit-prod
+  SERVICE: llm-proxy
+  WIF_PROVIDER: projects/406179055859/locations/global/workloadIdentityPools/github/providers/wind-spirit-repo
+  DEPLOY_SA: github-deploy@wind-spirit-prod.iam.gserviceaccount.com
+  FIREBASE_TOOLS: firebase-tools@15.34.1
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/deps-toolchain
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm harness -- assert --seeds 3 --only determinism,forager,farmer --out out/ci
+      - run: pnpm build
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      prev_version: ${{ steps.before.outputs.prev_version }}
+      prev_revision: ${{ steps.before.outputs.prev_revision }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/deps-toolchain
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: ${{ env.DEPLOY_SA }}
+      - uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3.0.1
+      - name: Record what is live, decide whether llm-proxy changed
+        id: before
+        env:
+          FORCE_PROXY: ${{ inputs.proxy || false }}
+        run: |
+          set -euo pipefail
+          token=$(gcloud auth print-access-token)
+          prev_version=$(curl -fsS -H "Authorization: Bearer $token" \
+            "https://firebasehosting.googleapis.com/v1beta1/sites/$SITE/channels/live/releases?pageSize=1" \
+            | jq -r '.releases[0].version.name')
+          prev_revision=$(gcloud run services describe "$SERVICE" --project "$PROJECT" --region "$REGION" \
+            --format 'value(status.traffic[0].revisionName)')
+          deployed=$(gcloud run services describe "$SERVICE" --project "$PROJECT" --region "$REGION" \
+            --format 'value(metadata.labels.deployed-commit)')
+          proxy=no
+          if [ "$FORCE_PROXY" = true ] || [ -z "$deployed" ] || ! git cat-file -e "$deployed^{commit}" 2>/dev/null \
+             || ! git diff --quiet "$deployed" HEAD -- services/llm-proxy; then proxy=yes; fi
+          echo "live hosting version: $prev_version; live revision: $prev_revision; proxy deployed from: ${deployed:-unknown}; deploy proxy: $proxy"
+          { echo "prev_version=$prev_version"; echo "prev_revision=$prev_revision"; echo "proxy=$proxy"; } >> "$GITHUB_OUTPUT"
+      # Same command as services/llm-proxy/README.md. --set-env-vars and --set-secrets each
+      # REPLACE the whole set, so both must list everything the live service has.
+      - name: Deploy llm-proxy (Cloud Run)
+        if: steps.before.outputs.proxy == 'yes'
+        run: |
+          gcloud run deploy "$SERVICE" \
+            --source services/llm-proxy \
+            --project "$PROJECT" --region "$REGION" \
+            --service-account llm-proxy-sa@wind-spirit-prod.iam.gserviceaccount.com \
+            --allow-unauthenticated \
+            --set-env-vars GOOGLE_CLOUD_PROJECT=wind-spirit-prod,VERTEX_LOCATION=global,ANTHROPIC_LOCATION=global,MAAS_LOCATION=global,MODEL_CHEAP=gemini-3.5-flash-lite,MODEL_ROUTINE=gemini-3.8-flash,MODEL_CAPABLE=gemini-3.1-pro-preview,MODEL_PREMIUM=gemini-3.1-pro-preview,REQUIRE_AUTH=true,REQUIRE_INVITE=true,APP_CHECK=enforce,DAILY_TOKEN_QUOTA=2000000 \
+            --set-secrets OPENROUTER_API_KEY=openrouter-api-key:latest,TYPESAFE_API_KEY=typesafe-api-key:latest \
+            --timeout 300 --concurrency 40 --memory 512Mi --cpu 1 \
+            --min-instances 0 --max-instances 5 \
+            --update-labels deployed-commit="$GITHUB_SHA" \
+            --quiet
+      - name: Check the llm-proxy gates
+        if: steps.before.outputs.proxy == 'yes'
+        run: |
+          set -euo pipefail
+          url=$(gcloud run services describe "$SERVICE" --project "$PROJECT" --region "$REGION" --format 'value(status.url)')
+          # Plain /health only: /health?deep=1 makes five paid model calls.
+          curl -fsS "$url/health" | jq -e '.ok == true and .requireAuth == true and .appCheck == "enforce"' >/dev/null
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$url/v1/invite/redeem" -H 'content-type: application/json' -d '{"code":"x"}')
+          [ "$code" = 401 ] || { echo "::error::invite redeem without App Check returned $code, expected 401"; exit 1; }
+      - name: Deploy Firebase Hosting
+        working-directory: apps/web
+        run: npx --yes "$FIREBASE_TOOLS" deploy --project "$PROJECT" --only hosting --non-interactive
+
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Loads the UI once per deploy (each load signs in one anonymous Firebase user).
+      - uses: AndyFooBlah/uptime/smoke@main
+        with:
+          url: https://wind-spirit-prod.web.app/
+          ui-text: Your invitation
+      - uses: AndyFooBlah/uptime/smoke@main
+        with:
+          url: https://llm-proxy-406179055859.us-central1.run.app/health
+          ui-text: ""
+          contains: '"ok":true'
+
+  rollback:
+    needs: [deploy, smoke]
+    if: always() && (needs.deploy.result == 'failure' || needs.smoke.result == 'failure')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      PREV_VERSION: ${{ needs.deploy.outputs.prev_version }}
+      PREV_REVISION: ${{ needs.deploy.outputs.prev_revision }}
+    steps:
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: ${{ env.DEPLOY_SA }}
+      - uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3.0.1
+      - name: Roll back to what was live before this run, then fail
+        run: |
+          set -euo pipefail
+          token=$(gcloud auth print-access-token)
+          live=$(curl -fsS -H "Authorization: Bearer $token" \
+            "https://firebasehosting.googleapis.com/v1beta1/sites/$SITE/channels/live/releases?pageSize=1" \
+            | jq -r '.releases[0].version.name')
+          if [ -n "$PREV_VERSION" ] && [ "$live" != "$PREV_VERSION" ]; then
+            curl -fsS -X POST -H "Authorization: Bearer $token" \
+              "https://firebasehosting.googleapis.com/v1beta1/sites/$SITE/releases?versionName=$PREV_VERSION" >/dev/null
+            echo "Hosting rolled back to $PREV_VERSION"
+          fi
+          serving=$(gcloud run services describe "$SERVICE" --project "$PROJECT" --region "$REGION" \
+            --format 'value(status.traffic[0].revisionName)')
+          if [ -n "$PREV_REVISION" ] && [ "$serving" != "$PREV_REVISION" ]; then
+            gcloud run services update-traffic "$SERVICE" --project "$PROJECT" --region "$REGION" \
+              --to-revisions "$PREV_REVISION=100" --quiet
+            echo "llm-proxy traffic rolled back to $PREV_REVISION"
+          fi
+          echo "::error::Deploy or smoke test failed; production was rolled back"
+          exit 1
