@@ -322,3 +322,4 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
   2026-10-16 journal rollout, independently, because the same command was used in each.
 - 2026-10-17T04:52Z [decision] Corrected by appending rather than editing the entries above, per the append-only
   rule.
+- 2026-11-08T17:30Z [step] Turned on Dependabot alerts and security updates, and replaced a standard `.github/dependabot.yml`: weekly grouped minor/patch updates with a 5-day cooldown (14 days for majors); security updates open immediately. Part of the cross-repo dependency security program (AndyFooBlah/andy-private-docs#57).
