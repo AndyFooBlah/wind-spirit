@@ -1,13 +1,13 @@
 # Build context: services/llm-proxy only (pnpm workspace root is not available here),
 # so the image uses npm against this package.json alone.
-FROM node:24-slim AS build
+FROM node:25-slim AS build
 WORKDIR /app
 COPY package.json tsconfig.docker.json ./
 RUN npm install --no-audit --no-fund
 COPY src ./src
 RUN npx tsc -p tsconfig.docker.json
 
-FROM node:24-slim
+FROM node:25-slim
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json ./
