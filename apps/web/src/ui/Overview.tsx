@@ -71,7 +71,7 @@ function Chart({ title, series, villages, colour, kind }: { title: string; serie
   const W = 420, H = 150, L = 34, B = 18, T = 6;
   const pts = series; const n = pts.length;
   const x = (i: number) => L + (n > 1 ? (i / (n - 1)) * (W - L - 6) : 0);
-  let body: JSX.Element | null = null; let ymax = 1; let legend: JSX.Element | null = null;
+  let body: React.JSX.Element | null = null; let ymax = 1; let legend: React.JSX.Element | null = null;
   if (n >= 1 && kind === 'pop') {
     const totals = pts.map(p => p.villages.reduce((a, v) => a + (v.alive ? v.pop : 0), 0));
     ymax = Math.max(10, ...totals);

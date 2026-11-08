@@ -15,7 +15,7 @@ export function MapCanvas() {
   const renderer = useRef(new MapRenderer());
   const state = useRef<RenderState>({ zoom: 'local', center: { x: 32, y: 32 }, targeting: false, speedMs: 0 });
   const [tip, setTip] = useState<{ x: number; y: number; text: string } | undefined>();
-  const drag = useRef<{ x: number; y: number; cx: number; cy: number; moved: boolean } | undefined>();
+  const drag = useRef<{ x: number; y: number; cx: number; cy: number; moved: boolean } | undefined>(undefined);
   const zoom = useGame(s => s.zoom); const targeting = useGame(s => s.targeting);
 
   useEffect(() => {
