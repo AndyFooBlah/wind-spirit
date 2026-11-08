@@ -119,8 +119,8 @@ importers:
   services/llm-proxy:
     dependencies:
       '@anthropic-ai/sdk':
-        specifier: 0.126.0
-        version: 0.126.0
+        specifier: 1.4.0
+        version: 1.4.0
       '@anthropic-ai/vertex-sdk':
         specifier: ^1.1.0
         version: 1.1.0
@@ -151,15 +151,6 @@ importers:
         version: 4.1.12(@opentelemetry/api@1.10.0)(@types/node@26.6.5)(vite@8.1.6(@types/node@26.6.5)(esbuild@0.28.2)(tsx@4.23.13))
 
 packages:
-
-  '@anthropic-ai/sdk@0.126.0':
-    resolution: {integrity: sha512-VhiZl6rA/8uC+MgDaOhEcAWaIZ2tPnIY885jlZqxrGrutUW2nqCtophBtlsX0tk5kChBUjV/1NVjL3y0M4OwUg==}
-    hasBin: true
-    peerDependencies:
-      zod: ^3.25.0 || ^4.0.0
-    peerDependenciesMeta:
-      zod:
-        optional: true
 
   '@anthropic-ai/sdk@1.4.0':
     resolution: {integrity: sha512-tyuibnhQL57kLOx5oomY4Ld7jOVOPNC5v3IiyRtR3l+Friv66tI4VbuZYF2NMel/T0WMuQMBFOMKDBUbUh8gPA==}
@@ -1956,11 +1947,6 @@ packages:
         optional: true
 
 snapshots:
-
-  '@anthropic-ai/sdk@0.126.0':
-    dependencies:
-      json-schema-to-ts: 3.1.1
-      standardwebhooks: 1.1.1
 
   '@anthropic-ai/sdk@1.4.0':
     dependencies:

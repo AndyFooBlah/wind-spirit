@@ -55,7 +55,8 @@ export function toParams(req: ProviderRequest): Anthropic.MessageCreateParamsNon
   if (systemText) {
     params.system = useCache ? [{ type: 'text', text: systemText, cache_control: CACHE }] : systemText;
   }
-  if (req.temperature !== undefined) params.temperature = req.temperature;
+  // SDK 1.x dropped `temperature` from its types; the API still accepts it where the model allows.
+  if (req.temperature !== undefined) (params as { temperature?: number }).temperature = req.temperature;
   // thinkingLevel is a Gemini knob; Haiku 4.5 wants budget_tokens and Sonnet 5 wants adaptive, so map loosely.
   if (req.thinkingLevel && req.thinkingLevel !== 'low' && req.thinkingLevel !== 'minimal') {
     params.thinking = req.model.startsWith('claude-haiku-4-5')
