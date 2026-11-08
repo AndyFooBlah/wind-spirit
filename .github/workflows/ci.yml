@@ -29,15 +29,29 @@ jobs:
       - run: pnpm test
       - run: pnpm harness -- assert --seeds 3 --only determinism,forager,farmer --out out/ci   # the full suite (all scenarios, 6+ seeds) is run locally before each milestone
       - run: pnpm build   # every package, including the web bundle that deploy.yml ships
+      # Loads the built UI in headless Chromium (external requests blocked, so no sign-in and no model
+      # calls) and requires the invitation gate to render: a react/react-dom mismatch fails here.
+      - run: pnpm --filter @wind-spirit/web exec playwright install --with-deps chromium
+      - run: pnpm --filter @wind-spirit/web render-check
 
   # Builds the Cloud Run image from services/llm-proxy/Dockerfile (Dependabot's
-  # docker ecosystem), with the same npm install the image does.
+  # docker ecosystem) in the same staged context deploy.yml uses: the package plus
+  # a lockfile pruned from the workspace pnpm-lock.yaml, installed frozen. Then
+  # starts it and checks plain /health (no credentials, no model calls).
   proxy-image:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - run: docker build -t llm-proxy:ci services/llm-proxy
+      - uses: ./.github/actions/deps-toolchain
+      - run: pnpm install --frozen-lockfile
+      - run: services/llm-proxy/scripts/build-context.sh "$RUNNER_TEMP/llm-proxy"
+      - run: docker build -t llm-proxy:ci "$RUNNER_TEMP/llm-proxy"
+      - name: Start the image and check /health
+        run: |
+          docker run -d --name proxy -p 8080:8080 llm-proxy:ci
+          for _ in $(seq 1 15); do curl -fsS localhost:8080/health && break; sleep 2; done | jq -e '.ok == true' \
+            || { docker logs proxy; exit 1; }
 
   # ---------------------------------------------------------------------------
   # Dependency program (AndyFooBlah/andy-private-docs#57, deps/POLICY.md there).
