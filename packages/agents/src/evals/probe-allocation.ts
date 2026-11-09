@@ -104,7 +104,7 @@ async function main() {
 
     const t0 = Date.now();
     const res = await client.systemOne({ state: stateOf(v), questions: questions as never });
-    const ms = Date.now() - t0; inTokens += res.usage.input_tokens;
+    const ms = Date.now() - t0; inTokens += res.usage.input_tokens ?? 0;
     const answers = res.answers as Record<string, ScoreResponse | ChoiceResponse>;
     const scores: Record<string, number> = {};
     for (const t of CANDIDATES) scores[t.task] = (answers[t.task] as ScoreResponse).score;
