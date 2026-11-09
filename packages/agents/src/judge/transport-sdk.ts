@@ -14,6 +14,6 @@ export class SdkSystemOne implements SystemOneTransport {
   }
   async systemOne(req: SystemOneRequest): Promise<SystemOneResult> {
     const res = await this.client.systemOne({ state: req.state, questions: req.questions as never, ...(req.model ? { model: req.model } : {}) });
-    return { model: res.model, answers: res.answers as Record<string, unknown>, usage: res.usage };
+    return { model: res.model, answers: res.answers as Record<string, unknown>, usage: { input_tokens: res.usage.input_tokens ?? 0, output_tokens: res.usage.output_tokens ?? 0 } };
   }
 }
