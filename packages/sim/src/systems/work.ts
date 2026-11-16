@@ -1,8 +1,8 @@
 import { K, mul, div } from '../fixed.js';
 import { harvestWeatherFactor, P, seasonOf, TERRAIN, WEEKS_PER_SEASON } from '../params.js';
-import type { Capability, Order, Person, Recipe, Village, WildResource } from '../types.js';
+import type { Capability, Order, Person, Recipe, Village, WildResource, World } from '../types.js';
 import { CAPABILITIES } from '../types.js';
-import { addStore, commodityById, craftLaborMult, hasCap, idx, inBounds, learnCommodities, nearWater, neighbors, parseGoods, popCounts, recipeById, stageOf, storeQty, takeStore, xy, type Ctx, tileDistance } from '../world.js';
+import { addStore, commodityById, storesWeeks, craftLaborMult, hasCap, idx, inBounds, learnCommodities, nearWater, neighbors, parseGoods, popCounts, recipeById, stageOf, storeQty, takeStore, xy, type Ctx, tileDistance } from '../world.js';
 import { addCargo } from './diplomacy.js';
 import { tread } from './paths.js';
 import { clearingSite, structureSite } from '../layout.js';
@@ -15,12 +15,21 @@ const SOURCE: Record<'forage' | 'hunt' | 'fish', { res: WildResource; out: strin
   fish: { res: 'fish', out: 'fish', base: P.yield.fish, season: P.seasonFish },
 };
 
+/** Who may be given orders this week. The chief is spared the work only when the village can afford it. */
+export function workforce(w: World, v: Village): Person[] {
+  const adults = v.people.filter(p => stageOf(p.born, w.tick) === 'adult');
+  const chiefWorks = adults.length <= 2 || storesWeeks(w, v) < 2;
+  return chiefWorks ? adults : adults.filter(p => p.id !== v.chief);
+}
+
 export function work(ctx: Ctx): void {
   const { w } = ctx; const season = seasonOf(w.tick); const roll = currentRoll(ctx);
   for (const v of w.villages) {
     if (!v.alive) continue;
     if (season === 3 && w.tick % WEEKS_PER_SEASON === 0) for (const p of v.plots) if (p.planted) { p.planted = false; p.crop = ''; p.fertility = Math.max(0, p.fertility - P.fertilityDropPerHarvest); }
-    let free = v.people.filter(p => stageOf(p.born, w.tick) === 'adult' && p.id !== v.chief).length;
+    // The chief directs rather than works, but not while the village starves and not when they are one of the
+    // last two adults: a chief who will not fish while the children die is how a village of seven became one.
+    let free = workforce(w, v).length;
     const keep: Order[] = [];
     let cleared = 0;
     for (const o of v.orders) {
@@ -265,8 +274,8 @@ function road(ctx: Ctx, v: Village, tile: number, workers: number): boolean {
   return true;
 }
 
-function takeAdults(v: Village, tick: number, n: number): Person[] {
-  const adults = v.people.filter(p => stageOf(p.born, tick) === 'adult' && p.id !== v.chief);
+function takeAdults(w: World, v: Village, n: number): Person[] {
+  const adults = workforce(w, v);
   const chosen = adults.slice(-n);
   const ids = new Set(chosen.map(p => p.id)); v.people = v.people.filter(p => !ids.has(p.id));
   return chosen;
@@ -282,7 +291,7 @@ function explore(ctx: Ctx, v: Village, o: Order, free: number): number {
   const boat = hasCap(v, 'paddle');
   const passable = (t: number) => TERRAIN[w.tiles[t].terrain].passable || (boat && TERRAIN[w.tiles[t].terrain].water);
   if (!passable(target)) { const alt = neighbors(w, target, 2).find(passable); if (alt === undefined) return 0; target = alt; }
-  const members = takeAdults(v, w.tick, n);
+  const members = takeAdults(w, v, n);
   const rations = takeStore(v, 'grain', members.length * 4 * P.foodPerPersonWeek);
   const party = spawnParty(ctx, v, 'explore', members, rations, target, { boat, cart: hasCap(v, 'cart'), sail: hasCap(v, 'sail') });
   if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
@@ -295,7 +304,7 @@ function envoy(ctx: Ctx, v: Village, o: Order, free: number): number {
   const n = Math.max(1, Math.min(o.workers || 2, free)); if (free < n) return 0;
   const offer = parseGoods(String(o.params.offer ?? '')); const want = parseGoods(String(o.params.want ?? ''));
   for (const c of Object.keys(offer)) offer[c] = Math.min(offer[c], storeQty(v, c));
-  const members = takeAdults(v, w.tick, n);
+  const members = takeAdults(w, v, n);
   const rations = takeStore(v, 'grain', members.length * 6 * P.foodPerPersonWeek);
   const party = spawnParty(ctx, v, 'envoy', members, rations, target.tile, { boat: hasCap(v, 'paddle'), cart: hasCap(v, 'cart'), sail: hasCap(v, 'sail') });
   if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
@@ -311,7 +320,7 @@ function raid(ctx: Ctx, v: Village, o: Order, free: number): number {
   if (!target || !target.alive || target.id === v.id || !v.knowledge.villages.includes(target.id)) return 0;
   if (v.relations[target.id]?.kin) return 0;   // nobody raids their own kin
   const n = Math.min(o.workers, free); if (n < 2) return 0;
-  const members = takeAdults(v, w.tick, n);
+  const members = takeAdults(w, v, n);
   const rations = takeStore(v, 'grain', members.length * 6 * P.foodPerPersonWeek);
   const party = spawnParty(ctx, v, 'raid', members, rations, target.tile, { boat: hasCap(v, 'paddle'), cart: hasCap(v, 'cart'), sail: hasCap(v, 'sail') });
   if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
@@ -328,7 +337,7 @@ function expedition(ctx: Ctx, v: Village, o: Order, free: number): number {
   if (target < 0 || !has(target)) { let best = -1, bestD = 99; for (const t of v.knowledge.tiles) if (has(t)) { const d = Math.max(Math.abs(xy(w, t)[0] - xy(w, v.tile)[0]), Math.abs(xy(w, t)[1] - xy(w, v.tile)[1])); if (d > 1 && d < bestD) { bestD = d; best = t; } } target = best; }
   if (target < 0) return 0;
   const weeks = Math.max(1, Math.min(8, Number(o.params.weeks ?? 3)));
-  const members = takeAdults(v, w.tick, n);
+  const members = takeAdults(w, v, n);
   const rations = takeStore(v, 'grain', members.length * (weeks + 4) * P.foodPerPersonWeek);
   const party = spawnParty(ctx, v, 'expedition', members, rations, target, { boat: hasCap(v, 'paddle'), cart: hasCap(v, 'cart'), sail: hasCap(v, 'sail') });
   if (!party) { v.people.push(...members); addStore(v, 'grain', rations); return 0; }
@@ -373,7 +382,7 @@ function colonize(ctx: Ctx, v: Village, o: Order, free: number): number {
   const nAdults = Math.min(free, Math.max(2, Math.trunc((counts.adults * share) / K)));
   const leaving = nAdults + Math.trunc(((counts.children + counts.elders) * share) / K);
   if (nAdults < 2 || counts.adults - nAdults < 4 || counts.total - leaving < P.colonizeMinRemaining) return 0;
-  const members = takeAdults(v, w.tick, nAdults);
+  const members = takeAdults(w, v, nAdults);
   const nOther = Math.trunc(((counts.children + counts.elders) * share) / K);
   const others = v.people.filter(p => stageOf(p.born, w.tick) !== 'adult').slice(-nOther);
   const ids = new Set(others.map(p => p.id)); v.people = v.people.filter(p => !ids.has(p.id)); members.push(...others);

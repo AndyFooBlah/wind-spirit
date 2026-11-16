@@ -3,6 +3,7 @@ import { WEEKS_PER_YEAR } from '@wind-spirit/sim';
 import { SEASON_NAMES, type PersonView } from '../sim/protocol.ts';
 import { lineageColour } from '../map/lineage.ts';
 import { Icon } from './icons.tsx';
+import { ChiefPortrait } from './Portrait.tsx';
 import { useGame, selectVillage, openWhisper, dreamStart, setZoom, viewDetail, tellStory, narrativeKey, tickLabel, type NarrativeSpan, type NarrativeStyle } from '../store/game.ts';
 
 type Tab = 'overview' | 'people' | 'stores' | 'history' | 'journal' | 'chronicle';
@@ -32,7 +33,7 @@ export function VillagePanel() {
         <Stat label="Mood" value={p.happiness} sub={p.shelterWords} />
       </div>
       <div className="trust" title={`trust ${(v.spirit.trust / 10).toFixed(0)} of 100`}>
-        <div className="small"><span className="strong">The chief:</span> {v.spirit.attitude}.</div>
+        <div className="row chiefline"><ChiefPortrait villageId={detail.id} chiefId={detail.chiefId} size={44} title="the chief" /><div className="small"><span className="strong">The chief:</span> {v.spirit.attitude}.</div></div>
         <div className="bar"><div style={{ width: `${v.spirit.trust / 10}%` }} /></div>
       </div>
       {detail.alive && !history && (

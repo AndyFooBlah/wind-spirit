@@ -2,7 +2,7 @@
  * The village view: everything a chief is allowed to know, in prompt-ready form.
  * Built only from the village's own knowledge. Nothing about tiers, budgets, or unseen tiles leaks.
  */
-import {
+import { workforce,
   K, P, TERRAIN, TILE_MILES, WEEKS_PER_YEAR, commodityById, hasCap, isPath, neighbors, popCounts, recipeById, seasonOf, shelter, stageOf, storeQty, storesWeeks, structures, tileDistance, xy, yearOf, storageMult,
   type Event, type Recipe, type Village, type World, type Commodity,
 } from '@wind-spirit/sim';
@@ -96,7 +96,7 @@ export function buildView(w: World, v: Village, o: ViewOpts): VillageView {
   const view: VillageView = {
     seed: w.seed, tick, year: yearOf(tick), season: SEASONS[seasonOf(tick)], week: (tick % 13) + 1,
     village: { id: v.id, name: v.name, founded: yearOf(v.founded), chiefTraits: v.chiefTraits, culture: v.culture },
-    people: { total: counts.total, children: counts.children, adults: counts.adults, elders: counts.elders, workersFree: Math.max(0, counts.adults - 1), hungryNow: v.hungryWeek, deathsRecent: v.recentDeaths.reduce((a, b) => a + b, 0), happiness: words(v.happiness, ['wretched', 'unhappy', 'uneasy', 'content', 'glad', 'joyful']), shelterWords: sh.capacity >= counts.total ? (sh.score >= 900 ? 'everyone sleeps warm' : 'everyone has shelter, some of it poor') : `${counts.total - sh.capacity} people have no roof`, calmWeeks: v.calmWeeks },
+    people: { total: counts.total, children: counts.children, adults: counts.adults, elders: counts.elders, workersFree: workforce(w, v).length, hungryNow: v.hungryWeek, deathsRecent: v.recentDeaths.reduce((a, b) => a + b, 0), happiness: words(v.happiness, ['wretched', 'unhappy', 'uneasy', 'content', 'glad', 'joyful']), shelterWords: sh.capacity >= counts.total ? (sh.score >= 900 ? 'everyone sleeps warm' : 'everyone has shelter, some of it poor') : `${counts.total - sh.capacity} people have no roof`, calmWeeks: v.calmWeeks },
     stores, foodWeeks: storesWeeks(w, v), storageWords: mult >= 4000 ? 'food keeps well' : mult >= 2000 ? 'food keeps a while' : 'fresh food spoils fast',
     plots: { cleared, planted, free, structures: Object.entries(structs).map(([n, c]) => `${c} ${n}`) },
     capabilities: v.capabilities.map(capName), recipes, rumors, commodities, crops, surroundings, villages, sites, roadSites, parties, orders,

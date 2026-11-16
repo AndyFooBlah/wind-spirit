@@ -1,4 +1,5 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { playtest } from './playtest.js';
 import { join } from 'node:path';
 import { runOne, toCsv } from './run.js';
 import { buildReport } from './report.js';
@@ -10,7 +11,10 @@ function arg(name: string, def: string): string { const i = argv.indexOf(`--${na
 const cmd = argv[0] ?? 'run';
 const out = join(process.env.INIT_CWD ?? process.cwd(), arg('out', 'out/latest')); mkdirSync(out, { recursive: true });
 
-if (cmd === 'run') {
+if (cmd === 'playtest') {
+  const seeds = Number(arg('seeds', '4')); const years = Number(arg('years', '300'));
+  playtest(Array.from({ length: seeds }, (_, i) => `play-${i}`), years);
+} else if (cmd === 'run') {
   const n = Number(arg('seeds', '10')), years = Number(arg('years', '200')), policy = arg('policy', 'sensible') as PolicyName;
   const startPop = Number(arg('pop', '20')); const prefix = arg('prefix', 'run'); const size = Number(arg('size', '64')); const villages = Number(arg('villages', '4'));
   const results = [];

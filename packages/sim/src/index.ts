@@ -6,7 +6,7 @@ export * from './hash.js';
 export * from './world.js';
 export * from './sim.js';
 export { route, stepCost } from './systems/travel.js';
-export { discover } from './systems/work.js';
+export { discover, workforce } from './systems/work.js';
 export { cargoOf } from './systems/diplomacy.js';
 export { breathe } from './systems/spirit.js';
 export { isPath } from './systems/paths.js';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { setTechOpen } from '../store/game.ts';
-import { useGame, dismissToast, focusVillage, installGlobalHandlers, updateSettings, setSpeed } from '../store/game.ts';
+import { useGame, dismissToast, focusVillage, installGlobalHandlers, updateSettings, setSpeed, dismissQuotaNotice } from '../store/game.ts';
 import { MapCanvas } from '../map/MapCanvas.tsx';
 import { Gallery } from './Gallery.tsx';
 import { TopBar, HistoryBar } from './TopBar.tsx';
@@ -29,6 +29,7 @@ function Game() {
         <VillagePanel />
       </div>
       {loading && <div className="loading">{loading}</div>}
+      <QuotaNotice />
       <Toasts />
       <SpiritDialog />
       <Overview />
@@ -51,6 +52,19 @@ function Toasts() {
           )}
         </div>
       ))}
+    </div>
+  );
+}
+
+/** The day's thinking budget is spent. Chiefs keep going on habit, so say so rather than letting them go quiet. */
+function QuotaNotice() {
+  const quota = useGame(s => s.quotaSpent);
+  if (!quota) return null;
+  const when = quota.resetAt ? new Date(quota.resetAt) : undefined;
+  return (
+    <div className="quota-notice">
+      <div><span className="strong">The chiefs are thinking for themselves today.</span> This world has used its day's share of the model, so every chief now acts on habit: the sim runs on, the journals go quiet.{when ? ` It comes back at ${when.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.` : ''}</div>
+      <button className="ghost" onClick={dismissQuotaNotice}>Understood</button>
     </div>
   );
 }

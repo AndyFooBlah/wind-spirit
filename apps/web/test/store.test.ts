@@ -70,3 +70,17 @@ describe('store round trip', () => {
     expect(await loadResume(db, meta.id)).toBeUndefined();
   });
 });
+
+describe('chief faces', () => {
+  it('always picks a real face, and the same one for the same chief', async () => {
+    const { chiefFace } = await import('../src/ui/Portrait.tsx');
+    const seen = new Set<string>();
+    for (let v = 0; v < 40; v++) for (const c of [-1, 0, 1, 7, 12, 999, 123456]) {
+      const f = chiefFace(v, c);
+      expect(f, `village ${v} chief ${c}`).toMatch(/^chief-[a-h]$/);
+      expect(chiefFace(v, c)).toBe(f);   // stable
+      seen.add(f);
+    }
+    expect(seen.size).toBeGreaterThan(4);   // and it spreads across the set
+  });
+});

@@ -5,13 +5,13 @@
 import { WEEKS_PER_YEAR, cargoOf, commodityById, recipeById, type Event, type Input, type Order, type Village, type World, type Mandate, type HostAnswer } from '@wind-spirit/sim';
 import { buildView, type VillageView } from './view.js';
 
-import { statePrompt, systemPrompt, visitorPrompt } from './prompt.js';
+import { credibilityLine, statePrompt, systemPrompt, visitorPrompt, type StateOpts } from './prompt.js';
 import { DECISION_SCHEMA, HOST_SCHEMA, type ChiefDecisionJson, type HostDecisionJson } from './schema.js';
 import { parseDecision, parseHostDecision } from './parse.js';
 import { renderChronicle } from './conversation.js';
 import { TIERS, classify, type Tier, type TierName } from './tiers.js';
 import type { LlmClient, ModelClass } from './client.js';
-import type { Judge, HostValue } from './judge/types.js';
+import type { Judge, HostValue, VerdictValue } from './judge/types.js';
 
 export type Speed = 'pause' | 'step' | 'slow' | 'normal' | 'fast' | 'veryfast';
 export interface JournalEntry { tick: number; requestedAt: number; village: number; reason: string; text: string; source: 'model' | 'habit'; dropped?: string[]; }
@@ -92,13 +92,18 @@ export class ChiefScheduler {
     if (!v.orders.length || reason.includes('season')) this.queue.push({ type: 'ChiefDecided', village: v.id, orders: this.o.fallback.decide(w, v, reason), requestedAt });
     try {
       const view = buildView(w, v, { events: this.eventsSince.get(v.id) ?? [], capNames: this.o.capNames, pendingSpirit: [...v.inbox], chronicle: renderChronicle(w, v) });
-      const decision = await this.callDecision(view, reason, v, w, classify(reason, { sites: view.sites.length, pop: v.people.length, hungry: v.hungryWeek > 0 }) === 'impactful' ? (tier.impactful === 'habit' ? 'routine' : tier.impactful) : (tier.routine === 'habit' ? 'routine' : tier.routine));
+      // The judge takes the two label-shaped parts of the deliberation before the prompt is built: whether this
+      // whisper is worth heeding, and how any claim now due turned out. Both come back into the prompt as things
+      // the chief already knows, so the model is writing from a judgement rather than making one mid-decision.
+      const judged = await this.judgeSpirit(view, v, w);
+      const decision = await this.callDecision(view, reason, v, w, classify(reason, { sites: view.sites.length, pop: v.people.length, hungry: v.hungryWeek > 0 }) === 'impactful' ? (tier.impactful === 'habit' ? 'routine' : tier.impactful) : (tier.routine === 'habit' ? 'routine' : tier.routine), judged.opts);
       if (!decision) { this.habit(w, v, reason, requestedAt, 'The chief could not make up their mind and fell back on habit.'); return; }
       const parsed = parseDecision(view, decision);
       const overruled = foodFloor(parsed.orders, view);
       if (overruled) parsed.dropped.push(overruled);
       this.queue.push({ type: 'ChiefDecided', village: v.id, orders: parsed.orders, requestedAt, memoryNotes: parsed.memoryNotes, clearInbox: true });
-      if (parsed.verdicts.length) this.queue.push({ type: 'ChiefJudged', village: v.id, verdicts: parsed.verdicts });
+      const verdicts = judged.verdicts ?? parsed.verdicts;
+      if (verdicts.length) this.queue.push({ type: 'ChiefJudged', village: v.id, verdicts });
       if (parsed.replyToSpirit) this.queue.push({ type: 'Prayer', village: v.id, text: parsed.replyToSpirit });
       this.journal({ tick: w.tick, requestedAt, village: v.id, reason, text: parsed.journal, source: 'model', dropped: parsed.dropped });
       if (parsed.replyToSpirit) this.onPrayer?.(v.id, parsed.replyToSpirit);
@@ -109,8 +114,8 @@ export class ChiefScheduler {
 
   onPrayer?: (village: number, text: string) => void;
 
-  private async callDecision(view: VillageView, reason: string, v: Village, w: World, modelClass: 'cheapest' | 'cheap' | 'routine' | 'capable' | 'premium' = 'routine'): Promise<ChiefDecisionJson | undefined> {
-    const system = systemPrompt(view); const user = statePrompt(view, reason);
+  private async callDecision(view: VillageView, reason: string, v: Village, w: World, modelClass: 'cheapest' | 'cheap' | 'routine' | 'capable' | 'premium' = 'routine', opts: StateOpts = {}): Promise<ChiefDecisionJson | undefined> {
+    const system = systemPrompt(view); const user = statePrompt(view, reason, true, opts);
     for (let attempt = 0; attempt < 2; attempt++) {
       const res = await this.o.client.generate({ class: modelClass, system, messages: [{ role: 'user', text: user }], schema: DECISION_SCHEMA, maxOutputTokens: 6000, temperature: 0.7, thinkingLevel: 'low', cacheKey: `chief:${w.seed}:${v.id}` });
       this.spent.set(this.key(v, w), (this.spent.get(this.key(v, w)) ?? 0) + res.usage.input + res.usage.output);
@@ -118,6 +123,28 @@ export class ChiefScheduler {
       if (json && Array.isArray(json.orders)) return json;
     }
     return undefined;
+  }
+
+  /**
+   * The judge's share of a deliberation: the whisper's credibility, and a verdict on every claim now due that
+   * the sim cannot settle itself. Returns what to put in the prompt and, when it ruled, the verdicts to queue.
+   * A judge that errors gives back nothing, and the chief decides as it always did.
+   */
+  private async judgeSpirit(view: VillageView, v: Village, w: World): Promise<{ opts: StateOpts; verdicts?: { claim: number; verdict: VerdictValue }[] }> {
+    const judge = this.o.judge?.(); if (!judge) return { opts: {} };
+    const opts: StateOpts = {};
+    try {
+      if (v.inbox.length) {
+        const j = await judge.credible({ view, whisper: v.inbox.join(' ') });
+        opts.credibility = credibilityLine(j, view.village.chiefTraits);
+      }
+      const due = v.chronicle.filter(c => c.outcome === 'pending' && c.due <= w.tick && c.check.kind === 'judged');
+      if (!due.length) return { opts };
+      const verdicts: { claim: number; verdict: VerdictValue }[] = [];
+      for (const c of due.slice(0, 10)) verdicts.push({ claim: c.id, verdict: (await judge.verdict({ view, claim: c.text, since: view.events })).value });
+      opts.verdictsJudged = true;
+      return { opts, verdicts };
+    } catch (err) { this.o.onError?.(err, v.id); return { opts: {} }; }
   }
 
   /** Ask the judge how to answer envoys. A judge that errors is not a reason to drop the visit: the model decides instead. */
@@ -139,12 +166,13 @@ export class ChiefScheduler {
       const partySize = p?.members.length;
       const decided = await this.judgeHost(view, guest?.name ?? 'strangers', m, cname, rname, host.id, partySize);
       const user = visitorPrompt(view, guest?.name ?? 'strangers', m, cname, rname, decided, partySize);
-      // Without a judge the model both decides and writes, and it is pinned to `cheapest`: on the threat-weak
-      // cases (tribute demanded by a village a third our size) 2.5 Flash-Lite refuses 6/6 where 3.8 Flash
-      // accepts 5 of 6 and 3.5 Flash-Lite 3 of 6. See #28. With a judge the decision is not the model's, so
-      // the tier's own class writes the prose.
+      // The tier's own class answers, judge or no judge. Host answers were pinned to `cheapest` while the
+      // threat-weak cases looked like a model failure; they were a mis-sized case (a war band measured against the
+      // whole village, not the adults who fight it) plus a prompt that never said how many were at the gate. With
+      // the party size and the village's reckoning of the odds stated, 3.8 Flash, 3.5 Flash-Lite and 2.5 Flash-Lite
+      // all refuse 10 of 10 on that case, so the pin only cost prose. See #28.
       const tier = this.tier();
-      const hostClass: ModelClass = decided ? (tier.impactful === 'habit' ? 'capable' : tier.impactful) : 'cheapest';
+      const hostClass: ModelClass = tier.impactful === 'habit' ? 'capable' : tier.impactful;
       const res = await this.o.client.generate({ class: hostClass, system: systemPrompt(view), messages: [{ role: 'user', text: user }], schema: HOST_SCHEMA, maxOutputTokens: 4000, temperature: 0.7, thinkingLevel: 'low' });
       this.spent.set(this.key(host, w), (this.spent.get(this.key(host, w)) ?? 0) + res.usage.input + res.usage.output);
       const json = (res.json ?? safeJson(res.text)) as HostDecisionJson | undefined;

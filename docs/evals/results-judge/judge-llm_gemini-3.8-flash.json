@@ -1,13 +1,13 @@
 {
  "judge": "llm:gemini-3.8-flash",
- "when": "2026-09-18T23:22:02.011Z",
- "corpus": "docs/evals/corpus-2026-09-13.json",
+ "when": "2026-09-18T23:33:53.220Z",
+ "corpus": "docs/evals/corpus-2026-09-18-threat.json",
  "repeat": 3,
  "spent": {
-  "calls": 45,
-  "input": 26811,
-  "output": 7373,
-  "cost": 0.095514
+  "calls": 37,
+  "input": 22061,
+  "output": 4490,
+  "cost": 0.06676649999999999
  },
  "results": [
   {
@@ -22,21 +22,19 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2151
+   "ms": 2957
   },
   {
    "id": "eval-a-visitor-fair-270-2#0",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "accept",
-   "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
-   "distribution": {
-    "accept": 0.95
-   },
-   "ms": 1784
+   "got": "ERROR",
+   "correct": false,
+   "p": 0,
+   "confidence": 0,
+   "ms": 1264,
+   "error": "proxy 502: {\"error\":\"upstream\",\"message\":\"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\"upstreamS"
   },
   {
    "id": "eval-a-visitor-greedy-430-1#0",
@@ -50,21 +48,21 @@
    "distribution": {
     "counter": 0.85
    },
-   "ms": 3700
+   "ms": 3804
   },
   {
    "id": "eval-a-visitor-threat-weak-600-1#0",
    "task": "host",
    "kind": "threat-weak",
    "expected": "refuse",
-   "got": "accept",
-   "correct": false,
-   "p": 0.92,
-   "confidence": 0.92,
+   "got": "refuse",
+   "correct": true,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "accept": 0.92
+    "refuse": 0.95
    },
-   "ms": 3717
+   "ms": 1875
   },
   {
    "id": "eval-a-visitor-threat-weak-810-3#0",
@@ -73,12 +71,12 @@
    "expected": "refuse",
    "got": "refuse",
    "correct": true,
-   "p": 0.85,
-   "confidence": 0.85,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 0.85
+    "refuse": 0.95
    },
-   "ms": 7148
+   "ms": 2205
   },
   {
    "id": "eval-a-visitor-fair-1040-0#0",
@@ -92,7 +90,7 @@
    "distribution": {
     "accept": 0.98
    },
-   "ms": 2735
+   "ms": 2126
   },
   {
    "id": "eval-a-visitor-fair-1300-1#0",
@@ -106,7 +104,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2658
+   "ms": 1917
   },
   {
    "id": "eval-a-visitor-fair-1570-0#0",
@@ -120,7 +118,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 1978
+   "ms": 2028
   },
   {
    "id": "eval-a-visitor-fair-1830-1#0",
@@ -134,21 +132,19 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 1297
+   "ms": 2494
   },
   {
    "id": "eval-a-visitor-greedy-2100-0#0",
    "task": "host",
    "kind": "greedy",
    "expected": "refuse|counter",
-   "got": "refuse",
-   "correct": true,
-   "p": 0.85,
-   "confidence": 0.85,
-   "distribution": {
-    "refuse": 0.85
-   },
-   "ms": 4634
+   "got": "ERROR",
+   "correct": false,
+   "p": 0,
+   "confidence": 0,
+   "ms": 856,
+   "error": "proxy 502: {\"error\":\"upstream\",\"message\":\"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\"upstreamS"
   },
   {
    "id": "eval-a-visitor-fair-2340-2#0",
@@ -157,12 +153,12 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.98,
-   "confidence": 0.98,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "accept": 0.98
+    "accept": 0.95
    },
-   "ms": 1847
+   "ms": 1786
   },
   {
    "id": "eval-a-visitor-fair-2610-0#0",
@@ -176,49 +172,45 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2835
+   "ms": 1164
   },
   {
    "id": "eval-a-visitor-fair-2870-2#0",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "accept",
-   "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
-   "distribution": {
-    "accept": 0.95
-   },
-   "ms": 3611
+   "got": "ERROR",
+   "correct": false,
+   "p": 0,
+   "confidence": 0,
+   "ms": 7283,
+   "error": "proxy 502: {\"error\":\"upstream\",\"message\":\"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\"upstreamS"
   },
   {
    "id": "eval-a-visitor-fair-3120-0#0",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "accept",
-   "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
-   "distribution": {
-    "accept": 0.95
-   },
-   "ms": 3277
+   "got": "ERROR",
+   "correct": false,
+   "p": 0,
+   "confidence": 0,
+   "ms": 1324,
+   "error": "proxy 502: {\"error\":\"upstream\",\"message\":\"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\"upstreamS"
   },
   {
    "id": "eval-a-visitor-greedy-3400-5#0",
    "task": "host",
    "kind": "greedy",
    "expected": "refuse|counter",
-   "got": "refuse",
+   "got": "counter",
    "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
+   "p": 0.78,
+   "confidence": 0.78,
    "distribution": {
-    "refuse": 0.95
+    "counter": 0.78
    },
-   "ms": 1110
+   "ms": 1184
   },
   {
    "id": "eval-a-visitor-fair-110-3#1",
@@ -232,7 +224,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 1465
+   "ms": 1127
   },
   {
    "id": "eval-a-visitor-fair-270-2#1",
@@ -246,49 +238,47 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2309
+   "ms": 2865
   },
   {
    "id": "eval-a-visitor-greedy-430-1#1",
    "task": "host",
    "kind": "greedy",
    "expected": "refuse|counter",
-   "got": "refuse",
-   "correct": true,
-   "p": 0.85,
-   "confidence": 0.85,
-   "distribution": {
-    "refuse": 0.85
-   },
-   "ms": 2825
+   "got": "ERROR",
+   "correct": false,
+   "p": 0,
+   "confidence": 0,
+   "ms": 1261,
+   "error": "proxy 502: {\"error\":\"upstream\",\"message\":\"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\"upstreamS"
   },
   {
    "id": "eval-a-visitor-threat-weak-600-1#1",
    "task": "host",
    "kind": "threat-weak",
    "expected": "refuse",
-   "got": "accept",
-   "correct": false,
-   "p": 0.85,
-   "confidence": 0.85,
+   "got": "refuse",
+   "correct": true,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "accept": 0.85
+    "refuse": 0.95
    },
-   "ms": 2453
+   "ms": 1589
   },
   {
    "id": "eval-a-visitor-threat-weak-810-3#1",
    "task": "host",
    "kind": "threat-weak",
    "expected": "refuse",
-   "got": "accept",
-   "correct": false,
-   "p": 0.85,
-   "confidence": 0.85,
+   "got": "refuse",
+   "correct": true,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "accept": 0.85
+    "refuse": 0.95
    },
-   "ms": 3613
+   "ms": 1146
   },
   {
    "id": "eval-a-visitor-fair-1040-0#1",
@@ -297,12 +287,12 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
+   "p": 0.98,
+   "confidence": 0.98,
    "distribution": {
-    "accept": 0.95
+    "accept": 0.98
    },
-   "ms": 2261
+   "ms": 2023
   },
   {
    "id": "eval-a-visitor-fair-1300-1#1",
@@ -316,7 +306,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2516
+   "ms": 2232
   },
   {
    "id": "eval-a-visitor-fair-1570-0#1",
@@ -330,21 +320,19 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 1910
+   "ms": 2074
   },
   {
    "id": "eval-a-visitor-fair-1830-1#1",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "accept",
-   "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
-   "distribution": {
-    "accept": 0.95
-   },
-   "ms": 1847
+   "got": "ERROR",
+   "correct": false,
+   "p": 0,
+   "confidence": 0,
+   "ms": 1086,
+   "error": "proxy 502: {\"error\":\"upstream\",\"message\":\"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\"upstreamS"
   },
   {
    "id": "eval-a-visitor-greedy-2100-0#1",
@@ -358,7 +346,7 @@
    "distribution": {
     "counter": 0.85
    },
-   "ms": 5401
+   "ms": 3310
   },
   {
    "id": "eval-a-visitor-fair-2340-2#1",
@@ -372,7 +360,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 4048
+   "ms": 1707
   },
   {
    "id": "eval-a-visitor-fair-2610-0#1",
@@ -386,21 +374,19 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2493
+   "ms": 2497
   },
   {
    "id": "eval-a-visitor-fair-2870-2#1",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "accept",
-   "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
-   "distribution": {
-    "accept": 0.95
-   },
-   "ms": 1866
+   "got": "ERROR",
+   "correct": false,
+   "p": 0,
+   "confidence": 0,
+   "ms": 6181,
+   "error": "proxy 502: {\"error\":\"upstream\",\"message\":\"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\"upstreamS"
   },
   {
    "id": "eval-a-visitor-fair-3120-0#1",
@@ -414,7 +400,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 1656
+   "ms": 2339
   },
   {
    "id": "eval-a-visitor-greedy-3400-5#1",
@@ -428,7 +414,7 @@
    "distribution": {
     "counter": 0.78
    },
-   "ms": 1123
+   "ms": 1510
   },
   {
    "id": "eval-a-visitor-fair-110-3#2",
@@ -442,7 +428,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2570
+   "ms": 3192
   },
   {
    "id": "eval-a-visitor-fair-270-2#2",
@@ -456,7 +442,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2629
+   "ms": 3985
   },
   {
    "id": "eval-a-visitor-greedy-430-1#2",
@@ -470,21 +456,21 @@
    "distribution": {
     "refuse": 0.95
    },
-   "ms": 2619
+   "ms": 4036
   },
   {
    "id": "eval-a-visitor-threat-weak-600-1#2",
    "task": "host",
    "kind": "threat-weak",
    "expected": "refuse",
-   "got": "accept",
-   "correct": false,
-   "p": 0.85,
-   "confidence": 0.85,
+   "got": "refuse",
+   "correct": true,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "accept": 0.85
+    "refuse": 0.95
    },
-   "ms": 2560
+   "ms": 2059
   },
   {
    "id": "eval-a-visitor-threat-weak-810-3#2",
@@ -493,12 +479,12 @@
    "expected": "refuse",
    "got": "refuse",
    "correct": true,
-   "p": 0.85,
-   "confidence": 0.85,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "refuse": 0.85
+    "refuse": 0.95
    },
-   "ms": 5181
+   "ms": 2339
   },
   {
    "id": "eval-a-visitor-fair-1040-0#2",
@@ -512,7 +498,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 3239
+   "ms": 1454
   },
   {
    "id": "eval-a-visitor-fair-1300-1#2",
@@ -526,7 +512,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2157
+   "ms": 2316
   },
   {
    "id": "eval-a-visitor-fair-1570-0#2",
@@ -540,7 +526,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2105
+   "ms": 3108
   },
   {
    "id": "eval-a-visitor-fair-1830-1#2",
@@ -549,26 +535,26 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.98,
-   "confidence": 0.98,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "accept": 0.98
+    "accept": 0.95
    },
-   "ms": 2439
+   "ms": 1022
   },
   {
    "id": "eval-a-visitor-greedy-2100-0#2",
    "task": "host",
    "kind": "greedy",
    "expected": "refuse|counter",
-   "got": "counter",
+   "got": "refuse",
    "correct": true,
-   "p": 0.85,
-   "confidence": 0.85,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "counter": 0.85
+    "refuse": 0.95
    },
-   "ms": 3613
+   "ms": 3344
   },
   {
    "id": "eval-a-visitor-fair-2340-2#2",
@@ -582,7 +568,7 @@
    "distribution": {
     "accept": 0.95
    },
-   "ms": 2013
+   "ms": 2266
   },
   {
    "id": "eval-a-visitor-fair-2610-0#2",
@@ -591,26 +577,24 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.99,
-   "confidence": 0.99,
+   "p": 0.95,
+   "confidence": 0.95,
    "distribution": {
-    "accept": 0.99
+    "accept": 0.95
    },
-   "ms": 1968
+   "ms": 2162
   },
   {
    "id": "eval-a-visitor-fair-2870-2#2",
    "task": "host",
    "kind": "fair",
    "expected": "accept|counter",
-   "got": "accept",
-   "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
-   "distribution": {
-    "accept": 0.95
-   },
-   "ms": 2047
+   "got": "ERROR",
+   "correct": false,
+   "p": 0,
+   "confidence": 0,
+   "ms": 3253,
+   "error": "proxy 502: {\"error\":\"upstream\",\"message\":\"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\"upstreamS"
   },
   {
    "id": "eval-a-visitor-fair-3120-0#2",
@@ -619,12 +603,12 @@
    "expected": "accept|counter",
    "got": "accept",
    "correct": true,
-   "p": 0.95,
-   "confidence": 0.95,
+   "p": 0.98,
+   "confidence": 0.98,
    "distribution": {
-    "accept": 0.95
+    "accept": 0.98
    },
-   "ms": 1231
+   "ms": 2488
   },
   {
    "id": "eval-a-visitor-greedy-3400-5#2",
@@ -638,7 +622,7 @@
    "distribution": {
     "counter": 0.78
    },
-   "ms": 1441
+   "ms": 1050
   }
  ]
 }

@@ -1,5 +1,6 @@
 /** Renders a VillageView into the fixed prompt sections. Order is stable so prefix caching works. */
 import type { VillageView } from './view.js';
+import type { Judgment } from './judge/types.js';
 import type { Mandate } from '@wind-spirit/sim';
 
 const TRAITS = ['piety', 'ambition', 'hospitality', 'curiosity'];
@@ -30,6 +31,31 @@ ${closing}`;
 
 const list = (xs: string[], empty = 'none') => (xs.length ? xs.map(x => `- ${x}`).join('\n') : `- ${empty}`);
 
+/**
+ * How readily this chief takes a spirit at its word. A deeply pious chief acts on a whisper they half believe;
+ * a skeptic wants to be sure. The evals put the useful middle near 0.4, so piety swings it between 0.6 and 0.2.
+ */
+export function credulityThreshold(chiefTraits: number[]): number {
+  const piety = Math.max(0, Math.min(1000, chiefTraits[0] ?? 500));
+  return 0.6 - (piety / 1000) * 0.4;
+}
+
+/**
+ * The judge's reading of a whisper, put back into the chief's own mouth. It states the two things separately —
+ * whether the claim squares with what the village has seen, and what obeying would cost — because a chief who
+ * knows both can still act in character. Asking the model to weigh the whisper inside the big decision prompt
+ * is what made cheap chiefs credulous; this is that judgement made on its own and handed back.
+ */
+export function credibilityLine(j: Judgment<boolean>, chiefTraits: number[]): string {
+  const consistent = j.distribution?.consistent ?? j.p;
+  const harmful = j.distribution?.harmful ?? 0;
+  const fits = consistent > 0.66 ? 'sits well with what your people have seen' : consistent > 0.33 ? 'you cannot square or dismiss against what your people have seen' : 'sits ill with what your people have seen';
+  const cost = harmful > 0.66 ? 'doing as it says would cost you dearly' : harmful > 0.33 ? 'doing as it says would cost you something' : 'doing as it says would cost you little';
+  const act = j.p >= credulityThreshold(chiefTraits);
+  const close = act ? 'On balance you are minded to heed it.' : 'On balance you are minded to trust your own eyes instead.';
+  return `What your own sense makes of it: it ${fits}, and ${cost}. ${close}`;
+}
+
 /** What to say when the chief has already made up their mind and only the terms and the telling are left. */
 const DECIDED: Record<'accept' | 'counter' | 'refuse', string> = {
   accept: 'You have decided to accept: give what they ask and take what they offer. Write what you give and take, and your journal.',
@@ -37,7 +63,14 @@ const DECIDED: Record<'accept' | 'counter' | 'refuse', string> = {
   refuse: 'You have decided to refuse and send them away with nothing. Say plainly why, and write your journal.',
 };
 
-export function statePrompt(v: VillageView, reason: string, withMenu = true): string {
+export interface StateOpts {
+  /** The chief's own reading of the whisper the spirit has just sent, from a judge. See credibilityLine. */
+  credibility?: string;
+  /** True when a judge has already ruled on any claims now due, so the chief is not asked to rule again. */
+  verdictsJudged?: boolean;
+}
+
+export function statePrompt(v: VillageView, reason: string, withMenu = true, o: StateOpts = {}): string {
   const p = v.people;
   const sections: string[] = [];
   sections.push(`# Now: year ${v.year}, ${v.season}, week ${v.week} of the season. Reason for deciding: ${reason}.`);
@@ -55,7 +88,7 @@ export function statePrompt(v: VillageView, reason: string, withMenu = true): st
   sections.push(`# Parties away:\n${list(v.parties.map(x => `${x.size} on a ${x.kind} to ${x.destination}, ${x.status}`), 'none')}`);
   sections.push(`# Current orders:\n${list(v.orders, 'none')}`);
   sections.push(`# Since you last decided:\n${list(v.events, 'quiet')}`);
-  sections.push(`# The spirit: ${v.spirit.attitude}.${v.spirit.chronicle.length ? '\nWhat the spirit has said and what came of it:\n' + list(v.spirit.chronicle) : ''}${v.spirit.pending.length ? '\nThe spirit speaks now:\n' + list(v.spirit.pending.map(m => `"${m}"`)) : ''}`);
+  sections.push(`# The spirit: ${v.spirit.attitude}.${v.spirit.chronicle.length ? '\nWhat the spirit has said and what came of it:\n' + list(v.spirit.chronicle) : ''}${v.spirit.pending.length ? '\nThe spirit speaks now:\n' + list(v.spirit.pending.map(m => `"${m}"`)) : ''}${o.credibility ? `\n${o.credibility}` : ''}${o.verdictsJudged ? '\nYou have already weighed any claim that has come due; do not rule on them again.' : ''}`);
   sections.push(`# Your notes to yourself:\n${list(v.memory, 'none')}`);
   if (withMenu) sections.push(`# Orders you may give (workers are adults; keep the sum within ${p.workersFree}):
 - forage / hunt / fish: workers. Winter favours hunting and fishing. Unless stores cover the whole season, keep enough hands on food to cover the weeks they do not; the village will overrule an order that starves it.

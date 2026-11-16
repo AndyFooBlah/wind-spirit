@@ -1,0 +1,370 @@
+# Wind Spirit journal
+
+Append-only. Every entry starts with a UTC timestamp and a tag: `[step]`, `[decision]`, `[friction]`,
+`[learning]`, `[surprise]`, `[incident]`, `[idea]`, `[milestone]`. Never edit or delete a past entry; to correct
+one, append a new entry naming the earlier one's timestamp.
+
+Entries before 2026-10-16T17:30Z were backfilled on 2026-10-16 from the git history, the issue tracker,
+`docs/build-notes.md`, `docs/evals-notes.md`, `docs/art-direction.md` and `docs/art/style-bible.md`, and the
+session transcripts. Timestamps for those are the commit times they correspond to, so they are accurate to the
+commit rather than to the moment of the decision, and entries with no commit of their own are placed at the
+nearest one. Everything from 2026-10-16T17:30Z on is written as the work happens.
+
+Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else was decided by Claude.
+
+---
+
+## Concept and M0
+
+- 2026-09-11T23:43Z [milestone] Concept settled and written up (`docs/concept.md`, ce2eed4). The hook: the spirit is
+  omniscient and nearly powerless, the chief is ignorant and potent, and trust is the only score.
+- 2026-09-11T23:47Z [decision] Owner settled the open concept questions in one pass: the UI shows seasons and time,
+  full history with scrubbing, game speeds, and the spirit influences weather. Technical design drafted (3bde463).
+- 2026-09-12T00:02Z [decision] M0 technical decisions settled (aa46155): week tick, event-sourced deterministic sim,
+  integers in thousandths, named-stream PRNG, tech as recipes with obfuscated names, 12×12 plots, paths worn by use.
+- 2026-09-12T00:43Z [milestone] M0 landed: deterministic sim core, world generator, balance harness (d440e62).
+- 2026-09-12T00:44Z [friction] pnpm 11 CI fought the build-script approvals for five commits (8178c7c…398bf17):
+  `onlyBuiltDependencies` moved to `pnpm-workspace.yaml`, then became `allowBuilds`, and pnpm wrote placeholder
+  entries once that had to be rewritten by hand.
+- 2026-09-12T07:35Z [decision] Balance tuning happens only through the harness, never by hand-editing outcomes;
+  legacy toggles kept behind `WS_PARAMS` so the tuning history stays reproducible (e32e2ba).
+
+## M1 to M7, in one sitting
+
+- 2026-09-12T07:58Z [decision] Owner: *"let's do M1 to M7, stopping only if you get stuck"*. Seven milestones ran
+  without checkpoints.
+- 2026-09-12T07:58Z [milestone] M1: tech skeleton, seeded generator, research, crafting, capabilities (60bc318).
+- 2026-09-12T08:46Z [milestone] M2: chief agent, scheduler, model proxy, envoys, raids (fe26421).
+- 2026-09-12T08:56Z [learning] Fresh food merged into older stacks, so a full granary aged to nothing. Stack merging
+  now has a one-week window (dc1fe29). A whole class of famine bugs came from this.
+- 2026-09-12T09:04Z [milestone] M6: audio engine, synthesised and seeded, speed-aware (611dae6).
+- 2026-09-12T09:06Z [decision] Famine mortality is quadratic and capped, and settlers may never hollow out a village
+  (b152b30): starvation should be a spiral, not a cliff.
+- 2026-09-12T09:23Z [milestone] M3/M4: the web app — sim in a worker, three-zoom canvas map, panels, speeds,
+  auto-pause, saves, and the spirit's whisper, dream and breath. Deployed to Firebase Hosting (0060195).
+- 2026-09-12T09:45Z [milestone] M5/M6: history scrubber in a second worker, narrative synthesis, audio integrated
+  (3f56982).
+- 2026-09-12T09:49Z [learning] Integrating the sim into a worker surfaced five separate bugs at once (5ac03d7):
+  bare `fetch` throws in a worker scope, the dream prompt needed its own prose-only form, chief memory had to ride
+  on `ChiefDecided` to stay replayable, chiefs needed provisional habit orders while thinking, and the `Sim`
+  constructor must not roll weather or a restored world hashes differently.
+- 2026-09-12T09:50Z [milestone] M7 closed; issues #1–#8 closed; CI green; full balance suite passing on six seeds
+  (f349a33).
+
+## The model-cost study
+
+- 2026-09-12T12:57Z [decision] Owner asked for larger worlds; sizes up to 128×128, default large, snapshots gzipped
+  (875239f).
+- 2026-09-12T15:54Z [decision] Owner commissioned a model-cost study: a categorised eval of about a hundred cases,
+  six to eight near-frontier cheaper models, context caching, a mixed-model strategy, and an intelligence knob at
+  roughly $1, $5 and $100 per century. Lab notebook opened (1645aa7, issue #9).
+- 2026-09-12T15:59Z [step] 96-case corpus built from observed game states, rule scorer, LLM judge, runner, report
+  (1f2b499).
+- 2026-09-12T16:18Z [surprise] Vertex prices are roughly double the Gemini API list for the same model (8a15bff).
+  Every cost estimate in the notebook had to be redone against the billing catalogue.
+- 2026-09-12T17:08Z [learning] MaaS open models silently strip optional fields under constrained JSON decoding.
+  They now use instruct-and-validate instead (f61c51a). Three models' first scores were this bug, not their ability.
+- 2026-09-12T17:31Z [decision] Tiers shipped: habit, thrifty, standard (Flash-Lite routine + Flash impactful),
+  lavish (24a0aa5).
+- 2026-09-12T17:49Z [decision] Owner: *"I have an account with openrouter"* — OpenRouter added as a provider, key in
+  Secret Manager, never in the repo (2bcdb5f, 51a0499).
+- 2026-09-12T19:14Z [step] OpenRouter pass across 24 further models (fbde365).
+- 2026-09-12T19:55Z [incident] The first notebook draft had two errors the post-writing caught: credulity counts
+  quoted "of 15" when the corpus has 10 false-fallow cases, and costs mixed per-300-years with per-century. Both
+  corrected before publication (2a477fa).
+- 2026-09-12T19:55Z [milestone] Second blog post published: andrewbrook.dev/writing/wind-spirit-chief-models/.
+- 2026-09-12T19:55Z [idea] Noted as follow-up: first-turn chief decisions can leave nobody on food.
+
+## The first-spring miss and the golden audit
+
+- 2026-09-12T20:33Z [decision] Owner: *"anything over 10s is pretty bad latency"* and *"Errors in the 'golden' eval
+  answers are common in data science - let's highlight how we reviewed suspicious cases"*. A 10-second bar went into
+  the report and a golden-answer audit was run (597f401, issue #10).
+- 2026-09-12T20:33Z [learning] The eval never saw the failure a new player sees first. Its earliest routine case is
+  week 110, by which time the scripted policy has built stores. Six first-spring cases added.
+- 2026-09-12T20:33Z [learning] The prompt said "food for 7 weeks" and nothing about how long a decision lasts.
+  Adding the cadence and the per-worker food arithmetic took 3.5 Flash-Lite from 8-of-9 first springs with nobody on
+  food to none. The prompt did the work; the scheduler's food floor is only a backstop.
+- 2026-09-12T20:33Z [learning] Four kinds of golden error found by asking which checks the strongest models fail:
+  asking for the impossible (harvest with nothing planted), never stating the threat, demanding a food share of
+  villages holding a year of stores, and corpus drift making old outputs unrescorable.
+- 2026-09-12T22:30Z [step] Third eval pass: 25 models re-run from scratch on the corrected 102-case corpus (941eb61).
+
+## Invitations, and a week of play features
+
+- 2026-09-12T20:45Z [decision] Owner: *"the Wind Spirit game will need an invitation code and/or login to play so
+  that I can invite my friends … without the whole internet trying it and running up my AI charges"*. The gate is
+  enforced in the proxy, never only in the client (99127cc, issue #11).
+- 2026-09-12T21:25Z [milestone] Villages became legible: buildings fixed to plots near the centre, fields in
+  clusters, villagers placed by their work, parties drawn by kind, overview charts (9153f8b, issues #12–#19).
+- 2026-09-12T21:25Z [decision] Villager activity is derived from the standing orders each week, never stored in the
+  sim, so the live view and the history scrubber agree and it costs nothing when no village is open.
+- 2026-09-12T21:43Z [decision] Owner renamed the omniscient advisor: *"maybe the most basic spirit (the AI the
+  players can all talk to) should be sun spirit? The players can then be wind, earth, water, wood, fire, various
+  animals."* Implemented as the sun spirit, three questions a year (a6c164a, issues #20–#22).
+- 2026-09-12T22:28Z [decision] Owner: *"Water shoudn't have paths"* — boats leave no trail; treading skips water,
+  fords excepted (f41ccd4).
+- 2026-09-12T22:29Z [friction] Owner found attention events yanking the camera distracting. They now pause and toast
+  without moving the view (a3c2838).
+- 2026-09-12T22:44Z [milestone] Lineage colours, kinship between parent and colony, and abandoning a village to seek
+  refuge (5fa1ea4, issues #23–#25).
+- 2026-09-12T22:49Z [friction] Owner: the top bar shifted by a few pixels as week numbers gained a digit. Fixed with
+  tabular figures and pinned widths (8bb9f00).
+- 2026-09-12T22:50Z [decision] Owner: *"maybe call it 'region' and put it between local and global?"* — a fourth
+  zoom at 24-pixel tiles (81b7b96).
+- 2026-09-12T23:08Z [decision] Owner: *"maybe the edges of the world should always be ocean?"* — every world now
+  ends in sea, two to five tiles deep (a18be43).
+- 2026-09-12T23:13Z [incident] The ocean rim made shore villages common, and ocean carried the richest fish stock,
+  so a village of 50 could live on wild food and the balance suite failed. Dropped the stock to 550, which passed on
+  six and twelve seeds — then CI, which runs three, failed at a median of 46.25 against a bar of 45. Settled at 450
+  (6abee37).
+- 2026-09-12T23:13Z [learning] A median over three seeds is a coin toss near the bar. Anything touching geography
+  gets checked on the CI sample too, before it ships.
+- 2026-09-12T23:14Z [incident] The expedition test picked the nearest regional commodity by distance; with an ocean
+  rim that tile sat across water and the party never came home. The test now picks a target it can walk to (0c9fe8a).
+
+## Art
+
+- 2026-09-14T15:27Z [decision] Art direction settled after three style tests (b677741, `docs/art-direction.md`):
+  stylised flat painting, warm with gravity, and an invented culture with a wind-and-water motif — explicitly no
+  references to real neolithic or pre-industrial peoples. Owner approved all four proposals.
+- 2026-09-15T22:28Z [step] Pipeline built: style bible, asset manifest, generator against fixed anchors, chroma-key
+  post-processor, atlas renderer with glyph fallback so art can land group by group (b783ad4, issue #26).
+- 2026-09-15T22:48Z [learning] Four prompt failure modes, all recorded in the style bible: the anchor image dominates
+  unless the subject is told to fill the frame; a permissive motif rule carves spirals into boulders and trees;
+  "seen from above" yields isometric tiles with decorative borders; and "ploughed earth" yields convincing wood
+  grain until the material is named against its near-miss.
+- 2026-09-15T22:48Z [learning] The model's painted drop shadow desaturates the magenta ground past the chroma key,
+  leaving a pink halo. Shadows are now forbidden in the prompt and the renderer draws its own.
+- 2026-09-16T06:23Z [decision] Icons are hand-authored SVG, not generated: they must take their colour from
+  surrounding text and stay legible at sixteen pixels, which a painted sprite cannot do (3c6d0a9).
+- 2026-09-16T06:56Z [surprise] Asking for "a second variant" of a ground texture produced a 2×2 comparison sheet
+  with white dividers, which tiled across the map as a grid of seams (f7ce9df). Variation has to be written into the
+  subject, never as a meta-instruction.
+- 2026-09-16T06:56Z [learning] Sampling a sprite to its very edge pulls in the transparent gutter between atlas
+  entries: a pale line on every tile boundary. Half a pixel of inset and a wider gutter fix it. The atlas URL also
+  needs a content hash, or a repack is served from cache.
+- 2026-09-18T16:53Z [milestone] Portraits: eight chiefs and the two spirits, finishing the art milestone (a22d71e).
+  Total generation spend across all art: about $25 for 186 candidates, against an estimate of $150–300.
+- 2026-09-18T16:53Z [learning] The closing step of the xoshiro-style hash (`h ^= h >>> 13`) yields a *signed* 32-bit
+  integer in JavaScript, so `h % n` went negative and the chief rendered as `portraits/undefined.png`. Every such
+  hash needs a final `>>> 0`. The same mixer appears in three places.
+
+## Judgment, and the tribute that was not cowardice
+
+- 2026-09-17T14:35Z [step] Pluggable judgment adapter for the decisions that are labels rather than prose:
+  credibility, verdict, host answer, with Jev and LLM implementations (d184c31, issue #27). Built by a second session.
+- 2026-09-17T14:46Z [step] Fourth eval pass: Jev against the LLMs on the three judgments, plus an allocation probe
+  (871ca29).
+- 2026-09-17T14:46Z [learning] Jev cannot allocate labour. Independent per-task Scores cannot see one another, so
+  ten tasks all rated "a good share" normalise to one hand on each. The checkers did not catch it either, which is a
+  hole in the checks as much as a finding about the model.
+- 2026-09-18T16:29Z [surprise] Issue #28 reported the standard tier paying tribute to weak bullies. The case was
+  mis-specified, not the model: it sized the war band at a third of the *whole village* while a raid resolves on
+  *adults*, so the "weak" bully was eight attackers against eleven defenders, which the sim's own combat model says
+  wins two times in five. The models that paid were right (e70e71a).
+- 2026-09-18T16:29Z [decision] A golden answer gets checked against the simulation, not against intuition. The game
+  has a combat model; it could have said what "weak" meant at any point, and it disagreed with me.
+- 2026-09-18T16:29Z [learning] The chief was told to weigh strength against strength and never told how many were at
+  the gate. Both the prompt and the judgment state now carry the party size and the village's own reckoning of the
+  odds, rather than asking a stone-age chief to do arithmetic. Both tier models then answer every host case correctly.
+- 2026-09-18T16:43Z [incident] I reported "45 of 45" from a single run. Running the identical command seven times
+  gives 45, 37, 41, 44, 45, 45, 40 — between 82% and 100%. The threat claim survived at six of six in every run;
+  the overall figure was a lucky run (3c95810).
+- 2026-09-18T16:43Z [learning] Count the observations behind a claim before writing it down. A category average of
+  fifteen visitor cases, ten of them easy, hides a one-in-six failure completely. The report now breaks out every
+  case kind where models disagree and prints how many cases sit behind each figure.
+- 2026-09-18T16:43Z [incident] The published post carried the same undersampled claim ("3.8 Flash and 3.5 Flash-Lite
+  refuse both"). Corrected in place and in a new section, *What two observations cannot tell you*, rather than
+  quietly edited. The first version of that section was itself about finding golden errors, which is the
+  uncomfortable part.
+
+## The long watch
+
+- 2026-09-18T17:51Z [milestone] A long unattended playtest command added (`pnpm harness -- playtest`): four worlds,
+  three centuries, scripted chiefs, watching for mechanics that fire but never resolve (3674e55).
+- 2026-09-18T17:51Z [surprise] It found a village idle and starving for fifty-five weeks. The work loop excludes the
+  chief from the workforce, so a village down to one adult has nobody who may be given an order: the policy returns
+  nothing, the sim does nothing, and it dies with a chief standing in it. The chief now works when there are two
+  adults or fewer, or stores are under two weeks.
+- 2026-09-18T17:51Z [learning] My first hypothesis — that abandonment was failing to find a route and dropping the
+  order — was a real bug and was fixed, but it was not this one. Tracing one village week by week found it in a
+  single line: `adults=1, free=0`. Guessing twice cost more than instrumenting once.
+- 2026-09-18T17:51Z [learning] Refuge, kinship and abandonment all came through twelve centuries clean: every
+  abandoned village's people were taken in, none lost on the road, longest walk ten weeks, kin never raided kin.
+- 2026-09-18T17:51Z [surprise] Raids are zero across twelve centuries, because the scripted chief only raids under
+  real pressure. The whole tribute-and-threat apparatus is barely exercised in ordinary play.
+- 2026-09-18T18:10Z [incident] A forty-year run with a real chief went silent at year 38: fourteen failures in a
+  row, which read in the journal as a chief with nothing to say. The proxy's logs gave it in one word, `quota` —
+  2,001,158 tokens against a daily cap of 2,000,000 (d5f37f6).
+- 2026-09-18T18:10Z [decision] The defect was the silence, not the cap. A banner now says the day's thinking is
+  spent, that the world keeps running on habit, and when it comes back.
+- 2026-09-18T18:10Z [learning] One village with a real chief costs about 52,000 tokens a game-year, so the daily cap
+  is about forty village-years, or thirteen at the default three model villages — an afternoon.
+
+## Hardening, and two sessions at once
+
+- 2026-09-18T16:30Z [step] A second session closed the invite brute-force and spend hole, added Dependabot, and
+  filled the licence appendix (8e84bc8, 3c5a05e, a8d8c39, issues #29–#31).
+- 2026-09-18T18:16Z [step] That session also wired credibility and verdict judgments into the scheduler (216abfa).
+- 2026-09-19T01:13Z [idea] Two issues filed by that session and still open: #40, idle adults produce nothing though
+  the prompt promises they forage, and `rest` is a no-op; #41, `usesMostAdults` counts rest workers, so a chief
+  passes it by resting the village. #40 is the same family as the chief-workforce bug above.
+- 2026-09-19T09:11Z [friction] Two sessions sharing one working tree means either can build and deploy the other's
+  state. A deploy of mine looked stale to the peer because the hash had changed under us both; verifying by
+  *content* rather than by filename settled it. Worth remembering: the strings lived in the worker chunk, not the
+  index bundle.
+- 2026-09-19T11:17Z [learning] Invite seats are spent per *user*, not per call, and every script run minted a
+  throwaway identity: one day's eval work took 29 seats. The harness now caches its user and refreshes the token,
+  so three consecutive runs cost one seat (96a4778).
+- 2026-09-19T11:17Z [decision] Owner: *"Let's trim seats to about 10. I don't want to spend more than a few dollars
+  per player per day for real game play."* The trim belongs to the other session; the seat fix above is what makes
+  ten workable.
+- 2026-09-19T11:17Z [learning] The daily cap is denominated in tokens, and tokens are not dollars. The same 2M cap
+  costs $0.44 on thrifty, $2.03 on standard and $6.76 on lavish — a fifteenfold spread, because the tier chooses the
+  model. No token number satisfies "a few dollars a day" across tiers; a dollar-denominated cap would.
+- 2026-09-19T11:17Z [learning] Jev is about forty times cheaper per judgment than 3.8 Flash ($0.034 against $1.484
+  per thousand), but judgments are the small half of the bill and Jev cannot generate orders or prose. It is a
+  quality argument that happens not to cost more, not the lever that brings lavish under budget. Tier choice is
+  that lever.
+
+## Process
+
+- 2026-09-12T19:55Z [decision] Owner on writing: reserve "honest" and "honesty" for an actual contrast with
+  deliberate deceit — *"Unless you're actively contrasting with intentional deceit please don't say 'honesty' when
+  you just mean to add a note or caveat"*. Scrubbed from the notebooks and three published posts.
+- 2026-09-18T16:29Z [decision] Anything that matters gets `run-judge.ts` with repeats, not a single pass. `run.ts`
+  gained `--repeat` for the same reason.
+
+---
+
+## Current
+
+- 2026-10-16T17:30Z [step] Created this journal, backfilled from git, issues, the four notes files and the session
+  transcripts, per the new global policy in `~/.claude/CLAUDE.md`.
+- 2026-10-16T17:30Z [learning] The repository has been dormant since 2026-09-19: no commits in four weeks. The
+  backfill therefore covers one dense week of building (11–19 September) rather than a long run of work.
+- 2026-10-16T17:30Z [idea] Open and unclaimed, in the order I would take them: #40 and #41 (idle adults produce
+  nothing while the prompt promises they forage, and a chief can pass `usesMostAdults` by resting the village — the
+  same family as the chief-workforce bug); #27 (the judgment adapter, owned by the other session); a
+  dollar-denominated spend cap; and the question nobody has an issue for, which is what a player is trying to
+  achieve beyond watching trust accumulate.
+
+- 2026-10-17T04:41Z [incident] Timestamp correction for the backfilled entries above (everything before the
+  `## Current` section): they carry local Pacific times with a `Z` suffix, so each is seven hours earlier than
+  the UTC it claims. `d184c31` is stamped 2026-09-17T14:35Z but committed at 21:35Z; `e70e71a` is stamped
+  2026-09-18T16:29Z but committed at 23:29Z. The ordering is right and the commit hashes are authoritative; only
+  the clock labels are off. Not edited, per append-only.
+- 2026-10-17T04:41Z [friction] This file was written twice within the hour. A second session checked for a journal, found none,
+  wrote a 55-line backfill, and had it replaced by this longer and better one moments later. No loss worth
+  recovering — this version covers more — but the file sat untracked in a shared working tree the whole time,
+  which is the most clobberable state there is. Committing it now so it stops being a race.
+- 2026-10-17T04:41Z [learning] The central finding of the Jev work is not in the entries above and belongs on the record:
+  **asked the narrow question on its own, every model answers credulity correctly** — 2.5 Flash-Lite scored 36/36
+  over three passes. The credulity defect was the combined prompt, not the judgement. Most of the available gain
+  is decomposition, which is free and works whoever answers; Jev's own edge is verdicts (97% against 79–84%),
+  speed and price.
+- 2026-10-17T04:41Z [learning] Putting that decomposition back into the game: with the judge asked first and the chief handed
+  the answer, 2.5 Flash went from obeying "plant nothing this spring" nine times in ten to zero in ten, and still
+  acted on the true nudge both times. It makes chiefs discriminating, not suspicious — a blanket distrust would
+  have scored the same on the lie and lost the rumour cases. 3.5 Flash-Lite 5/10 → 2/10, which the variance work
+  at 2026-09-18T16:43Z suggests is noise; 9/10 → 0/10 is not.
+- 2026-10-17T04:41Z [decision] Credulity became `credulityThreshold(chiefTraits)` — 0.6 for a skeptic, 0.2 for the devout,
+  0.4 in the middle. It is a character trait now rather than a side effect of which model the billing tier bought.
+  This is the part of the Jev work expected to outlast the vendor choice.
+- 2026-10-17T04:41Z [milestone] `b817f19` also added `POST /v1/systemone` to the proxy with the key in Secret Manager as
+  `typesafe-api-key`, on the same rules as the OpenRouter key. `JevJudge` takes a transport — `ProxySystemOne`
+  in the browser, `SdkSystemOne` in evals and server code — so the SDK import sits in a file the web barrel does
+  not re-export. Bundle verified free of key, SDK and `api.typesafe.ai`.
+- 2026-10-17T04:41Z [decision] When a judge answers, the model is told what was decided and writes only the terms and the
+  journal. Asking twice invites the prose and the decision to disagree.
+- 2026-10-17T04:41Z [incident] I built and deployed to production carrying eight commits from the other session without reading
+  them, and only noticed when the bundle size jumped. They were on `main` and the merged state checked out
+  (205 tests green), but the log should have been read before the deploy, not after.
+- 2026-10-17T04:41Z [idea] Owner's design thread, not yet an issue: idle villagers should either fall back to a default action
+  or rest, with a share of the village at leisure improving morale on a saturating curve. Proposed asymmetry —
+  unassigned means drifting (poor food, no morale), `rest` means granted leisure (no food, morale) — so leisure
+  is something a chief spends hands on rather than gets for free. Scale the weariness penalty by `(1 − hardship)`
+  so prosperity raises expectations. Grounding finding: `v.happiness` is read by nothing in the sim except the
+  coup check, so it is close to decorative; the strongest candidate consequence is **trust**, which is the game's
+  actual scoreboard. Blocked on #40 and #41.
+- 2026-10-17T04:41Z [idea] A blog post on the TypeSafe exploration is outlined (sixteen sections, two charts, ~2,500–3,500
+  words) but not drafted. Its spine is the finding above: most of the win was the question, not the model. The
+  outline deliberately leads with what was got wrong — the undersampled #28 claim and the superseded credulity
+  numbers — rather than appendixing it.
+
+- 2026-10-17T05:05Z [incident] My backfill timestamps were wrong: I used `git log --date=format:` under `TZ=UTC`,
+  which formats in each *commit's own* timezone, so every stamp from the 2026-10-16T17:30Z backfill entry and
+  above is local Pacific wearing a Z. The true UTC times are seven hours later (ce2eed4 is 2026-09-12T06:43Z, not
+  2026-09-11T23:43Z). `--date=format-local:` is the flag that actually converts. Found by the other session, not
+  by me. The entries stay as written, per append-only; read them as Pacific.
+- 2026-10-17T05:05Z [learning] A token-denominated quota cannot express the owner's goal. The same 2M/day cap
+  costs $0.44, $2.03 and $6.76 per player-day on thrifty, standard and lavish — a fifteenfold spread, because the
+  tier picks the model. Seat trimming bounds how many people can play, not what each costs: ten seats on lavish is
+  about $68 a day. Counting `costUsd` in `quota.ts` is the instrument that would do it.
+- 2026-10-17T05:05Z [learning] Nobody had costed the spirit's own calls. The sun spirit sends a whole-world digest
+  of roughly 20k tokens to the capable model, about $0.058 a question and $0.17 a game-year at three questions —
+  comparable to all three chiefs put together at standard. Dreams are about $0.013 a turn on the same class.
+- 2026-10-17T05:05Z [decision] Per the other session, the seat trim and the budget sizing are still unlanded: it
+  declined to act on my relay of the owner's instruction, on the grounds that a peer relay is not the owner's
+  approval for something it had put to him directly. That is the right call and the record should show no outcome.
+
+- 2026-10-17T04:52Z [incident] **Backfilled timestamps in this journal are seven hours early and are not UTC.**
+  Spot-checked against the commits they cite: entries generated with
+  `git log --date=format:'%Y-%m-%dT%H:%MZ'` render each commit in its own local zone (here PDT,
+  UTC-7) and then have a literal `Z` appended by the format string, so the `Z` is wrong. Add seven
+  hours to any entry that was derived from commit times. Entries written from session chronology
+  rather than from that command are unaffected, so this journal may mix both.
+- 2026-10-17T04:52Z [learning] Correct incantation for a UTC backfill:
+  `TZ=UTC git log --date=format-local:'%Y-%m-%dT%H:%MZ'` — `format-local`, not `format`. Appending a
+  literal `Z` to a local-time format produces timestamps that look authoritative and are silently
+  wrong, which is worse than an obviously missing timezone. This hit several repos in the
+  2026-10-16 journal rollout, independently, because the same command was used in each.
+- 2026-10-17T04:52Z [decision] Corrected by appending rather than editing the entries above, per the append-only
+  rule.
+- 2026-11-08T17:30Z [step] Turned on Dependabot alerts and security updates, and replaced a standard `.github/dependabot.yml`: weekly grouped minor/patch updates with a 5-day cooldown (14 days for majors); security updates open immediately. Part of the cross-repo dependency security program (AndyFooBlah/andy-private-docs#57).
+- 2026-11-08T18:57Z [step] Dependency program phases 2–3 (AndyFooBlah/andy-private-docs#57): ci.yml keeps its test job (typecheck, vitest, harness subset), adds `pnpm build` and a `proxy-image` job that builds the llm-proxy Dockerfile (Dependabot's docker ecosystem), pins actions by SHA, and appends the shared deps-merge/deps-fix block (tier standard, deploy deploy.yml). Added deps-fixer.yml and the deps-toolchain action (pnpm + Node 24).
+- 2026-11-08T18:57Z [step] New deploy.yml: on push to main and on dispatch from deps-merge, test, then deploy Hosting from apps/web (`firebase-tools@15.34.1 deploy --project wind-spirit-prod --only hosting`) and, only when services/llm-proxy/ changed since the commit in the service's `deployed-commit` label, the README's `gcloud run deploy llm-proxy --source …` via WIF (github-deploy@). Then smoke the UI ("Your invitation", once per deploy) and the proxy's /health; on failure roll Hosting back to the previous release and llm-proxy traffic to the previous revision.
+- 2026-11-08T18:57Z [decision] The CI deploy command copies the full env and secret sets from the live service (`gcloud run services describe`, which matched the README exactly), because `--set-env-vars` and `--set-secrets` each replace the whole set.
+- 2026-11-08T18:57Z [learning] `/health?deep=1` makes five paid model calls, so the deploy checks only plain /health (ok, requireAuth, appCheck=enforce) and the 401 on an unattested invite redeem. CI sets no model keys; the vitest suite and the harness subset (determinism, forager, farmer) are offline.
+- 2026-11-08T18:57Z [surprise] The llm-proxy image runs `npm install` against package.json alone (no lockfile in the build context), so its dependency versions float within the ranges at every build; pnpm-lock.yaml does not pin what Cloud Run runs.
+- 2026-11-08T20:21Z [step] First deploys through deploy.yml all green with smoke: push run 42512734991 (d9a3962, llm-proxy revision 00017, live service config unchanged except image and the new deployed-commit label), then dispatches from deps-merge 42516484879 (53fc2b5) and 42516834600 (4ef8cbf); 42516827959 was cancelled as a superseded pending run.
+- 2026-11-08T20:21Z [step] Dependabot PRs after the rollout: #53 (@types/node 26), #54 (google-auth-library 11) and #49 (vite 8.1.6) merged themselves on green and were deployed; #32, #33 and #34 (actions bumps) were closed by Dependabot as superseded by the SHA pins; #52 (node 25-slim) and #37 (react-dom) were green but not merged, see next entry; #36 (typescript 7) is conflicting and still shows its old red CI.
+- 2026-11-08T20:21Z [incident] DEPENDABOT_ALERTS_TOKEN appeared in the Actions and Dependabot stores at 19:51Z and GitHub rejects it (HTTP 401 Bad credentials). The deps-merge alerts lookup ran under set -e, so the job failed and green #52 and #37 were not merged. Fixed here by the shared template update: the lookup now runs only in high-tier repos and a rejected token means "routine", a failed merge asks Dependabot to rebase, and the fixer's alert sweep survives a bad token. The token itself still needs replacing by the owner.
+- 2026-11-08T20:21Z [friction] `@dependabot rebase` was unreliable: the first round of comments on 8 PRs produced one job in 30 minutes; a second round and `@dependabot recreate` moved most of them.
+- 2026-11-08T20:21Z [learning] Dependabot security jobs report security_update_not_possible for transitive glob (needs 14.0.2) and fast-uri (needs >= 3.1.9); left for the deps-fixer alert sweep.
+- 2026-11-08T20:40Z [incident] #37 (react-dom 18.3.1 → 19.3.1 and @types/react-dom 19, without react, which stayed at 18.3.1) passed CI, merged itself and deployed; the post-deploy smoke timed out waiting for "Your invitation" (run 42520491062) and the rollback job put Hosting back on the previous version (release type ROLLBACK, 20:39Z). First real use of the rollback path; it worked. llm-proxy was not touched.
+- 2026-11-08T20:40Z [decision] Reverted #37 so main is deployable again, rather than moving to React 19 by hand (that migration is the owner's or deps-fixer's call). CI cannot catch this class of break: nothing renders the React tree in vitest, so a react/react-dom mismatch typechecks and tests clean.
+- 2026-11-08T20:40Z [idea] Group react with react-dom (and their @types) in dependabot.yml, and add a CI step that renders the built app headlessly, so a mismatch fails CI instead of the post-deploy smoke.
+- 2026-11-08T20:40Z [step] #52 (node 25-slim for llm-proxy) merged itself and deployed (run 42520319485, revision llm-proxy-00020, smoke green). Closing and reopening a Dependabot PR makes Dependabot reply that it will ignore that release; for #37 it recreated the PR anyway, and #36 (typescript 7) stayed conflicting with no CI.
+- 2026-11-08T20:45Z [step] Revert of #37 (#57) deployed green with smoke (run 42521476592); the live UI is back on React 18 from main.
+- 2026-11-08T20:45Z [step] Shared template update: deps-fixer.yml's claude-code-action steps get `allowed_bots: github-actions`, because the action refuses runs started by a bot ("Workflow initiated by non-human actor") and CI's deps-fix job dispatches the fixer as github-actions. Applied with the coordinator's patch_deps.py.
+- 2026-11-08T21:13Z [step] Critical alerts #17/#18 (tinypool prototype-pollution RCE, dev scope, via vitest 3.2.7 → tinypool 1.1.1): bumped vitest ^3.2.0 → ^4.1.12 at the root and in services/llm-proxy, by hand (deps-fixer has no token yet). vitest 4 has no tinypool dependency; no patched tinypool fits vitest 3. Same test files; 205 root + 106 llm-proxy tests, typecheck, the CI harness assert and the full build pass locally without credentials.
+- 2026-11-08T21:13Z [decision] vitest 4.1.12 rather than 5.x: the smallest major step that drops tinypool, and also the first patched release for the open @vitest/mocker alerts. 5.1.0 is under the 14-day cooldown for majors. The merge redeploys llm-proxy too, because its package.json changed (devDependency only; the runtime image omits dev deps). After the deploy, check that the live UI renders "Your invitation" (react-dom incident earlier today).
+- 2026-11-08T22:30Z [step] llm-proxy image now installs from the workspace lockfile. It used to `npm install` against `services/llm-proxy/package.json` alone (build context = that directory), so its runtime deps resolved at build time, outside pnpm-lock.yaml and Dependabot. New `services/llm-proxy/scripts/build-context.sh` stages the context with `pnpm deploy` (injected mode), which writes a pnpm-lock.yaml pruned from the workspace one without re-resolving (the script checks every package in it is in the workspace lockfile); the Dockerfile installs from it with `pnpm install --frozen-lockfile`, then `--prod --offline` for the runtime stage. deploy.yml deploys `--source` that staged dir (same env vars and secrets as the live service, checked) and now also redeploys the proxy when pnpm-lock.yaml or the root package.json change. CI builds the image the same way and checks plain /health in it. Part of AndyFooBlah/andy-private-docs#57.
+- 2026-11-08T22:30Z [step] Follow-up to the react-dom 19 incident: dependabot.yml has a `react` group (react, react-dom and their @types, every update type) ahead of `routine`, so version updates move them together. CI and deploy.yml's test job now run `apps/web/scripts/render-check.mjs`: it serves the built bundle with `vite preview`, loads it in headless Chromium (playwright 1.64.1, a web devDependency) with every external request aborted (no sign-in, no proxy, no model calls) and requires "Your invitation" with no page errors. Checked locally: passes on main, fails with react-dom 19 next to react 18. Part of AndyFooBlah/andy-private-docs#57.
+- 2026-11-08T22:37Z [friction] First real deps-fixer run (VoiceCommon#45): Claude's fix passed CI, but the PR had fallen behind main and could not merge. deps-fixer now merges the base branch into the PR before Claude starts, so the fix is tested against current main and the PR picks up main's newer workflows. Claude resolves any conflicts. Part of AndyFooBlah/andy-private-docs#57.
+- 2026-11-08T22:45Z [step] deps-fixer: llm-proxy docker build failed with two @anthropic-ai/sdk copies (direct pin 0.126.0 vs vertex-sdk 1.1.0's 1.4.0, so MessageParam types clashed); bumped the direct pin to 1.4.0 and re-locked, and cast `temperature` in providers/anthropic.ts since SDK 1.x dropped it from the types (PR #65).
+- 2026-11-08T22:54Z [friction] deps-fixer's daily sweep picked up green PRs that were waiting for owner review, because an old failed deps/merge check (the earlier bad-token 401) still showed in their checks. The sweep now skips PRs labelled needs-owner-review or deps-gave-up, and ignores failed deps/* jobs. Part of AndyFooBlah/andy-private-docs#57.
+- 2026-11-09T14:24Z [step] deps-fixer: typecheck failed because the @typesafe-ai/sdk update made usage.input_tokens/output_tokens nullable; coalesced them to 0 in judge/transport-sdk.ts and evals/probe-allocation.ts (PR #67).
+- 2026-11-09T23:10Z [step] deps-fixer: added pnpm overrides (pnpm-workspace.yaml) and re-locked: @grpc/grpc-js 1.9.16 -> 1.14.7, fast-uri 3.1.7 -> 3.1.9 (held below 4), glob 10.5.0 -> 14.0.4, minimatch 9.0.9 -> 11.0.5; typecheck, test, harness assert and build pass.
+- 2026-11-16T00:42Z [incident] **deps-fixer has failed every night since 2026-11-10** (runs on 11-10, 11-12, 11-13,
+  11-14, 11-15; 11-11 inconclusive). Every run picks PR #36 (typescript 7, conflicting since
+  2026-11-08), merges `main` into it as the 2026-11-08T22:37Z change intends, and leaves conflict
+  markers in `package.json`, `pnpm-lock.yaml` and `services/llm-proxy/package.json` for Claude to
+  resolve. The next step, `./.github/actions/deps-toolchain`, runs `pnpm/action-setup`, whose
+  self-installer parses `package.json` to read `packageManager` — and dies on the markers with
+  `SyntaxError: Expected property name or '}' in JSON at position 333`. The job ends before the
+  "Claude fixes the PR" step, so the conflict resolution the merge was added to enable never runs.
+  The ordering is `deps-fixer.yml` lines 102 (merge) → 117 (toolchain) → 119 (Claude).
+- 2026-11-16T00:42Z [learning] The same step order is in the shared template
+  (`andy-private-docs/deps/templates/deps-fixer.yml`, unchanged since 2026-11-08), so any repo on it
+  stalls the same way as soon as a Dependabot PR conflicts in a manifest the toolchain parses. Fixing
+  it belongs upstream; candidates are setting up the toolchain before the merge, or giving
+  `pnpm/action-setup` an explicit version so it never reads the file.
+- 2026-11-16T00:42Z [step] Reviewed the month's activity for the owner. No game or simulation work landed since
+  2026-10-17: issues #27, #40 and #41 are open, and the seat trim to ~10 and the dollar-denominated
+  spend cap are still unlanded. Security posture is clean (no open Dependabot alerts) and the live
+  service is healthy (`/health` ok, appCheck enforce, React 18 bundle serving).
+- 2026-11-16T01:03Z [step] deps-fixer.yml synced from the program template (andy-private-docs#57, audit Q-47). The daily sweep had failed here since 2026-11-09 on PR #36 (TypeScript 7, 31 commits behind main): the fixer merged main into the branch, the merge conflicted in package.json, and `pnpm/action-setup` then died parsing the conflict markers, before the step that counts attempts, so it retried and failed every day. The toolchain is now set up first, on main's tree; a fixer failure on one PR is labelled `deps-fixer-error`, counted as an attempt and no longer fails the run; the pick job runs on a read-only token that includes `checks: read` and `statuses: read` (needed in private repos); and the pick log lists every PR and alert count it evaluated.
+- 2026-11-16T01:05Z [step] deps-fixer: TypeScript 7 no longer auto-loads @types/*, so typecheck failed on node globals; added "types": ["node"] to tsconfig.base.json, and resolved merge conflicts in package.json files (kept typescript ^7.0.2 with main's other bumps) and regenerated pnpm-lock.yaml (PR #36).
