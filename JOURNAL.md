@@ -348,3 +348,21 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
 - 2026-11-08T22:54Z [friction] deps-fixer's daily sweep picked up green PRs that were waiting for owner review, because an old failed deps/merge check (the earlier bad-token 401) still showed in their checks. The sweep now skips PRs labelled needs-owner-review or deps-gave-up, and ignores failed deps/* jobs. Part of AndyFooBlah/andy-private-docs#57.
 - 2026-11-09T14:24Z [step] deps-fixer: typecheck failed because the @typesafe-ai/sdk update made usage.input_tokens/output_tokens nullable; coalesced them to 0 in judge/transport-sdk.ts and evals/probe-allocation.ts (PR #67).
 - 2026-11-09T23:10Z [step] deps-fixer: added pnpm overrides (pnpm-workspace.yaml) and re-locked: @grpc/grpc-js 1.9.16 -> 1.14.7, fast-uri 3.1.7 -> 3.1.9 (held below 4), glob 10.5.0 -> 14.0.4, minimatch 9.0.9 -> 11.0.5; typecheck, test, harness assert and build pass.
+- 2026-11-16T00:42Z [incident] **deps-fixer has failed every night since 2026-11-10** (runs on 11-10, 11-12, 11-13,
+  11-14, 11-15; 11-11 inconclusive). Every run picks PR #36 (typescript 7, conflicting since
+  2026-11-08), merges `main` into it as the 2026-11-08T22:37Z change intends, and leaves conflict
+  markers in `package.json`, `pnpm-lock.yaml` and `services/llm-proxy/package.json` for Claude to
+  resolve. The next step, `./.github/actions/deps-toolchain`, runs `pnpm/action-setup`, whose
+  self-installer parses `package.json` to read `packageManager` — and dies on the markers with
+  `SyntaxError: Expected property name or '}' in JSON at position 333`. The job ends before the
+  "Claude fixes the PR" step, so the conflict resolution the merge was added to enable never runs.
+  The ordering is `deps-fixer.yml` lines 102 (merge) → 117 (toolchain) → 119 (Claude).
+- 2026-11-16T00:42Z [learning] The same step order is in the shared template
+  (`andy-private-docs/deps/templates/deps-fixer.yml`, unchanged since 2026-11-08), so any repo on it
+  stalls the same way as soon as a Dependabot PR conflicts in a manifest the toolchain parses. Fixing
+  it belongs upstream; candidates are setting up the toolchain before the merge, or giving
+  `pnpm/action-setup` an explicit version so it never reads the file.
+- 2026-11-16T00:42Z [step] Reviewed the month's activity for the owner. No game or simulation work landed since
+  2026-10-17: issues #27, #40 and #41 are open, and the seat trim to ~10 and the dollar-denominated
+  spend cap are still unlanded. Security posture is clean (no open Dependabot alerts) and the live
+  service is healthy (`/health` ok, appCheck enforce, React 18 bundle serving).
