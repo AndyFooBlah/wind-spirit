@@ -442,3 +442,23 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
 - 2026-11-23T07:07Z [friction] `gcloud firestore` has no `documents` subcommand, so counting had to go through the
   Firestore REST API. Earlier today its error text piped to `wc -l` produced "18", which I almost
   reported as a seat count.
+- 2026-11-23T07:14Z [milestone] #73 and #74 deployed and verified in production (revision `llm-proxy-00029-8nq`,
+  labelled `deployed-commit=e989c5a`; deploy run green with smoke, rollback not triggered).
+  `GET /v1/invite/status` returns `{"invited":true,"required":true,"seats":{"used":4,"limit":10}}`,
+  and one real call at the cheapest class (8 input, 1 output tokens, $0.0000012, `costSource: table`)
+  landed in today's quota document as `microUsd: 1, tokens: 9`. The arithmetic matches the catalog
+  prices verified earlier today exactly: 8 x $0.10/1M + 1 x $0.40/1M.
+- 2026-11-23T07:14Z [incident] Revoking the eval seats took out the one the eval tooling actually uses. I filtered on
+  `label == 'evals'` assuming the two seats labelled `harness` were the live ones; in fact the
+  credential cached in `.harness-user.json` (uid aRPE...73b2) carries the label `evals`, because an
+  eval run created it. Caught within minutes because the live status check came back
+  `invited: false` when it should have been true, and restored by setting `revoked: false` on that one
+  document. The two `harness`-labelled seats appear to be unused. Lesson: a label records which script
+  minted a seat, not whether anything still holds it — check the credential cache, not the label.
+- 2026-11-23T07:14Z [learning] Rounding at the bottom of the scale: a call costing $0.0000012 becomes 1 micro-dollar,
+  and anything under $0.0000005 rounds to zero and is not recorded at all. Reaching $3 in
+  unrecorded calls would take some six million of them, and the 2,000,000-token backstop stops that
+  long before — which is a second, unplanned reason to keep the token counter rather than retire it.
+- 2026-11-23T07:14Z [step] Seats now: 4 held (owner, the working harness credential, two unused `harness` seats from
+  September), 6 free for people. Clearing the two unused ones, or raising `MAX_SEATS`, would make the
+  full ten available for friends; left for the owner to decide.
