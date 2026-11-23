@@ -368,3 +368,26 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
   service is healthy (`/health` ok, appCheck enforce, React 18 bundle serving).
 - 2026-11-16T01:03Z [step] deps-fixer.yml synced from the program template (andy-private-docs#57, audit Q-47). The daily sweep had failed here since 2026-11-09 on PR #36 (TypeScript 7, 31 commits behind main): the fixer merged main into the branch, the merge conflicted in package.json, and `pnpm/action-setup` then died parsing the conflict markers, before the step that counts attempts, so it retried and failed every day. The toolchain is now set up first, on main's tree; a fixer failure on one PR is labelled `deps-fixer-error`, counted as an attempt and no longer fails the run; the pick job runs on a read-only token that includes `checks: read` and `statuses: read` (needed in private repos); and the pick log lists every PR and alert count it evaluated.
 - 2026-11-16T01:05Z [step] deps-fixer: TypeScript 7 no longer auto-loads @types/*, so typecheck failed on node globals; added "types": ["node"] to tsconfig.base.json, and resolved merge conflicts in package.json files (kept typescript ^7.0.2 with main's other bumps) and regenerated pnpm-lock.yaml (PR #36).
+- 2026-11-23T06:47Z [step] Owner asked that all open work be tracked on GitHub, so the items that existed only in
+  this journal or in a review are now issues: #73 (the spend cap counts tokens, not dollars), #74 (no
+  seat ceiling — seats are however many invite codes exist), #75 (saves live only in IndexedDB, no
+  export), #76 (no minimum instance, so the proxy cold-starts), #77 (the design question: what is a
+  player trying to achieve), #78 (the owner's idle-villagers/leisure/morale thread, blocked on #40 and
+  #41), #79 (React 19 as a deliberate migration rather than PR #61 merging itself), #80 (the
+  TypeSafe/Jev write-up). #73 and #74 together are the owner's 2026-09-19 cost request.
+- 2026-11-23T06:47Z [learning] Verified each claim against the running system before filing rather than from the
+  2026-10-17 review: `DAILY_TOKEN_QUOTA=2000000` with a `tokens` counter and no money anywhere;
+  no seat cap in `invites.ts` (only `REQUIRE_INVITE` and `UninvitedCap`); `store/db.ts` is
+  IndexedDB with no export path; the service has `maxScale=5`, `startup-cpu-boost`, and no
+  `minScale`.
+- 2026-11-23T06:47Z [friction] `gcloud firestore documents list` does not exist, and its error text piped to
+  `wc -l` returned 18 — which I nearly reported as "18 invite codes and 18 players". Count rows
+  through the REST API or the Admin SDK, and never let an error message become a number.
+- 2026-11-23T06:47Z [step] Closed out the deps-fixer question: the ordering bug from 2026-11-16T00:42Z was fixed in
+  this repo (`f9303cd`) and upstream (`andy-private-docs@bb8739c`) within half an hour of that
+  entry — `deps-toolchain` now runs before the base merge, so `pnpm/action-setup` never parses a
+  conflicted `package.json`. The nightly sweep has been green seven nights running. Checked all
+  nineteen sibling repos: ten *local clones* still carry the old order, every *remote* has the fix.
+- 2026-11-23T06:47Z [learning] Those ten clones were the second stale-clone trap of the day — the first was this
+  repo, where a month of commits was invisible until I fetched. Check `origin`, or the GitHub API,
+  before reporting that something is unfixed anywhere.
