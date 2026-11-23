@@ -391,3 +391,20 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
 - 2026-11-23T06:47Z [learning] Those ten clones were the second stale-clone trap of the day — the first was this
   repo, where a month of commits was invisible until I fetched. Check `origin`, or the GitHub API,
   before reporting that something is unfixed anywhere.
+- 2026-11-23T07:06Z [incident] **Main's lockfile has been broken since 2026-11-16, and every deploy since has
+  failed.** `pnpm install --frozen-lockfile` dies with
+  `ERR_PNPM_LOCKFILE_MISSING_DEPENDENCY: no entry for '@jridgewell/trace-mapping@0.3.31'`, which pnpm
+  attributes to a badly resolved merge conflict — the vitest 4.1.12 -> 5.0.5 and
+  @vitejs/plugin-react 5 -> 6 bumps (#71, #72) landed within a minute of each other at
+  2026-11-16T14:30Z and 14:31Z. The last green deploy is 14:27Z (#70), so the live service has been
+  running a week-old build. My own journal-only push this morning (fee59b9) failed CI and deploy for
+  the same reason and I did not check afterwards, which is how it stayed invisible for a week.
+  Repaired by regenerating with `--no-frozen-lockfile`; frozen install, typecheck, 222 tests, build
+  and the 3-seed harness assert all pass on it.
+- 2026-11-23T07:06Z [learning] Two Dependabot PRs that both touch the lockfile can each pass CI and still produce a
+  broken lockfile when merged minutes apart, because neither run tested the merged result. CI's own
+  green is per-PR, not per-merge. Worth a merge queue, or at least re-running CI on main after a
+  same-minute pair lands.
+- 2026-11-23T07:06Z [learning] Check CI after a push, even a documentation-only one. A journal commit cannot break a
+  build, but it can be the first thing to *discover* a broken one, and reporting "pushed" without
+  looking is how a week-old deploy failure goes unnoticed.
