@@ -462,3 +462,12 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
 - 2026-11-23T07:14Z [step] Seats now: 4 held (owner, the working harness credential, two unused `harness` seats from
   September), 6 free for people. Clearing the two unused ones, or raising `MAX_SEATS`, would make the
   full ten available for friends; left for the owner to decide.
+- 2026-11-23T07:19Z [incident] Correction to the pricing entry stamped earlier today (the [learning] entry that
+  re-verified the four model classes): I wrote that the $0.75 figure for 3.8 Flash "is actually the
+  Flex/Off-Peak/Deferred SKU — standard online prediction is $1.50", presenting a guess as a
+  resolution. The Flex SKU at $0.75 does exist, but the Vertex pricing page separately and explicitly
+  frames $0.75/$0.075/$3.75 as an introductory rate for *standard* global usage "through
+  December 31, 2026", with $1.50/$0.15/$7.50 "Starting January 1, 2027". Those are two different
+  claims and the coincidence of figures does not settle which the bill applies. The catalog's standard
+  SKU still reads $1.50 today, which is what the cap is priced on — the conservative direction, since
+  it caps earlier than a $0.75 bill would. The discrepancy stays open; the billing export decides it.
