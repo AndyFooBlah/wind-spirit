@@ -408,3 +408,37 @@ Owner decisions are quoted. The owner is Andy (`AndyFooBlah`); everything else w
 - 2026-11-23T07:06Z [learning] Check CI after a push, even a documentation-only one. A journal commit cannot break a
   build, but it can be the first thing to *discover* a broken one, and reporting "pushed" without
   looking is how a week-old deploy failure goes unnoticed.
+- 2026-11-23T07:07Z [decision] Spend is now capped in dollars (#73). `DAILY_USD_QUOTA` defaults to $3 per principal
+  per UTC day, priced per call from the catalog in `models.ts` via the existing `estimateCost`, and
+  accumulated as integer micro-dollars in the same quota document (`microUsd`) so a day of
+  fraction-of-a-cent increments stays exact. Owner's constraint, 2026-09-19: *"I don't want to spend
+  more than a few dollars per player per day for real game play."*
+- 2026-11-23T07:07Z [decision] The token quota stays, as a backstop rather than the limit: `estimateCost` returns 0
+  for a model absent from the catalog, so a spend-only cap would never fire for an unpriced model.
+  Whichever ceiling is hit first stops the caller, and spend is reported first because that is the one
+  the budget is written in. Consequence worth knowing: at the cheapest class $3 buys more than
+  2,000,000 tokens, so the token backstop still binds first there — `DAILY_TOKEN_QUOTA` is the knob
+  if the full $3 should be reachable on cheap tiers. Left at its existing value so this change does
+  not quietly loosen or tighten what players had.
+- 2026-11-23T07:07Z [learning] Verified all four live model classes against the Cloud Billing Catalog today before
+  building a cap on them (10,171 Vertex SKUs, service C7E2-9256-1C43): 2.5-flash-lite $0.10/$0.40,
+  3.5-flash-lite $0.30/$2.50, 3.8-flash $1.50/$7.50, 3.1-pro $2.00/$12.00 per 1M in/out. Every
+  figure in `models.ts` is still correct. Two findings: 3.1 Pro bills under a shared
+  "Gemini 3.0 Pro / 3.1 Pro / 3 Pro Image" SKU family, not its own name; and the $0.75 figure for
+  3.8 Flash that an earlier note read as a time-limited introductory price is actually the
+  Flex/Off-Peak/Deferred SKU — standard online prediction is $1.50. Long-context (>200K) SKUs are
+  double, which the game never reaches but the table does not model.
+- 2026-11-23T07:07Z [decision] Seats are capped (#74). `MAX_SEATS` defaults to 10, enforced inside the redeem
+  transaction with a `count()` aggregate, which Firestore locks over the matched documents — so two
+  friends redeeming the last seat at the same moment cannot both get it. A player who already holds a
+  seat returns before the check, so lowering the ceiling never evicts anyone. `/v1/invite/status` now
+  reports `seats: { used, limit }`.
+- 2026-11-23T07:07Z [surprise] 33 players held seats, against the ~10 the owner asked for — but none of them was a
+  person: 30 labelled `evals` (one code, `lantern-saffron-14`), 2 `harness`, 1 `owner`. They are the
+  eval-run seats recorded at 2026-09-18, before refresh-token caching stopped a seat being burned per
+  script run. Deploying a ceiling of 10 over them would have *blocked* the owner's friends rather than
+  made room, so the 30 `evals` seats were revoked (`revoked: true`, reversible, and the harness
+  re-redeems on its own). 3 seats held now, 7 free for people.
+- 2026-11-23T07:07Z [friction] `gcloud firestore` has no `documents` subcommand, so counting had to go through the
+  Firestore REST API. Earlier today its error text piped to `wc -l` produced "18", which I almost
+  reported as a seat count.

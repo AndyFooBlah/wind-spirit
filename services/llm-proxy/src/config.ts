@@ -51,6 +51,11 @@ export const config = {
   requireAuth: (process.env.REQUIRE_AUTH ?? 'true').toLowerCase() !== 'false',
   /** Model calls need a redeemed invitation code (see invites.ts). Off only for local development. */
   requireInvite: (process.env.REQUIRE_INVITE ?? 'true').toLowerCase() !== 'false',
+  /**
+   * How many players may hold a seat at once. A redeemed code is refused when the seats are full;
+   * players who already hold one are never affected, so lowering this does not evict anybody.
+   */
+  maxSeats: num('MAX_SEATS', 10),
   invitesCollection: process.env.INVITES_COLLECTION ?? 'invites',
   playersCollection: process.env.PLAYERS_COLLECTION ?? 'players',
   /**
@@ -80,6 +85,17 @@ export const config = {
   appCheckAppIds: list('APP_CHECK_APP_IDS', ['1:406179055859:web:c8e690b638cdd7e7944f86']),
   /** `/health?deep=1` makes five paid model calls with no auth; at most one deep probe per interval per instance. */
   deepHealthMinIntervalMs: num('DEEP_HEALTH_MIN_INTERVAL_MS', 60_000),
+  /**
+   * The real daily ceiling, in US dollars per principal per UTC day. A token is not a unit of cost:
+   * the model classes span roughly 15x in price per token (`gemini-2.5-flash-lite` against
+   * `gemini-3.1-pro-preview`), so a token quota alone is a very different bill depending on which
+   * class a player's chiefs reach for. Priced from the catalog in `models.ts`.
+   */
+  dailyUsdQuota: num('DAILY_USD_QUOTA', 3),
+  /**
+   * Kept as a backstop, not the primary limit: `estimateCost` returns 0 for a model that is not in the
+   * pricing catalog, so a spend-only cap would never fire for one. Whichever ceiling is reached first wins.
+   */
   dailyTokenQuota: num('DAILY_TOKEN_QUOTA', 2_000_000),
   requestTimeoutMs: num('REQUEST_TIMEOUT_MS', 120_000),
   quotaCollection: process.env.QUOTA_COLLECTION ?? 'quotas',

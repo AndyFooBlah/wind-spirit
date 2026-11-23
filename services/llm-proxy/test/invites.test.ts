@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CODE_ALPHABET, inviteProblem, mintCode, normalizeCode, UninvitedCap } from '../src/invites.js';
+import { CODE_ALPHABET, inviteProblem, mintCode, normalizeCode, seatProblem, UninvitedCap } from '../src/invites.js';
 
 describe('normalizeCode', () => {
   it('forgives case, spaces and underscores', () => {
@@ -66,5 +66,26 @@ describe('UninvitedCap', () => {
     expect(cap.blockedFor('u', T0 + 1)).toBeDefined();
     cap.clear('u');
     expect(cap.blockedFor('u', T0 + 1)).toBeUndefined();
+  });
+});
+
+describe('seatProblem', () => {
+  it('admits a new player while a seat is free', () => {
+    expect(seatProblem(0, 10)).toBeUndefined();
+    expect(seatProblem(9, 10)).toBeUndefined();
+  });
+  it('refuses once the seats are full, with the count in the message', () => {
+    const full = seatProblem(10, 10);
+    expect(full?.status).toBe(403);
+    expect(full?.code).toBe('no_seats');
+    expect(full?.message).toBe('all 10 seats are taken; ask for one to be freed');
+  });
+  it('refuses when already over the ceiling, which is how lowering it behaves', () => {
+    // Existing holders are returned before this check, so they keep playing; only new seats are refused.
+    expect(seatProblem(18, 10)?.code).toBe('no_seats');
+  });
+  it('a ceiling of zero or less means uncapped', () => {
+    expect(seatProblem(1000, 0)).toBeUndefined();
+    expect(seatProblem(1000, -1)).toBeUndefined();
   });
 });

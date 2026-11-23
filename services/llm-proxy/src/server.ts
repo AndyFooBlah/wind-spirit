@@ -6,7 +6,7 @@ import { authenticate, clientIp, initFirebase, principalLabel, type Principal } 
 import { requireAppCheck } from './appcheck.js';
 import { FirestoreAttemptStore, InviteThrottle } from './throttle.js';
 import { checkQuota, recordUsage } from './quota.js';
-import { isInvited, redeemInvite, requireInvite } from './invites.js';
+import { isInvited, redeemInvite, requireInvite, seatCount } from './invites.js';
 import { addUsage, estimateCost, MODELS, modelInfo, ZERO_USAGE, type Usage } from './models.js';
 import { providerFor, type ProviderRequest } from './providers/index.js';
 import { extractJson } from './providers/types.js';
@@ -297,7 +297,7 @@ async function v1SystemOne(ctx: Ctx): Promise<void> {
     sendJson(ctx.res, 200, { model: r.model, answers: r.answers, usage: r.usage, cost, costSource: 'table', ms: Date.now() - ctx.startedAt });
   } finally {
     done();
-    if (used > 0) void recordUsage(principal, used);
+    if (used > 0) void recordUsage(principal, used, ctx.entry.costUsd ?? 0);
   }
 }
 
@@ -350,7 +350,8 @@ async function v1Generate(ctx: Ctx): Promise<void> {
   } finally {
     done();
     const used = (ctx.entry.inputTokens ?? 0) + (ctx.entry.outputTokens ?? 0);
-    if (used > 0) void recordUsage(principal, used);
+    // `noteUsage` has already priced the call onto the log entry, including a retried attempt's tokens.
+    if (used > 0) void recordUsage(principal, used, ctx.entry.costUsd ?? 0);
   }
 }
 
@@ -409,7 +410,7 @@ async function v1Stream(ctx: Ctx): Promise<void> {
   } finally {
     done();
     const used = usage.input + usage.output;
-    if (used > 0) void recordUsage(principal, used);
+    if (used > 0) void recordUsage(principal, used, ctx.entry.costUsd ?? 0);
   }
 }
 
@@ -463,7 +464,8 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
     if (req.method === 'GET' && url.pathname === '/v1/invite/status') {
       const principal = await authenticate(req);
       entry.principal = principalLabel(principal);
-      sendJson(res, 200, { invited: await isInvited(principal), required: config.requireInvite });
+      const [invited, seatsUsed] = await Promise.all([isInvited(principal), config.requireInvite ? seatCount() : Promise.resolve(0)]);
+      sendJson(res, 200, { invited, required: config.requireInvite, seats: { used: seatsUsed, limit: config.maxSeats } });
       return;
     }
     if (req.method === 'POST' && url.pathname === '/v1/generate') {

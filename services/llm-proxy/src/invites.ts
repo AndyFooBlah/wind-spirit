@@ -96,6 +96,32 @@ async function playerExists(uid: string): Promise<boolean> {
   return false;
 }
 
+/**
+ * Players holding a seat right now. Revoked players do not count, so revoking one frees their seat.
+ * Used for reporting; the ceiling itself is enforced inside the redeem transaction, which needs the
+ * count under a lock.
+ */
+export async function seatCount(): Promise<number> {
+  const snap = await getFirestore().collection(config.playersCollection).where('revoked', '==', false).count().get();
+  return snap.data().count;
+}
+
+export interface SeatState {
+  used: number;
+  limit: number;
+}
+
+/**
+ * Pure decision: whether a new seat may be created. `limit <= 0` means no ceiling. Existing seat holders are
+ * never asked this question, so lowering the ceiling cannot evict a player who is already in.
+ */
+export function seatProblem(used: number, limit: number): { status: number; code: string; message: string } | undefined {
+  if (limit > 0 && used >= limit) {
+    return { status: 403, code: 'no_seats', message: `all ${limit} seats are taken; ask for one to be freed` };
+  }
+  return undefined;
+}
+
 /** Throws 403 unless the caller has redeemed an invitation. Off when REQUIRE_INVITE=false (local dev). */
 export async function requireInvite(p: Principal): Promise<void> {
   if (!config.requireInvite) return;
@@ -147,6 +173,16 @@ export async function redeemInvite(p: Principal, rawCode: unknown, now: Date = n
       const doc = invite.exists ? (invite.data() as InviteDoc) : undefined;
       const problem = inviteProblem(doc, now);
       if (problem) throw new HttpError(problem.status, problem.code, problem.message);
+      // Seats are the spend ceiling's companion: a valid code still cannot create a seat that does not exist.
+      // Counted inside the transaction, which locks the matched documents, so two friends redeeming the last
+      // seat at the same moment cannot both get it. Existing seat holders returned above, before this check,
+      // so lowering MAX_SEATS never evicts anyone already playing.
+      if (config.maxSeats > 0) {
+        const seats = await tx.get(db.collection(config.playersCollection).where('revoked', '==', false).count());
+        const used = seats.data().count;
+        const full = seatProblem(used, config.maxSeats);
+        if (full) throw new HttpError(full.status, full.code, full.message, { used, limit: config.maxSeats });
+      }
       tx.update(inviteRef, { uses: FieldValue.increment(1), lastRedeemedAt: FieldValue.serverTimestamp() });
       tx.set(playerRef, { code, label: doc!.label, redeemedAt: FieldValue.serverTimestamp(), revoked: false });
       return { label: doc!.label, alreadyPlayer: false };
